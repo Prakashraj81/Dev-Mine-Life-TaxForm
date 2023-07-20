@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  background: #fff;
+}
+header {
+  background: #fff !important;
+}
+.email-wrap {
+  display: flex;
+  width: 450px;
+  border: 1.7px solid #000;
+  border-radius: 3px;
+}
+.email-wrap input {
+  flex: 1;
+  padding: 15px 10px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+}
+.email-wrap button {
+  padding-right: 10px;
+  background-color: #fff;
+  cursor: pointer;
+  cursor: hand;
+}
+.email-wrap button span {
+  margin-left: 50px;
+  padding: 7px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #e88c87;
+  border-radius: 3px;
+}
+
+.custom-file-label::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+}
