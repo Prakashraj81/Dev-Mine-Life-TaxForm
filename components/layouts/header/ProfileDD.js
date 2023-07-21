@@ -76,7 +76,7 @@ const ProfileDD = () => {
                     ml: 1,
                   }}
                 >
-                  Prakashraj
+                  山田　太郎
                 </Typography>
                 <FeatherIcon icon="chevron-down" width="20" height="20" />
               </Box>
