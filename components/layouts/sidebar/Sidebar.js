@@ -74,7 +74,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
               <ListItemIcon>
                 <FeatherIcon
                   className={`${
-                    location === item.href ? "text-primary-color" : ""
+                    location === item.href ? "text-black" : ""
                   }`}
                   icon={item.icon}
                   width="20"
@@ -102,14 +102,14 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                 <>
                   <List
                     component="li"
-                    className="w-full text-primary-color inline-block px-3 py-7px text-base"
+                    className="w-full tracking-2 text-black inline-block px-3 py-7px text-base"
                     disablePadding
                     key={sub.title}
                   >
                     <NextLink
                       className={`${
                         location === sub.href
-                          ? "text-black tracking-2 font-bold"
+                          ? "text-primary-color"
                           : ""
                       }`}
                       href={sub.href}
