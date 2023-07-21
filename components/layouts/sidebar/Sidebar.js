@@ -33,6 +33,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
     }
   };
 
+
   const [Id, setId] = useState(0);
   const [visible, setvisible] = useState(false);
 
@@ -96,12 +97,12 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
             </ListItem>
           </NextLink>
           {item.href === "" && item.id === Id ? (
-            <Box className="w-full inline-block px-3 py-4">
+            <Box className="w-full inline-block px-3 py-7px">
               {item.child.map((sub, index) => (
                 <>
                   <List
                     component="li"
-                    className="w-full text-primary-color inline-block px-3 py-2 text-base"
+                    className="w-full text-primary-color inline-block px-3 py-7px text-base"
                     disablePadding
                     key={sub.title}
                   >

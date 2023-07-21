@@ -18,6 +18,7 @@ module.exports = {
       },
       padding: {
         '5px': '5px !important',
+        '7px': '7px !important',
       },
       screens: {      
         'xs':'600px',
