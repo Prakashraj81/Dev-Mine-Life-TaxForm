@@ -16,6 +16,9 @@ module.exports = {
         'return-bg':'#6B6868',
         'border-light':'#e891882e',
       },
+      padding: {
+        '5px': '5px !important',
+      },
       screens: {      
         'xs':'600px',
       },

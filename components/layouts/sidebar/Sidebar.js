@@ -56,8 +56,8 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
       <LogoIcon className="mx-auto" />
       </div>
       {Menuitems.map((item, index) => (
-        <List
-        className="py-3"
+        <List        
+        className="Sidebar-menu py-5px"
         component="li" disablePadding key={item.title}>
           <NextLink href={item.href}>
             <ListItem
@@ -101,7 +101,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                 <>
                   <List
                     component="li"
-                    className="w-full text-primary-color inline-block px-3 py-4"
+                    className="w-full text-primary-color inline-block px-3 py-2 text-base"
                     disablePadding
                     key={sub.title}
                   >
