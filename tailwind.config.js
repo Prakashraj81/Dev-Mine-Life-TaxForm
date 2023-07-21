@@ -14,6 +14,7 @@ module.exports = {
         'sidebar':'#e891881a',
         'list-text': '#4B4B4B',
         'return-bg':'#6B6868',
+        'border-light':'#e891882e',
       },
       screens: {      
         'xs':'600px',

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import NextLink from "next/link";
 import PropTypes from "prop-types";
 import {
@@ -18,6 +18,7 @@ import FeatherIcon from "feather-icons-react";
 import LogoIcon from "../logo/LogoIcon";
 import Menuitems from "./MenuItems";
 import { useRouter } from "next/router";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
   const [open, setOpen] = React.useState(true);
@@ -31,47 +32,98 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
       setOpen(index);
     }
   };
+
+  const [Id, setId] = useState(0);
+  const [visible, setvisible] = useState(false);
+
+  function SubMenuOpen(event) {
+    let id = Number(event.currentTarget.id);
+    if (Id === id) {
+      setvisible(false);
+      setId(0);
+    } else {
+      setvisible(true);
+      setId(id);
+    }
+  }
+
   let curl = useRouter();
   const location = curl.pathname;
 
   const SidebarContent = (
     <Box p={2} height="100%">
+      <div className="pb-7">
       <LogoIcon className="mx-auto" />
-      <Box mt={2}>
-        <List>
-          {Menuitems.map((item, index) => (
-            <List component="li" disablePadding key={item.title}>
-              <NextLink href={item.href}>
-                <ListItem
-                  onClick={() => handleClick(index)}
-                  button
-                  selected={location === item.href}
+      </div>
+      {Menuitems.map((item, index) => (
+        <List
+        className="py-3"
+        component="li" disablePadding key={item.title}>
+          <NextLink href={item.href}>
+            <ListItem
+              onClick={() => handleClick(index)}
+              button
+              selected={location === item.href}
+              className={`${
+                location === item.href
+                  ? "text-primary-color tracking-2"
+                  : "border-border-light border-2"
+              }`}
+            >
+              <ListItemIcon>
+                <FeatherIcon
                   className={`${
-                    location === item.href
-                      ? "text-primary-color tracking-2 font-bold"
-                      : ""
+                    location === item.href ? "text-primary-color" : ""
                   }`}
-                >
-                  <ListItemIcon>
-                    <FeatherIcon
-                      className={`${
-                        location === item.href ? "text-primary-color" : ""
-                      }`}
-                      icon={item.icon}
-                      width="20"
-                      height="20"
-                    />
-                  </ListItemIcon>
+                  icon={item.icon}
+                  width="20"
+                  height="20"
+                />
+              </ListItemIcon>
 
-                  <ListItemText onClick={onSidebarClose}>
-                    {item.title}
-                  </ListItemText>
-                </ListItem>
-              </NextLink>
-            </List>
-          ))}
+              <ListItemText
+                className={`${
+                  location === item.href ? "text-black" : ""
+                }`}
+                id={item.id}
+                onClick={SubMenuOpen}
+              >
+                {item.title}
+              </ListItemText>
+              <ListItemIcon>                
+                <ArrowForwardIosIcon />
+              </ListItemIcon>
+            </ListItem>
+          </NextLink>
+          {item.href === "" && item.id === Id ? (
+            <Box className="w-full inline-block px-3 py-4">
+              {item.child.map((sub, index) => (
+                <>
+                  <List
+                    component="li"
+                    className="w-full text-primary-color inline-block px-3 py-4"
+                    disablePadding
+                    key={sub.title}
+                  >
+                    <NextLink
+                      className={`${
+                        location === sub.href
+                          ? "text-black tracking-2 font-bold"
+                          : ""
+                      }`}
+                      href={sub.href}
+                    >
+                      {sub.title}
+                    </NextLink>
+                  </List>
+                </>
+              ))}
+            </Box>
+          ) : (
+            <></>
+          )}
         </List>
-      </Box>
+      ))}
     </Box>
   );
   if (lgUp) {
@@ -82,7 +134,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
         variant="persistent"
         PaperProps={{
           sx: {
-            width: "265px",
+            width: "280px",
             border: "0 !important",
             boxShadow: "0px 7px 30px 0px rgb(113 122 131 / 11%)",
           },
@@ -99,7 +151,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
       onClose={onSidebarClose}
       PaperProps={{
         sx: {
-          width: "265px",
+          width: "280px",
           border: "0 !important",
         },
       }}
