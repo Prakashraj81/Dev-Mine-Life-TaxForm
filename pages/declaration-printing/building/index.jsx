@@ -18,8 +18,9 @@ export default function House() {
                     家屋の情報を「追加する」ボタンをクリックし、ご入力ください。「」ボタンを押すと内容を複製して入力できます。わからない項目は「？」をご確認ください。
                     </p>
                 </div>
+                
                 <div className="w-full inline-block text-left">
-                    <Link href="/declaration-printing/house/house-add">
+                    <Link href="/declaration-printing/building/house-add">
                         <button id="decedent_edit" className="text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
                             <AddIcon className="text-white" />
                             追加する

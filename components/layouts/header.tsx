@@ -36,7 +36,7 @@ export default function Header() {
                       <span
                         className="text-black font-medium text-sm md:text-base lg:text-base xl:text-base 2xl:text-base"
                       >
-                        <UserProfileDropdown />
+                        
                       </span>
                     </li>
                   </ul>

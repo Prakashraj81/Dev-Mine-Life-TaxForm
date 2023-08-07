@@ -21,7 +21,7 @@ const Header = ({ sx, customClass, toggleMobileSidebar, position }) => {
             },
           }}
         >
-          <FeatherIcon icon="menu" width="20" height="20" />
+          <FeatherIcon icon="menu" width="25" height="25" />
         </IconButton>
         {/* ------------------------------------------- */}
         {/* Page heading */}

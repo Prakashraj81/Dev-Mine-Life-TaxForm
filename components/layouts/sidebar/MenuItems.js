@@ -1,10 +1,20 @@
+import React from "react";
+import HomeIcon from '@mui/icons-material/Home';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import FileOpenIcon from '@mui/icons-material/FileOpen';
+import NoteAltIcon from '@mui/icons-material/NoteAlt';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+
 const Menuitems = [
   //First
   {
     id: 1,
-    title: "基礎情報の入力",
-    icon: "home",
+    title: "基礎情報の入力",    
     href: "",
+    icon: <HomeIcon />,
+    iconClosed: <KeyboardArrowRightIcon />,
+    iconOpened: <KeyboardArrowUpIcon />,
     child: [
       {        
         title: "基礎情報の入力",
@@ -19,123 +29,148 @@ const Menuitems = [
       {
         title: "相続人",
         icon: "disc",
-        href: "/basic-information/heir-1",
+        href: "/basic-information/heir",
       },
-      {
-        title: "相続人2",
-        icon: "disc",
-        href: "/basic-information/heir-2",
-      },
+      // {
+      //   title: "相続人2",
+      //   icon: "disc",
+      //   href: "/basic-information/heir-2",
+      // },
     ],
   },  
 
   //Second  
   {
     id:2,
-    title: "財産の入力",
-    icon: "home",
+    title: "財産の入力",    
     href: "",
     text: "Enter property",
+    icon: <FileOpenIcon />,
+    iconClosed: <KeyboardArrowRightIcon />,
+    iconOpened: <KeyboardArrowUpIcon />,
     child: [
       {        
-        title: "現金・預貯金",
+        title: "現金預金(外貨含む)",
         icon: "disc",
         href: "/declaration-printing/cash-savings", 
+        translateHeading: "Cash deposit (including foreign currency)",
         text: "Cash/savings",   
       },
       {
-        title: "有価証券-株式、公債、社債など",
+        title: "有価証券",
         icon: "disc",
         href: "/declaration-printing/securities",
+        translateHeading: "Securities",
         text: "Securities - stocks, bonds, corporate bonds, etc.",
-      },
+      },      
       {
-        title: "家屋-自宅・賃貸など",
+        title: "建物",
         icon: "disc",
-        href: "/declaration-printing/house/",
+        href: "/declaration-printing/building",
+        translateHeading: "building",
         text: "House - home, rental, etc.",
-      },
+      },     
       {
         title: "土地",
         icon: "disc",
-        href: "/declaration-printing/other-property",
+        href: "/declaration-printing/land",
+        translateHeading: "land",
         text: "land",
-      },
+      },     
       {
-        title: "その他の財産-自動車 管理残額 代償財産など",
+        title: "家庭用財産",
+        icon: "disc",
+        href: "/declaration-printing/household-property",
+        translateHeading: "household property",
+        text: "Other Assets - Automobile balance under management Compensatory assets, etc.",
+      },
+      //doubt
+      {
+        title: "その他財産",
         icon: "disc",
         href: "/declaration-printing/other-property",
+        translateHeading: "Other assets",
         text: "Other Assets - Automobile balance under management Compensatory assets, etc.",
       },
       {
-        title: "生命保険金・死亡退職手当金",
-        icon: "disc",
-        href: "/declaration-printing/life-insurance",
-        text: "Life Insurance Benefits/Death and Retirement Benefits",
-      },
-      {
-        title: "葬儀費用",
-        icon: "disc",
-        href: "/declaration-printing/funeral-expenses",
-        text: "funeral expenses",
-      },  
-      {
         title: "債務",
         icon: "disc",
-        href: "/declaration-printing/debt",
+        href: "/declaration-printing/debt",        
+        translateHeading: "debt",
         text: "debt",
+      },  
+      {
+        title: "葬式費用",
+        icon: "disc",
+        href: "/declaration-printing/funeral-expenses",
+        translateHeading: "funeral expenses",
+        text: "funeral expenses",
       },
     ],
   },
   //Third  
   {
     id:3,
-    title: "贈与・各種控除",
-    icon: "home",
+    title: "贈与・各種控除",    
     href: "",
+    icon: <NoteAltIcon />,
+    iconClosed: <KeyboardArrowRightIcon />,
+    iconOpened: <KeyboardArrowUpIcon />,
     child: [
+      {
+        title: "小規模宅地等の特例",
+        icon: "disc",
+        translateHeading: "Exceptions for small-scale residential land, etc.",
+        href: "/gift-various/exceptions-residential-land",
+      },
       {        
-        title: "配偶者居住権の設定",
+        title: "生前贈与",
         icon: "disc",
-        href: "/declaration-printing/cash-savings",    
+        translateHeading: "lifetime gift",
+        href: "/gift-various/gifts-taxation",    
+      },      
+      {
+        title: "未成年控除",
+        icon: "disc",
+        translateHeading: "deduction for minors",
+        href: "/gift-various/deduction-minors",
       },
       {
-        title: "小規模宅地の特例",
+        title: "障害者控除",
         icon: "disc",
-        href: "/declaration-printing/cash-savings-add",
-      },
-      {
-        title: "3年以内贈与・相続時精算課税",
-        icon: "disc",
-        href: "/declaration-printing/cash-savings/cash-savings-add",
-      },
-      {
-        title: "未成年控除額が本人の税額を超える場合の割振り",
-        icon: "disc",
-        href: "/declaration-printing/cash-savings/cash-savings-cash",
-      },
-      {
-        title: "障害者控除額が本人の税額を超える場合の割振り",
-        icon: "disc",
-        href: "/declaration-printing/cash-savings/cash-savings-list",
-      },
+        translateHeading: "Disabled deduction",
+        href: "/gift-various/allocation-amount",
+      },      
       {        
         title: "相次相続控除",
         icon: "disc",
-        href: "/declaration-printing/cash-savings",    
+        translateHeading: "successive inheritance deduction",
+        href: "/gift-various/successive-inheritance",    
       },
-      {        
-        title: "公益法人等への寄附・遺贈",
-        icon: "disc",
-        href: "/declaration-printing/cash-savings/cash-savings",    
-      },
+      // //doubt
+      // {
+      //   title: "相次相続控除-1",
+      //   icon: "disc",
+      //   translateHeading: "funeral",
+      //   href: "/gift-various/allocation-disability",
+      // },
+      // //doubt
+      // {        
+      //   title: "公益法人等への寄附・遺贈",
+      //   icon: "disc",
+      //   translateHeading: "Donations and bequests to public interest corporations, etc.",
+      //   href: "/404",    
+      // },
     ],
   },
   {
     id:4,
-    title: "申告書の印刷",
-    icon: "home",
+    title: "申告書の印刷",    
+    translateHeading: "funeral",
     href: "/property/declaration-printing",
+    icon: <CardGiftcardIcon />,
+    iconClosed: <KeyboardArrowRightIcon />,
+    iconOpened: <KeyboardArrowUpIcon />,
   },
 ];
 

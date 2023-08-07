@@ -2,9 +2,12 @@
 import Link from "next/link";
 import { useState, Fragment } from "react";
 import { useForm } from "react-hook-form";
+import Header from "../../components/layouts/header";
+import Footer from "../../components/layouts/footer";
+import Register from './register';
 
-
-export default function Login() {
+export default function Login(props) {
+  const { showregister } = props;
   const [UserName, setUserName] = useState("");
   const [Password, setPassword] = useState("");
 
@@ -15,27 +18,23 @@ export default function Login() {
     }
   });
 
+
   const onSubmit = async (defaultValues) => {
     var value = JSON.stringify(defaultValues);
     console.log(value);
-    if (value.Name != "") {
-      var Apiurl = "/";
-      const urlresponse = await fetch(Apiurl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(defaultValues),
-        mode: "no-cors",
-      });
-    }
-    else {
-
-    }
+    var Apiurl = "/";
+    const urlresponse = await fetch(Apiurl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(defaultValues),
+      mode: "no-cors",
+    });
     //res.status(200).end()
   };
 
   return (
     <>
-      
+      <Header />
       <div className="login-form-wrapper py-14">
         <div className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
           <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
@@ -126,7 +125,11 @@ export default function Login() {
           </div>
         </div>
       </div>
-    
+      <Footer />
     </>
   );
 }
+
+
+
+

@@ -2,6 +2,7 @@
 import '../styles/index.css'
 import '../styles/_container.css'
 import '../styles/_sidebar.css'
+import '../styles/responsive.css'
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import FullLayout from './../components/layouts/FullLayout';
@@ -22,4 +23,5 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp
+export default MyApp;
+

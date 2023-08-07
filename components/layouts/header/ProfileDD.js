@@ -1,6 +1,7 @@
 import React from "react";
 import FeatherIcon from "feather-icons-react";
 import Image from "next/image";
+import NextLink from "next/link";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import {
   Box,
@@ -120,9 +121,9 @@ const ProfileDD = () => {
           </Box>
           <Divider />
           <Box p={2}>
-            <Link href="/auth/login">
+            <NextLink href="/auth/login">
               <button className="text-black">Logout</button>
-            </Link>
+            </NextLink>
           </Box>
         </Box>
       </Menu>

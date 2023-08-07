@@ -24,4 +24,38 @@
 .Sidebar-menu > a > div {
   border: 2px solid #e891882e;
   border-radius: 5px !important;
+  transition-duration: 0.3s;
+}
+
+.Sidebar-menu > a > div:hover {
+  border-left: 4px solid #e89188;
+  cursor: pointer;
+}
+.Sidebar-active {
+  border-left: 4px solid #e89188;
+}
+.SidebarLink > div:first-child {
+  display: flex;
+  align-items: center;
+}
+.SidebarLabel {
+  margin-left: 10px;
+}
+.DropdownLink {
+  background: #e8918857;
+  height: 60px;
+  padding-left: 3rem;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+}
+.DropdownLink:hover {
+  background: #e89188;
+  cursor: pointer;
+  color: #fff;
+}
+
+.transition-all {
+  transition-delay: 1s;
 }

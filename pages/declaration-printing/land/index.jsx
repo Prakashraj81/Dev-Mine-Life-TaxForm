@@ -1,33 +1,32 @@
 import React from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
-import BackButton from "../../../components/back-btn";
 
-export default function Securities() {
+export default function Land() {
     return (
         <>
-            <div className="securities-wrapper">
+            <div className="house-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
                         <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                            有価証券
+                            土地
                         </p>
                     </div>
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        有価証券の情報を「追加する」ボタンをクリックし、ご入力ください。「」ボタンを押すと内容を複製して入力できます。わからない項目は「？」をご確認ください。
+                    家屋の情報を「追加する」ボタンをクリックし、ご入力ください。「」ボタンを押すと内容を複製して入力できます。わからない項目は「？」をご確認ください。
                     </p>
                 </div>
                 <div className="w-full inline-block text-left">
-                    <Link href="/declaration-printing/securities/securities-add">
+                    <Link href="/declaration-printing/land/land-add">
                         <button id="decedent_edit" className="text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
                             <AddIcon className="text-white" />
                             追加する
                         </button>
                     </Link>
                 </div>
-                <div className="Total-property-section py-5 md:py-10 lg:py-20 xl:py-20 2xl:py-20 px-5 md:px-10 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
+                <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
                     <div className="heading text-center">
                         <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                     </div>
@@ -47,8 +46,16 @@ export default function Securities() {
                             </li>
                         </ul>
                     </div>
-                    <div className="back-btn pt-5 md:pt-10 lg:pt-20 xl:pt-20 2xl:pt-20 text-center">
-                        <BackButton/>
+                    <div className="back-btn pt-20 text-center">
+                        <Link href="/">
+                            <button
+                                className="bg-return-bg rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                            >
+                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                    戻る
+                                </span>
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

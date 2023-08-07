@@ -1,29 +1,74 @@
 "use client";
 import Link from "next/link";
-import { useState, Fragment, Controller } from "react";
+import { useState, Fragment, Controller, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import BackButton from "../../../components/back-btn";
 
 export default function CashSavingsAdd() {
     let DepositList = [
-        { value: 'option1', label: 'Option 1' },
-        { value: 'option2', label: 'Option 2' },
-        { value: 'option3', label: 'Option 3' },
+        { id: 1, value: '現金', label: '現金' },
+        { id: 2, value: '普通預金', label: '普通預金' },
+        { id: 3, value: '定期預金', label: '定期預金' },
+        { id: 4, value: '当座預金', label: '当座預金' },
+        { id: 5, value: '通常貯金', label: '通常貯金' },
+        { id: 6, value: '普通貯金', label: '普通貯金' },
+        { id: 7, value: '定期貯金', label: '定期貯金' },
+        { id: 8, value: 'その他', label: 'その他' },
     ];
 
     const [DepositType, setDepositType] = useState("");
     const [FinancialInstitutionName, setFinancialInstitutionName] = useState("");
-    const [AmountofMoney, setAmountofMoney] = useState("");
+    const [PostCode, setPostCode] = useState(0);
+    const [Address, setAddress] = useState("");
+    const [AmountofMoney, setAmountofMoney] = useState(0);
+
+    let [ShowFinancialInstitutionName, setShowFinancialInstitutionName] = useState(false);
+    let [ShowPostCode, setShowPostCode] = useState(false);
+    let [ShowAddress, setShowAddress] = useState(false);
+    //let [ShowFinancialInstitutionName, setShowFinancialInstitutionName] = useState(false);
 
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
         defaultValues: {
             DepositType: "",
             FinancialInstitutionBranchName: "",
-            AmountofMoney: "",
+            PostCode: 0,
+            Address: "",
+            AmountofMoney: 0,
         }
     });
 
-    const handleDropdownChange = (event) => {
-        setDepositType(event.target.value);
+    useEffect (() => {
+        setShowFinancialInstitutionName(true);
+        setShowPostCode(false);
+        setShowAddress(false);
+    }, []);
+
+    const handleDepositType = (event) => {
+        let selectedOption = event.target.options[event.target.selectedIndex];
+        let selectedId = Number(selectedOption.value);
+        setDepositType(selectedOption.text);
+        if (selectedId === 1) {
+            setShowFinancialInstitutionName(false);
+            setShowPostCode(true);
+            setShowAddress(true);
+        }
+        else if (selectedId === 2 || selectedId === 3 || selectedId === 4 || selectedId === 5 || selectedId === 6 || selectedId === 7 || selectedId === 8) {
+            setShowPostCode(false);
+            setShowAddress(false);
+            setShowFinancialInstitutionName(true);
+        }
+        else {
+
+        }
+    };
+
+    const handleKeyPress = (e) => {
+        const keyCode = e.keyCode || e.which;
+        const keyValue = String.fromCharCode(keyCode);
+        const numericRegex = /^[0-9\b]+$/;
+        if (!numericRegex.test(keyValue)) {
+            e.preventDefault();
+        }
     };
 
 
@@ -69,9 +114,10 @@ export default function CashSavingsAdd() {
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' value={DepositList} onChange={handleDropdownChange}>
+                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleDepositType}>
+                                        <option value=''>Select an option</option>
                                         {DepositList.map((option) => (
-                                            <option key={option.value} value={option.value}>
+                                            <option key={option.value} value={option.id}>
                                                 {option.label}
                                             </option>
                                         ))}
@@ -80,25 +126,70 @@ export default function CashSavingsAdd() {
                             </div>
                         </div>
 
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="FinancialInstitutionBranchName" className="form-label">
-                                        金融機関名
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="FinancialInstitutionBranchName"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("FinancialInstitutionBranchName", { required: "FinancialInstitutionBranchName is required" })}
-                                        aria-invalid={errors.FinancialInstitutionBranchName ? "true" : "false"}
-                                    />
-                                    {errors.FinancialInstitutionBranchName && <p className="text-red-500" role="alert">{errors.FinancialInstitutionBranchName?.message}</p>}
+                        {ShowPostCode && (
+                            <div className="w-full inline-block items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label htmlFor="PostCode" className="form-label">
+                                            郵便番号
+                                        </label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            id="PostCode"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            onKeyPress={handleKeyPress}
+                                        />                                        
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
+
+                        {ShowAddress && (
+                            <div className="w-full inline-block items-center justify-between mb-7">
+                                <div className="w-full inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label htmlFor="Address" className="form-label">
+                                            住所
+                                        </label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            id="Address"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            {...register("Address", { required: "Address is required" })}
+                                            aria-invalid={errors.Address ? "true" : "false"}
+                                        />
+                                        {errors.Address && <p className="text-red-500" role="alert">{errors.Address?.message}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {ShowFinancialInstitutionName && (
+                            <div className="w-full block items-center justify-between mb-7">
+                                <div className="user-details">
+                                    <div className="label w-full inline-block">
+                                        <label htmlFor="FinancialInstitutionBranchName" className="form-label">
+                                            金融機関名
+                                        </label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            id="FinancialInstitutionBranchName"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            {...register("FinancialInstitutionBranchName", { required: "FinancialInstitutionBranchName is required" })}
+                                            aria-invalid={errors.FinancialInstitutionBranchName ? "true" : "false"}
+                                        />
+                                        {errors.FinancialInstitutionBranchName && <p className="text-red-500" role="alert">{errors.FinancialInstitutionBranchName?.message}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
 
 
                         <div className="w-full inline-block items-center justify-between mb-7">
@@ -112,11 +203,9 @@ export default function CashSavingsAdd() {
                                     <input
                                         type="text"
                                         id="AmountofMoney"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("AmountofMoney", { required: "AmountofMoney is required" })}
-                                        aria-invalid={errors.AmountofMoney ? "true" : "false"}
-                                    />
-                                    {errors.AmountofMoney && <p className="text-red-500" role="alert">{errors.AmountofMoney?.message}</p>}
+                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        onKeyPress={handleKeyPress}
+                                    />                                    
                                 </div>
                             </div>
                         </div>
@@ -148,17 +237,7 @@ export default function CashSavingsAdd() {
                         </div>
 
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <div className="save-btn text-center">
-                                <Link href="/">
-                                    <button
-                                        className="bg-return-bg rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                    >
-                                        <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                            戻る
-                                        </span>
-                                    </button>
-                                </Link>
-                            </div>
+                            <BackButton />
                             <div className="save-btn text-center">
                                 <button
                                     type="submit"

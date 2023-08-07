@@ -2,12 +2,18 @@
 import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
+import BackButton from "../../../components/back-btn";
 
 export default function CashSavingsCash() {
     let DepositList = [
-        { value: 'option1', label: 'Option 1' },
-        { value: 'option2', label: 'Option 2' },
-        { value: 'option3', label: 'Option 3' },
+        { value: '現金', label: '現金' },
+        { value: '普通預普通預金金', label: '普通預普通預金金' },
+        { value: '定期預金', label: '定期預金' },
+        { value: '当座預金', label: '当座預金' },
+        { value: '通常貯金', label: '通常貯金' },
+        { value: '普通貯金', label: '普通貯金' },
+        { value: '定期貯金', label: '定期貯金' },
+        { value: 'その他', label: 'その他' },
     ];
 
     const [DepositType, setDepositType] = useState("");
@@ -24,7 +30,7 @@ export default function CashSavingsCash() {
         }
     });
 
-    const handleDropdownChange = (event) => {
+    const DepositDropdownChange = (event) => {
         setDepositType(event.target.value);
     };
 
@@ -63,7 +69,7 @@ export default function CashSavingsCash() {
                 </div>
                 <div className="w-full inline-block">
                     <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
-                        <div className="w-full inline-block items-center justify-between mb-7">
+                        <div className="w-full inline-block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="Deposit" className="form-label">
@@ -71,7 +77,8 @@ export default function CashSavingsCash() {
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' value={DepositList} onChange={handleDropdownChange}>
+                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={DepositDropdownChange}>
+                                        <option value=''>Select an option</option>
                                         {DepositList.map((option) => (
                                             <option key={option.value} value={option.value}>
                                                 {option.label}
@@ -82,7 +89,7 @@ export default function CashSavingsCash() {
                             </div>
                         </div>
 
-                        <div className="w-full block items-center justify-between mb-7">
+                        <div className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="FinancialInstitutionName" className="form-label">
@@ -102,7 +109,7 @@ export default function CashSavingsCash() {
                             </div>
                         </div>
 
-                        <div className="w-full block items-center justify-between mb-7">
+                        <div className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="BranchName" className="form-label">
@@ -123,7 +130,7 @@ export default function CashSavingsCash() {
                         </div>
 
 
-                        <div className="w-full inline-block items-center justify-between mb-7">
+                        <div className="w-full inline-block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="AmountofMoney" className="form-label">
@@ -143,7 +150,7 @@ export default function CashSavingsCash() {
                             </div>
                         </div>
 
-                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
+                        <div className="Total-property-section  py-5 md:py-10 lg:py-20 xl:py-20 2xl:py-20 px-5 md:px-10 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
                             <div className="heading text-center">
                                 <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                             </div>
@@ -169,31 +176,22 @@ export default function CashSavingsCash() {
                             </div>
                         </div>
 
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                        <div className="w-full flex justify-evenly items-center py-5">
+                            <BackButton />
                             <div className="save-btn text-center">
-                                <Link href="/">
+                                <Link href="/declaration-printing/cash-savings/cash-savings-list">
                                     <button
-                                        className="bg-return-bg rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                                        className="bg-primary-color rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
                                     >
                                         <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                            戻る
+                                            保存して戻る
                                         </span>
                                     </button>
                                 </Link>
                             </div>
-                            <div className="save-btn text-center">
-                                <button
-                                    type="submit"
-                                    className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        保存して戻る
-                                    </span>
-                                </button>
-                            </div>
                         </div>
-                        <div className="heading text-center pt-8">
-                            <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
+                        <div className="heading text-center pt-2 md:pt-5 lg:pt-8 xl:pt-8 2xl:pt-8">
+                            <h5 className="text-xs text-black tracking-2 font-medium">必須入力項目があります。</h5>
                         </div>
                     </form>
                 </div>

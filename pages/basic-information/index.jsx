@@ -1,8 +1,10 @@
 import React from "react";
+import { ReactElement } from 'react';
 import Link from "next/link";
 import Button from '@mui/material/Button';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 export default function BasicInformation() {
     return (
@@ -24,11 +26,11 @@ export default function BasicInformation() {
                     <div className="decedent">
                         <div className="block lg:flex xl:flex 2xl:flex justify-between items-center">
                             <div className="w-6/12 inline-block float-left">
-                                <h5 className="text-base tracking-2 text-custom-black">被相続人</h5>
+                                <h5 className="text-sm tracking-2 text-custom-black">被相続人</h5>
                             </div>
                             <div className="w-6/12 inline-block text-right">
                                 <Link href="/basic-information/decendent">
-                                    <button id="decedent_edit" className="text-base bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                                    <button id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
                                         <ModeEditIcon className="text-white" />
                                     </button>
                                 </Link>
@@ -36,49 +38,52 @@ export default function BasicInformation() {
                         </div>
                         <div className="block py-4 lg:flex xl:flex 2xl:flex justify-between items-center">
                             <div className="w-6/12 inline-block float-left">
-                                <p className="text-base tracking-2 text-custom-black">氏名</p>
+                                <p className="text-sm tracking-2 text-custom-black">氏名</p>
                             </div>
                             <div className="w-6/12 inline-block float-left">
-                                <p className="text-base tracking-2 text-black">お亡くなりになった日</p>
+                                <p className="text-sm tracking-2 text-black">お亡くなりになった日</p>
                             </div>
                         </div>
                         <div className="block lg:flex xl:flex 2xl:flex justify-between items-center">
                             <div className="w-6/12 inline-block float-left">
-                                <p className="text-base tracking-2 text-custom-black">name</p>
+                                <p className="text-sm tracking-2 text-custom-black">Prakash</p>
                             </div>
                             <div className="w-6/12 inline-block float-left">
-                                <p className="text-base tracking-2 text-black">2022-12-31</p>
+                                <p className="text-sm tracking-2 text-black">2022-12-31</p>
                             </div>
                         </div>
                     </div>
 
                     <div className="heir py-10 border-b-2">
                         <div className="block lg:flex xl:flex 2xl:flex justify-between items-center">
-                            <div className="w-6/12 inline-block float-left">
-                                <h5 className="text-base tracking-2 text-custom-black">相続人</h5>
+                            <div className="w-10/12 inline-block float-left">
+                                <h5 id="heir_name" className="text-sm tracking-2 text-custom-black">相続人</h5>
                             </div>
-                            <div className="w-6/12 inline-block text-right">
-                                <Link href="/basic-information/heir-1">
-                                    <button id="decedent_edit" className="text-base bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                            <div className="w-2/12 inline-block text-right">
+                                <div className="flex justify-end items-center">
+                                    <button id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
                                         <ModeEditIcon className="text-white" />
                                     </button>
-                                </Link>
+                                    <button id="decedent_delete" className="text-sm bg-red-600 ml-5 rounded-sm hover:bg-red-600 px-1 py-1 tracking-2 text-custom-black">
+                                        <DeleteOutlinedIcon className="text-white" />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div className="block py-4 lg:flex xl:flex 2xl:flex justify-between items-center">
                             <div className="w-6/12 inline-block float-left">
-                                <p className="text-base tracking-2 text-custom-black">氏名</p>
+                                <p className="text-sm tracking-2 text-custom-black">氏名</p>
                             </div>
                             <div className="w-6/12 inline-block float-left">
-                                <p className="text-base tracking-2 text-black">続柄</p>
+                                <p className="text-sm tracking-2 text-black">続柄</p>
                             </div>
                         </div>
                         <div className="block lg:flex xl:flex 2xl:flex justify-between items-center">
                             <div className="w-6/12 inline-block float-left">
-                                <p className="text-base tracking-2 text-custom-black">Prakash</p>
+                                <p className="text-sm tracking-2 text-custom-black">Raj</p>
                             </div>
                             <div className="w-6/12 inline-block float-left">
-                                <p className="text-base tracking-2 text-black">祖父</p>
+                                <p className="text-sm tracking-2 text-black">祖父</p>
                             </div>
                         </div>
                     </div>
@@ -86,7 +91,7 @@ export default function BasicInformation() {
                     <div className="w-full inline-block text-right py-10">
                         <div className="add-btn">
                             <Link href="/basic-information/heir-2">
-                                <button id="decedent_edit" className="text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                                <button id="decedent_edit" className="text-sm text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
                                     <AddIcon className="text-white" />
                                     追加する
                                 </button>

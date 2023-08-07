@@ -2,14 +2,14 @@ import React from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
 
-export default function SuccessiveInheritance() {
+export default function GiftTaxation() {
     return (
         <>
             <div className="cash-savings-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
                         <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                        相次相続控除
+                        3年以内贈与・相続時精算課税
                         </p>
                     </div>
                 </div>
@@ -19,7 +19,7 @@ export default function SuccessiveInheritance() {
                     </p>
                 </div>
                 <div className="w-full inline-block text-left">
-                    <Link href="/gift-various/successive-inheritance/successive-inheritance-add">
+                    <Link href="/gift-various/gifts-taxation/gifts-tax-add">
                         <button id="decedent_edit" className="text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
                             <AddIcon className="text-white" />
                             追加する

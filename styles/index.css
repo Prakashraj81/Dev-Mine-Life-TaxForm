@@ -20,9 +20,21 @@
 body {
   font-family: "Noto Sans JP", sans-serif;
   background: #fff;
+  font-size: 14px;
+  letter-spacing: 2px;
+  line-height: 26px;
+  color: #000;
 }
 header {
   background: #fff !important;
+}
+font {
+  letter-spacing: 0;
+}
+input {
+  font-size: 16px;
+  padding:0px 10px;
+ 
 }
 .email-wrap {
   display: flex;

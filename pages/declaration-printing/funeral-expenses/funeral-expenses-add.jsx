@@ -11,21 +11,21 @@ export default function FuneralExpensesAdd() {
         { value: 'option3', label: 'Option 3' },
     ];
 
-    const [FeePayeeName, setFeePayeeName] = useState("");    
+    const [FeePayeeName, setFeePayeeName] = useState("");
     const [PostCode, setPostCode] = useState("");
     const [Address, setAddress] = useState("");
     const [DatePaid, setDatePaid] = useState("");
-    const [AmountPaid, setAmountPaid] = useState("");    
+    const [AmountPaid, setAmountPaid] = useState("");
 
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
         defaultValues: {
             KindsLIst: "",
-            FeePayeeName: "",            
+            FeePayeeName: "",
             PostCode: "",
             Address: "",
             DatePaid: "",
             AmountPaid: "",
-            ReductionRate: "",            
+            ReductionRate: "",
         }
     });
 
@@ -84,21 +84,20 @@ export default function FuneralExpensesAdd() {
                                         {...register("FeePayeeName", { required: "FeePayeeName is required" })}
                                         aria-invalid={errors.FeePayeeName ? "true" : "false"}
                                     />
-                                    <div className="mt-3">
-                                    <p className="text-sm text-black tracking-2 font-medium">タグで下記のタグから選択</p>
-                                </div>
                                     {errors.FeePayeeName && <p className="text-red-500 mt-2" role="alert">{errors.FeePayeeName?.message}</p>}
                                 </div>
                             </div>
                         </div>
+                    </div>
 
+                    <div className="w-full block items-center justify-between mb-10">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label htmlFor="郵便番号" className="form-label">
-                                支払先の所在場所
+                                    支払先の所在場所
                                 </label>
                                 <label htmlFor="PostCode" className="form-label mt-2">
-                                郵便番号
+                                    郵便番号
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -117,25 +116,21 @@ export default function FuneralExpensesAdd() {
                         </div>
                     </div>
 
-
-                    <div className="w-full block items-center justify-between mb-7">
+                    <div className="w-full hidden items-center justify-between mb-7">
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label htmlFor="Valuation" className="form-label">
-                                    所在場所
-                                </label>
-                                <label htmlFor="PostCode" className="form-label">
-                                    郵便番号
+                                    タグで下記のタグから選択
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
-                            <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' value={KindsList} onChange={handleDropdownChange}>
-                                        {KindsList.map((option) => (
-                                            <option key={option.value} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
+                                <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' value={KindsList} onChange={handleDropdownChange}>
+                                    {KindsList.map((option) => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
                                 {errors.PostCode && <p className="text-red-500 mt-2" role="alert">{errors.PostCode?.message}</p>}
                             </div>
                         </div>
@@ -161,19 +156,19 @@ export default function FuneralExpensesAdd() {
                             </div>
                         </div>
                     </div>
-                    
+
 
 
                     <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label htmlFor="DatePaid" className="form-label">
-                                支払った日
+                                    支払った日
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
-                                    type="text"
+                                    type="date"
                                     id="DatePaid"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     {...register("DatePaid", { required: "DatePaid is required" })}
@@ -189,14 +184,14 @@ export default function FuneralExpensesAdd() {
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label htmlFor="AmountPaid" className="form-label">
-                                支払った金額
+                                    支払った金額
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
                                     id="AmountPaid"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     {...register("AmountPaid", { required: "AmountPaid is required" })}
                                     aria-invalid={errors.AmountPaid ? "true" : "false"}
                                 />
@@ -247,15 +242,15 @@ export default function FuneralExpensesAdd() {
                             </Link>
                         </div>
                         <div className="save-btn text-center">
-                        <button
-                        type="submit"
+                            <button
+                                type="submit"
 
-className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
->
-<span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-    保存して戻る
-</span>
-</button>
+                                className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                            >
+                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                    保存して戻る
+                                </span>
+                            </button>
                         </div>
                     </div>
                     <div className="heading text-center pt-8">

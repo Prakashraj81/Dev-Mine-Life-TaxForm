@@ -2,8 +2,10 @@
 import Link from "next/link";
 import { useState, Fragment } from "react";
 import { useForm } from "react-hook-form";
+import Header from "../../components/layouts/header";
+import Footer from "../../components/layouts/footer";
 
-export default function Register() {
+export default function Register(props) {
   const [Name, setName] = useState("");
   const [PhoneNo, setPhoneNo] = useState("");
   const [Email, setEmail] = useState("");
@@ -39,10 +41,9 @@ export default function Register() {
   };
   return (
     <>
-      
+      <Header />
       <div className="register-form-wrapper py-14">
         <div className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
-
           <div className="register-forms">
             <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
               <div className="username-details mb-7">
@@ -181,7 +182,7 @@ export default function Register() {
           </div>
         </div>
       </div>
-    
+      <Footer />
     </>
   );
 }

@@ -19,6 +19,8 @@ import LogoIcon from "../logo/LogoIcon";
 import Menuitems from "./MenuItems";
 import { useRouter } from "next/router";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import styled from "styled-components";
+import { motion } from "framer-motion";
 
 const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
   const [open, setOpen] = React.useState(true);
@@ -33,20 +35,40 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
     }
   };
 
-
   const [Id, setId] = useState(0);
   const [visible, setvisible] = useState(false);
 
-  function SubMenuOpen(event) {
-    let id = Number(event.currentTarget.id);
-    if (Id === id) {
+  const SubMenuOpen = (id) => {
+    let menu_id = id;
+    if (Id === menu_id) {
       setvisible(false);
       setId(0);
     } else {
       setvisible(true);
-      setId(id);
+      setId(menu_id);
     }
-  }
+  };
+
+  const DropdownLink = styled(motion.a)`
+    background: none;
+    height: 60px;
+    padding-left: 3rem;
+    display: inline-block;
+    align-items: center;
+    text-decoration: none;
+    color: #000;
+    font-size: 18px;
+    &:hover {
+      cursor: pointer;
+    }
+  `;
+
+  const IconAnimate = styled(motion.span)`
+    font-size: 18px;
+    &:hover {
+      cursor: pointer;
+    }
+  `;
 
   let curl = useRouter();
   const location = curl.pathname;
@@ -54,63 +76,72 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
   const SidebarContent = (
     <Box p={2} height="100%">
       <div className="pb-7">
-      <LogoIcon className="mx-auto" />
+        <LogoIcon className="mx-auto" />
       </div>
       {Menuitems.map((item, index) => (
-        <List        
-        className="Sidebar-menu py-5px"
-        component="li" disablePadding key={item.title}>
+        <List
+          className="Sidebar-menu SidebarLink py-2"
+          component="li"
+          disablePadding
+          key={item.title}
+          onClick={() => handleClick(index)}
+        >
           <NextLink href={item.href}>
             <ListItem
-              onClick={() => handleClick(index)}
+              onClick={() => SubMenuOpen(item.id)}
+              id={item.id}
               button
               selected={location === item.href}
               className={`${
                 location === item.href
-                  ? "text-primary-color tracking-2"
+                  ? "text-primary-color tracking-2 "
                   : "border-border-light border-2"
               }`}
             >
-              <ListItemIcon>
-                <FeatherIcon
-                  className={`${
-                    location === item.href ? "text-black" : ""
-                  }`}
-                  icon={item.icon}
-                  width="20"
-                  height="20"
-                />
+              <ListItemIcon
+                className={`${
+                  location === item.href ? "text-black" : "text-custom-black"
+                }`}
+                width="20"
+                height="20"
+              >
+                {item.icon}
               </ListItemIcon>
 
               <ListItemText
-                className={`${
-                  location === item.href ? "text-black" : ""
-                }`}
+                className={`${location === item.href ? "text-black" : ""}`}
                 id={item.id}
-                onClick={SubMenuOpen}
               >
                 {item.title}
               </ListItemText>
-              <ListItemIcon>                
-                <ArrowForwardIosIcon />
+              <ListItemIcon className="transition ease-in-out delay-150 duration-300" width="20" height="20">
+              {item.href === "" && item.id === Id
+                    ? item.iconOpened
+                    : item.child
+                    ? item.iconClosed
+                    : null}
               </ListItemIcon>
             </ListItem>
           </NextLink>
           {item.href === "" && item.id === Id ? (
-            <Box className="w-full inline-block px-3 py-7px">
+            <DropdownLink
+              className={`${item.id !== Id ? "w-full inline-block transition-all-all pl-0 px-3 py-7px" : "transition ease-in-out delay-150 duration-300"}`}
+              initial={{ height: 0 }}
+              animate={{ height: "60px" }}
+              exit={{ height: 0 }}
+            >
               {item.child.map((sub, index) => (
                 <>
                   <List
                     component="li"
-                    className="w-full tracking-2 text-black inline-block px-3 py-7px text-base"
+                    className="w-full tracking-2 text-black inline-block pl-0 px-3 py-7px text-base"
                     disablePadding
                     key={sub.title}
+                    item={item}                    
                   >
                     <NextLink
                       className={`${
-                        location === sub.href
-                          ? "text-primary-color"
-                          : ""
+                        location === sub.href ? "text-primary-color" : ""
                       }`}
                       href={sub.href}
                     >
@@ -119,12 +150,12 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                   </List>
                 </>
               ))}
-            </Box>
+            </DropdownLink>
           ) : (
             <></>
           )}
         </List>
-      ))}
+      ))}      
     </Box>
   );
   if (lgUp) {

@@ -2,15 +2,21 @@
 import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
-
+import BackButton from "../../components/back-btn";
 
 export default function Heir2() {
     const ProfessionList = [
-        { value: 'option1', label: 'Option 1' },
-        { value: 'option2', label: 'Option 2' },
-        { value: 'option3', label: 'Option 3' },
+        { value: '公務員', label: '公務員' },
+        { value: '会社役員', label: '会社役員' },
+        { value: '会社員（正社員）', label: '会社員（正社員）' },
+        { value: '会社員（契約社員/派遣社員）', label: '会社員（契約社員/派遣社員）' },
+        { value: '自営業/自由業', label: '自営業/自由業' },
+        { value: '学生', label: '学生' },
+        { value: 'パート/アルバイト', label: 'パート/アルバイト' },
+        { value: '主婦', label: '主婦' },
+        { value: 'その他', label: 'その他' },
+        { value: 'なし', label: 'なし' },
     ];
-
     const RelationshipWithDecedentList = [
         { value: 'option1', label: 'Option 1' },
         { value: 'option2', label: 'Option 2' },
@@ -27,7 +33,7 @@ export default function Heir2() {
     const [Profession, setProfession] = useState("");
     const [RelationshipWithDecedent, setRelationshipWithDecedent] = useState("");
     const [Address, setAddress] = useState("");
-    const [postcode, setpostcode] = useState("");
+    const [TelephoneNumber, setTelephoneNumber] = useState("");
 
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
         defaultValues: {
@@ -40,13 +46,17 @@ export default function Heir2() {
             RelationshipWithDecedent: "",
             InheritanceDivisionCompletionDate: "",
             DateofDeath: "",
-            postcode: "",
+            TelephoneNumber: "",
         }
     });
 
-    const handleDropdownChange = (event) => {
+    const ProfessionDropdownChange = (event) => {
         setProfession(event.target.value);
     };
+
+    const RelationshipDropdownChange = (event) => {
+        setRelationshipWithDecedent(event.target.value);
+    }
 
 
     const onSubmit = async (defaultValues) => {
@@ -84,8 +94,8 @@ export default function Heir2() {
                 </div>
                 <div className="login-forms">
                     <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
-                        <div className="w-full flex items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                        <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
                                         <label htmlFor="Name" className="form-label">
@@ -105,7 +115,7 @@ export default function Heir2() {
                                 </div>
                             </div>
 
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
                                         <label htmlFor="Furigana" className="form-label">
@@ -126,7 +136,7 @@ export default function Heir2() {
                             </div>
                         </div>
 
-                        <div className="w-full inline-block float-left mb-7">
+                        <div className="w-full inline-block float-left mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="DateofBirth" className="form-label">
@@ -146,7 +156,7 @@ export default function Heir2() {
                             </div>
                         </div>
 
-                        <div className="w-full block items-center justify-between mb-7">
+                        <div className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="PostCode" className="form-label">
@@ -166,7 +176,7 @@ export default function Heir2() {
                             </div>
                         </div>
 
-                        <div className="w-full block items-center justify-between mb-7">
+                        <div className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="Address" className="form-label">
@@ -186,32 +196,32 @@ export default function Heir2() {
                             </div>
                         </div>
 
-                        <div className="w-full block items-center justify-between mb-7">
+                        <div className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="postcode" className="form-label">
-                                        郵便番号
+                                    <label htmlFor="TelephoneNumber" className="form-label">
+                                        電話番号
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <input
                                         type="text"
-                                        id="postcode"
+                                        id="TelephoneNumber"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("postcode", { required: "postcode is required" })}
-                                        aria-invalid={errors.postcode ? "true" : "false"}
+                                        {...register("TelephoneNumber", { required: "TelephoneNumber is required" })}
+                                        aria-invalid={errors.TelephoneNumber ? "true" : "false"}
                                     />
                                     <div className="mt-3">
-                                        <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
+                                        <p className="text-xs text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
                                     </div>
-                                    {errors.postcode && <p className="text-red-500 mt-2" role="alert">{errors.postcode?.message}</p>}
+                                    {errors.TelephoneNumber && <p className="text-red-500 mt-2" role="alert">{errors.TelephoneNumber?.message}</p>}
                                 </div>
                             </div>
                         </div>
 
 
-                        <div className="w-full flex items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                        <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
                                         <label htmlFor="Profession" className="form-label">
@@ -219,7 +229,8 @@ export default function Heir2() {
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
-                                        <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' value={ProfessionList} onChange={handleDropdownChange}>
+                                        <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={ProfessionDropdownChange}>
+                                            <option value=''>Select an option</option>
                                             {ProfessionList.map((option) => (
                                                 <option key={option.value} value={option.value}>
                                                     {option.label}
@@ -230,14 +241,15 @@ export default function Heir2() {
                                 </div>
                             </div>
 
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="RelationshipWithDecedent" className="form-label">
                                         被相続人との間柄
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' value={RelationshipWithDecedentList} onChange={handleDropdownChange}>
+                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={RelationshipDropdownChange}>
+                                        <option value=''>Select an option</option>
                                         {RelationshipWithDecedentList.map((option) => (
                                             <option key={option.value} value={option.value}>
                                                 {option.label}
@@ -249,26 +261,18 @@ export default function Heir2() {
 
                         </div>
 
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <div className="save-btn pt-10 text-center">
-                                <button
-                                    type="submit"
-                                    className="bg-return-bg rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        戻る
-                                    </span>
-                                </button>
-                            </div>
-                            <div className="save-btn pt-10 text-center">
-                                <button
-                                    type="submit"
-                                    className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        保存して戻る
-                                    </span>
-                                </button>
+                        <div className="w-full flex justify-evenly items-center py-5">
+                            <BackButton />
+                            <div className="save-btn text-center">
+                                <Link href="/">
+                                    <button
+                                        className="bg-primary-color rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                                    >
+                                        <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                            保存して戻る
+                                        </span>
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     </form>

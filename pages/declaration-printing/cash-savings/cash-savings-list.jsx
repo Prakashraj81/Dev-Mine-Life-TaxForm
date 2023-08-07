@@ -3,6 +3,7 @@ import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import BackButton from "../../../components/back-btn";
 
 export default function CashSavingsList() {
     return (
@@ -21,18 +22,18 @@ export default function CashSavingsList() {
                     </p>
                 </div>
                 <div className="w-full inline-block">
-                    <div className="cash-list border-t-2 py-3">
-                        <table className="w-full">
+                    <div className="cash-list py-3">
+                        <table className="w-full border-2 border-light-gray">
                             <tr>
-                                <td>Prakash</td>
-                                <td>普通預金</td>
-                                <td>10,000</td>
-                                <td className="text-center">
+                                <td className="py-2 px-2 border-r-2 border-light-gray">Prakash</td>
+                                <td className="py-2 px-2 border-r-2 border-light-gray">普通預金</td>
+                                <td className="py-2 px-2 border-r-2 border-light-gray text-right">10,000</td>
+                                <td className="py-2 px-2 border-r-2 border-light-gray text-right">
                                     <button id="cash_edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                         <ModeEditIcon className="text-white" />
                                     </button>
                                 </td>
-                                <td className="text-center">
+                                <td className="py-2 px-2 border-r-2 border-light-gray text-right">
                                     <button id="cash_edit" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                         <DeleteOutlinedIcon className="text-white" />
                                     </button>
@@ -50,7 +51,7 @@ export default function CashSavingsList() {
                             </Link>
                         </div>
                     </div>
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
+                    <div className="Total-property-section py-5 md:py-10 lg:py-20 xl:py-20 2xl:py-20 px-5 md:px-10 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
                         <div className="heading text-center">
                             <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                         </div>
@@ -70,17 +71,7 @@ export default function CashSavingsList() {
                                 </li>
                             </ul>
                         </div>
-                        <div className="back-btn pt-20 text-center">
-                            <Link href="/">
-                                <button
-                                    className="bg-return-bg rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        戻る
-                                    </span>
-                                </button>
-                            </Link>
-                        </div>
+                        <BackButton />
                     </div>
                 </div>
             </div>
