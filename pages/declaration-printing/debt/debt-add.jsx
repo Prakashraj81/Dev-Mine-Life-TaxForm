@@ -8,11 +8,11 @@ import { useEffect } from 'react';
 
 export default function DebtAdd() {
     let DebtList = [
-        { id: 1, value: 'その他', label: 'その他' },
-        { id: 2, value: '立木', label: '立木' },
-        { id: 3, value: '代償財産', label: '代償財産' },
-        { id: 4, value: '管理残額（教育資金）', label: '管理残額（教育資金）' },
-        { id: 5, value: '管理残額（結婚・子育て資金）', label: '管理残額（結婚・子育て資金）' },
+        { id: 1, value: '公租公課', label: '公租公課' },
+        { id: 2, value: '銀行借入金', label: '銀行借入金' },
+        { id: 3, value: '未払金', label: '未払金' },
+        { id: 4, value: '買掛金', label: '買掛金' },
+        { id: 5, value: 'その他債務', label: 'その他債務' },
     ];
 
     const [DebtType, setDebtType] = useState("");
