@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function SuccessiveInheritance() {
     return (
@@ -43,3 +44,7 @@ export default function SuccessiveInheritance() {
         </>
     )
 }
+
+SuccessiveInheritance.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

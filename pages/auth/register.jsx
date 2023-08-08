@@ -1,9 +1,11 @@
 "use client";
+//import type { ReactElement } from 'react';
 import Link from "next/link";
 import { useState, Fragment } from "react";
 import { useForm } from "react-hook-form";
-import Header from "../../components/layouts/header";
-import Footer from "../../components/layouts/footer";
+import Header from "../../components/header";
+import Footer from "../../components/footer";
+import BlankLayout from '../../components/layouts/blank/BlankLayout';
 
 export default function Register(props) {
   const [Name, setName] = useState("");
@@ -186,3 +188,8 @@ export default function Register(props) {
     </>
   );
 }
+
+
+Register.getLayout = function getLayout(page) {
+  return <BlankLayout>{page}</BlankLayout>;
+};

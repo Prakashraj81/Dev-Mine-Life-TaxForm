@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function DebtTaxtPublic() {
     let DebtList = [
@@ -290,3 +291,7 @@ export default function DebtTaxtPublic() {
         </>
     )
 }
+
+DebtTaxtPublic.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

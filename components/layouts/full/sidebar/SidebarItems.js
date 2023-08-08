@@ -14,18 +14,16 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import FeatherIcon from "feather-icons-react";
-import LogoIcon from "../logo/LogoIcon";
 import Menuitems from "./MenuItems";
 import { useRouter } from "next/router";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
+const SidebarItems = () => {
+  let curl = useRouter();
+  const location = curl.pathname;
+  
   const [open, setOpen] = React.useState(true);
-
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
   const handleClick = (index) => {
     if (open === index) {
@@ -70,17 +68,11 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
     }
   `;
 
-  let curl = useRouter();
-  const location = curl.pathname;
-
-  const SidebarContent = (
-    <Box p={2} height="100%">
-      <div className="pb-7">
-        <LogoIcon className="mx-auto" />
-      </div>
-      {Menuitems.map((item, index) => (
+  return (
+    <Box sx={{ px: 3 }}>
+       {Menuitems.map((item, index) => (
         <List
-          className="Sidebar-menu SidebarLink py-2"
+          className="Sidebar-menu SidebarLink py-2px"
           component="li"
           disablePadding
           key={item.title}
@@ -89,43 +81,47 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
           <NextLink href={item.href}>
             <ListItem
               onClick={() => SubMenuOpen(item.id)}
-              id={item.id}
+              id={`${item.id}`}
               button
               selected={location === item.href}
               className={`${
                 location === item.href
-                  ? "text-primary-color tracking-2 "
+                  ? "text-primary-color tracking-2"
                   : "border-border-light border-2"
               }`}
             >
               <ListItemIcon
                 className={`${
                   location === item.href ? "text-black" : "text-custom-black"
-                }`}
-                width="20"
-                height="20"
+                }`}                
               >
                 {item.icon}
               </ListItemIcon>
 
               <ListItemText
                 className={`${location === item.href ? "text-black" : ""}`}
-                id={item.id}
+                id={`${item.id}`}
               >
                 {item.title}
               </ListItemText>
-              <ListItemIcon className="transition ease-in-out delay-150 duration-300" width="20" height="20">
-              {item.href === "" && item.id === Id
-                    ? item.iconOpened
-                    : item.child
-                    ? item.iconClosed
-                    : null}
+              <ListItemIcon
+                className="transition ease-in-out delay-150 duration-300"                
+              >
+                {item.href === "" && item.id === Id
+                  ? item.iconOpened
+                  : item.child
+                  ? item.iconClosed
+                  : null}
               </ListItemIcon>
             </ListItem>
           </NextLink>
           {item.href === "" && item.id === Id ? (
             <DropdownLink
-              className={`${item.id !== Id ? "w-full inline-block transition-all-all pl-0 px-3 py-7px" : "transition ease-in-out delay-150 duration-300"}`}
+              className={`${
+                item.id !== Id
+                  ? "w-full inline-block transition-all-all pl-0 px-3 py-7px active"
+                  : "transition ease-in-out delay-150 duration-300 deactive"
+              }`}
               initial={{ height: 0 }}
               animate={{ height: "60px" }}
               exit={{ height: 0 }}
@@ -137,7 +133,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                     className="w-full tracking-2 text-black inline-block pl-0 px-3 py-7px text-base"
                     disablePadding
                     key={sub.title}
-                    item={item}                    
+                    item={item}
                   >
                     <NextLink
                       className={`${
@@ -155,49 +151,8 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
             <></>
           )}
         </List>
-      ))}      
+      ))}
     </Box>
   );
-  if (lgUp) {
-    return (
-      <Drawer
-        anchor="left"
-        open={isSidebarOpen}
-        variant="persistent"
-        PaperProps={{
-          sx: {
-            width: "280px",
-            border: "0 !important",
-            boxShadow: "0px 7px 30px 0px rgb(113 122 131 / 11%)",
-          },
-        }}
-      >
-        {SidebarContent}
-      </Drawer>
-    );
-  }
-  return (
-    <Drawer
-      anchor="left"
-      open={isMobileSidebarOpen}
-      onClose={onSidebarClose}
-      PaperProps={{
-        sx: {
-          width: "280px",
-          border: "0 !important",
-        },
-      }}
-      variant="temporary"
-    >
-      {SidebarContent}
-    </Drawer>
-  );
 };
-
-Sidebar.propTypes = {
-  isMobileSidebarOpen: PropTypes.bool,
-  onSidebarClose: PropTypes.func,
-  isSidebarOpen: PropTypes.bool,
-};
-
-export default Sidebar;
+export default SidebarItems;

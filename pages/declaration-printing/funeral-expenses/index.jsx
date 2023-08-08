@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function FuneralExpenses() {
     return (
@@ -62,3 +63,7 @@ export default function FuneralExpenses() {
         </>
     )
 }
+
+FuneralExpenses.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

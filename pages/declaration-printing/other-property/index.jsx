@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function OtherProperty() {
     return (
@@ -62,3 +63,7 @@ export default function OtherProperty() {
         </>
     )
 }
+
+OtherProperty.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

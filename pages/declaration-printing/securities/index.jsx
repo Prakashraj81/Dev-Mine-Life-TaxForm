@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
 import BackButton from "../../../components/back-btn";
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function Securities() {
     return (
@@ -55,3 +56,7 @@ export default function Securities() {
         </>
     )
 }
+
+Securities.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

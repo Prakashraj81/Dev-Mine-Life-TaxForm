@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState, Fragment } from "react";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
-
+import FullLayout from '../../components/layouts/full/FullLayout';
 
 export default function CustomerSupportTicket() {
 
@@ -137,3 +137,8 @@ export default function CustomerSupportTicket() {
     </>
   );
 }
+
+
+CustomerSupportTicket.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

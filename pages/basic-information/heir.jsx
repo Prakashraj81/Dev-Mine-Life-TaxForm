@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import BackButton from "../../components/back-btn";
+import FullLayout from '../../components/layouts/full/FullLayout';
 
 export default function Heir() {
     const ProfessionList = [
@@ -230,7 +231,7 @@ export default function Heir() {
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={ProfessionDropdownChange}>
-                                            <option value=''>Select an option</option>
+                                            <option value=''></option>
                                             {ProfessionList.map((option) => (
                                                 <option key={option.value} value={option.value}>
                                                     {option.label}
@@ -247,17 +248,9 @@ export default function Heir() {
                                         被相続人との間柄
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
-                                    {/* <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={RelationshipDropdownChange}>
-                                        <option value=''>Select an option</option>
-                                        {RelationshipWithDecedentList.map((option) => (
-                                            <option key={option.value} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select> */}
+                                <div className="w-full inline-block mt-2">                                    
                                     <select name="relationship" id="relationship" className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                        <option value=''>Select an option</option>
+                                        <option value=''></option>
                                         <option value="夫"> 夫 </option>
                                         <option value="妻"> 妻 </option>
                                         <optgroup label="息子">
@@ -324,3 +317,7 @@ export default function Heir() {
         </>
     )
 }
+
+Heir.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

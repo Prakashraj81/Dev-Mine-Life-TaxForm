@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import BackButton from "../../../components/back-btn";
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function HouseAdd() {
     let KindsList = [
@@ -304,7 +305,7 @@ export default function HouseAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleKinds}>
-                                        <option value=''>Select an option</option>
+                                        <option value=''></option>
                                         {KindsList.map((option) => (
                                             <option key={option.id} value={option.id}>
                                                 {option.label}
@@ -324,7 +325,7 @@ export default function HouseAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleHowToUse}>
-                                        <option value=''>Select an option</option>
+                                        <option value=''></option>
                                     </select>
                                 </div>
                             </div>
@@ -339,7 +340,7 @@ export default function HouseAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleHowToUse}>
-                                        <option value=''>Select an option</option>
+                                        <option value=''></option>
                                         {HowToUseList_House.map((option) => (
                                             <option key={option.id} value={option.id}>
                                                 {option.label}
@@ -359,7 +360,7 @@ export default function HouseAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleHowToUse}>
-                                        <option value=''>Select an option</option>
+                                        <option value=''></option>
                                         {HowToUseList_Structure.map((option) => (
                                             <option key={option.id} value={option.id}>
                                                 {option.label}
@@ -382,7 +383,7 @@ export default function HouseAdd() {
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleStructure}>
-                                            <option value=''>Select an option</option>
+                                            <option value=''></option>
                                             {StructureList.map((option) => (
                                                 <option key={option.id} value={option.id}>
                                                     {option.label}
@@ -401,7 +402,7 @@ export default function HouseAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleUsage}>
-                                        <option value=''>Select an option</option>
+                                        <option value=''></option>
                                         {UsageList.map((option) => (
                                             <option key={option.id} value={option.id}>
                                                 {option.label}
@@ -688,3 +689,7 @@ export default function HouseAdd() {
         </>
     )
 }
+
+HouseAdd.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

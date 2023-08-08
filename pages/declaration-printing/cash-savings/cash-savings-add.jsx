@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, Fragment, Controller, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import BackButton from "../../../components/back-btn";
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function CashSavingsAdd() {
     let DepositList = [
@@ -115,7 +116,7 @@ export default function CashSavingsAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleDepositType}>
-                                        <option value=''>Select an option</option>
+                                        <option value=''></option>
                                         {DepositList.map((option) => (
                                             <option key={option.value} value={option.id}>
                                                 {option.label}
@@ -258,3 +259,8 @@ export default function CashSavingsAdd() {
         </>
     )
 }
+
+
+CashSavingsAdd.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

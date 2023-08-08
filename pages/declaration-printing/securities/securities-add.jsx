@@ -4,6 +4,7 @@ import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from 'react';
 import BackButton from "../../../components/back-btn";
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function SecuritiesAdd() {
     let SecuritiesList = [
@@ -333,7 +334,7 @@ export default function SecuritiesAdd() {
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={SecuritiesDropdownChange}>
-                                    <option value="0">Select an option</option>
+                                    <option value="0"></option>
                                     {SecuritiesList.map((option) => (
                                         <option key={option.value} value={option.id}>
                                             {option.label}
@@ -352,7 +353,7 @@ export default function SecuritiesAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={UnitDetailsDropdownChange}>
-                                        <option value="0">Select an option</option>
+                                        <option value="0"></option>
                                         {UnitDetailsList.map((option) => (
                                             <option key={option.value} value={option.id}>
                                                 {option.label}
@@ -656,3 +657,7 @@ export default function SecuritiesAdd() {
         </>
     )
 }
+
+SecuritiesAdd.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

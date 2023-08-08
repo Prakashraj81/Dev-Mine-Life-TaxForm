@@ -1,7 +1,8 @@
 import React from "react";
 import HomeIcon from '@mui/icons-material/Home';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+//import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
@@ -14,7 +15,7 @@ const Menuitems = [
     href: "",
     icon: <HomeIcon />,
     iconClosed: <KeyboardArrowRightIcon />,
-    iconOpened: <KeyboardArrowUpIcon />,
+    iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
         title: "基礎情報の入力",
@@ -47,7 +48,7 @@ const Menuitems = [
     text: "Enter property",
     icon: <FileOpenIcon />,
     iconClosed: <KeyboardArrowRightIcon />,
-    iconOpened: <KeyboardArrowUpIcon />,
+    iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
         title: "現金預金(外貨含む)",
@@ -115,7 +116,7 @@ const Menuitems = [
     href: "",
     icon: <NoteAltIcon />,
     iconClosed: <KeyboardArrowRightIcon />,
-    iconOpened: <KeyboardArrowUpIcon />,
+    iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {
         title: "小規模宅地等の特例",
@@ -170,7 +171,7 @@ const Menuitems = [
     href: "/property/declaration-printing",
     icon: <CardGiftcardIcon />,
     iconClosed: <KeyboardArrowRightIcon />,
-    iconOpened: <KeyboardArrowUpIcon />,
+    iconOpened: <KeyboardArrowDownIcon />,
   },
 ];
 

@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function DonationsBequests() {
     return (
@@ -10,3 +11,7 @@ export default function DonationsBequests() {
         </>
     )
 }
+
+DonationsBequests.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

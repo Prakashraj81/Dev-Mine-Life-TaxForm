@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import BackButton from "../../../components/back-btn";
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function SuccessiveInheritanceAdd() {
     let AmountGiftList = [
@@ -138,7 +139,7 @@ export default function SuccessiveInheritanceAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' value={AmountGiftList} onChange={handleDropdownChange}>
-                                        <option value=''>select an option</option>
+                                        <option value=''></option>
                                     </select>
                                     {errors.RelationshipDecedent && <p className="text-red-500 mt-2" role="alert">{errors.RelationshipDecedent?.message}</p>}
                                 </div>
@@ -214,3 +215,7 @@ export default function SuccessiveInheritanceAdd() {
         </>
     )
 }
+
+SuccessiveInheritanceAdd.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

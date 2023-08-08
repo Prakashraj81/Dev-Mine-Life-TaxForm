@@ -2,7 +2,9 @@
 import Link from "next/link";
 import { useState, Fragment } from "react";
 import { useForm } from "react-hook-form";
-
+import Header from "../../components/header";
+import Footer from "../../components/footer";
+import BlankLayout from '../../components/layouts/blank/BlankLayout';
 
 export default function ForgetPassword() {
 
@@ -35,7 +37,7 @@ export default function ForgetPassword() {
 
   return (
     <>
-    
+    <Header/>
       <div className="forget-password-form-wrapper py-32">
         <div className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
           <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
@@ -85,7 +87,11 @@ export default function ForgetPassword() {
           </div>
         </div>
       </div>
-      
+      <Footer/>
     </>
   );
 }
+
+ForgetPassword.getLayout = function getLayout(page) {
+  return <BlankLayout>{page}</BlankLayout>;
+};

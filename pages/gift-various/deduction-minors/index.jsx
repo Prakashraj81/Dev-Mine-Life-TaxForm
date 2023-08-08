@@ -4,6 +4,7 @@ import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from 'react';
 import BackButton from "../../../components/back-btn";
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function DeductionMinors() {
        return (
@@ -66,3 +67,7 @@ export default function DeductionMinors() {
         </>
     )
 }
+
+DeductionMinors.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

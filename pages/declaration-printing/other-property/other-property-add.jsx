@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function OtherPropertyAdd() {
     let PropertyList = [
@@ -184,7 +184,7 @@ export default function OtherPropertyAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handlePropertyType}>
-                                        <option value=''>select an option</option>
+                                        <option value=''></option>
                                         {PropertyList.map((option) => (
                                             <option key={option.value} value={option.id}>
                                                 {option.label}
@@ -494,3 +494,7 @@ export default function OtherPropertyAdd() {
         </>
     )
 }
+
+OtherPropertyAdd.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

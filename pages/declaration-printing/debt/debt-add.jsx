@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import BackButton from "../../../components/back-btn";
 import { useEffect } from 'react';
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function DebtAdd() {
     let DebtList = [
@@ -164,7 +165,7 @@ export default function DebtAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleDebitType}>
-                                        <option value=''>select an option</option>
+                                        <option value=''></option>
                                         {DebtList.map((option) => (
                                             <option key={option.value} value={option.id}>
                                                 {option.label}
@@ -419,3 +420,7 @@ export default function DebtAdd() {
         </>
     )
 }
+
+DebtAdd.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import AddIcon from '@mui/icons-material/Add';
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function Gift() {
     let LandSpousalList = [
@@ -370,3 +371,7 @@ export default function Gift() {
         </>
     )
 }
+
+Gift.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

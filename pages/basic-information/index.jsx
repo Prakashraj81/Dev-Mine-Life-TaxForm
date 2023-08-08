@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import FullLayout from '../../components/layouts/full/FullLayout';
 
 export default function BasicInformation() {
     return (
@@ -109,3 +110,8 @@ export default function BasicInformation() {
         </>
     )
 }
+
+
+BasicInformation.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

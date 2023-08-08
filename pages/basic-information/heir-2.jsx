@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import BackButton from "../../components/back-btn";
+import FullLayout from '../../components/layouts/full/FullLayout';
 
 export default function Heir2() {
     const ProfessionList = [
@@ -281,3 +282,7 @@ export default function Heir2() {
         </>
     )
 }
+
+Heir2.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

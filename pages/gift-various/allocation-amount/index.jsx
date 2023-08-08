@@ -4,6 +4,7 @@ import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from 'react';
 import BackButton from "../../../components/back-btn";
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function AllocationAmount() {
     return (
@@ -66,3 +67,8 @@ export default function AllocationAmount() {
         </>
     )
 }
+
+
+AllocationAmount.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

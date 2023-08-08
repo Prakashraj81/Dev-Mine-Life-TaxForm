@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function SecuritiesStocksOther() {
     let SecuritiesList = [
@@ -250,3 +251,7 @@ export default function SecuritiesStocksOther() {
         </>
     )
 }
+
+SecuritiesStocksOther.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

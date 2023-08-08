@@ -1,7 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
-import LogoIcon from "./logo/LogoIcon";
-import UserProfileDropdown from '../auth/user-profile-dropdown';
+import Logo from "./layouts/full/shared/logo/Logo";
 
 export default function Header() {
   return (
@@ -10,7 +8,7 @@ export default function Header() {
         <div className="navbar">
           <div className="flex items-center justify-between h-20">
             <div className="flex-shrink-0">
-              <LogoIcon />
+              <Logo />
             </div>
             <div className="flex items-center">
               <div className="hidden md:block">

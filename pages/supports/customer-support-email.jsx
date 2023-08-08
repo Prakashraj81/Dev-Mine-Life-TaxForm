@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, Fragment } from "react";
 import { useForm } from "react-hook-form";
-
+import FullLayout from '../../components/layouts/full/FullLayout';
 
 export default function CustomerSupportEmail() {
 
@@ -109,3 +109,8 @@ export default function CustomerSupportEmail() {
     </>
   );
 }
+
+
+CustomerSupportEmail.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

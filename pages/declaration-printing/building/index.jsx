@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function House() {
     return (
@@ -63,3 +64,7 @@ export default function House() {
         </>
     )
 }
+
+House.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

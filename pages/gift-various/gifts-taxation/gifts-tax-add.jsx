@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function GiftTaxAdd() {    
 
@@ -273,7 +274,7 @@ export default function GiftTaxAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                        <option value=''>select an option</option>
+                                        <option value=''></option>
                                         {GiftTypeList.map((option) => (
                                             <option key={option.value} value={option.id}>
                                                 {option.label}
@@ -313,7 +314,7 @@ export default function GiftTaxAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handlePropertyChange}>
-                                        <option value=''>select an option</option>
+                                        <option value=''></option>
                                         {PropertyList.map((option) => (
                                             <option key={option.value} value={option.id}>
                                                 {option.label}
@@ -332,7 +333,7 @@ export default function GiftTaxAdd() {
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={PropertyDetailsChange}>
-                                    <option value=''>select an option</option>
+                                    <option value=''></option>
                                     {PropertyOptionsData.map((option) => (
                                         <option key={option.value} value={option.id}>
                                             {option.label}
@@ -511,7 +512,7 @@ export default function GiftTaxAdd() {
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                    <option value=''>select an option</option>                                    
+                                    <option value=''></option>                                    
                                 </select>
                             </div>
                         </div>
@@ -526,7 +527,7 @@ export default function GiftTaxAdd() {
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                    <option value=''>select an option</option>                                    
+                                    <option value=''></option>                                    
                                 </select>
                             </div>
                         </div>
@@ -571,3 +572,8 @@ export default function GiftTaxAdd() {
         </>
     )
 }
+
+
+GiftTaxAdd.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
+};

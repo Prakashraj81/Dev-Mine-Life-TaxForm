@@ -1,10 +1,12 @@
 "use client";
+//import type { ReactElement } from 'react';
 import Link from "next/link";
 import { useState, Fragment } from "react";
 import { useForm } from "react-hook-form";
-import Header from "../../components/layouts/header";
-import Footer from "../../components/layouts/footer";
+import Header from "../../components/header";
+import Footer from "../../components/footer";
 import Register from './register';
+import BlankLayout from '../../components/layouts/blank/BlankLayout';
 
 export default function Login(props) {
   const { showregister } = props;
@@ -100,7 +102,7 @@ export default function Login(props) {
               </div>
               <div className="text-center">
                 <div className="mt-3">
-                  <Link href="../forget-password">
+                  <Link href="/auth/forget-password">
                     <span className="text-xs text-black font-medium">
                       パスワードを忘れた方
                     </span>
@@ -130,6 +132,8 @@ export default function Login(props) {
   );
 }
 
-
+Login.getLayout = function getLayout(page) {
+  return <BlankLayout>{page}</BlankLayout>;
+};
 
 
