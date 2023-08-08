@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import FullLayout from '../../../components/layouts/full/FullLayout';
+import FullLayout from '../../components/layouts/full/FullLayout';
 
 export default function DonationsBequests() {
     return (
