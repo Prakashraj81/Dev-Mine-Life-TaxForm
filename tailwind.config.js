@@ -16,6 +16,7 @@ module.exports = {
         'list-text': '#4B4B4B',
         'return-bg':'#6B6868',
         'border-light':'#e891882e',
+        'input-color':'#cccccc96',
       },
       padding: {
         '5px': '5px !important',

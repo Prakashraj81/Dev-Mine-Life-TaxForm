@@ -4,6 +4,9 @@ import { useEffect, useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import BackButton from "../../../components/back-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
+import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import FloorIcon from "../../../components/inputbox-icon/textbox-floor-icon";
+import AreaIcon from "../../../components/inputbox-icon/textbox-area-icon";
 
 export default function HouseAdd() {
     let KindsList = [
@@ -63,7 +66,7 @@ export default function HouseAdd() {
     const [Valuation, setValuation] = useState(0);
     const [Structure, setStructure] = useState("");
     const [Usage, setUsage] = useState("");
-    const [NumberofFloors, setNumberofFloors] = useState(0);
+    const [NumberofFloors, setNumberofFloors] = useState("");
     let [UndecidedHeir, setUndecidedHeir] = useState(0);
     let [TotalPrice, setTotalPrice] = useState(0);
     let [Undecidedheir1, setUndecidedheir1] = useState(0);
@@ -80,7 +83,7 @@ export default function HouseAdd() {
         defaultValues: {
             Kinds: "",
             HowToUse: "",
-            PostCode: 0,
+            PostCode: "",
             ResidenceDisplay: "",
             Area: 0,
             PropertyTaxAssessmentValue: 0,
@@ -91,7 +94,7 @@ export default function HouseAdd() {
             Valuation: 0,
             Structure: "",
             Usage: "",
-            NumberofFloors: 0,
+            NumberofFloors: "",
             UndecidedHeir: 0,
             TotalPrice: 0,
         }
@@ -105,6 +108,19 @@ export default function HouseAdd() {
             e.preventDefault();
         }
     };
+
+    //Postal code 7 digit limit function
+    const [isValid, setIsValid] = useState(true);
+    const postalcodeDigit = (e) => {
+        let digit_value = e.target.value;
+        let isValidInput = /^\d{7}$/.test(digit_value);        
+        if (digit_value.length == 8 || digit_value.length == 9 || digit_value.length == 10) {
+            digit_value = digit_value.slice(0, 7)
+            setPostCode(digit_value);
+        } 
+        setPostCode(digit_value);
+        setIsValid(isValidInput);
+    }
 
     const NumberofFloorsKeyPress = (e) => {
         var value = Number(event.target.value);
@@ -422,17 +438,18 @@ export default function HouseAdd() {
                                         建物全体の階数
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
+                                <div className="w-full inline-block mt-2 relative">
                                     <input
                                         type="text"
                                         id="NumberofFloors"
                                         onKeyPress={handleKeyPress}
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
                                         {...register("NumberofFloors", { required: "この項目は必須です" })}
                                         aria-invalid={errors.NumberofFloors ? "true" : "false"}
                                     />
-                                    {errors.NumberofFloors && <p className="text-red-500 mt-2" role="alert">{errors.NumberofFloors?.message}</p>}
+                                    <FloorIcon />
                                 </div>
+                                {errors.NumberofFloors && <p className="text-red-500 mt-2" role="alert">{errors.NumberofFloors?.message}</p>}
                             </div>
                         </div>
                     )}
@@ -445,20 +462,21 @@ export default function HouseAdd() {
                                     郵便番号
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2">
+                            <div className="w-full inline-block mt-2 relative">
                                 <input
                                     type="text"
-                                    id="postcode"
+                                    id="PostCode"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
                                     onKeyPress={handleKeyPress}
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    {...register("postcode", { required: "この項目は必須です" })}
-                                    aria-invalid={errors.postcode ? "true" : "false"}
+                                    onChange={postalcodeDigit}
+                                    value={PostCode}
                                 />
-                                <div className="mt-3">
-                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
-                                </div>
-                                {errors.postcode && <p className="text-red-500 mt-2" role="alert">{errors.postcode?.message}</p>}
+                                <PostcodeIcon />
                             </div>
+                            <div className="mt-3">
+                                <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
+                            </div>
+                            {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
                         </div>
                     </div>
 
@@ -491,15 +509,16 @@ export default function HouseAdd() {
                                     面積
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2">
+                            <div className="w-full inline-block mt-2 relative">
                                 <input
                                     type="text"
                                     id="Area"
                                     onKeyPress={handleKeyPress}
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
                                     {...register("Area", { required: "この項目は必須です" })}
                                     aria-invalid={errors.postcode ? "true" : "false"}
                                 />
+                                <AreaIcon />
                                 {errors.Area && <p className="text-red-500 mt-2" role="alert">{errors.Area?.message}</p>}
                             </div>
                         </div>
@@ -604,13 +623,13 @@ export default function HouseAdd() {
                                     証明書を挿入
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2">
+                            <div className="w-full inline-block mt-2 relative">
                                 <div class="custom-file">
-                                    <input type="file" className="text-right flex form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3" id="InsertCertificate" aria-describedby="inputGroupFileAddon06" accept="image/x-png,image/gif,image/jpeg,image/svg"
+                                    <input type="file" className="absolute right-0 top-0 p-2.5 text-right flex form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3" id="InsertCertificate" aria-describedby="inputGroupFileAddon06" accept="image/x-png,image/gif,image/jpeg,image/svg"
                                         {...register("InsertCertificate", { required: "この項目は必須です" })}
                                         aria-invalid={errors.InsertCertificate ? "true" : "false"}
                                     />
-                                    <label className="custom-file-label" for="InsertCertificate">Upload</label>
+                                    <label className="hidden custom-file-label" for="InsertCertificate">Upload</label>
                                 </div>
                             </div>
                         </div>
@@ -691,5 +710,5 @@ export default function HouseAdd() {
 }
 
 HouseAdd.getLayout = function getLayout(page) {
-  return <FullLayout>{page}</FullLayout>;
+    return <FullLayout>{page}</FullLayout>;
 };

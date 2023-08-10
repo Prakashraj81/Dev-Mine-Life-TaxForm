@@ -3,9 +3,13 @@ import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import BackButton from "../../../components/back-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
+import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import FloorIcon from "../../../components/inputbox-icon/textbox-floor-icon";
+import AreaIcon from "../../../components/inputbox-icon/textbox-area-icon";
 
-export default function GiftTaxAdd() {    
+export default function GiftTaxAdd() {
 
     let GiftTypeList = [
         { id: 1, value: '一般贈与', label: '一般贈与' },
@@ -88,7 +92,7 @@ export default function GiftTaxAdd() {
     const [DateofGift, setDateofGift] = useState("");
     const [TypeofProperty, setTypeofProperty] = useState("");
     const [PropertyDetails, setPropertyDetails] = useState("");
-    const [PostCode, setPostCode] = useState(0);
+    const [PostCode, setPostCode] = useState("");
     const [Address, setAddress] = useState("");
     const [Quantity, setQuantity] = useState(0);
     const [GiftAmount, setGiftAmount] = useState(0);
@@ -114,7 +118,7 @@ export default function GiftTaxAdd() {
             DateofGift: "",
             TypeofProperty: "",
             PropertyDetails: "",
-            PostCode: 0,
+            PostCode: "",
             Address: "",
             Quantity: 0,
             GiftAmount: 0,
@@ -124,6 +128,20 @@ export default function GiftTaxAdd() {
             Breadth: 0,
         }
     });
+
+
+    //Postal code 7 digit limit function
+    const [isValid, setIsValid] = useState(true);
+    const postalcodeDigit = (e) => {
+        let digit_value = e.target.value;
+        let isValidInput = /^\d{7}$/.test(digit_value);        
+        if (digit_value.length == 8 || digit_value.length == 9 || digit_value.length == 10) {
+            digit_value = digit_value.slice(0, 7)
+            setPostCode(digit_value);
+        } 
+        setPostCode(digit_value);
+        setIsValid(isValidInput);
+    }
 
     const handleDropdownChange = (event) => {
         var selectedId = Number(event.target.value);
@@ -135,16 +153,16 @@ export default function GiftTaxAdd() {
         setPropertyDetails(selectedOption.text);
         let DetailsId = Number(selectedOption.value);
         let property_value = TypeofProperty;
-        if(property_value === "現金・預貯金" || property_value === "外貨" || property_value === "Cash/savings" || property_value === "foreign currency"){
-            if(DetailsId === 2){            
-                setShowBreadth(false);            
+        if (property_value === "現金・預貯金" || property_value === "外貨" || property_value === "Cash/savings" || property_value === "foreign currency") {
+            if (DetailsId === 2) {
+                setShowBreadth(false);
                 setShowPostCode(false);
                 setShowAddress(false);
                 setShowLocation(true);
                 setShowQuantity(true);
-            }        
-            else{
-                setShowBreadth(false);   
+            }
+            else {
+                setShowBreadth(false);
                 setShowLocation(false);
                 setShowQuantity(false);
                 setShowPostCode(true);
@@ -245,7 +263,14 @@ export default function GiftTaxAdd() {
     };
 
 
-
+    const handleKeyPress = (e) => {
+        const keyCode = e.keyCode || e.which;
+        const keyValue = String.fromCharCode(keyCode);
+        const numericRegex = /^[0-9\b]+$/;
+        if (!numericRegex.test(keyValue)) {
+            e.preventDefault();
+        }
+    };
 
     return (
         <>
@@ -348,23 +373,28 @@ export default function GiftTaxAdd() {
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
-                                    <label className="form-label">
+                                    <label className="form-label w-full inline-block">
                                         所在場所
                                     </label>
-                                    <label className="form-label mt-3">
+                                    <label className="form-label w-full inline-block mt-3">
                                         郵便番号
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
+                                <div className="w-full inline-block mt-2 relative">
                                     <input
                                         type="text"
                                         id="PostCode"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("PostCode", { required: "PostCode is required" })}
-                                        aria-invalid={errors.PostCode ? "true" : "false"}
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
+                                        onKeyPress={handleKeyPress}
+                                        onChange={postalcodeDigit}
+                                        value={PostCode}
                                     />
-                                    {errors.PostCode && <p className="text-red-500 mt-2" role="alert">{errors.PostCode?.message}</p>}
+                                    <PostcodeIcon />
                                 </div>
+                                <div className="mt-3">
+                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
+                                </div>
+                                {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
                             </div>
                         </div>
                     )}
@@ -399,14 +429,15 @@ export default function GiftTaxAdd() {
                                         広さ
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
+                                <div className="w-full inline-block mt-2 relative">
                                     <input
                                         type="text"
                                         id="Breadth"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
                                         {...register("Breadth", { required: "Breadth is required" })}
                                         aria-invalid={errors.Breadth ? "true" : "false"}
                                     />
+                                    <AreaIcon />
                                     {errors.Breadth && <p className="text-red-500 mt-2" role="alert">{errors.Breadth?.message}</p>}
                                 </div>
                             </div>
@@ -473,7 +504,7 @@ export default function GiftTaxAdd() {
                                         <input
                                             type="text"
                                             id="GiftAmount"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             {...register("GiftAmount", { required: "GiftAmount is required" })}
                                             aria-invalid={errors.GiftAmount ? "true" : "false"}
                                         />
@@ -492,7 +523,7 @@ export default function GiftTaxAdd() {
                                     <input
                                         type="text"
                                         id="AmountofGiftTax"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         {...register("AmountofGiftTax", { required: "AmountofGiftTax is required" })}
                                         aria-invalid={errors.AmountofGiftTax ? "true" : "false"}
                                     />
@@ -510,9 +541,9 @@ export default function GiftTaxAdd() {
                                     贈与税申告書の提出先
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2">
+                            <div className="w-full inline-block mt-2 relative">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                    <option value=''></option>                                    
+                                    <option value=''></option>
                                 </select>
                             </div>
                         </div>
@@ -527,7 +558,7 @@ export default function GiftTaxAdd() {
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                    <option value=''></option>                                    
+                                    <option value=''></option>
                                 </select>
                             </div>
                         </div>
@@ -539,15 +570,7 @@ export default function GiftTaxAdd() {
 
                     <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                         <div className="save-btn text-center">
-                            <Link href="/">
-                                <button
-                                    className="bg-return-bg rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        戻る
-                                    </span>
-                                </button>
-                            </Link>
+                            <BackButton />
                         </div>
                         <div className="save-btn text-center">
                             <Link href="/declaration-printing/other-property/other-property-others">
@@ -575,5 +598,5 @@ export default function GiftTaxAdd() {
 
 
 GiftTaxAdd.getLayout = function getLayout(page) {
-  return <FullLayout>{page}</FullLayout>;
+    return <FullLayout>{page}</FullLayout>;
 };

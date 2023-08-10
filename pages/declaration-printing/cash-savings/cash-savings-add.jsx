@@ -4,6 +4,7 @@ import { useState, Fragment, Controller, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import BackButton from "../../../components/back-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
+import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 
 export default function CashSavingsAdd() {
     let DepositList = [
@@ -19,7 +20,7 @@ export default function CashSavingsAdd() {
 
     const [DepositType, setDepositType] = useState("");
     const [FinancialInstitutionName, setFinancialInstitutionName] = useState("");
-    const [PostCode, setPostCode] = useState(0);
+    const [PostCode, setPostCode] = useState("");
     const [Address, setAddress] = useState("");
     const [AmountofMoney, setAmountofMoney] = useState(0);
 
@@ -32,13 +33,13 @@ export default function CashSavingsAdd() {
         defaultValues: {
             DepositType: "",
             FinancialInstitutionBranchName: "",
-            PostCode: 0,
+            PostCode: "",
             Address: "",
             AmountofMoney: 0,
         }
     });
 
-    useEffect (() => {
+    useEffect(() => {
         setShowFinancialInstitutionName(true);
         setShowPostCode(false);
         setShowAddress(false);
@@ -62,6 +63,20 @@ export default function CashSavingsAdd() {
 
         }
     };
+
+    //Postal code 7 digit limit function
+    const [isValid, setIsValid] = useState(true);
+    const postalcodeDigit = (e) => {
+        let digit_value = e.target.value;
+        let isValidInput = /^\d{7}$/.test(digit_value);
+        if (digit_value.length == 8 || digit_value.length == 9 || digit_value.length == 10) {
+            digit_value = digit_value.slice(0, 7)
+            setPostCode(digit_value);
+        }
+        setPostCode(digit_value);
+        setIsValid(isValidInput);
+    }
+
 
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
@@ -135,14 +150,21 @@ export default function CashSavingsAdd() {
                                             郵便番号
                                         </label>
                                     </div>
-                                    <div className="w-full inline-block mt-2">
+                                    <div className="w-full inline-block mt-2 relative">
                                         <input
                                             type="text"
                                             id="PostCode"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
                                             onKeyPress={handleKeyPress}
-                                        />                                        
+                                            onChange={postalcodeDigit}
+                                            value={PostCode}
+                                        />
+                                        <PostcodeIcon />
                                     </div>
+                                    <div className="mt-3">
+                                        <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
+                                    </div>
+                                    {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
                                 </div>
                             </div>
                         )}
@@ -206,7 +228,7 @@ export default function CashSavingsAdd() {
                                         id="AmountofMoney"
                                         className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         onKeyPress={handleKeyPress}
-                                    />                                    
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -262,5 +284,5 @@ export default function CashSavingsAdd() {
 
 
 CashSavingsAdd.getLayout = function getLayout(page) {
-  return <FullLayout>{page}</FullLayout>;
+    return <FullLayout>{page}</FullLayout>;
 };

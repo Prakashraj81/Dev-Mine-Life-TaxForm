@@ -4,6 +4,7 @@ import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import BackButton from "../../components/back-btn";
 import FullLayout from '../../components/layouts/full/FullLayout';
+import PostcodeIcon from "../../components/inputbox-icon/textbox-postcode-icon";
 
 export default function Decendent() {
 
@@ -43,20 +44,25 @@ export default function Decendent() {
         }
     });
 
-    // const ProfessionDropdownChange = (event) => {    
-    //     let profession_value = event.target.value;
-    //     console.log("profession_value:" + profession_value);
-    //     {profession_value === "" ? 
-    //     setErrorVisible(!isErrorVisible)
-    //     :
-    //     setErrorVisible(false)
-    //     }
-    //     setProfession(event.target.value);
-    // };
 
     const ProfessionDropdownChange = (event) => {
         setProfession(event.target.value);
     }
+
+
+    //Postal code 7 digit limit function
+    const [isValid, setIsValid] = useState(true);
+    const postalcodeDigit = (e) => {
+        let digit_value = e.target.value;
+        let isValidInput = /^\d{7}$/.test(digit_value);        
+        if (digit_value.length == 8 || digit_value.length == 9 || digit_value.length == 10) {
+            digit_value = digit_value.slice(0, 7)
+            setPostCode(digit_value);
+        } 
+        setPostCode(digit_value);
+        setIsValid(isValidInput);
+    }
+
 
 
     const onSubmit = async (defaultValues) => {
@@ -164,16 +170,21 @@ export default function Decendent() {
                                         郵便番号
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
+                                <div className="w-full inline-block mt-2 relative">
                                     <input
                                         type="text"
                                         id="PostCode"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("PostCode", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.PostCode ? "true" : "false"}
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
+                                        onKeyPress={handleKeyPress}
+                                        onChange={postalcodeDigit}
+                                        value={PostCode}
                                     />
-                                    {errors.PostCode && <p className="text-red-500" role="alert">{errors.PostCode?.message}</p>}
+                                    <PostcodeIcon />
                                 </div>
+                                <div className="mt-3">
+                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
+                                </div>
+                                {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
                             </div>
                         </div>
 
@@ -206,6 +217,7 @@ export default function Decendent() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={ProfessionDropdownChange}>
+                                        <option value=''></option>
                                         {ProfessionList.map((option) => (
                                             <option key={option.value}
                                                 value={option.value}>
@@ -269,15 +281,14 @@ export default function Decendent() {
                         <div className="w-full flex justify-evenly items-center py-10">
                             <BackButton />
                             <div className="save-btn text-center">
-                                <Link href="/">
-                                    <button
-                                        className="bg-primary-color rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                    >
-                                        <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                            保存して戻る
-                                        </span>
-                                    </button>
-                                </Link>
+                                <button
+                                    type="submit"
+                                    className="bg-primary-color rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                                >
+                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                        保存して戻る
+                                    </span>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -288,5 +299,5 @@ export default function Decendent() {
 }
 
 Decendent.getLayout = function getLayout(page) {
-  return <FullLayout>{page}</FullLayout>;
+    return <FullLayout>{page}</FullLayout>;
 };

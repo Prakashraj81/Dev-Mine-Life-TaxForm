@@ -4,11 +4,12 @@ import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import BackButton from "../../../components/back-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
+import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 
-export default function HouseholdPropertyAdd() {   
+export default function HouseholdPropertyAdd() {
 
     const [PropertyContent, setPropertyContent] = useState("");
-    const [Location, setLocation] = useState("");
+    const [PostCode, setPostCode] = useState("");
     const [Address, setAddress] = useState("");
     const [Valuation, setValuation] = useState(0);
 
@@ -19,7 +20,7 @@ export default function HouseholdPropertyAdd() {
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
         defaultValues: {
             PropertyContent: "",
-            Location: "",
+            PostCode: "",
             Address: "",
             Valuation: 0,
             UndecidedHeir: 0,
@@ -34,18 +35,19 @@ export default function HouseholdPropertyAdd() {
         setUndecidedHeir(value);
         setTotalPrice(value);
     };
+    
 
-//Footer box calculation
-const FooterboxKeyPress = (e) => {
-    let footer_box_value = Number(e.target.value);
-    if (footer_box_value > 0) {
-        var value = AmountofMoney - footer_box_value;
-        setUndecidedHeir(value);
+    //Footer box calculation
+    const FooterboxKeyPress = (e) => {
+        let footer_box_value = Number(e.target.value);
+        if (footer_box_value > 0) {
+            var value = AmountofMoney - footer_box_value;
+            setUndecidedHeir(value);
+        }
+        else {
+            setUndecidedHeir(AmountofMoney);
+        }
     }
-    else{
-        setUndecidedHeir(AmountofMoney);
-    }
-}
 
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
@@ -60,12 +62,12 @@ const FooterboxKeyPress = (e) => {
         var value = JSON.stringify(defaultValues);
         console.log(value);
         var Apiurl = "/";
-            const urlresponse = await fetch(Apiurl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(defaultValues),
-                mode: "no-cors",
-            });
+        const urlresponse = await fetch(Apiurl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(defaultValues),
+            mode: "no-cors",
+        });
     };
     return (
         <>
@@ -111,16 +113,21 @@ const FooterboxKeyPress = (e) => {
                                         所在場所
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
+                                <div className="w-full inline-block mt-2 relative">
                                     <input
                                         type="text"
-                                        id="Location"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Location", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.Location ? "true" : "false"}
+                                        id="PostCode"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
+                                        onKeyPress={handleKeyPress}
+                                        {...register("PostCode", { required: "数字7桁で入力して下さい。海外の場合は入力不要です。" })}
+                                        aria-invalid={errors.PostCode ? "true" : "false"}
                                     />
-                                    {errors.Location && <p className="text-red-500" role="alert">{errors.Location?.message}</p>}
+                                    <PostcodeIcon />
                                 </div>
+                                <div className="mt-3">
+                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
+                                </div>
+                                {errors.PostCode && <p className="text-red-500" role="alert">{errors.PostCode?.message}</p>}
                             </div>
                         </div>
 
@@ -156,10 +163,10 @@ const FooterboxKeyPress = (e) => {
                                     <input
                                         type="text"
                                         id="Valuation"
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                        
+                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         onChange={ValuationKeyPress}
                                         onKeyPress={handleKeyPress}
-                                    />                                    
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -175,12 +182,12 @@ const FooterboxKeyPress = (e) => {
                                         <span>取得財産の価額</span>
                                     </li>
                                     <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>山田　太郎</span>
-                                    <div className="text-right"><input type="text" className="border-2 h-10 text-right form-control w-50 outline-none"
-                                        onChange={FooterboxKeyPress}
-                                        onKeyPress={handleKeyPress}
-                                    /></div>
-                                </li>
+                                        <span>山田　太郎</span>
+                                        <div className="text-right"><input type="text" className="border-2 h-10 text-right form-control w-50 outline-none"
+                                            onChange={FooterboxKeyPress}
+                                            onKeyPress={handleKeyPress}
+                                        /></div>
+                                    </li>
                                     <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                         <span>相続人未決定</span>
                                         <span>{UndecidedHeir}</span>
@@ -218,5 +225,5 @@ const FooterboxKeyPress = (e) => {
 
 
 HouseholdPropertyAdd.getLayout = function getLayout(page) {
-  return <FullLayout>{page}</FullLayout>;
+    return <FullLayout>{page}</FullLayout>;
 };

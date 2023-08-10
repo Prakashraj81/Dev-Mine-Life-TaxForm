@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import BackButton from "../../../components/back-btn";
 import { useEffect } from 'react';
 import FullLayout from '../../../components/layouts/full/FullLayout';
+import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 
 export default function DebtAdd() {
     let DebtList = [
@@ -57,11 +58,25 @@ export default function DebtAdd() {
     };
 
 
+    //Postal code 7 digit limit function
+    const [isValid, setIsValid] = useState(true);
+    const postalcodeDigit = (e) => {
+        let digit_value = e.target.value;
+        let isValidInput = /^\d{7}$/.test(digit_value);        
+        if (digit_value.length == 8 || digit_value.length == 9 || digit_value.length == 10) {
+            digit_value = digit_value.slice(0, 7)
+            setPostCode(digit_value);
+        } 
+        setPostCode(digit_value);
+        setIsValid(isValidInput);
+    }
+
+
     useEffect(() => {
-        setShowCauseofUnpaidBalance(false);          
+        setShowCauseofUnpaidBalance(false);
         setShowNameDebt(true);
         setShowPostCode(true);
-        setShowAddress(true);        
+        setShowAddress(true);
         setShowCreditorName(true);
         setShowObligationDateDebtPaymentDeadline(true);
     }, []);
@@ -257,19 +272,21 @@ export default function DebtAdd() {
                                         郵便番号
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
+                                <div className="w-full inline-block mt-2 relative">
                                     <input
                                         type="text"
                                         id="PostCode"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("PostCode", { required: "PostCode is required" })}
-                                        aria-invalid={errors.PostCode ? "true" : "false"}
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
+                                        onKeyPress={handleKeyPress}
+                                        onChange={postalcodeDigit}
+                                        value={PostCode}
                                     />
-                                    <div className="mt-3">
-                                        <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
-                                    </div>
-                                    {errors.PostCode && <p className="text-red-500 mt-2" role="alert">{errors.PostCode?.message}</p>}
+                                    <PostcodeIcon />
                                 </div>
+                                <div className="mt-3">
+                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
+                                </div>
+                                {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
                             </div>
                         </div>
                     )}
@@ -422,5 +439,5 @@ export default function DebtAdd() {
 }
 
 DebtAdd.getLayout = function getLayout(page) {
-  return <FullLayout>{page}</FullLayout>;
+    return <FullLayout>{page}</FullLayout>;
 };
