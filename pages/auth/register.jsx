@@ -172,7 +172,7 @@ export default function Register(props) {
                 </div>
               </div>
               <div className="register-btn pt-10 text-center">
-                <Link href={"/"}>
+                <Link href="/auth/login">
                   <button className="bg-white border-2 border-primary-gray rounded px-7 py-2">
                     <span className="text-primary-gray text-sm font-medium">
                       ログイン

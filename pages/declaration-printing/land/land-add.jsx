@@ -119,7 +119,7 @@ export default function LandAdd() {
                             </label>
                             <label className="pl-3">
                                 <div>
-                                    <input className="mr-1" id="No" type="radio" checked={selectedOption === 'No'} onChange={RadioButton} value="No"/>
+                                    <input className="mr-1" id="No" type="radio" checked={selectedOption === 'No'} onChange={RadioButton} value="No" />
                                     <label for="No">No</label>
                                 </div>
                             </label>
@@ -869,5 +869,5 @@ export default function LandAdd() {
 }
 
 LandAdd.getLayout = function getLayout(page) {
-  return <FullLayout>{page}</FullLayout>;
+    return <FullLayout>{page}</FullLayout>;
 };

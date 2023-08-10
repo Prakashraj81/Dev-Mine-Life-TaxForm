@@ -11,8 +11,9 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import FeatherIcon from "feather-icons-react";
-import { IconListCheck, IconMail, IconUser } from "@tabler/icons-react";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
+import BeenhereOutlinedIcon from '@mui/icons-material/BeenhereOutlined';
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
@@ -100,7 +101,7 @@ const Profile = () => {
                   >
                     山田　太郎
                   </Typography>
-                  <FeatherIcon icon="chevron-down" width="20" height="20" />
+                  <KeyboardArrowDownIcon width="20" height="20" />
                 </Box>
               </Box>
             </Button>
@@ -120,22 +121,22 @@ const Profile = () => {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           sx={{
             "& .MuiMenu-paper": {
-              width: "200px",
+              width: "250px",
             },
           }}
         >
         
           <MenuItem>
             <ListItemIcon>
-              <IconMail width={20} />
+              <AppRegistrationOutlinedIcon width={18} />
             </ListItemIcon>
-            <ListItemText>My Account</ListItemText>
+            <p className="text-sm">登録情報の変更・退会</p>
           </MenuItem>
-          <MenuItem>
+          <MenuItem className="py-3">
             <ListItemIcon>
-              <IconListCheck width={20} />
+              <BeenhereOutlinedIcon width={18} />
             </ListItemIcon>
-            <ListItemText>My Tasks</ListItemText>
+            <p className="text-sm">有料会員登録</p>           
           </MenuItem>
           <Box mt={1} py={1} px={2}>
             <Button
@@ -145,7 +146,7 @@ const Profile = () => {
               component={Link}
               fullWidth
             >
-              Logout
+              ログアウト
             </Button>
           </Box>
         </Menu>

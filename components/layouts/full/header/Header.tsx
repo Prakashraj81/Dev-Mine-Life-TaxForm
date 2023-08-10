@@ -1,11 +1,10 @@
 import React from 'react';
 import { Box, AppBar, Toolbar, styled, Stack, IconButton, Badge, Button } from '@mui/material';
 import PropTypes from 'prop-types';
-
-// components
+//components
 import Profile from './Profile';
 import PageHeading from './pageheading';
-import { IconBellRinging, IconMenu } from '@tabler/icons-react';
+import DehazeIcon from '@mui/icons-material/Dehaze';
 
 interface ItemType {
   toggleMobileSidebar: (event: React.MouseEvent<HTMLElement>) => void;
@@ -45,10 +44,8 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
             },
           }}
         >
-          <IconMenu width="20" height="20" />
+          <DehazeIcon width="20" height="50" />
         </IconButton>
-
-
         <IconButton
           size="large"
           aria-label="show 11 new notifications"
@@ -70,8 +67,8 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
   );
 };
 
-// Header.propTypes = {
-//   sx: PropTypes.object,
-// };
+Header.propTypes = {
+  sx: PropTypes.object,
+};
 
 export default Header;

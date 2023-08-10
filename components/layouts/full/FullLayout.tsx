@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { styled, Container, Box } from "@mui/material";
 import Header from "./header/Header";
+import Footer from './../../footer';
 import TopStepper from "./stepper/top-stepper";
 import SideBarWidgetList from "./header/sidebar-widget-list";
 import Sidebar from "./sidebar/Sidebar";
@@ -30,61 +31,41 @@ const FullLayout: React.FC<Props> = ({ children }) => {
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
   return (
-    <MainWrapper className="mainwrapper">
-      {/* ------------------------------------------- */}
-      {/* Sidebar */}
-      {/* ------------------------------------------- */}
+    <MainWrapper className="mainwrapper">      
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         isMobileSidebarOpen={isMobileSidebarOpen}
         onSidebarClose={() => setMobileSidebarOpen(false)}
-      />
-      {/* ------------------------------------------- */}
-      {/* Main Wrapper */}
-      {/* ------------------------------------------- */}
-      <PageWrapper className="page-wrapper">
-        {/* ------------------------------------------- */}
-        {/* Header */}
-        {/* ------------------------------------------- */}
+      />      
+      <PageWrapper className="page-wrapper">      
         <Header
           toggleMobileSidebar={() => setMobileSidebarOpen(true)}
         />
-        {/* ------------------------------------------- */}
-        {/* PageContent */}
-        {/* ------------------------------------------- */}
-        {/* <Container
-          sx={{
-            paddingTop: "20px",
-            maxWidth: "1200px",
-          }}
-        > */}
-          {/* ------------------------------------------- */}
-          {/* Page Route */}
-          {/* ------------------------------------------- */}
-          <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
+        <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
           <div className="wrapper relative w-full inline-block">
-                  <div className="layout-wrapper">
-                    <div className="w-full inline-block">
-                      <div className="w-full lg:w-80 xl:w-80 2xl:w-80 inline-block float-left px-0 lg:px-10 xl:px-10 2xl:px-10 py-0 lg:py-10 xl:py-10 2xl:py-10">
-                        <div className="top-stepper-sec max-w-screen-md mx-auto">
-                          <TopStepper />
-                        </div>
-                        <div className="page-wrapper">{children}</div>
-                      </div>
-                      <div className="w-20 hidden lg:inline-block xl:inline-block 2xl:inline-block float-left border-l-2">
-                        <div className="">
-                          <SideBarWidgetList />
-                        </div>
-                      </div>
+            <div className="layout-wrapper">
+              <div className="w-full inline-block">
+                <div className="w-full lg:w-80 xl:w-80 2xl:w-80 inline-block float-left px-0 lg:px-10 xl:px-10 2xl:px-10 py-0 lg:py-10 xl:py-10 2xl:py-10">
+                  <div className="top-stepper-sec max-w-screen-md mx-auto">
+                    <TopStepper />
+                  </div>
+                  <div className="page-wrapper">
+                    {children}
+                    <div className="footer-sec pt-10">
+                    <Footer />
                     </div>
                   </div>
-                </div>          
-          </Box>
-          {/* ------------------------------------------- */}
-          {/* End Page */}
-          {/* ------------------------------------------- */}
-        {/* </Container> */}
-      </PageWrapper>      
+                </div>
+                <div className="w-20 hidden lg:inline-block xl:inline-block 2xl:inline-block float-left border-l-2">
+                  <div className="">
+                    <SideBarWidgetList />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Box>        
+      </PageWrapper>
     </MainWrapper>
   );
 };
