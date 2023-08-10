@@ -4,6 +4,7 @@ import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import FullLayout from '../../../components/layouts/full/FullLayout';
+import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 
 export default function FuneralExpensesAdd() {
     let KindsList = [
@@ -34,6 +35,27 @@ export default function FuneralExpensesAdd() {
         setKinds(event.target.value);
     };
 
+    const handleKeyPress = (e) => {
+        const keyCode = e.keyCode || e.which;
+        const keyValue = String.fromCharCode(keyCode);
+        const numericRegex = /^[0-9\b]+$/;
+        if (!numericRegex.test(keyValue)) {
+            e.preventDefault();
+        }
+    };
+
+    //Postal code 7 digit limit function
+    const [isValid, setIsValid] = useState(true);
+    const postalcodeDigit = (e) => {
+        let digit_value = e.target.value;
+        let isValidInput = /^\d{7}$/.test(digit_value);        
+        if (digit_value.length == 8 || digit_value.length == 9 || digit_value.length == 10) {
+            digit_value = digit_value.slice(0, 7)
+            setPostCode(digit_value);
+        } 
+        setPostCode(digit_value);
+        setIsValid(isValidInput);
+    }
 
     const onSubmit = async (defaultValues) => {
         var value = JSON.stringify(defaultValues);
@@ -94,26 +116,28 @@ export default function FuneralExpensesAdd() {
                     <div className="w-full block items-center justify-between mb-10">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
-                                <label htmlFor="郵便番号" className="form-label">
+                                <label className="form-label">
                                     支払先の所在場所
                                 </label>
                                 <label htmlFor="PostCode" className="form-label mt-2">
                                     郵便番号
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2">
+                            <div className="w-full inline-block mt-2 relative">
                                 <input
                                     type="text"
                                     id="PostCode"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    {...register("PostCode", { required: "PostCode is required" })}
-                                    aria-invalid={errors.PostCode ? "true" : "false"}
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
+                                    onKeyPress={handleKeyPress}
+                                    onChange={postalcodeDigit}
+                                    value={PostCode}
                                 />
-                                <div className="mt-3">
-                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
-                                </div>
-                                {errors.PostCode && <p className="text-red-500 mt-2" role="alert">{errors.PostCode?.message}</p>}
+                                <PostcodeIcon />
                             </div>
+                            <div className="mt-3">
+                                <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
+                            </div>
+                            {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
                         </div>
                     </div>
 

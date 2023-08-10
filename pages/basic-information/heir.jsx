@@ -73,6 +73,14 @@ export default function Heir() {
         setIsValid(isValidInput);
     }
 
+    const handleKeyPress = (e) => {
+        const keyCode = e.keyCode || e.which;
+        const keyValue = String.fromCharCode(keyCode);
+        const numericRegex = /^[0-9\b]+$/;
+        if (!numericRegex.test(keyValue)) {
+            e.preventDefault();
+        }
+    };
 
 
     const onSubmit = async (defaultValues) => {
