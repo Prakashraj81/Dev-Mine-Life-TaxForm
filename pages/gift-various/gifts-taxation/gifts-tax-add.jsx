@@ -321,7 +321,7 @@ export default function GiftTaxAdd() {
                                     type="date"
                                     id="DateofGift"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    {...register("DateofGift", { required: "DateofGift is required" })}
+                                    {...register("DateofGift", { required: "この項目は必須です" })}
                                     aria-invalid={errors.DateofGift ? "true" : "false"}
                                 />
                                 {errors.DateofGift && <p className="text-red-500 mt-2" role="alert">{errors.DateofGift?.message}</p>}
@@ -412,7 +412,7 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Address"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Address", { required: "Address is required" })}
+                                        {...register("Address", { required: "この項目は必須です" })}
                                         aria-invalid={errors.Address ? "true" : "false"}
                                     />
                                     {errors.Address && <p className="text-red-500 mt-2" role="alert">{errors.Address?.message}</p>}
@@ -434,7 +434,7 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Breadth"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                        {...register("Breadth", { required: "Breadth is required" })}
+                                        {...register("Breadth", { required: "この項目は必須です" })}
                                         aria-invalid={errors.Breadth ? "true" : "false"}
                                     />
                                     <AreaIcon />
@@ -458,7 +458,7 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Location"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Location", { required: "Location is required" })}
+                                        {...register("Location", { required: "この項目は必須です" })}
                                         aria-invalid={errors.Location ? "true" : "false"}
                                     />
                                     {errors.Location && <p className="text-red-500 mt-2" role="alert">{errors.Location?.message}</p>}
@@ -481,7 +481,7 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Quantity"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Quantity", { required: "Quantity is required" })}
+                                        {...register("Quantity", { required: "この項目は必須です" })}
                                         aria-invalid={errors.Quantity ? "true" : "false"}
                                     />
                                     {errors.Quantity && <p className="text-red-500 mt-2" role="alert">{errors.Quantity?.message}</p>}
@@ -505,7 +505,7 @@ export default function GiftTaxAdd() {
                                             type="text"
                                             id="GiftAmount"
                                             className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("GiftAmount", { required: "GiftAmount is required" })}
+                                            {...register("GiftAmount", { required: "この項目は必須です" })}
                                             aria-invalid={errors.GiftAmount ? "true" : "false"}
                                         />
                                         {errors.GiftAmount && <p className="text-red-500 mt-2" role="alert">{errors.GiftAmount?.message}</p>}
@@ -524,7 +524,7 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="AmountofGiftTax"
                                         className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("AmountofGiftTax", { required: "AmountofGiftTax is required" })}
+                                        {...register("AmountofGiftTax", { required: "この項目は必須です" })}
                                         aria-invalid={errors.AmountofGiftTax ? "true" : "false"}
                                     />
                                     {errors.AmountofGiftTax && <p className="text-red-500 mt-2" role="alert">{errors.AmountofGiftTax?.message}</p>}
@@ -573,16 +573,14 @@ export default function GiftTaxAdd() {
                             <BackButton />
                         </div>
                         <div className="save-btn text-center">
-                            <Link href="/declaration-printing/other-property/other-property-others">
-                                <button
-
-                                    className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        保存して戻る
-                                    </span>
-                                </button>
-                            </Link>
+                        <button
+type="sumbit"
+className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+>
+<span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+    保存して戻る
+</span>
+</button>
                         </div>
                     </div>
                     <div className="heading text-center pt-8">

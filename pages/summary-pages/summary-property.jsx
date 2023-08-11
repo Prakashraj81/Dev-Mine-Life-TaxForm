@@ -1,0 +1,141 @@
+"use client";
+import Link from "next/link";
+import { useState, Fragment, Controller } from "react";
+import { useForm } from "react-hook-form";
+import BackButton from "../../components/back-btn";
+import FullLayout from '../../components/layouts/full/FullLayout';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { list } from "postcss";
+
+const tableList = [
+    {
+        id: 1,
+        heading: "現金預金(外貨含む)",
+        amount: 5000,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/cash-savings",
+    },
+    {
+        id: 2,
+        heading: "有価証券",
+        amount: 22800,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/securities",
+    },
+    {
+        id: 3,
+        heading: "建物",
+        amount: 0,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/building",
+    },
+    {
+        id: 4,
+        heading: "土地",
+        amount: 750000,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/land",
+    },
+    {
+        id: 5,
+        heading: "家庭用財産",
+        amount: 0,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/household-property",
+    },
+    {
+        id: 6,
+        heading: "その他財産",
+        amount: 4321,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/other-property",
+    },
+    {
+        id: 7,
+        heading: "債務",
+        amount: 0,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/debt",
+    },
+    {
+        id: 8,
+        heading: "葬式費用",
+        amount: 700,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/funeral-expenses",
+    },
+]
+
+export default function SummaryProperty() {
+    let amt = "";
+    return (
+        <>
+            <div className="summary-property-wrapper">
+                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <div className="page-heading">
+                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+                            財産の入力
+                        </p>
+                    </div>
+                </div>
+                <div className="page-description py-8">
+                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                        入力したい項目の「」ボタンをクリックして各財産情報を入力してください。 入力が完了しましたら「入力終了（次へ）」をクリックして贈与・控除の入力へ進んで下さい。 ご不明な点は「？」をご確認ください。
+                    </p>
+                </div>
+                <div className="summary-tables-wrapper max-w-screen-md mx-auto">
+                    <table className="text-left table">
+                        <tbody>
+                            {tableList.map((list, index) => (
+                                <tr className="border-t" id={list.id}>
+                                    <th className="w-full py-5 font-medium">{list.heading}</th>
+                                    <td className="text-right">{list.amount.toLocaleString()}</td>
+                                    <td className="pl-10">
+                                        <Link href={list.path}>
+                                            <button id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                                                {list.icon}
+                                            </button>
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
+                    <div className="heading text-center">
+                        <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
+                    </div>
+                    <div className="total-list pt-10">
+                        <ul>
+                            <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
+                                <span>受取人</span>
+                                <span>取得財産の価額</span>
+                            </li>
+                            <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
+                                <span>山田　太郎</span>
+                                <span>0</span>
+                            </li>
+                            <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
+                                <span>相続人未決定</span>
+                                <span>0</span>
+                            </li>
+                            <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
+                                <span>合計</span>
+                                <span>0</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div className="w-full flex justify-evenly items-center py-10">
+                    <BackButton />
+                </div>
+            </div>
+        </>
+    )
+}
+
+
+SummaryProperty.getLayout = function getLayout(page) {
+    return <FullLayout>{page}</FullLayout>;
+};

@@ -21,11 +21,18 @@ import { motion } from "framer-motion";
 
 const SidebarItems = () => {
   let curl = useRouter();
-  const location = curl.pathname;
-  
-  const [open, setOpen] = React.useState(true);
+  let location = curl.pathname;
+  const paths = location.split('/');
 
-  const handleClick = (index) => {
+if (paths.length >= 4) {  
+  paths.splice(3, 1); 
+  location = paths.join('/');  
+} 
+
+  const [open, setOpen] = React.useState(true);
+  const [activeDivIndex, setActiveDivIndex] = useState(null);
+
+  const handleClick = (index) => {          
     if (open === index) {
       setOpen((prevopen) => !prevopen);
     } else {
@@ -39,9 +46,11 @@ const SidebarItems = () => {
   const SubMenuOpen = (id) => {
     let menu_id = id;
     if (Id === menu_id) {
+      setActiveDivIndex(null); 
       setvisible(false);
       setId(0);
     } else {
+      setActiveDivIndex(menu_id === activeDivIndex ? null : menu_id); 
       setvisible(true);
       setId(menu_id);
     }
@@ -84,11 +93,9 @@ const SidebarItems = () => {
               id={`${item.id}`}
               button
               selected={location === item.href}
-              className={`${
-                location === item.href
-                  ? "text-primary-color tracking-2"
-                  : "border-border-light border-2"
-              }`}
+              key={index}
+              className={`div-item ${activeDivIndex === item.id ? 'border-l-4 active' : ''}`}
+              
             >
               <ListItemIcon
                 className={`${
@@ -130,14 +137,19 @@ const SidebarItems = () => {
                 <>
                   <List
                     component="li"
-                    className="w-full tracking-2 text-black inline-block pl-0 px-3 py-7px text-base"
+                    className="w-full flex items-center tracking-2 text-black inline-block pl-0 px-3 py-7px text-base hover:text-primary-color"
                     disablePadding
                     key={sub.title}
                     item={item}
                   >
+                    <span
+                    className={`${
+                      location === sub.href ? "text-lg text-primary-color" : "hover:text-primary-color"
+                    }`}
+                    >-</span>
                     <NextLink
                       className={`${
-                        location === sub.href ? "text-primary-color" : ""
+                        location === sub.href ? "text-primary-color" : "hover:text-primary-color"
                       }`}
                       href={sub.href}
                     >

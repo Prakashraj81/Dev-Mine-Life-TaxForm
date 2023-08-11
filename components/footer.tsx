@@ -6,7 +6,7 @@ export default function Footer() {
       <footer>
         <div className="footer-wrapper bg-custom-light py-10">
           <div className="text-center">
-            <p className="text-black text-sm tracking-2 text-center font-medium">©税理士法人マインライフ</p>
+            <p className="text-black text-sm tracking-2 text-center font-medium">©株式会社マインライフ</p>
           </div>
         </div>
       </footer>

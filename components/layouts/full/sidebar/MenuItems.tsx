@@ -50,6 +50,13 @@ const Menuitems = [
     iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
+        title: "Summary-page",
+        icon: "disc",
+        href: "/summary-pages/summary-property", 
+        translateHeading: "summary-property",
+        text: "summary-property",   
+      },
+      {        
         title: "現金預金(外貨含む)",
         icon: "disc",
         href: "/declaration-printing/cash-savings", 
@@ -117,6 +124,13 @@ const Menuitems = [
     iconClosed: <KeyboardArrowRightIcon />,
     iconOpened: <KeyboardArrowDownIcon />,
     child: [
+      {        
+        title: "Summary-page",
+        icon: "disc",
+        href: "/summary-pages/summary-gifts-various", 
+        translateHeading: "summary-gifts-various",
+        text: "summary-gifts-various",   
+      },
       {
         title: "小規模宅地等の特例",
         icon: "disc",
