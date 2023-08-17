@@ -28,7 +28,7 @@ export default function Securities() {
                         </button>
                     </Link>
                 </div>
-                <div className="Total-property-section py-5 md:py-10 lg:py-20 xl:py-20 2xl:py-20 px-5 md:px-10 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
+                <div className="Total-property-section py-5 md:py-10 lg:py-20 xl:py-20 2xl:py-20 px-5 md:px-10 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-sm xl:max-w-screen-sm 2xl:max-w-screen-sm">
                     <div className="heading text-center">
                         <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                     </div>

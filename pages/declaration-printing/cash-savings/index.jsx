@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -6,7 +6,19 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import BackButton from "../../../components/back-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 
+
 export default function CashSavings() {
+    let [cashSavingsList, setcashSavingsList] = useState([]);
+    useEffect(() => {
+        let sessionValue = sessionStorage.getItem('cashSavings');
+        if (sessionValue) {
+            var tempArray =[];
+            tempArray[0]=JSON.parse(sessionValue);
+            console.log(tempArray); // Log the parsed data
+            setcashSavingsList(tempArray);
+        }
+    }, []);
+
     return (
         <>
             <div className="cash-savings-wrapper">
@@ -24,51 +36,29 @@ export default function CashSavings() {
                 </div>
                 <div className="cash-list py-3">
                     <table className="w-full border border-light-gray">
-                        <tr>
-                            <td className="py-2 px-2 border-r border border-light-gray">Prakash</td>
-                            <td className="py-2 px-2 border-r border border-light-gray">普通預金</td>
-                            <td className="py-2 px-2 border-r border border-light-gray text-right">10,000</td>
-                            <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                <button id="cash_edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                    <ModeEditIcon className="text-white" />
-                                </button>
-                            </td>
-                            <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                <button id="cash_edit" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                    <DeleteOutlinedIcon className="text-white" />
-                                </button>
-                            </td>
-                        </tr>
-                        <tr className="border border-t border-light-gray">
-                            <td className="py-2 px-2 border-r border border-light-gray">Shree</td>
-                            <td className="py-2 px-2 border-r border border-light-gray">普通預金</td>
-                            <td className="py-2 px-2 border-r border border-light-gray text-right">2,500</td>
-                            <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                <button id="cash_edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                    <ModeEditIcon className="text-white" />
-                                </button>
-                            </td>
-                            <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                <button id="cash_edit" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                    <DeleteOutlinedIcon className="text-white" />
-                                </button>
-                            </td>
-                        </tr>
-                        <tr className="border border-t border-light-gray">
-                            <td className="py-2 px-2 border-r border border-light-gray">Gowtham</td>
-                            <td className="py-2 px-2 border-r border border-light-gray">普通預金</td>
-                            <td className="py-2 px-2 border-r border border-light-gray text-right">8000</td>
-                            <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                <button id="cash_edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                    <ModeEditIcon className="text-white" />
-                                </button>
-                            </td>
-                            <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                <button id="cash_edit" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                    <DeleteOutlinedIcon className="text-white" />
-                                </button>
-                            </td>
-                        </tr>
+                        {
+                            cashSavingsList.map((list, index) => (
+                                <tr key={index}>
+                                    {list.Address ?
+                                        <td className="py-2 px-2 border-r border border-light-gray">{list.Address}</td>
+                                        :
+                                        <td className="py-2 px-2 border-r border border-light-gray">{list.FinancialInstitutionName}</td>
+                                    }
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.DepositType}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.AmountofMoney}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">
+                                        <button id="cash_Edit" value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                            <ModeEditIcon className="text-white" />
+                                        </button>
+                                    </td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">
+                                        <button id="cash_Delete" value="Delete" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                            <DeleteOutlinedIcon className="text-white" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        }
                     </table>
                 </div>
                 <div className="w-full inline-block text-left">
@@ -107,5 +97,5 @@ export default function CashSavings() {
 }
 
 CashSavings.getLayout = function getLayout(page) {
-  return <FullLayout>{page}</FullLayout>;
+    return <FullLayout>{page}</FullLayout>;
 };

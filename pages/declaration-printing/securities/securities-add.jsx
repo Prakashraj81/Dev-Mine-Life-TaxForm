@@ -6,6 +6,9 @@ import { useEffect } from 'react';
 import BackButton from "../../../components/back-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
+import InfoIcon from '@mui/icons-material/Info';
+
 
 export default function SecuritiesAdd() {
     let SecuritiesList = [
@@ -27,6 +30,19 @@ export default function SecuritiesAdd() {
 
     ];
 
+    let HeirList = [
+        { id: 1, name: "User", name1: "山田　太郎" },
+        { id: 2, name: "Shree", name1: "Shree" },
+        { id: 3, name: "Prakashraj", name1: "Prakashraj" },
+        { id: 4, name: "Gowtham", name1: "Gowtham" },
+    ];
+
+    const buttonStyle = {
+        width: '18px',
+        height: '18px',
+    };
+
+
     let [SecuritiesType, setSecuritiesType] = useState("");
     let [UnitDetails, setUnitDetails] = useState("");
     let [NameofSecurities, setNameofSecurities] = useState("");
@@ -40,6 +56,7 @@ export default function SecuritiesAdd() {
     let [ReductionAmount, setReductionAmount] = useState(0);
     let [UndecidedHeir, setUndecidedHeir] = useState(0);
     let [totalPrice, settotalPrice] = useState(0);
+    let [boxValues, setBoxValues] = useState([]);
 
     //Hide and Show Input   
     let [showAmountMoney, setshowAmountMoney] = useState(false);
@@ -52,19 +69,23 @@ export default function SecuritiesAdd() {
     let [showUnitDetails, setshowUnitDetails] = useState(false);
     let [showMoneyOrderQuantity, setshowMoneyOrderQuantity] = useState(false);
     let [showReducationAmount, setshowReducationAmount] = useState(false);
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+    let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
 
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
         defaultValues: {
             SecuritiesType: "",
             NameofSecurities: "",
             PostCode: "",
-            FinancialInstitutionBranchName: "",
+            FinancialInstitutionName: "",
             Address: "",
             UnitPrice: 0,
             Quantity: 0,
             MoneyOrder: 0,
             ReductionAmount: 0,
             AmountofMoney: 0,
+            UndecidedHeir: 0,
+            totalPrice: 0,
         }
     });
 
@@ -81,12 +102,10 @@ export default function SecuritiesAdd() {
         setIsValid(isValidInput);
     }
 
-
-
+    //Securities dropdown
     let selectId = 0;
     const SecuritiesDropdownChange = (event) => {
         let selectedOption = event.target.options[event.target.selectedIndex];
-        console.log("selectedOption:" + selectedOption.value + ",event.target.value:" + selectedOption.text);
         setSecuritiesType(selectedOption.text);
         selectId = Number(selectedOption.value)
         handleInputChange(selectId);
@@ -94,7 +113,6 @@ export default function SecuritiesAdd() {
 
     const UnitDetailsDropdownChange = (event) => {
         let selectedOption = event.target.options[event.target.selectedIndex];
-        console.log("selectedOption:" + selectedOption.value + ",event.target.value:" + selectedOption.text);
         setSecuritiesType(selectedOption.text);
         selectId = Number(selectedOption.value);
         handleInputChange(selectId);
@@ -114,11 +132,11 @@ export default function SecuritiesAdd() {
         setPostCode("");
         setFinancialInstitutionName("");
         setAddress("");
-        setUnitPrice("");
-        setQuantity("");
-        setAmountofMoney("");
-        setMoneyOrder("");
-        setReductionAmount("");
+        setUnitPrice(0);
+        setQuantity(0);
+        setAmountofMoney(0);
+        setMoneyOrder(0);
+        setReductionAmount(0);
         setUndecidedHeir(0);
         settotalPrice(0);
     }
@@ -212,7 +230,6 @@ export default function SecuritiesAdd() {
             setAmountofMoney(false);
         }
         var value = JSON.stringify(defaultValues);
-        console.log(value);
         if (value.SecuritiesType != "") {
             var Apiurl = "/";
             const urlresponse = await fetch(Apiurl, {
@@ -229,9 +246,20 @@ export default function SecuritiesAdd() {
     };
 
     const AmountofMoneyKeyPress = (e) => {
-        let amount_of_money = Number(e.target.value);
-        console.log("amount_of_money:" + amount_of_money);
-        setAmountofMoney(amount_of_money);
+        let amount_of_money = e.target.value;
+        amount_of_money = amount_of_money.replace(/,/g, '').replace('.', '');
+        amount_of_money = parseFloat(amount_of_money);
+        amount_of_money = amount_of_money.toLocaleString();
+        if (amount_of_money === "NaN") {
+            setAmountofMoney(0);
+            setUndecidedHeir(0);
+        }
+        else {
+            setAmountofMoneyError(false);
+            setAmountofMoney(amount_of_money);
+            setUndecidedHeir(amount_of_money);
+        }
+        AmountToTotalCalculation(amount_of_money);
     }
 
     const MoneyOrderKeyPress = (e) => {
@@ -246,11 +274,15 @@ export default function SecuritiesAdd() {
         if (reduction_amount > 0) {
             var amount = previousAmountofmoney;
             amount = amount - reduction_amount;
-            setAmountofMoney(amount);
+            setAmountofMoney(amount.toLocaleString());
+            setUndecidedHeir(amount.toLocaleString());
+            AmountToTotalCalculation(amount.toLocaleString());
         }
         else {
             amount = previousAmountofmoney - reduction_amount;
-            setAmountofMoney(amount);
+            setAmountofMoney(amount.toLocaleString());
+            setUndecidedHeir(amount.toLocaleString());
+            AmountToTotalCalculation(amount.toLocaleString());
             setReductionAmount(0);
         }
     }
@@ -260,24 +292,13 @@ export default function SecuritiesAdd() {
         setQuantity(money_Quantity);
         if (money_Quantity >= 10) {
             var percentage = (10 / 100) * money_Quantity;
-            setAmountofMoney(percentage);
+            setAmountofMoney(percentage.toLocaleString());
         }
         else {
             setAmountofMoney(0);
         }
     }
 
-    //Footer box calculation
-    const FooterboxKeyPress = (e) => {
-        let footer_box_value = Number(e.target.value);
-        if (footer_box_value > 0) {
-            var value = AmountofMoney - footer_box_value;
-            setUndecidedHeir(value);
-        }
-        else {
-            setUndecidedHeir(AmountofMoney);
-        }
-    }
 
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
@@ -290,11 +311,10 @@ export default function SecuritiesAdd() {
 
     let flag = 0;
     function onchangeUnitPrice(e) {
-        let unit_price = Number(e.target.value);
-        console.log("keyValue:" + unit_price);
+        let unit_price = parseFloat(e.target.value);
         setUnitPrice(unit_price);
-        let val = Quantity;
-        if (val > 0) {
+        let qty = Quantity;
+        if (qty > 0) {
             flag = 1;
             onchangeQuantity(e);
         }
@@ -310,16 +330,75 @@ export default function SecuritiesAdd() {
             quantity = Quantity;
         }
         else {
-            quantity = Number(e.target.value);
+            quantity = parseFloat(e.target.value);
         }
         if (quantity > 0) {
             let totalPrice = u_price * quantity;
-            console.log("keyValue---x:" + quantity + ":" + totalPrice);
             setQuantity(quantity);
-            setAmountofMoney(totalPrice);
-            setUndecidedHeir(totalPrice);
+            setAmountofMoney(totalPrice.toLocaleString());
+            setUndecidedHeir(totalPrice.toLocaleString());
+            AmountToTotalCalculation(totalPrice.toLocaleString());
+        }
+        else {
+            setQuantity(0);
+            AmountToTotalCalculation(0);
         }
     }
+
+    //Box value calculation function    
+    function AmountToTotalCalculation(AmountofMoney) {
+        //Amount of money convert
+        if (AmountofMoney == 0 || AmountofMoney == "NaN") {
+            AmountofMoney = 0;
+        }
+        else {
+            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+            AmountofMoney = parseFloat(AmountofMoney);
+        }
+        let totalBoxValues = boxValues.reduce((total, value) => total + value, 0);
+        if (isNaN(totalBoxValues)) {
+            totalBoxValues = 0;
+        }
+        let heirValue = AmountofMoney - totalBoxValues;
+        if (heirValue < 0) {
+            setUndecidedHeir(heirValue.toLocaleString());
+            setShowIncorrectError(true);
+        }
+        else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(heirValue.toLocaleString());
+        }
+    }
+
+
+    const handleBoxValueChange = (e, index) => {
+        setBoxValues([0]);
+        let newValue = parseFloat(e.target.value);
+        let updatedBoxValues = [...boxValues];
+        updatedBoxValues[index] = isNaN(newValue) ? 0 : newValue;
+        updatedBoxValues = updatedBoxValues.map((value) => (value === undefined ? 0 : value));
+        setBoxValues(updatedBoxValues);
+
+        //Amount of money convert
+        if (AmountofMoney == 0) {
+            AmountofMoney = 0;
+        }
+        else {
+            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+            AmountofMoney = parseFloat(AmountofMoney);
+        }
+        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);       
+        totalBoxValues = isNaN(totalBoxValues) ? 0 : totalBoxValues;
+        let heirValue = AmountofMoney - totalBoxValues;
+        if (heirValue < 0) {
+            setUndecidedHeir(heirValue.toLocaleString());
+            setShowIncorrectError(true);
+        }
+        else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(heirValue.toLocaleString());
+        }
+    };
 
 
     return (
@@ -345,7 +424,7 @@ export default function SecuritiesAdd() {
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label htmlFor="SecuritiesType" className="form-label">
-                                    有価証券の種類
+                                    有価証券の種類<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -364,7 +443,7 @@ export default function SecuritiesAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="UnitDetails" className="form-label">
-                                        受益証券の詳細
+                                        受益証券の詳細<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -386,7 +465,7 @@ export default function SecuritiesAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="NameofSecurities" className="form-label">
-                                        有価証券の名称、銘柄
+                                        有価証券の名称、銘柄<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -394,14 +473,10 @@ export default function SecuritiesAdd() {
                                         type="text"
                                         id="NameofSecurities"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("NameofSecurities", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.NameofSecurities ? "true" : "false"}
                                     />
-                                    {errors.NameofSecurities && <p className="text-red-500" role="alert">{errors.NameofSecurities?.message}</p>}
                                 </div>
                             </div>
                         </div>
-
                     )}
 
                     {showPostcode && (
@@ -436,7 +511,7 @@ export default function SecuritiesAdd() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="Address" className="form-label">
-                                        住所
+                                        住所<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -444,10 +519,7 @@ export default function SecuritiesAdd() {
                                         type="text"
                                         id="Address"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Address", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.Address ? "true" : "false"}
                                     />
-                                    {errors.Address && <p className="text-red-500" role="alert">{errors.Address?.message}</p>}
                                 </div>
                             </div>
                         </div>
@@ -458,7 +530,7 @@ export default function SecuritiesAdd() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="FinancialInstitutionName" className="form-label">
-                                        金融機関名
+                                        金融機関名<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -466,10 +538,7 @@ export default function SecuritiesAdd() {
                                         type="text"
                                         id="FinancialInstitutionName"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("FinancialInstitutionName", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.Address ? "true" : "false"}
                                     />
-                                    {errors.FinancialInstitutionName && <p className="text-red-500" role="alert">{errors.FinancialInstitutionName?.message}</p>}
                                 </div>
                             </div>
                         </div>
@@ -480,19 +549,21 @@ export default function SecuritiesAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
-                                        <label htmlFor="UnitPrice" className="form-label">
-                                            一株当たりの単価
+                                        <label className="form-label flex items-center">
+                                            一株当たりの単価 <InfoIcon style={buttonStyle} className="ml-2  text-blue-500" />
                                         </label>
                                     </div>
-                                    <div className="w-full inline-block mt-2">
+                                    <div className="w-full inline-block mt-2 relative">
                                         <input
                                             type="text"
                                             id="UnitPrice"
                                             value={UnitPrice}
                                             onChange={onchangeUnitPrice}
                                             onKeyPress={handleKeyPress}
-                                            className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            autocomplete="off"
+                                            className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
                                         />
+                                        <UnitPriceIcon />
                                     </div>
                                 </div>
                             </div>
@@ -594,10 +665,7 @@ export default function SecuritiesAdd() {
                                         type="text"
                                         value={AmountofMoney}
                                         className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("AmountofMoney", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.AmountofMoney ? "true" : "false"}
                                     />
-                                    {errors.AmountofMoney && <p className="text-red-500" role="alert">{errors.AmountofMoney?.message}</p>}
                                 </div>
                             </div>
                         </div>
@@ -622,11 +690,10 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
-
                     )}
 
 
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
+                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="heading text-center">
                             <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                         </div>
@@ -636,13 +703,15 @@ export default function SecuritiesAdd() {
                                     <span>受取人</span>
                                     <span>取得財産の価額</span>
                                 </li>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>山田　太郎</span>
-                                    <div className="text-right"><input type="text" className="border-2 h-10 text-right form-control w-50 outline-none"
-                                        onChange={FooterboxKeyPress}
-                                        onKeyPress={handleKeyPress}
-                                    /></div>
-                                </li>
+                                {HeirList.map((heirlist, index) => (
+                                    <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
+                                        <span>{heirlist.name}</span>
+                                        <div className="text-right"><input id={heirlist.id} type="text" autocomplete="off" className="border-2 h-10 text-right form-control w-50 outline-none"
+                                            onChange={(e) => handleBoxValueChange(e, index)}
+                                            onKeyPress={handleKeyPress}
+                                        /></div>
+                                    </li>
+                                ))}
                                 <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                     <span>相続人未決定</span>
                                     <span>{UndecidedHeir}</span>
@@ -653,6 +722,11 @@ export default function SecuritiesAdd() {
                                 </li>
                             </ul>
                         </div>
+                        {ShowIncorrectError && (
+                            <div className="show-error py-5">
+                                <p className="text-left text-red-500">金額配分が正しくありません</p>
+                            </div>
+                        )}
                     </div>
 
                     <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">

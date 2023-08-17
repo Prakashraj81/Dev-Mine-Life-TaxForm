@@ -50,7 +50,7 @@ const Menuitems = [
     iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
-        title: "Summary-page",
+        title: "まとめ",
         icon: "disc",
         href: "/summary-pages/summary-property", 
         translateHeading: "summary-property",
@@ -125,7 +125,7 @@ const Menuitems = [
     iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
-        title: "Summary-page",
+        title: "まとめ",
         icon: "disc",
         href: "/summary-pages/summary-gifts-various", 
         translateHeading: "summary-gifts-various",

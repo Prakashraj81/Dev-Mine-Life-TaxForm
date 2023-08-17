@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import BackButton from "../../../components/back-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import { useRouter } from 'next/router';
 
 export default function CashSavingsAdd() {
     let DepositList = [
@@ -18,49 +19,71 @@ export default function CashSavingsAdd() {
         { id: 8, value: 'その他', label: 'その他' },
     ];
 
-    const [DepositType, setDepositType] = useState("");
-    const [FinancialInstitutionName, setFinancialInstitutionName] = useState("");
-    const [PostCode, setPostCode] = useState("");
-    const [Address, setAddress] = useState("");
-    const [AmountofMoney, setAmountofMoney] = useState(0);
+    let HeirList = [
+        { id: 1, name: "User", name1: "山田　太郎" },
+        { id: 2, name: "Shree", name1: "Shree" },
+        { id: 3, name: "Prakashraj", name1: "Prakashraj" },
+        { id: 4, name: "Gowtham", name1: "Gowtham" },
+    ]
+
+    let [DepositType, setDepositType] = useState("");
+    let [FinancialInstitutionName, setFinancialInstitutionName] = useState("");
+    let [PostCode, setPostCode] = useState("");
+    let [Address, setAddress] = useState("");
+    let [AmountofMoney, setAmountofMoney] = useState(0);
 
     let [ShowFinancialInstitutionName, setShowFinancialInstitutionName] = useState(false);
     let [ShowPostCode, setShowPostCode] = useState(false);
     let [ShowAddress, setShowAddress] = useState(false);
-    //let [ShowFinancialInstitutionName, setShowFinancialInstitutionName] = useState(false);
+    let [UndecidedHeir, setUndecidedHeir] = useState(0);
+    let [totalPrice, settotalPrice] = useState(0);
+    let [ConstantValue, setConstantValue] = useState(0);
 
-    const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
-        defaultValues: {
-            DepositType: "",
-            FinancialInstitutionBranchName: "",
-            PostCode: "",
-            Address: "",
-            AmountofMoney: 0,
-        }
-    });
+    //Error state and button disabled
+    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+    let [DepositTypeError, setDepositTypeError] = useState(false);
+    let [FinancialInstitutionNameError, setFinancialInstitutionNameError] = useState(false);
+    let [AddressError, setAddressError] = useState(false);
+    let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => {       
         setShowFinancialInstitutionName(true);
         setShowPostCode(false);
         setShowAddress(false);
     }, []);
 
+    //Clear function
+    function clearFunction() {
+        setFinancialInstitutionName("");
+        setPostCode("");
+        setAddress("");
+        setAmountofMoney(0);
+        setUndecidedHeir(0);
+        settotalPrice(0);
+    }
+
+    //Deposit type dropdown
     const handleDepositType = (event) => {
         let selectedOption = event.target.options[event.target.selectedIndex];
         let selectedId = Number(selectedOption.value);
         setDepositType(selectedOption.text);
+        setisSumbitDisabled(false);
+        clearFunction();
         if (selectedId === 1) {
+            setDepositTypeError(false);
             setShowFinancialInstitutionName(false);
             setShowPostCode(true);
             setShowAddress(true);
         }
         else if (selectedId === 2 || selectedId === 3 || selectedId === 4 || selectedId === 5 || selectedId === 6 || selectedId === 7 || selectedId === 8) {
+            setDepositTypeError(false);
             setShowPostCode(false);
             setShowAddress(false);
             setShowFinancialInstitutionName(true);
         }
         else {
-
+            setDepositTypeError(true);
         }
     };
 
@@ -75,9 +98,30 @@ export default function CashSavingsAdd() {
         }
         setPostCode(digit_value);
         setIsValid(isValidInput);
+        setisSumbitDisabled(false);
+    }
+
+    //Amount input calculation function
+    const AmountofMoneyKeyPress = (e) => {
+        let amount_of_money = e.target.value;
+        amount_of_money = amount_of_money.replace(/,/g, '').replace('.', '');
+        amount_of_money = parseFloat(amount_of_money);
+        amount_of_money = amount_of_money.toLocaleString();
+        if (amount_of_money === "NaN") {
+            setAmountofMoney(0);
+            setUndecidedHeir(0);
+        }
+        else {
+            setAmountofMoneyError(false);
+            setAmountofMoney(amount_of_money);
+            setUndecidedHeir(amount_of_money);
+        }
+        setisSumbitDisabled(false);
+        AmountToTotalCalculation(amount_of_money);
     }
 
 
+    //Input keypress
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
         const keyValue = String.fromCharCode(keyCode);
@@ -87,24 +131,160 @@ export default function CashSavingsAdd() {
         }
     };
 
-
-    const onSubmit = async (defaultValues) => {
-        var value = JSON.stringify(defaultValues);
-        console.log(value);
-        if (value.DepositType != "") {
-            var Apiurl = "/";
-            const urlresponse = await fetch(Apiurl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(defaultValues),
-                mode: "no-cors",
-            });
+    //All input validation check and handling function
+    const inputHandlingFunction = (event) => {
+        let inputId = event.currentTarget.id;
+        let inputValue = event.target.value;
+        if (inputId === "FinancialInstitutionName") {
+            setFinancialInstitutionName(inputValue);
+            setFinancialInstitutionNameError(false);
         }
         else {
-
+            setAddress(inputValue);
+            setAddressError(false);
         }
-        //res.status(200).end()
+        setisSumbitDisabled(false);
+    }
+
+
+    //Submit API function 
+    const router = useRouter();
+    const onSubmit = () => {
+        let default_Values = {
+            DepositType: DepositType,
+            FinancialInstitutionName: FinancialInstitutionName,
+            PostCode: PostCode,
+            Address: Address,
+            AmountofMoney: AmountofMoney,
+            UndecidedHeir: UndecidedHeir,
+            totalPrice: AmountofMoney,
+        };
+
+        //input Validation
+        if (default_Values.DepositType === "") {
+            setDepositTypeError(true);
+            isSumbitDisabled = true;
+        }
+
+        if (default_Values.FinancialInstitutionName === "") {
+            if (ShowFinancialInstitutionName === true) {
+                setFinancialInstitutionNameError(true);
+                isSumbitDisabled = true;
+            }
+            else{            
+                setFinancialInstitutionNameError(false);               
+            }        
+        } 
+
+        if (default_Values.Address === "") {
+            if (ShowAddress === true) {
+                setAddressError(true);
+                isSumbitDisabled = true;
+            }
+            else{
+                setAddressError(false);                
+            }
+        }
+
+        if (default_Values.AmountofMoney !== "" || default_Values.AmountofMoney === 0) {
+            valueConvertFun(default_Values.AmountofMoney);
+        }
+
+        if (default_Values.UndecidedHeir < 0) {
+            setShowIncorrectError(true);
+            isSumbitDisabled = true;
+        }
+
+        //Api setup
+        if (isSumbitDisabled !== true) {
+            console.log("API allowed");
+            sessionStorage.setItem('cashSavings', JSON.stringify(default_Values));            
+            router.push('/declaration-printing/cash-savings');
+            // let Apiurl = "/";
+            // const urlresponse = await fetch(Apiurl, {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify(defaultValues),
+            //     mode: "no-cors",
+            // });
+        }
+        else{
+            console.log("API not allowed");
+            isSumbitDisabled = true;
+        }
     };
+
+    function valueConvertFun(convertValue) {
+        convertValue = convertValue.replace(/,/g, '').replace('.', '');
+        convertValue = parseFloat(convertValue);
+        if (convertValue === 0) {
+            setAmountofMoneyError(true);
+            setisSumbitDisabled(true);
+        }
+        else {            
+            setAmountofMoneyError(false);            
+        }
+    }
+
+    //Box value calculation function
+    let [boxValues, setBoxValues] = useState([]);
+    function AmountToTotalCalculation(AmountofMoney) {
+        //Amount of money convert
+        if (AmountofMoney == 0 || AmountofMoney == "NaN") {
+            AmountofMoney = 0;
+        }
+        else {
+            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+            AmountofMoney = parseFloat(AmountofMoney);
+        }
+        let totalBoxValues = boxValues.reduce((total, value) => total + value, 0);
+        if (isNaN(totalBoxValues)) {
+            totalBoxValues = 0;
+        }
+        let heirValue = AmountofMoney - totalBoxValues;
+        if (heirValue < 0) {
+            setUndecidedHeir(heirValue.toLocaleString());
+            setShowIncorrectError(true);
+        }
+        else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(heirValue.toLocaleString());
+        }
+    }
+
+
+    const handleBoxValueChange = (e, index) => {
+        let newValue = parseFloat(e.target.value);
+        if (isNaN(newValue)) {
+            newValue = 0;
+        }
+        const updatedBoxValues = [...boxValues];
+        updatedBoxValues[index] = newValue;
+        setBoxValues(updatedBoxValues);
+
+        //Amount of money convert
+        if (AmountofMoney == 0) {
+            AmountofMoney = 0;
+        }
+        else {
+            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+            AmountofMoney = parseFloat(AmountofMoney);
+        }
+        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
+        if (isNaN(totalBoxValues)) {
+            totalBoxValues = 0;
+        }
+        let heirValue = AmountofMoney - totalBoxValues;
+        if (heirValue < 0) {
+            setUndecidedHeir(heirValue.toLocaleString());
+            setShowIncorrectError(true);
+        }
+        else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(heirValue.toLocaleString());
+        }
+    };
+
     return (
         <>
             <div className="cash-savings-wrapper">
@@ -121,16 +301,16 @@ export default function CashSavingsAdd() {
                     </p>
                 </div>
                 <div className="w-full inline-block">
-                    <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                    <form action="#" method="POST" onSubmit={onSubmit}>
                         <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="Deposit" className="form-label">
-                                        預金の種類
+                                        預金の種類<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleDepositType}>
+                                    <select className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2" onChange={handleDepositType}>
                                         <option value=''></option>
                                         {DepositList.map((option) => (
                                             <option key={option.value} value={option.id}>
@@ -138,6 +318,9 @@ export default function CashSavingsAdd() {
                                             </option>
                                         ))}
                                     </select>
+                                    {DepositTypeError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -174,7 +357,7 @@ export default function CashSavingsAdd() {
                                 <div className="w-full inline-block float-left">
                                     <div className="label w-full inline-block">
                                         <label htmlFor="Address" className="form-label">
-                                            住所
+                                            住所<i className="text-red-500">*</i>
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
@@ -182,10 +365,12 @@ export default function CashSavingsAdd() {
                                             type="text"
                                             id="Address"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("Address", { required: "Address is required" })}
-                                            aria-invalid={errors.Address ? "true" : "false"}
+                                            onChange={inputHandlingFunction}
+                                            value={Address}
                                         />
-                                        {errors.Address && <p className="text-red-500" role="alert">{errors.Address?.message}</p>}
+                                        {AddressError && (
+                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -195,19 +380,21 @@ export default function CashSavingsAdd() {
                             <div className="w-full block items-center justify-between mb-7">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
-                                        <label htmlFor="FinancialInstitutionBranchName" className="form-label">
-                                            金融機関名
+                                        <label htmlFor="FinancialInstitutionName" className="form-label">
+                                            金融機関名<i className="text-red-500">*</i>
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
                                             type="text"
-                                            id="FinancialInstitutionBranchName"
+                                            id="FinancialInstitutionName"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("FinancialInstitutionBranchName", { required: "FinancialInstitutionBranchName is required" })}
-                                            aria-invalid={errors.FinancialInstitutionBranchName ? "true" : "false"}
+                                            onChange={inputHandlingFunction}
+                                            value={FinancialInstitutionName}
                                         />
-                                        {errors.FinancialInstitutionBranchName && <p className="text-red-500" role="alert">{errors.FinancialInstitutionBranchName?.message}</p>}
+                                        {FinancialInstitutionNameError && (
+                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -218,22 +405,27 @@ export default function CashSavingsAdd() {
                         <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="AmountofMoney" className="form-label">
-                                        金額
+                                    <label className="form-label">
+                                        金額<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <input
                                         type="text"
-                                        id="AmountofMoney"
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        value={AmountofMoney}
+                                        onChange={AmountofMoneyKeyPress}
                                         onKeyPress={handleKeyPress}
+                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+
                                     />
+                                    {AmountofMoneyError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
+                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                             <div className="heading text-center">
                                 <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                             </div>
@@ -243,28 +435,38 @@ export default function CashSavingsAdd() {
                                         <span>受取人</span>
                                         <span>取得財産の価額</span>
                                     </li>
-                                    <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                        <span>山田　太郎</span>
-                                        <span>0</span>
-                                    </li>
+                                    {HeirList.map((heirlist, index) => (
+                                        <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
+                                            <span>{heirlist.name}</span>
+                                            <div className="text-right"><input id={heirlist.id} type="text" autoComplete="off" className="border-2 h-10 text-right form-control w-50 outline-none"
+                                                onChange={(e) => handleBoxValueChange(e, index)}
+                                                onKeyPress={handleKeyPress}
+                                            /></div>
+                                        </li>
+                                    ))}
                                     <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                         <span>相続人未決定</span>
-                                        <span>0</span>
+                                        <span>{UndecidedHeir}</span>
                                     </li>
                                     <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                         <span>合計</span>
-                                        <span>0</span>
+                                        <span>{AmountofMoney}</span>
                                     </li>
                                 </ul>
                             </div>
+                            {ShowIncorrectError && (
+                                <div className="show-error py-5">
+                                    <p className="text-left text-red-500">金額配分が正しくありません</p>
+                                </div>
+                            )}
                         </div>
 
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                             <BackButton />
                             <div className="save-btn text-center">
-                                <button
-                                    type="submit"
-                                    className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                                <button                                    
+                                    disabled={isSumbitDisabled}
+                                    className={isSumbitDisabled ? "cursor-not-allowed bg-custom-light rounded px-10 py-3 text-white" : "cursor-pointer bg-primary-color rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"}
                                 >
                                     <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
                                         保存して戻る
