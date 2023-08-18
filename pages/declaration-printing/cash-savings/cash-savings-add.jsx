@@ -160,12 +160,12 @@ export default function CashSavingsAdd() {
         };
 
         //input Validation
-        if (defaultValues[0].DepositType === "") {
+        if (defaultValues.DepositType === "") {
             setDepositTypeError(true);
             isSumbitDisabled = true;
         }
 
-        if (defaultValues[0].FinancialInstitutionName === "") {
+        if (defaultValues.FinancialInstitutionName === "") {
             if (ShowFinancialInstitutionName === true) {
                 setFinancialInstitutionNameError(true);
                 isSumbitDisabled = true;
@@ -175,7 +175,7 @@ export default function CashSavingsAdd() {
             }
         }
 
-        if (defaultValues[0].Address === "") {
+        if (defaultValues.Address === "") {
             if (ShowAddress === true) {
                 setAddressError(true);
                 isSumbitDisabled = true;
@@ -185,11 +185,11 @@ export default function CashSavingsAdd() {
             }
         }
 
-        if (defaultValues[0].AmountofMoney !== "" || defaultValues[0].AmountofMoney === 0) {
+        if (defaultValues.AmountofMoney !== "" || defaultValues.AmountofMoney === 0) {
             valueConvertFun(defaultValues.AmountofMoney);
         }
 
-        if (defaultValues[0].UndecidedHeir < 0) {
+        if (defaultValues.UndecidedHeir < 0) {
             setShowIncorrectError(true);
             isSumbitDisabled = true;
         }
