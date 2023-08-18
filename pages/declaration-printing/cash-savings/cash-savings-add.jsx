@@ -1,11 +1,10 @@
 "use client";
 import Link from "next/link";
-import { useState, Fragment, Controller, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import BackButton from "../../../components/back-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
-import { useRouter } from 'next/router';
 
 export default function CashSavingsAdd() {
     let DepositList = [
@@ -47,7 +46,7 @@ export default function CashSavingsAdd() {
     let [AddressError, setAddressError] = useState(false);
     let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
 
-    useEffect(() => {       
+    useEffect(() => {
         setShowFinancialInstitutionName(true);
         setShowPostCode(false);
         setShowAddress(false);
@@ -150,7 +149,7 @@ export default function CashSavingsAdd() {
     //Submit API function 
     const router = useRouter();
     const onSubmit = () => {
-        let default_Values = {
+        let defaultValues = {
             DepositType: DepositType,
             FinancialInstitutionName: FinancialInstitutionName,
             PostCode: PostCode,
@@ -161,36 +160,36 @@ export default function CashSavingsAdd() {
         };
 
         //input Validation
-        if (default_Values.DepositType === "") {
+        if (defaultValues[0].DepositType === "") {
             setDepositTypeError(true);
             isSumbitDisabled = true;
         }
 
-        if (default_Values.FinancialInstitutionName === "") {
+        if (defaultValues[0].FinancialInstitutionName === "") {
             if (ShowFinancialInstitutionName === true) {
                 setFinancialInstitutionNameError(true);
                 isSumbitDisabled = true;
             }
-            else{            
-                setFinancialInstitutionNameError(false);               
-            }        
-        } 
+            else {
+                setFinancialInstitutionNameError(false);
+            }
+        }
 
-        if (default_Values.Address === "") {
+        if (defaultValues[0].Address === "") {
             if (ShowAddress === true) {
                 setAddressError(true);
                 isSumbitDisabled = true;
             }
-            else{
-                setAddressError(false);                
+            else {
+                setAddressError(false);
             }
         }
 
-        if (default_Values.AmountofMoney !== "" || default_Values.AmountofMoney === 0) {
-            valueConvertFun(default_Values.AmountofMoney);
+        if (defaultValues[0].AmountofMoney !== "" || defaultValues[0].AmountofMoney === 0) {
+            valueConvertFun(defaultValues.AmountofMoney);
         }
 
-        if (default_Values.UndecidedHeir < 0) {
+        if (defaultValues[0].UndecidedHeir < 0) {
             setShowIncorrectError(true);
             isSumbitDisabled = true;
         }
@@ -198,31 +197,31 @@ export default function CashSavingsAdd() {
         //Api setup
         if (isSumbitDisabled !== true) {
             console.log("API allowed");
-            sessionStorage.setItem('cashSavings', JSON.stringify(default_Values));            
-            router.push('/declaration-printing/cash-savings');
-            // let Apiurl = "/";
-            // const urlresponse = await fetch(Apiurl, {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify(defaultValues),
-            //     mode: "no-cors",
-            // });
+            sessionStorage.setItem('cashSavings', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/cash-savings`);
         }
-        else{
+        else {
             console.log("API not allowed");
-            isSumbitDisabled = true;
+            setisSumbitDisabled(true);
         }
     };
 
     function valueConvertFun(convertValue) {
-        convertValue = convertValue.replace(/,/g, '').replace('.', '');
-        convertValue = parseFloat(convertValue);
         if (convertValue === 0) {
+            convertValue = 0;
             setAmountofMoneyError(true);
             setisSumbitDisabled(true);
         }
-        else {            
-            setAmountofMoneyError(false);            
+        else {
+            convertValue = convertValue.replace(/,/g, '').replace('.', '');
+            convertValue = parseFloat(convertValue);
+            if (convertValue === 0) {
+                setAmountofMoneyError(true);
+                setisSumbitDisabled(true);
+            }
+            else {
+                setAmountofMoneyError(false);
+            }
         }
     }
 
@@ -464,7 +463,9 @@ export default function CashSavingsAdd() {
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                             <BackButton />
                             <div className="save-btn text-center">
-                                <button                                    
+                                <button
+                                    type="button"
+                                    onClick={onSubmit}
                                     disabled={isSumbitDisabled}
                                     className={isSumbitDisabled ? "cursor-not-allowed bg-custom-light rounded px-10 py-3 text-white" : "cursor-pointer bg-primary-color rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"}
                                 >

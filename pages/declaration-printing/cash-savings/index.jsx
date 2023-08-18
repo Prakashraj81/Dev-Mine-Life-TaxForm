@@ -11,11 +11,13 @@ export default function CashSavings() {
     let [cashSavingsList, setcashSavingsList] = useState([]);
     useEffect(() => {
         let sessionValue = sessionStorage.getItem('cashSavings');
-        if (sessionValue) {
-            var tempArray =[];
-            tempArray[0]=JSON.parse(sessionValue);
-            console.log(tempArray); // Log the parsed data
+        var tempArray =[];
+        tempArray[0] = JSON.parse(sessionValue);     
+        if (tempArray[0] !== null) {                   
             setcashSavingsList(tempArray);
+        }
+        else{
+            setcashSavingsList([]);
         }
     }, []);
 
@@ -36,8 +38,7 @@ export default function CashSavings() {
                 </div>
                 <div className="cash-list py-3">
                     <table className="w-full border border-light-gray">
-                        {
-                            cashSavingsList.map((list, index) => (
+                        {cashSavingsList.map((list, index) => (
                                 <tr key={index}>
                                     {list.Address ?
                                         <td className="py-2 px-2 border-r border border-light-gray">{list.Address}</td>
@@ -57,8 +58,7 @@ export default function CashSavings() {
                                         </button>
                                     </td>
                                 </tr>
-                            ))
-                        }
+                            ))}
                     </table>
                 </div>
                 <div className="w-full inline-block text-left">
