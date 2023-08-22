@@ -1,8 +1,11 @@
 "use client";
 import Link from "next/link";
-import { useState, Fragment, Controller } from "react";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
+import BackButton from "../../../components/back-btn";
+import SubmitButton from "../../../components/submit-btn";
+import IncorrectError from "../../../components/person-list-box/incorrect-error";
+import PersonListBox from "../../../components/person-list-box/person-list-box";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 
@@ -15,42 +18,39 @@ export default function OtherPropertyAdd() {
         { id: 5, value: '管理残額（結婚・子育て資金）', label: '管理残額（結婚・子育て資金）' },
     ];
 
-    const [Property, setProperty] = useState("");
-    const [PropertyName, setPropertyName] = useState("");
-    const [DateofAcquisition, setDateofAcquisition] = useState("");
-    const [PostCode, setPostCode] = useState("");
-    const [Valuation, setValuation] = useState(0);
-    const [Address, setAddress] = useState("");
-    const [UnitPrice, setUnitPrice] = useState(0);
-    const [Quantity, setQuantity] = useState(0);
-    const [ReductionRate, setReductionRate] = useState(0);
-    const [ManagementBalance, setManagementBalance] = useState(0);
+    let [Property, setProperty] = useState("");
+    let [PropertyName, setPropertyName] = useState("");
+    let [DateofAcquisition, setDateofAcquisition] = useState("");
+    let [PostCode, setPostCode] = useState("");
+    let [Valuation, setValuation] = useState("0");
+    let [Address, setAddress] = useState("");
+    let [UnitPrice, setUnitPrice] = useState("0");
+    let [Quantity, setQuantity] = useState("0");
+    let [ReductionRate, setReductionRate] = useState("0");    
 
     let [ShowDateofAcquisition, setShowDateofAcquisition] = useState(false);
     let [ShowPostCode, setShowPostCode] = useState(false);
-    let [ShowAmountofMoney, setShowAmountofMoney] = useState(true);
+    let [ShowValuation, setShowValuation] = useState(true);
     let [ShowAddress, setShowAddress] = useState(false);
     let [ShowUnitPriceQuantity, setShowUnitPriceQuantity] = useState(false);
     let [ShowReductionRate, setShowReductionRate] = useState(false);
-    let [ShowAmountofMoneyDisabled, setShowAmountofMoneyDisabled] = useState(false);
-    let [ShowManagementBalance, setShowManagementBalance] = useState(false);
+    let [ShowValuationDisabled, setShowValuationDisabled] = useState(false);   
     let [ShowContent, setShowContent] = useState(false);
     let [ShowCompensatoryProperty, setShowCompensatoryProperty] = useState(false);
 
-    const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
-        defaultValues: {
-            Property: "",
-            PropertyName: "",
-            DateofAcquisition: "",
-            PostCode: "",
-            Address: "",
-            UnitPrice: 0,
-            Quantity: 0,
-            ReductionRate: 0,
-            ManagementBalance: 0,
-            Valuation: 0,
-        }
-    });
+    let [UndecidedHeir, setUndecidedHeir] = useState("0");
+    let [TotalPrice, setTotalPrice] = useState("0");
+    let [boxValues, setBoxValues] = useState([]);
+
+    //Error state and button disabled
+    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+    let [PropertyError, setPropertyError] = useState(false);
+    let [PropertyNameError, setPropertyNameError] = useState(false);
+    let [AddressError, setAddressError] = useState(false); 
+    let [DateofAcquisitionError, setDateofAcquisitionError] = useState(false);   
+    let [ReductionRateError, setReductionRateError] = useState(false);
+    let [ValuationError, setValuationError] = useState(false);
 
     //Postal code 7 digit limit function
     const [isValid, setIsValid] = useState(true);
@@ -70,77 +70,72 @@ export default function OtherPropertyAdd() {
         let selectedOption = event.target.options[event.target.selectedIndex];
         let selectedId = Number(selectedOption.value);
         setProperty(selectedOption.text);
+        setisSumbitDisabled(false);
         if (selectedId === 1) {
             setShowContent(false);
-            setShowCompensatoryProperty(false);
-            setShowManagementBalance(false);
-            setShowAmountofMoneyDisabled(false);
+            setShowCompensatoryProperty(false);            
+            setShowValuationDisabled(false);
             setShowDateofAcquisition(false);
             setShowReductionRate(false);
             setShowPostCode(true);
             setShowAddress(true);
             setShowUnitPriceQuantity(true);
-            setShowAmountofMoney(true);
+            setShowValuation(true);
         }
         else if (selectedId === 2) {
             setShowContent(false);
-            setShowCompensatoryProperty(false);
-            setShowManagementBalance(false);
-            setShowAmountofMoneyDisabled(false);
+            setShowCompensatoryProperty(false);            
+            setShowValuationDisabled(false);
             setShowDateofAcquisition(false);
             setShowReductionRate(true);
             setShowPostCode(true);
             setShowAddress(true);
             setShowUnitPriceQuantity(true);
-            setShowAmountofMoney(true);
+            setShowValuation(true);
         }
         else if (selectedId === 3) {
-            setShowContent(false);
-            setShowManagementBalance(false);
+            setShowContent(false);            
             setShowDateofAcquisition(false);
             setShowReductionRate(false);
             setShowPostCode(false);
             setShowAddress(false);
             setShowUnitPriceQuantity(false);
-            setShowAmountofMoney(false);
-            setShowAmountofMoneyDisabled(true);
+            setShowValuation(false);
+            setShowValuationDisabled(true);
             setShowCompensatoryProperty(true);
         }
         else if (selectedId === 4) {
             setShowCompensatoryProperty(false);
-            setShowAmountofMoneyDisabled(false);
+            setShowValuationDisabled(false);
             setShowReductionRate(false);
             setShowUnitPriceQuantity(false);
-            setShowAmountofMoney(false);
+            setShowValuation(false);
             setShowContent(true);
             setShowDateofAcquisition(true);
             setShowPostCode(true);
-            setShowAddress(true);
-            setShowManagementBalance(true);
+            setShowAddress(true);            
         }
         else if (selectedId === 5) {
             setShowCompensatoryProperty(false);
-            setShowAmountofMoneyDisabled(false);
+            setShowValuationDisabled(false);
             setShowReductionRate(false);
             setShowUnitPriceQuantity(false);
-            setShowAmountofMoney(false);
+            setShowValuation(false);
             setShowContent(false);
             setShowDateofAcquisition(true);
             setShowPostCode(true);
-            setShowAddress(true);
-            setShowManagementBalance(true);
+            setShowAddress(true);            
         }
         else {
             setShowContent(false);
-            setShowCompensatoryProperty(false);
-            setShowManagementBalance(false);
-            setShowAmountofMoneyDisabled(false);
+            setShowCompensatoryProperty(false);            
+            setShowValuationDisabled(false);
             setShowDateofAcquisition(false);
             setShowReductionRate(false);
             setShowPostCode(false);
             setShowAddress(false);
             setShowUnitPriceQuantity(false);
-            setShowAmountofMoney(true);
+            setShowValuation(true);
         }
     };
 
@@ -153,23 +148,217 @@ export default function OtherPropertyAdd() {
         }
     };
 
+    const ValuationKeyPress = (e) => {
+        let valuation = e.target.value;
+        setValuation(valuation);        
+        setisSumbitDisabled(false);
+    }
 
-    const onSubmit = async (defaultValues) => {
-        var value = JSON.stringify(defaultValues);
-        console.log(value);
-        if (value.PropertyName != "") {
-            var Apiurl = "/";
-            const urlresponse = await fetch(Apiurl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(defaultValues),
-                mode: "no-cors",
-            });
+    const ReductionRateKeyPress = (e) => {
+
+    }
+    
+    // const ReductionAmountKeyPress = (e) => {
+    //     let reduction_amount = Number(e.target.value);
+    //     var previousValuation = (10 / 100) * Quantity;
+    //     setReductionAmount(reduction_amount);
+    //     if (reduction_amount > 0) {
+    //         var amount = previousValuation;
+    //         amount = amount - reduction_amount;
+    //         setValuation(amount.toLocaleString());
+    //         setUndecidedHeir(amount.toLocaleString());
+    //         AmountToTotalCalculation(amount.toLocaleString());
+    //     }
+    //     else {
+    //         amount = previousValuation - reduction_amount;
+    //         setValuation(amount.toLocaleString());
+    //         setUndecidedHeir(amount.toLocaleString());
+    //         AmountToTotalCalculation(amount.toLocaleString());
+    //         setReductionAmount(0);
+    //     }
+    //     setisSumbitDisabled(false);
+    // }
+    
+
+    let flag = 0;
+    function onchangeUnitPrice(e) {
+        let unit_price = parseFloat(e.target.value);
+        if(isNaN(unit_price)){
+            setUnitPrice(0);
+        }
+        else{
+            setUnitPrice(unit_price);
+        }
+        let qty = Quantity;
+        if (qty > 0) {
+            flag = 1;
+            onchangeQuantity(e);
         }
         else {
-            router.push('/declaration-printing/other-property/other-property-others');
+            flag = 0;
         }
-        //res.status(200).end()
+    }
+
+    function onchangeQuantity(e) {
+        let u_price = UnitPrice;
+        let quantity;
+        if (flag == 1) {
+            quantity = Quantity;
+        }
+        else {
+            quantity = parseFloat(e.target.value);
+        }
+        if (quantity > 0) {
+            let totalPrice = u_price * quantity;
+            setQuantity(quantity);
+            setValuation(totalPrice.toLocaleString());
+            setUndecidedHeir(totalPrice.toLocaleString());
+            AmountToTotalCalculation(totalPrice.toLocaleString());
+        }
+        else {
+            setQuantity(0);
+            AmountToTotalCalculation(0);
+        }
+        setisSumbitDisabled(false);
+    }
+
+    //Box value calculation function    
+    function AmountToTotalCalculation(Valuation) {
+        //Amount of money convert
+        if (Valuation == 0 || Valuation == "NaN") {
+            Valuation = 0;
+        }
+        else {
+            Valuation = Valuation.replace(/,/g, '').replace('.', '');
+            Valuation = parseFloat(Valuation);
+        }
+        let totalBoxValues = boxValues.reduce((total, value) => total + value, 0);
+        if (isNaN(totalBoxValues)) {
+            totalBoxValues = 0;
+        }
+        let heirValue = Valuation - totalBoxValues;
+        if (heirValue < 0) {
+            setUndecidedHeir(heirValue.toLocaleString());
+            setShowIncorrectError(true);
+        }
+        else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(heirValue.toLocaleString());
+        }
+    }
+
+    //All input validation check and handling function
+    const inputHandlingFunction = (event) => {
+        setShowIncorrectError(false);
+        let inputId = event.currentTarget.id;
+        let inputValue = event.target.value;
+        if (inputId === "PropertyName") {
+            setPropertyName(inputValue);
+            setPropertyNameError(false);
+        }
+        else if (inputId === "DateofAcquisition") {
+            setDateofAcquisition(inputValue);
+            setDateofAcquisitionError(false);
+        }        
+        else {
+            setAddress(inputValue);
+            setAddressError(false);
+        }
+        setisSumbitDisabled(false);
+    }
+
+
+    //Footer box values and calculation
+    let handleBoxValueChange = (e, index) => {
+        let newValue = parseFloat(e.target.value);
+        if (isNaN(newValue)) {
+            newValue = 0;
+        }
+        const updatedBoxValues = [...boxValues];
+        updatedBoxValues[index] = newValue;
+        setBoxValues(updatedBoxValues);
+        //Amount of money convert
+        if (Valuation === 0) {
+            Valuation = 0;
+        }
+        else {            
+            Valuation = parseFloat(Valuation.replace(/,/g, '').replace('.', ''));            
+        }
+        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
+        if (isNaN(totalBoxValues)) {
+            totalBoxValues = 0;
+        }
+        let heirValue = Valuation - totalBoxValues;
+        if (heirValue < 0) {
+            setUndecidedHeir(heirValue.toLocaleString());
+            setShowIncorrectError(true);
+        }
+        else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(heirValue.toLocaleString());
+        }
+    };
+
+    //Submit API function 
+    const router = useRouter();
+    const onSubmit = () => {
+        let defaultValues = {
+            Property: Property,
+            PropertyName: PropertyName,
+            DateofAcquisition: DateofAcquisition,
+            PostCode: PostCode,
+            Address: Address,
+            UnitPrice: UnitPrice,
+            Quantity: Quantity,
+            ReductionRate: ReductionRate,            
+            Valuation: Valuation,
+            UndecidedHeir: UndecidedHeir,
+            TotalPrice: Valuation,
+        }
+
+        //input Validation
+        if (defaultValues.Property === "") {
+            setPropertyContentError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.PropertyName === "") {
+            setPropertyNameError(true);
+            isSumbitDisabled = true;
+        }
+        if(defaultValues.DateofAcquisition === ""){
+            if(ShowDateofAcquisition === true){
+                setDateofAcquisitionError(true);
+                isSumbitDisabled = true;
+            }   
+        }
+        if (defaultValues.Address === "") {
+            if(ShowAddress === true){
+                setAddressError(true);
+                isSumbitDisabled = true;
+            }            
+        }
+        if (defaultValues.ReductionRate === "") {
+            if(ShowReductionRate === true){
+                setReductionRateError(true);
+                isSumbitDisabled = true;
+            }            
+        }
+        if (defaultValues.Valuation === "") {
+            if(ShowValuation === true){
+                setValuationError(true);
+                isSumbitDisabled = true;   
+            }                       
+        }
+        //Api setup
+        if (isSumbitDisabled !== true) {
+            console.log("API allowed");
+            sessionStorage.setItem('OtherProperty', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/other-property`);
+        }
+        else {
+            console.log("API not allowed");
+            setisSumbitDisabled(true);
+        }
     };
     return (
         <>
@@ -187,13 +376,13 @@ export default function OtherPropertyAdd() {
                     </p>
                 </div>
 
-                <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                <form action="#" method="POST">
                     <div className="w-full flex items-center justify-between mb-7">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        財産の種類
+                                        財産の種類<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -205,14 +394,17 @@ export default function OtherPropertyAdd() {
                                             </option>
                                         ))}
                                     </select>
+                                    {PropertyError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
 
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
-                                <label htmlFor="PropertyName" className="form-label">
-                                    財産の名称
+                                <label className="form-label">
+                                    財産の名称<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -220,10 +412,12 @@ export default function OtherPropertyAdd() {
                                     type="text"
                                     id="PropertyName"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    {...register("PropertyName", { required: "PropertyName is required" })}
-                                    aria-invalid={errors.PropertyName ? "true" : "false"}
-                                />
-                                {errors.PropertyName && <p className="text-red-500 mt-2" role="alert">{errors.PropertyName?.message}</p>}
+                                    onChange={inputHandlingFunction}
+                                    value={PropertyName}
+                                    />
+                                    {PropertyNameError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                             </div>
                         </div>
                     </div>
@@ -236,8 +430,8 @@ export default function OtherPropertyAdd() {
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="DateofAcquisition" className="form-label">
-                                        財産の取得日
+                                    <label className="form-label">
+                                        財産の取得日<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -245,10 +439,12 @@ export default function OtherPropertyAdd() {
                                         type="date"
                                         id="DateofAcquisition"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("DateofAcquisition", { required: "DateofAcquisition is required" })}
-                                        aria-invalid={errors.DateofAcquisition ? "true" : "false"}
+                                        onChange={inputHandlingFunction}
+                                        value={DateofAcquisition}
                                     />
-                                    {errors.DateofAcquisition && <p className="text-red-500 mt-2" role="alert">{errors.DateofAcquisition?.message}</p>}
+                                    {DateofAcquisitionError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -258,7 +454,7 @@ export default function OtherPropertyAdd() {
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="PostCode" className="form-label">
+                                    <label className="form-label">
                                         郵便番号
                                     </label>
                                 </div>
@@ -286,8 +482,8 @@ export default function OtherPropertyAdd() {
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full block">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="Address" className="form-label">
-                                        住所
+                                    <label className="form-label">
+                                        住所<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -295,10 +491,12 @@ export default function OtherPropertyAdd() {
                                         type="text"
                                         id="Address"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Address", { required: "Address is required" })}
-                                        aria-invalid={errors.Address ? "true" : "false"}
+                                        onChange={inputHandlingFunction}
+                                        value={Address}
                                     />
-                                    {errors.Address && <p className="text-red-500 mt-2" role="alert">{errors.Address?.message}</p>}
+                                    {AddressError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -318,10 +516,8 @@ export default function OtherPropertyAdd() {
                                             type="text"
                                             id="UnitPrice"
                                             className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("UnitPrice", { required: "UnitPrice is required" })}
-                                            aria-invalid={errors.UnitPrice ? "true" : "false"}
-                                        />
-                                        {errors.UnitPrice && <p className="text-red-500 mt-2" role="alert">{errors.UnitPrice?.message}</p>}
+                                            
+                                        />                                    
                                     </div>
                                 </div>
                             </div>
@@ -337,10 +533,8 @@ export default function OtherPropertyAdd() {
                                         type="text"
                                         id="Quantity"
                                         className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Quantity", { required: "Quantity is required" })}
-                                        aria-invalid={errors.Quantity ? "true" : "false"}
-                                    />
-                                    {errors.Quantity && <p className="text-red-500 mt-2" role="alert">{errors.Quantity?.message}</p>}
+                                        
+                                    />                                    
                                 </div>
                             </div>
                         </div>
@@ -350,8 +544,8 @@ export default function OtherPropertyAdd() {
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="ReductionRate" className="form-label">
-                                        減額割合
+                                    <label className="form-label">
+                                        減額割合<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -359,81 +553,42 @@ export default function OtherPropertyAdd() {
                                         type="text"
                                         id="ReductionRate"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("ReductionRate", { required: "ReductionRate is required" })}
-                                        aria-invalid={errors.ReductionRate ? "true" : "false"}
+                                        onChange={ReductionRateKeyPress}
+                                      onKeyPress={handleKeyPress}
                                     />
-                                    {errors.ReductionRate && <p className="text-red-500 mt-2" role="alert">{errors.ReductionRate?.message}</p>}
+                                    {ReductionRateError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     )}
 
 
-                    {ShowAmountofMoney && (
+                    {ShowValuation && (
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="Valuation" className="form-label">
-                                        評価額
+                                    <label className="form-label">
+                                        評価額<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <input
                                         type="text"
                                         id="Valuation"
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Valuation", { required: "Valuation is required" })}
-                                        aria-invalid={errors.Valuation ? "true" : "false"}
-                                    />
-                                    {errors.Valuation && <p className="text-red-500 mt-2" role="alert">{errors.Valuation?.message}</p>}
+                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"   
+                                        onChange={ValuationKeyPress}
+                                        onKeyPress={handleKeyPress}                                     
+                                    />  
+                                    {ValuationError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}                                  
                                 </div>
                             </div>
                         </div>
                     )}
-
-                    {ShowManagementBalance && (
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="ManagementBalance" className="form-label">
-                                        管理残高
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        disabled
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("ManagementBalance", { required: "ManagementBalance is required" })}
-                                        aria-invalid={errors.ManagementBalance ? "true" : "false"}
-                                    />
-                                    {errors.ManagementBalance && <p className="text-red-500 mt-2" role="alert">{errors.ManagementBalance?.message}</p>}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {ShowAmountofMoneyDisabled && (
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="Valuation" className="form-label">
-                                        評価額
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        disabled
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Valuation", { required: "Valuation is required" })}
-                                        aria-invalid={errors.Valuation ? "true" : "false"}
-                                    />
-                                    {errors.Valuation && <p className="text-red-500 mt-2" role="alert">{errors.Valuation?.message}</p>}
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    
 
                     {ShowCompensatoryProperty && (
                         <div className="w-full block items-center justify-between mb-7">
@@ -451,61 +606,23 @@ export default function OtherPropertyAdd() {
                     )}
 
 
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
-                        <div className="heading text-center">
-                            <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
+                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                            <div className="heading text-center">
+                                <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
+                            </div>
+                            <div className="total-list pt-10">                             
+                                <PersonListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarValuation={Valuation}  />
+                            </div>
+                            <IncorrectError IncorrectError={ShowIncorrectError}/>
                         </div>
-                        <div className="total-list pt-10">
-                            <ul>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>受取人</span>
-                                    <span>取得財産の価額</span>
-                                </li>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>山田　太郎</span>
-                                    <div className="text-right"><input type="text" className="border-2 h-10 text-right form-control w-50 outline-none"
-                                        onKeyPress={handleKeyPress}
-                                    /></div>
-                                </li>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>相続人未決定</span>
-                                    <span>{0}</span>
-                                </li>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>合計</span>
-                                    <span>{0}</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                        <div className="save-btn text-center">
-                            <Link href="/">
-                                <button
-                                    className="bg-return-bg rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        戻る
-                                    </span>
-                                </button>
-                            </Link>
-                        </div>
-                        <div className="save-btn text-center">
-                            <Link href="/declaration-printing/other-property/other-property-others">
-                                <button
 
-                                    className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        保存して戻る
-                                    </span>
-                                </button>
-                            </Link>
+                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                            <BackButton />
+                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                         </div>
-                    </div>
-                    <div className="heading text-center pt-8">
-                        <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
-                    </div>
+                        <div className="heading text-center pt-8">
+                            <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
+                        </div>
                 </form>
 
 

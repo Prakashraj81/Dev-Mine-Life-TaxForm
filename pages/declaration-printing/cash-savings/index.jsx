@@ -9,6 +9,7 @@ import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function CashSavings() {
     let [cashSavingsList, setcashSavingsList] = useState([]);
+    let totalValuation = 0;
     useEffect(() => {
         let sessionValue = sessionStorage.getItem('cashSavings');
         var tempArray =[];
@@ -38,7 +39,11 @@ export default function CashSavings() {
                 </div>
                 <div className="cash-list py-3">
                     <table className="w-full border border-light-gray">
-                        {cashSavingsList.map((list, index) => (
+                        {cashSavingsList.map((list, index) => {
+                            // Calculate TotalPrice correctly
+                            let AmountofMoney = parseFloat(list.AmountofMoney.replace(/,/g, '').replace('.', ''));
+                            totalValuation += AmountofMoney;
+                            return (
                                 <tr key={index}>
                                     {list.Address ?
                                         <td className="py-2 px-2 border-r border border-light-gray">{list.Address}</td>
@@ -46,7 +51,7 @@ export default function CashSavings() {
                                         <td className="py-2 px-2 border-r border border-light-gray">{list.FinancialInstitutionName}</td>
                                     }
                                     <td className="py-2 px-2 border-r border border-light-gray">{list.DepositType}</td>
-                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.AmountofMoney}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.AmountofMoney.toLocaleString()}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
                                         <button id="cash_Edit" value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <ModeEditIcon className="text-white" />
@@ -58,7 +63,9 @@ export default function CashSavings() {
                                         </button>
                                     </td>
                                 </tr>
-                            ))}
+                            );
+                        })}
+
                     </table>
                 </div>
                 <div className="w-full inline-block text-left">
@@ -81,11 +88,11 @@ export default function CashSavings() {
                             </li>
                             <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                 <span>相続人未決定</span>
-                                <span>0</span>
+                                <span>{totalValuation}</span>
                             </li>
                             <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                 <span>合計</span>
-                                <span>0</span>
+                                <span>{totalValuation}</span>
                             </li>
                         </ul>
                     </div>

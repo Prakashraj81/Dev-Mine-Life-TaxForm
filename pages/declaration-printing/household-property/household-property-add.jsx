@@ -1,53 +1,48 @@
 "use client";
 import Link from "next/link";
-import { useState, Fragment, Controller } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import BackButton from "../../../components/back-btn";
+import SubmitButton from "../../../components/submit-btn";
+import IncorrectError from "../../../components/person-list-box/incorrect-error";
+import PersonListBox from "../../../components/person-list-box/person-list-box";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 
 export default function HouseholdPropertyAdd() {
 
-    const [PropertyContent, setPropertyContent] = useState("");
-    const [PostCode, setPostCode] = useState("");
-    const [Address, setAddress] = useState("");
-    const [Valuation, setValuation] = useState(0);
+    let [PropertyContent, setPropertyContent] = useState("");
+    let [PostCode, setPostCode] = useState("");
+    let [Address, setAddress] = useState("");
+    let [Valuation, setValuation] = useState("0");
 
-    let [UndecidedHeir, setUndecidedHeir] = useState(0);
-    let [TotalPrice, setTotalPrice] = useState(0);
-    let [UserAmount, setUserAmount] = useState(0);
+    let [UndecidedHeir, setUndecidedHeir] = useState("0");
+    let [TotalPrice, setTotalPrice] = useState("0");
+    let [boxValues, setBoxValues] = useState([]);
 
-    const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
-        defaultValues: {
-            PropertyContent: "",
-            PostCode: "",
-            Address: "",
-            Valuation: 0,
-            UndecidedHeir: 0,
-            TotalPrice: 0,
-            UserAmount: 0,
-        }
-    });
+    //Error state and button disabled
+    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+    let [PropertyContentError, setPropertyContentError] = useState(false);
+    let [AddressError, setAddressError] = useState(false);
+
 
     const ValuationKeyPress = (e) => {
-        let value = Number(e.target.value);
-        setValuation(value);
-        setUndecidedHeir(value);
-        setTotalPrice(value);
-    };
-    
-
-    //Footer box calculation
-    const FooterboxKeyPress = (e) => {
-        let footer_box_value = Number(e.target.value);
-        if (footer_box_value > 0) {
-            var value = AmountofMoney - footer_box_value;
+        let value = e.target.value;
+        value = value.replace(/,/g, '').replace('.', '');
+        value = parseFloat(value);        
+        if(value > 0){
+            value = value.toLocaleString();
+            setValuation(value);
             setUndecidedHeir(value);
+            setTotalPrice(value);
         }
-        else {
-            setUndecidedHeir(AmountofMoney);
+        else{
+            setValuation("0");
+            setUndecidedHeir("0");
+            setTotalPrice("0");
         }
-    }
+    };
 
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
@@ -58,16 +53,98 @@ export default function HouseholdPropertyAdd() {
         }
     };
 
-    const onSubmit = async (defaultValues) => {
-        var value = JSON.stringify(defaultValues);
-        console.log(value);
-        var Apiurl = "/";
-        const urlresponse = await fetch(Apiurl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(defaultValues),
-            mode: "no-cors",
-        });
+    //Postal code 7 digit limit function
+    const [isValid, setIsValid] = useState(true);
+    const postalcodeDigit = (e) => {
+        let digit_value = e.target.value;
+        let isValidInput = /^\d{7}$/.test(digit_value);
+        if (digit_value.length == 8 || digit_value.length == 9 || digit_value.length == 10) {
+            digit_value = digit_value.slice(0, 7)
+            setPostCode(digit_value);
+        }
+        setPostCode(digit_value);
+        setIsValid(isValidInput);
+    }
+
+    //All input validation check and handling function
+    const inputHandlingFunction = (event) => {
+        setShowIncorrectError(false);
+        let inputId = event.currentTarget.id;
+        let inputValue = event.target.value;
+        if (inputId === "PropertyContent") {
+            setPropertyContent(inputValue);
+            setPropertyContentError(false);
+        }
+        else {
+            setAddress(inputValue);
+            setAddressError(false);
+        }
+        setisSumbitDisabled(false);
+    }
+
+    //Footer box values and calculation
+    let handleBoxValueChange = (e, index) => {
+        let newValue = parseFloat(e.target.value);
+        if (isNaN(newValue)) {
+            newValue = 0;
+        }
+        const updatedBoxValues = [...boxValues];
+        updatedBoxValues[index] = newValue;
+        setBoxValues(updatedBoxValues);
+
+        //Amount of money convert
+        if (Valuation == 0) {
+            Valuation = 0;
+        }
+        else {            
+            Valuation = parseFloat(Valuation.replace(/,/g, '').replace('.', ''));            
+        }
+        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
+        if (isNaN(totalBoxValues)) {
+            totalBoxValues = 0;
+        }
+        let heirValue = Valuation - totalBoxValues;
+        if (heirValue < 0) {
+            setUndecidedHeir(heirValue.toLocaleString());
+            setShowIncorrectError(true);
+        }
+        else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(heirValue.toLocaleString());
+        }
+    };
+
+    //Submit API function 
+    const router = useRouter();
+    const onSubmit = () => {
+        let defaultValues = {
+            PropertyContent: PropertyContent,
+            PostCode: PostCode,
+            Address: Address,
+            Valuation: Valuation,
+            UndecidedHeir: UndecidedHeir,
+            TotalPrice: Valuation,
+        };
+
+        //input Validation
+        if (defaultValues.PropertyContent === "") {
+            setPropertyContentError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.Address === "") {
+            setAddressError(true);
+            isSumbitDisabled = true;
+        }
+        //Api setup
+        if (isSumbitDisabled !== true) {
+            console.log("API allowed");
+            sessionStorage.setItem('HouseholdProperty', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/household-property`);
+        }
+        else {
+            console.log("API not allowed");
+            setisSumbitDisabled(true);
+        }
     };
     return (
         <>
@@ -85,23 +162,25 @@ export default function HouseholdPropertyAdd() {
                     </p>
                 </div>
                 <div className="w-full inline-block">
-                    <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                    <form action="#" method="POST">
                         <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="PropertyContent" className="form-label">
-                                        財産の内容
+                                        財産の内容<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <input
                                         type="text"
                                         id="PropertyContent"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("PropertyContent", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.PropertyContent ? "true" : "false"}
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                        
+                                        onChange={inputHandlingFunction}
+                                        value={PropertyContent}
                                     />
-                                    {errors.PropertyContent && <p className="text-red-500" role="alert">{errors.PropertyContent?.message}</p>}
+                                    {PropertyContentError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -119,23 +198,23 @@ export default function HouseholdPropertyAdd() {
                                         id="PostCode"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
                                         onKeyPress={handleKeyPress}
-                                        {...register("PostCode", { required: "数字7桁で入力して下さい。海外の場合は入力不要です。" })}
-                                        aria-invalid={errors.PostCode ? "true" : "false"}
+                                        onChange={postalcodeDigit}
+                                        value={PostCode}
                                     />
                                     <PostcodeIcon />
                                 </div>
                                 <div className="mt-3">
                                     <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
                                 </div>
-                                {errors.PostCode && <p className="text-red-500" role="alert">{errors.PostCode?.message}</p>}
+                                {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
                             </div>
                         </div>
 
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="Address" className="form-label">
-                                        住所
+                                    <label className="form-label">
+                                        住所<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -143,10 +222,13 @@ export default function HouseholdPropertyAdd() {
                                         type="text"
                                         id="Address"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Address", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.Address ? "true" : "false"}
+                                        onKeyPress={handleKeyPress}
+                                        onChange={inputHandlingFunction}
+                                        value={Address}
                                     />
-                                    {errors.Address && <p className="text-red-500" role="alert">{errors.Address?.message}</p>}
+                                    {AddressError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -155,7 +237,7 @@ export default function HouseholdPropertyAdd() {
                         <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="Valuation" className="form-label">
+                                    <label className="form-label">
                                         評価額
                                     </label>
                                 </div>
@@ -171,47 +253,19 @@ export default function HouseholdPropertyAdd() {
                             </div>
                         </div>
 
-                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
+                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                             <div className="heading text-center">
                                 <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                             </div>
-                            <div className="total-list pt-10">
-                                <ul>
-                                    <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                        <span>受取人</span>
-                                        <span>取得財産の価額</span>
-                                    </li>
-                                    <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                        <span>山田　太郎</span>
-                                        <div className="text-right"><input type="text" className="border-2 h-10 text-right form-control w-50 outline-none"
-                                            onChange={FooterboxKeyPress}
-                                            onKeyPress={handleKeyPress}
-                                        /></div>
-                                    </li>
-                                    <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                        <span>相続人未決定</span>
-                                        <span>{UndecidedHeir}</span>
-                                    </li>
-                                    <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                        <span>合計</span>
-                                        <span>{TotalPrice}</span>
-                                    </li>
-                                </ul>
+                            <div className="total-list pt-10">                             
+                                <PersonListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={Valuation}  />
                             </div>
+                            <IncorrectError IncorrectError={ShowIncorrectError}/>
                         </div>
 
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                             <BackButton />
-                            <div className="save-btn text-center">
-                                <button
-                                    type="submit"
-                                    className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        保存して戻る
-                                    </span>
-                                </button>
-                            </div>
+                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                         </div>
                         <div className="heading text-center pt-8">
                             <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>

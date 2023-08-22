@@ -1,9 +1,10 @@
-"use client";
 import Link from "next/link";
-import { useState, Fragment, Controller } from "react";
-import { useForm } from "react-hook-form";
-import { useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import BackButton from "../../../components/back-btn";
+import SubmitButton from "../../../components/submit-btn";
+import PersonListBox from "../../../components/person-list-box/person-list-box";
+import IncorrectError from "../../../components/person-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
@@ -60,7 +61,7 @@ export default function SecuritiesAdd() {
 
     //Hide and Show Input   
     let [showAmountMoney, setshowAmountMoney] = useState(false);
-    let [ShowFinancial, setShowFinancial] = useState(false);
+    let [showFinancialInstitutionName, setshowFinancialInstitutionNameInstitutionName] = useState(false);
     let [showQuantityPrice, setshowQuantityPrice] = useState(false);
     let [showAddress, setshowAddress] = useState(true);
     let [showPostcode, setshowPostcode] = useState(true);
@@ -69,25 +70,17 @@ export default function SecuritiesAdd() {
     let [showUnitDetails, setshowUnitDetails] = useState(false);
     let [showMoneyOrderQuantity, setshowMoneyOrderQuantity] = useState(false);
     let [showReducationAmount, setshowReducationAmount] = useState(false);
-    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
-    let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
 
-    const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
-        defaultValues: {
-            SecuritiesType: "",
-            NameofSecurities: "",
-            PostCode: "",
-            FinancialInstitutionName: "",
-            Address: "",
-            UnitPrice: 0,
-            Quantity: 0,
-            MoneyOrder: 0,
-            ReductionAmount: 0,
-            AmountofMoney: 0,
-            UndecidedHeir: 0,
-            totalPrice: 0,
-        }
-    });
+    //Error state and button disabled
+    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+    let [SecuritiesTypeError, setSecuritiesTypeError] = useState(false);
+    let [UnitDetailsError, setUnitDetailsError] = useState(false);
+    let [NameofSecuritiesError, setNameofSecuritiesError] = useState(false);
+    let [AddressError, setAddressError] = useState(false);
+    let [UnitPriceError, setUnitPriceError] = useState(false);
+    let [FinancialInstitutionNameError, setFinancialInstitutionNameError] = useState(false);
+    let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
 
     //Postal code 7 digit limit function
     const [isValid, setIsValid] = useState(true);
@@ -107,15 +100,27 @@ export default function SecuritiesAdd() {
     const SecuritiesDropdownChange = (event) => {
         let selectedOption = event.target.options[event.target.selectedIndex];
         setSecuritiesType(selectedOption.text);
-        selectId = Number(selectedOption.value)
-        handleInputChange(selectId);
+        selectId = Number(selectedOption.value);
+        if (selectId !== 0) {
+            setSecuritiesTypeError(false);
+            handleInputChange(selectId);
+        }
+        else {
+            setSecuritiesTypeError(true);
+        }
     };
 
     const UnitDetailsDropdownChange = (event) => {
         let selectedOption = event.target.options[event.target.selectedIndex];
         setSecuritiesType(selectedOption.text);
         selectId = Number(selectedOption.value);
-        handleInputChange(selectId);
+        if (selectId !== 0) {
+            setUnitDetailsError(false);
+            handleInputChange(selectId);
+        }
+        else {
+            setUnitDetailsError(true);
+        }
     }
 
 
@@ -142,13 +147,14 @@ export default function SecuritiesAdd() {
     }
 
     const handleInputChange = (selectId) => {
+        setisSumbitDisabled(false);
         inputClear();
         if (selectId === 0 || selectId === 4) {
             setshowNameSecurities(true);
             setshowPostcode(true);
             setshowAddress(true);
             setshowAmountMoney(true);
-            setShowFinancial(false);
+            setshowFinancialInstitutionNameInstitutionName(false);
             setshowQuantityPrice(false);
             setshowUnitDetails(false);
             setshowReducationAmount(false);
@@ -160,7 +166,7 @@ export default function SecuritiesAdd() {
             setshowAddress(true);
             setshowAmountMoney(false);
             setshowQuantityPrice(true);
-            setShowFinancial(false);
+            setshowFinancialInstitutionNameInstitutionName(false);
             setshowUnitDetails(false);
             setshowReducationAmount(false);
             setshowMoneyOrderQuantity(false);
@@ -170,7 +176,7 @@ export default function SecuritiesAdd() {
             setshowAddress(false);
             setshowAmountMoney(false);
             setshowQuantityPrice(true);
-            setShowFinancial(true);
+            setshowFinancialInstitutionName(true);
             setshowNameSecurities(true);
             setshowUnitDetails(false);
             setshowReducationAmount(false);
@@ -179,7 +185,7 @@ export default function SecuritiesAdd() {
         else if (selectId === 5 || selectId === 6 || selectId === 8) {
             setshowNameSecurities(true);
             setshowAmountMoney(true);
-            setShowFinancial(true);
+            setshowFinancialInstitutionName(true);
             setshowPostcode(false);
             setshowAddress(false);
             setshowQuantityPrice(false);
@@ -191,7 +197,7 @@ export default function SecuritiesAdd() {
             setshowUnitDetails(true);
             setshowNameSecurities(true);
             setshowAmountMoney(true);
-            setShowFinancial(true);
+            setshowFinancialInstitutionName(true);
             setshowPostcode(false);
             setshowAddress(false);
             setshowQuantityPrice(false);
@@ -204,7 +210,7 @@ export default function SecuritiesAdd() {
             setshowUnitDetails(true);
             setshowNameSecurities(true);
             setshowAmountMoney(true);
-            setShowFinancial(true);
+            setshowFinancialInstitutionName(true);
             setshowPostcode(false);
             setshowAddress(false);
             setshowQuantityPrice(false);
@@ -215,36 +221,14 @@ export default function SecuritiesAdd() {
             setshowUnitDetails(true);
             setshowNameSecurities(true);
             setshowAmountMoney(false);
-            setShowFinancial(true);
+            setshowFinancialInstitutionName(true);
             setshowPostcode(false);
             setshowAddress(false);
             setshowMoneyOrderQuantity(false);
         }
-        else {
-
-        }
     }
 
-    const onSubmit = async (defaultValues) => {
-        if (defaultValues.AmountofMoney > 0) {
-            setAmountofMoney(false);
-        }
-        var value = JSON.stringify(defaultValues);
-        if (value.SecuritiesType != "") {
-            var Apiurl = "/";
-            const urlresponse = await fetch(Apiurl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(defaultValues),
-                mode: "no-cors",
-            });
-        }
-        else {
-
-        }
-        //res.status(200).end()
-    };
-
+    //Amount input
     const AmountofMoneyKeyPress = (e) => {
         let amount_of_money = e.target.value;
         amount_of_money = amount_of_money.replace(/,/g, '').replace('.', '');
@@ -259,12 +243,14 @@ export default function SecuritiesAdd() {
             setAmountofMoney(amount_of_money);
             setUndecidedHeir(amount_of_money);
         }
+        setisSumbitDisabled(false);
         AmountToTotalCalculation(amount_of_money);
     }
 
     const MoneyOrderKeyPress = (e) => {
         let money_order = Number(e.target.value);
         setMoneyOrder(money_order);
+        setisSumbitDisabled(false);
     }
 
     const ReductionAmountKeyPress = (e) => {
@@ -285,6 +271,7 @@ export default function SecuritiesAdd() {
             AmountToTotalCalculation(amount.toLocaleString());
             setReductionAmount(0);
         }
+        setisSumbitDisabled(false);
     }
 
     const MoneyOrderQuantityKeyPress = (e) => {
@@ -297,6 +284,7 @@ export default function SecuritiesAdd() {
         else {
             setAmountofMoney(0);
         }
+        setisSumbitDisabled(false);
     }
 
 
@@ -312,7 +300,12 @@ export default function SecuritiesAdd() {
     let flag = 0;
     function onchangeUnitPrice(e) {
         let unit_price = parseFloat(e.target.value);
-        setUnitPrice(unit_price);
+        if(isNaN(unit_price)){
+            setUnitPrice(0);
+        }
+        else{
+            setUnitPrice(unit_price);
+        }
         let qty = Quantity;
         if (qty > 0) {
             flag = 1;
@@ -343,6 +336,26 @@ export default function SecuritiesAdd() {
             setQuantity(0);
             AmountToTotalCalculation(0);
         }
+        setisSumbitDisabled(false);
+    }
+
+    //All input validation check and handling function
+    const inputHandlingFunction = (event) => {
+        let inputId = event.currentTarget.id;
+        let inputValue = event.target.value;
+        if (inputId === "NameofSecurities") {
+            setNameofSecurities(inputValue);
+            setNameofSecuritiesError(false);
+        }
+        else if (inputId === "FinancialInstitutionName") {
+            setFinancialInstitutionName(inputValue);
+            setFinancialInstitutionNameError(false);
+        }
+        else {
+            setAddress(inputValue);
+            setAddressError(false);
+        }
+        setisSumbitDisabled(false);
     }
 
     //Box value calculation function    
@@ -371,6 +384,26 @@ export default function SecuritiesAdd() {
     }
 
 
+    function valueConvertFun(convertValue) {
+        if (convertValue === 0) {
+            convertValue = 0;
+            setAmountofMoneyError(true);
+            setisSumbitDisabled(true);
+        }
+        else {
+            convertValue = convertValue.replace(/,/g, '').replace('.', '');
+            convertValue = parseFloat(convertValue);
+            if (convertValue === 0) {
+                setAmountofMoneyError(true);
+                setisSumbitDisabled(true);
+            }
+            else {
+                setAmountofMoneyError(false);
+            }
+        }
+    }
+
+
     const handleBoxValueChange = (e, index) => {
         setBoxValues([0]);
         let newValue = parseFloat(e.target.value);
@@ -387,7 +420,7 @@ export default function SecuritiesAdd() {
             AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
             AmountofMoney = parseFloat(AmountofMoney);
         }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);       
+        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
         totalBoxValues = isNaN(totalBoxValues) ? 0 : totalBoxValues;
         let heirValue = AmountofMoney - totalBoxValues;
         if (heirValue < 0) {
@@ -400,6 +433,85 @@ export default function SecuritiesAdd() {
         }
     };
 
+    //Submit API function 
+    const router = useRouter();
+    const onSubmit = () => {
+        let defaultValues = {
+            SecuritiesType: SecuritiesType,
+            UnitDetails: UnitDetails,
+            NameofSecurities: NameofSecurities,
+            PostCode: PostCode,
+            FinancialInstitutionName: FinancialInstitutionName,
+            Address: Address,
+            UnitPrice: UnitPrice,
+            Quantity: Quantity,
+            MoneyOrder: MoneyOrder,
+            ReductionAmount: ReductionAmount,
+            AmountofMoney: AmountofMoney,
+            UndecidedHeir: UndecidedHeir,
+            totalPrice: totalPrice,
+        };
+        if (defaultValues.SecuritiesType === "") {
+            setSecuritiesTypeError(true);
+            isSumbitDisabled = true;
+        }
+
+        if (defaultValues.UnitDetails === "") {
+            if (showUnitDetails === true) {
+                setUnitDetailsError(true);
+                isSumbitDisabled = true;
+            }
+
+        }
+
+        if (defaultValues.NameofSecurities === "") {
+            setNameofSecuritiesError(true);
+            isSumbitDisabled = true;
+        }
+
+        if (defaultValues.FinancialInstitutionName === "") {
+            if (showFinancialInstitutionName === true) {
+                setFinancialInstitutionNameError(true);
+                isSumbitDisabled = true;
+            }
+        }
+
+        if (defaultValues.Address === "") {
+            if (showAddress === true) {
+                setAddressError(true);
+                isSumbitDisabled = true;
+            }
+        }
+
+        if (defaultValues.AmountofMoney !== "" || defaultValues.AmountofMoney === 0) {
+            valueConvertFun(defaultValues.AmountofMoney);
+        }
+
+        if (defaultValues.UndecidedHeir !== "") {
+            if(defaultValues.UndecidedHeir === 0){
+                UndecidedHeir = 0;
+            }    
+            else{
+                UndecidedHeir = defaultValues.UndecidedHeir.replace(/,/g, '').replace('.', '');
+                UndecidedHeir = parseFloat(UndecidedHeir);
+            }        
+            if (defaultValues.UndecidedHeir < 0) {
+                setShowIncorrectError(true);
+                isSumbitDisabled = true;
+            }
+        }
+
+        //Api setup
+        if (isSumbitDisabled !== true) {
+            console.log("API allowed");
+            sessionStorage.setItem('securities', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/securities`);
+        }
+        else {
+            console.log("API not allowed");
+            setisSumbitDisabled(true);
+        }
+    };
 
     return (
         <>
@@ -418,7 +530,7 @@ export default function SecuritiesAdd() {
                 </div>
             </div>
             <div className="w-full inline-block">
-                <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                <form action="#" method="POST">
 
                     <div className="w-full flex items-center justify-between mb-7">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
@@ -436,6 +548,9 @@ export default function SecuritiesAdd() {
                                         </option>
                                     ))}
                                 </select>
+                                {SecuritiesTypeError && (
+                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                )}
                             </div>
                         </div>
 
@@ -455,6 +570,9 @@ export default function SecuritiesAdd() {
                                             </option>
                                         ))}
                                     </select>
+                                    {UnitDetailsError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -473,7 +591,12 @@ export default function SecuritiesAdd() {
                                         type="text"
                                         id="NameofSecurities"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        onChange={inputHandlingFunction}
+                                        value={NameofSecurities}
                                     />
+                                    {NameofSecuritiesError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -519,13 +642,18 @@ export default function SecuritiesAdd() {
                                         type="text"
                                         id="Address"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        onChange={inputHandlingFunction}
+                                        value={Address}
                                     />
+                                    {AddressError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     )}
 
-                    {ShowFinancial && (
+                    {showFinancialInstitutionName && (
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
@@ -538,7 +666,12 @@ export default function SecuritiesAdd() {
                                         type="text"
                                         id="FinancialInstitutionName"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        onChange={inputHandlingFunction}
+                                        value={FinancialInstitutionName}
                                     />
+                                    {FinancialInstitutionNameError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -564,6 +697,9 @@ export default function SecuritiesAdd() {
                                             className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
                                         />
                                         <UnitPriceIcon />
+                                        {UnitPriceError && (
+                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -676,17 +812,21 @@ export default function SecuritiesAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        金額
+                                        金額<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <input
                                         type="text"
+                                        id="AmountofMoney"
                                         value={AmountofMoney}
                                         onChange={AmountofMoneyKeyPress}
                                         onKeyPress={handleKeyPress}
                                         className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     />
+                                    {AmountofMoneyError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -698,51 +838,14 @@ export default function SecuritiesAdd() {
                             <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                         </div>
                         <div className="total-list pt-10">
-                            <ul>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>受取人</span>
-                                    <span>取得財産の価額</span>
-                                </li>
-                                {HeirList.map((heirlist, index) => (
-                                    <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                        <span>{heirlist.name}</span>
-                                        <div className="text-right"><input id={heirlist.id} type="text" autocomplete="off" className="border-2 h-10 text-right form-control w-50 outline-none"
-                                            onChange={(e) => handleBoxValueChange(e, index)}
-                                            onKeyPress={handleKeyPress}
-                                        /></div>
-                                    </li>
-                                ))}
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>相続人未決定</span>
-                                    <span>{UndecidedHeir}</span>
-                                </li>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>合計</span>
-                                    <span>{AmountofMoney}</span>
-                                </li>
-                            </ul>
+                        <PersonListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={AmountofMoney}  />
                         </div>
-                        {ShowIncorrectError && (
-                            <div className="show-error py-5">
-                                <p className="text-left text-red-500">金額配分が正しくありません</p>
-                            </div>
-                        )}
+                        <IncorrectError IncorrectError={ShowIncorrectError}/>
                     </div>
 
-                    <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                        <div className="save-btn text-center">
-                            <BackButton />
-                        </div>
-                        <div className="save-btn text-center">
-                            <button
-                                type="submit"
-                                className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                            >
-                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                    保存して戻る
-                                </span>
-                            </button>
-                        </div>
+                    <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">                        
+                        <BackButton />
+                        <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled}/>
                     </div>
                     <div className="heading text-center pt-8">
                         <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>

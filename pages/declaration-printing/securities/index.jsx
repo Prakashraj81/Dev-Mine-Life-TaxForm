@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import BackButton from "../../../components/back-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function Securities() {
+    let [SecuritiesList, setSecuritiesList] = useState([]);
+    let totalValuation = 0;
+    useEffect(() => {
+        let sessionValue = sessionStorage.getItem('securities');
+        var tempArray =[];
+        tempArray[0] = JSON.parse(sessionValue);     
+        if (tempArray[0] !== null) {                   
+            setSecuritiesList(tempArray);
+        }
+        else{
+            setSecuritiesList([]);
+        }
+    }, []);
     return (
         <>
             <div className="securities-wrapper">
@@ -19,6 +34,32 @@ export default function Securities() {
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         有価証券の情報を「追加する」ボタンをクリックし、ご入力ください。「」ボタンを押すと内容を複製して入力できます。わからない項目は「？」をご確認ください。
                     </p>
+                </div>
+                <div className="securities-list py-8">
+                    <table className="w-full border border-light-gray">                        
+                        {SecuritiesList.map((list, index) => {
+                            // Calculate TotalPrice correctly
+                            let AmountofMoney = parseFloat(list.AmountofMoney.replace(/,/g, '').replace('.', ''));
+                            totalValuation += AmountofMoney;
+                            return (
+                                <tr key={index}>
+                                <td className="py-2 px-2 border-r border border-light-gray">{list.NameofSecurities}</td>
+                                <td className="py-2 px-2 border-r border border-light-gray">{list.SecuritiesType}</td>
+                                <td className="py-2 px-2 border-r border border-light-gray text-right">{list.AmountofMoney.toLocaleString()}</td>
+                                <td className="py-2 px-2 border-r border border-light-gray text-right">
+                                    <button id="cash_Edit" value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <ModeEditIcon className="text-white" />
+                                    </button>
+                                </td>
+                                <td className="py-2 px-2 border-r border border-light-gray text-right">
+                                    <button id="cash_Delete" value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <DeleteOutlinedIcon className="text-white" />
+                                    </button>
+                                </td>
+                            </tr>
+                            );
+                        })}
+                    </table>
                 </div>
                 <div className="w-full inline-block text-left">
                     <Link href="/declaration-printing/securities/securities-add">
@@ -40,16 +81,16 @@ export default function Securities() {
                             </li>
                             <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                 <span>相続人未決定</span>
-                                <span>0</span>
+                                <span>{totalValuation}</span>
                             </li>
                             <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                 <span>合計</span>
-                                <span>0</span>
+                                <span>{totalValuation}</span>
                             </li>
                         </ul>
                     </div>
                     <div className="back-btn pt-5 md:pt-10 lg:pt-20 xl:pt-20 2xl:pt-20 text-center">
-                        <BackButton/>
+                        <BackButton />
                     </div>
                 </div>
             </div>
@@ -58,5 +99,5 @@ export default function Securities() {
 }
 
 Securities.getLayout = function getLayout(page) {
-  return <FullLayout>{page}</FullLayout>;
+    return <FullLayout>{page}</FullLayout>;
 };

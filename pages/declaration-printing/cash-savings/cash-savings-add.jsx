@@ -3,6 +3,9 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import BackButton from "../../../components/back-btn";
+import SubmitButton from "../../../components/submit-btn";
+import PersonListBox from "../../../components/person-list-box/person-list-box";
+import IncorrectError from "../../../components/person-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 
@@ -35,8 +38,8 @@ export default function CashSavingsAdd() {
     let [ShowPostCode, setShowPostCode] = useState(false);
     let [ShowAddress, setShowAddress] = useState(false);
     let [UndecidedHeir, setUndecidedHeir] = useState(0);
-    let [totalPrice, settotalPrice] = useState(0);
-    let [ConstantValue, setConstantValue] = useState(0);
+    let [totalPrice, settotalPrice] = useState(0);    
+    let [boxValues, setBoxValues] = useState([]);
 
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
@@ -121,7 +124,7 @@ export default function CashSavingsAdd() {
 
 
     //Input keypress
-    const handleKeyPress = (e) => {
+    let handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
         const keyValue = String.fromCharCode(keyCode);
         const numericRegex = /^[0-9\b]+$/;
@@ -144,67 +147,7 @@ export default function CashSavingsAdd() {
         }
         setisSumbitDisabled(false);
     }
-
-
-    //Submit API function 
-    const router = useRouter();
-    const onSubmit = () => {
-        let defaultValues = {
-            DepositType: DepositType,
-            FinancialInstitutionName: FinancialInstitutionName,
-            PostCode: PostCode,
-            Address: Address,
-            AmountofMoney: AmountofMoney,
-            UndecidedHeir: UndecidedHeir,
-            totalPrice: AmountofMoney,
-        };
-
-        //input Validation
-        if (defaultValues.DepositType === "") {
-            setDepositTypeError(true);
-            isSumbitDisabled = true;
-        }
-
-        if (defaultValues.FinancialInstitutionName === "") {
-            if (ShowFinancialInstitutionName === true) {
-                setFinancialInstitutionNameError(true);
-                isSumbitDisabled = true;
-            }
-            else {
-                setFinancialInstitutionNameError(false);
-            }
-        }
-
-        if (defaultValues.Address === "") {
-            if (ShowAddress === true) {
-                setAddressError(true);
-                isSumbitDisabled = true;
-            }
-            else {
-                setAddressError(false);
-            }
-        }
-
-        if (defaultValues.AmountofMoney !== "" || defaultValues.AmountofMoney === 0) {
-            valueConvertFun(defaultValues.AmountofMoney);
-        }
-
-        if (defaultValues.UndecidedHeir < 0) {
-            setShowIncorrectError(true);
-            isSumbitDisabled = true;
-        }
-
-        //Api setup
-        if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('cashSavings', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/cash-savings`);
-        }
-        else {
-            console.log("API not allowed");
-            setisSumbitDisabled(true);
-        }
-    };
+    
 
     function valueConvertFun(convertValue) {
         if (convertValue === 0) {
@@ -225,8 +168,7 @@ export default function CashSavingsAdd() {
         }
     }
 
-    //Box value calculation function
-    let [boxValues, setBoxValues] = useState([]);
+    //Box value calculation function    
     function AmountToTotalCalculation(AmountofMoney) {
         //Amount of money convert
         if (AmountofMoney == 0 || AmountofMoney == "NaN") {
@@ -252,7 +194,7 @@ export default function CashSavingsAdd() {
     }
 
 
-    const handleBoxValueChange = (e, index) => {
+    let handleBoxValueChange = (e, index) => {
         let newValue = parseFloat(e.target.value);
         if (isNaN(newValue)) {
             newValue = 0;
@@ -284,6 +226,61 @@ export default function CashSavingsAdd() {
         }
     };
 
+
+    //Submit API function 
+    const router = useRouter();
+    const onSubmit = () => {
+        let defaultValues = {
+            DepositType: DepositType,
+            FinancialInstitutionName: FinancialInstitutionName,
+            PostCode: PostCode,
+            Address: Address,
+            AmountofMoney: AmountofMoney,
+            UndecidedHeir: UndecidedHeir,
+            totalPrice: AmountofMoney,
+        };
+
+        //input Validation
+        if (defaultValues.DepositType === "") {
+            setDepositTypeError(true);
+            isSumbitDisabled = true;
+        }
+
+        if (defaultValues.FinancialInstitutionName === "") {
+            if (ShowFinancialInstitutionName === true) {
+                setFinancialInstitutionNameError(true);
+                isSumbitDisabled = true;
+            }            
+        }
+
+        if (defaultValues.Address === "") {
+            if (ShowAddress === true) {
+                setAddressError(true);
+                isSumbitDisabled = true;
+            }            
+        }
+
+        if (defaultValues.AmountofMoney !== "" || defaultValues.AmountofMoney === 0) {
+            valueConvertFun(defaultValues.AmountofMoney);
+        }
+
+        if (defaultValues.UndecidedHeir < 0) {
+            setShowIncorrectError(true);
+            isSumbitDisabled = true;
+        }
+
+        //Api setup
+        if (isSumbitDisabled !== true) {
+            console.log("API allowed");
+            sessionStorage.setItem('cashSavings', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/cash-savings`);
+        }
+        else {
+            console.log("API not allowed");
+            setisSumbitDisabled(true);
+        }
+    };
+
     return (
         <>
             <div className="cash-savings-wrapper">
@@ -300,7 +297,7 @@ export default function CashSavingsAdd() {
                     </p>
                 </div>
                 <div className="w-full inline-block">
-                    <form action="#" method="POST" onSubmit={onSubmit}>
+                    <form action="#" method="POST">
                         <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
@@ -428,52 +425,15 @@ export default function CashSavingsAdd() {
                             <div className="heading text-center">
                                 <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                             </div>
-                            <div className="total-list pt-10">
-                                <ul>
-                                    <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                        <span>受取人</span>
-                                        <span>取得財産の価額</span>
-                                    </li>
-                                    {HeirList.map((heirlist, index) => (
-                                        <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                            <span>{heirlist.name}</span>
-                                            <div className="text-right"><input id={heirlist.id} type="text" autoComplete="off" className="border-2 h-10 text-right form-control w-50 outline-none"
-                                                onChange={(e) => handleBoxValueChange(e, index)}
-                                                onKeyPress={handleKeyPress}
-                                            /></div>
-                                        </li>
-                                    ))}
-                                    <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                        <span>相続人未決定</span>
-                                        <span>{UndecidedHeir}</span>
-                                    </li>
-                                    <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                        <span>合計</span>
-                                        <span>{AmountofMoney}</span>
-                                    </li>
-                                </ul>
+                            <div className="total-list pt-10">                             
+                                <PersonListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={AmountofMoney}  />
                             </div>
-                            {ShowIncorrectError && (
-                                <div className="show-error py-5">
-                                    <p className="text-left text-red-500">金額配分が正しくありません</p>
-                                </div>
-                            )}
+                            <IncorrectError IncorrectError={ShowIncorrectError}/>
                         </div>
 
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                             <BackButton />
-                            <div className="save-btn text-center">
-                                <button
-                                    type="button"
-                                    onClick={onSubmit}
-                                    disabled={isSumbitDisabled}
-                                    className={isSumbitDisabled ? "cursor-not-allowed bg-custom-light rounded px-10 py-3 text-white" : "cursor-pointer bg-primary-color rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"}
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        保存して戻る
-                                    </span>
-                                </button>
-                            </div>
+                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled}/>
                         </div>
                         <div className="heading text-center pt-8">
                             <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>

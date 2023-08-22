@@ -1,6 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import BackButton from "../../../components/back-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function House() {
@@ -48,17 +51,7 @@ export default function House() {
                             </li>
                         </ul>
                     </div>
-                    <div className="back-btn pt-20 text-center">
-                        <Link href="/">
-                            <button
-                                className="bg-return-bg rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                            >
-                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                    戻る
-                                </span>
-                            </button>
-                        </Link>
-                    </div>
+                    <BackButton />
                 </div>
             </div>
         </>
