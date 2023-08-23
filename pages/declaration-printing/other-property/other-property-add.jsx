@@ -4,10 +4,11 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import IncorrectError from "../../../components/person-list-box/incorrect-error";
-import PersonListBox from "../../../components/person-list-box/person-list-box";
+import IncorrectError from "../../../components/heir-list-box/incorrect-error";
+import HeirListBox from "../../../components/heir-list-box/heir-list-box";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
 
 export default function OtherPropertyAdd() {
     let PropertyList = [
@@ -26,7 +27,7 @@ export default function OtherPropertyAdd() {
     let [Address, setAddress] = useState("");
     let [UnitPrice, setUnitPrice] = useState("0");
     let [Quantity, setQuantity] = useState("0");
-    let [ReductionRate, setReductionRate] = useState("0");    
+    let [ReductionRate, setReductionRate] = useState("0");
 
     let [ShowDateofAcquisition, setShowDateofAcquisition] = useState(false);
     let [ShowPostCode, setShowPostCode] = useState(false);
@@ -34,7 +35,7 @@ export default function OtherPropertyAdd() {
     let [ShowAddress, setShowAddress] = useState(false);
     let [ShowUnitPriceQuantity, setShowUnitPriceQuantity] = useState(false);
     let [ShowReductionRate, setShowReductionRate] = useState(false);
-    let [ShowValuationDisabled, setShowValuationDisabled] = useState(false);   
+    let [ShowValuationDisabled, setShowValuationDisabled] = useState(false);
     let [ShowContent, setShowContent] = useState(false);
     let [ShowCompensatoryProperty, setShowCompensatoryProperty] = useState(false);
 
@@ -47,8 +48,8 @@ export default function OtherPropertyAdd() {
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
     let [PropertyError, setPropertyError] = useState(false);
     let [PropertyNameError, setPropertyNameError] = useState(false);
-    let [AddressError, setAddressError] = useState(false); 
-    let [DateofAcquisitionError, setDateofAcquisitionError] = useState(false);   
+    let [AddressError, setAddressError] = useState(false);
+    let [DateofAcquisitionError, setDateofAcquisitionError] = useState(false);
     let [ReductionRateError, setReductionRateError] = useState(false);
     let [ValuationError, setValuationError] = useState(false);
 
@@ -73,7 +74,7 @@ export default function OtherPropertyAdd() {
         setisSumbitDisabled(false);
         if (selectedId === 1) {
             setShowContent(false);
-            setShowCompensatoryProperty(false);            
+            setShowCompensatoryProperty(false);
             setShowValuationDisabled(false);
             setShowDateofAcquisition(false);
             setShowReductionRate(false);
@@ -84,7 +85,7 @@ export default function OtherPropertyAdd() {
         }
         else if (selectedId === 2) {
             setShowContent(false);
-            setShowCompensatoryProperty(false);            
+            setShowCompensatoryProperty(false);
             setShowValuationDisabled(false);
             setShowDateofAcquisition(false);
             setShowReductionRate(true);
@@ -94,13 +95,13 @@ export default function OtherPropertyAdd() {
             setShowValuation(true);
         }
         else if (selectedId === 3) {
-            setShowContent(false);            
+            setShowContent(false);
             setShowDateofAcquisition(false);
             setShowReductionRate(false);
             setShowPostCode(false);
             setShowAddress(false);
             setShowUnitPriceQuantity(false);
-            setShowValuation(false);
+            setShowValuation(true);
             setShowValuationDisabled(true);
             setShowCompensatoryProperty(true);
         }
@@ -109,26 +110,26 @@ export default function OtherPropertyAdd() {
             setShowValuationDisabled(false);
             setShowReductionRate(false);
             setShowUnitPriceQuantity(false);
-            setShowValuation(false);
+            setShowValuation(true);
             setShowContent(true);
             setShowDateofAcquisition(true);
             setShowPostCode(true);
-            setShowAddress(true);            
+            setShowAddress(true);
         }
         else if (selectedId === 5) {
             setShowCompensatoryProperty(false);
             setShowValuationDisabled(false);
             setShowReductionRate(false);
             setShowUnitPriceQuantity(false);
-            setShowValuation(false);
+            setShowValuation(true);
             setShowContent(false);
             setShowDateofAcquisition(true);
             setShowPostCode(true);
-            setShowAddress(true);            
+            setShowAddress(true);
         }
         else {
             setShowContent(false);
-            setShowCompensatoryProperty(false);            
+            setShowCompensatoryProperty(false);
             setShowValuationDisabled(false);
             setShowDateofAcquisition(false);
             setShowReductionRate(false);
@@ -148,45 +149,35 @@ export default function OtherPropertyAdd() {
         }
     };
 
-    const ValuationKeyPress = (e) => {
-        let valuation = e.target.value;
-        setValuation(valuation);        
-        setisSumbitDisabled(false);
-    }
-
     const ReductionRateKeyPress = (e) => {
+        let reduction_amount = Number(e.target.value);
+        var previousAmountofmoney = (10 / 100) * Quantity;
+        setReductionAmount(reduction_amount);
+        if (reduction_amount > 0) {
+            var amount = previousAmountofmoney;
+            amount = amount - reduction_amount;
+            setValuation(amount.toLocaleString());
+            setUndecidedHeir(amount.toLocaleString());
+            AmountToTotalCalculation(amount.toLocaleString());
+        }
+        else {
+            amount = previousAmountofmoney - reduction_amount;
+            setValuation(amount.toLocaleString());
+            setUndecidedHeir(amount.toLocaleString());
+            AmountToTotalCalculation(amount.toLocaleString());
+            setReductionAmount(0);
+        }
+        setisSumbitDisabled(false);
+    }   
 
-    }
-    
-    // const ReductionAmountKeyPress = (e) => {
-    //     let reduction_amount = Number(e.target.value);
-    //     var previousValuation = (10 / 100) * Quantity;
-    //     setReductionAmount(reduction_amount);
-    //     if (reduction_amount > 0) {
-    //         var amount = previousValuation;
-    //         amount = amount - reduction_amount;
-    //         setValuation(amount.toLocaleString());
-    //         setUndecidedHeir(amount.toLocaleString());
-    //         AmountToTotalCalculation(amount.toLocaleString());
-    //     }
-    //     else {
-    //         amount = previousValuation - reduction_amount;
-    //         setValuation(amount.toLocaleString());
-    //         setUndecidedHeir(amount.toLocaleString());
-    //         AmountToTotalCalculation(amount.toLocaleString());
-    //         setReductionAmount(0);
-    //     }
-    //     setisSumbitDisabled(false);
-    // }
-    
 
     let flag = 0;
     function onchangeUnitPrice(e) {
         let unit_price = parseFloat(e.target.value);
-        if(isNaN(unit_price)){
+        if (isNaN(unit_price)) {
             setUnitPrice(0);
         }
-        else{
+        else {
             setUnitPrice(unit_price);
         }
         let qty = Quantity;
@@ -220,6 +211,24 @@ export default function OtherPropertyAdd() {
             AmountToTotalCalculation(0);
         }
         setisSumbitDisabled(false);
+    }
+
+    const ValuationKeyPress = (e) => {        
+        let valuation = e.target.value;
+        valuation = valuation.replace(/,/g, '').replace('.', '');
+        valuation = parseFloat(valuation);
+        valuation = valuation.toLocaleString();
+        if (valuation === "NaN") {
+            setValuation(0);
+            setUndecidedHeir(0);
+        }
+        else {
+            setValuationError(false);
+            setValuation(valuation);
+            setUndecidedHeir(valuation);
+        }
+        setisSumbitDisabled(false);
+        AmountToTotalCalculation(valuation);
     }
 
     //Box value calculation function    
@@ -259,7 +268,7 @@ export default function OtherPropertyAdd() {
         else if (inputId === "DateofAcquisition") {
             setDateofAcquisition(inputValue);
             setDateofAcquisitionError(false);
-        }        
+        }       
         else {
             setAddress(inputValue);
             setAddressError(false);
@@ -281,8 +290,8 @@ export default function OtherPropertyAdd() {
         if (Valuation === 0) {
             Valuation = 0;
         }
-        else {            
-            Valuation = parseFloat(Valuation.replace(/,/g, '').replace('.', ''));            
+        else {
+            Valuation = parseFloat(Valuation.replace(/,/g, '').replace('.', ''));
         }
         let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
         if (isNaN(totalBoxValues)) {
@@ -310,10 +319,11 @@ export default function OtherPropertyAdd() {
             Address: Address,
             UnitPrice: UnitPrice,
             Quantity: Quantity,
-            ReductionRate: ReductionRate,            
+            ReductionRate: ReductionRate,
             Valuation: Valuation,
             UndecidedHeir: UndecidedHeir,
             TotalPrice: Valuation,
+            boxValues:boxValues,
         }
 
         //input Validation
@@ -325,29 +335,29 @@ export default function OtherPropertyAdd() {
             setPropertyNameError(true);
             isSumbitDisabled = true;
         }
-        if(defaultValues.DateofAcquisition === ""){
-            if(ShowDateofAcquisition === true){
+        if (defaultValues.DateofAcquisition === "") {
+            if (ShowDateofAcquisition === true) {
                 setDateofAcquisitionError(true);
                 isSumbitDisabled = true;
-            }   
+            }
         }
         if (defaultValues.Address === "") {
-            if(ShowAddress === true){
+            if (ShowAddress === true) {
                 setAddressError(true);
                 isSumbitDisabled = true;
-            }            
+            }
         }
         if (defaultValues.ReductionRate === "") {
-            if(ShowReductionRate === true){
+            if (ShowReductionRate === true) {
                 setReductionRateError(true);
                 isSumbitDisabled = true;
-            }            
+            }
         }
         if (defaultValues.Valuation === "") {
-            if(ShowValuation === true){
+            if (ShowValuation === true) {
                 setValuationError(true);
-                isSumbitDisabled = true;   
-            }                       
+                isSumbitDisabled = true;
+            }
         }
         //Api setup
         if (isSumbitDisabled !== true) {
@@ -414,10 +424,10 @@ export default function OtherPropertyAdd() {
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     onChange={inputHandlingFunction}
                                     value={PropertyName}
-                                    />
-                                    {PropertyNameError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
+                                />
+                                {PropertyNameError && (
+                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -515,9 +525,12 @@ export default function OtherPropertyAdd() {
                                         <input
                                             type="text"
                                             id="UnitPrice"
+                                            value={UnitPrice}
+                                            onChange={onchangeUnitPrice}
+                                            onKeyPress={handleKeyPress}
+                                            autocomplete="off"
                                             className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            
-                                        />                                    
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -532,9 +545,12 @@ export default function OtherPropertyAdd() {
                                     <input
                                         type="text"
                                         id="Quantity"
+                                        value={Quantity}
+                                        onChange={onchangeQuantity}
+                                        onKeyPress={handleKeyPress}
+                                        autocomplete="off"
                                         className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        
-                                    />                                    
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -554,7 +570,8 @@ export default function OtherPropertyAdd() {
                                         id="ReductionRate"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         onChange={ReductionRateKeyPress}
-                                      onKeyPress={handleKeyPress}
+                                        onKeyPress={handleKeyPress}
+                                        autocomplete="off"
                                     />
                                     {ReductionRateError && (
                                         <p className="text-red-500" role="alert">この項目は必須です</p>
@@ -573,22 +590,25 @@ export default function OtherPropertyAdd() {
                                         評価額<i className="text-red-500">*</i>
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
+                                <div className="w-full inline-block mt-2 relative">
                                     <input
                                         type="text"
                                         id="Valuation"
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"   
+                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
                                         onChange={ValuationKeyPress}
-                                        onKeyPress={handleKeyPress}                                     
-                                    />  
+                                        onKeyPress={handleKeyPress}
+                                        value={Valuation}
+                                        autocomplete="off"                                        
+                                    />
+                                    <UnitPriceIcon />
                                     {ValuationError && (
                                         <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}                                  
+                                    )}
                                 </div>
                             </div>
                         </div>
                     )}
-                    
+
 
                     {ShowCompensatoryProperty && (
                         <div className="w-full block items-center justify-between mb-7">
@@ -607,22 +627,22 @@ export default function OtherPropertyAdd() {
 
 
                     <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                            <div className="heading text-center">
-                                <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
-                            </div>
-                            <div className="total-list pt-10">                             
-                                <PersonListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarValuation={Valuation}  />
-                            </div>
-                            <IncorrectError IncorrectError={ShowIncorrectError}/>
+                        <div className="heading text-center">
+                            <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                         </div>
+                        <div className="total-list pt-10">
+                            <HeirListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={Valuation} />
+                        </div>
+                        <IncorrectError IncorrectError={ShowIncorrectError} />
+                    </div>
 
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton />
-                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>
-                        <div className="heading text-center pt-8">
-                            <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
-                        </div>
+                    <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                        <BackButton />
+                        <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                    </div>
+                    <div className="heading text-center pt-8">
+                        <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
+                    </div>
                 </form>
 
 

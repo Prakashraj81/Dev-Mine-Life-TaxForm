@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import IncorrectError from "../../../components/person-list-box/incorrect-error";
+import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import FloorIcon from "../../../components/inputbox-icon/textbox-floor-icon";

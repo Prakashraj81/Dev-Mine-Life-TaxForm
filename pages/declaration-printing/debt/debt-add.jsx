@@ -1,12 +1,14 @@
 "use client";
 import Link from "next/link";
-import { useState, Fragment, Controller } from "react";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import BackButton from "../../../components/back-btn";
-import { useEffect } from 'react';
+import SubmitButton from "../../../components/submit-btn";
+import IncorrectError from "../../../components/heir-list-box/incorrect-error";
+import PersonListBox from "../../../components/heir-list-box/heir-list-box";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
 
 export default function DebtAdd() {
     let DebtList = [
@@ -17,15 +19,18 @@ export default function DebtAdd() {
         { id: 5, value: 'その他債務', label: 'その他債務' },
     ];
 
-    const [DebtType, setDebtType] = useState("");
-    const [NameofDebt, setNameofDebt] = useState("");
-    const [CauseofUnpaidBalance, setCauseofUnpaidBalance] = useState("");
-    const [CreditorName, setCreditorName] = useState("");
-    const [PostCode, setPostCode] = useState("");
-    const [Address, setAddress] = useState("");
-    const [ObligationDate, setObligationDate] = useState("");
-    const [DebtPaymentDeadline, setDebtPaymentDeadline] = useState("");
-    const [AmountofMoney, setAmountofMoney] = useState(0);
+    let [DebtType, setDebtType] = useState("");
+    let [NameofDebt, setNameofDebt] = useState("");
+    let [CauseofUnpaidBalance, setCauseofUnpaidBalance] = useState("");
+    let [CreditorName, setCreditorName] = useState("");
+    let [PostCode, setPostCode] = useState("");
+    let [Address, setAddress] = useState("");
+    let [ObligationDate, setObligationDate] = useState("");
+    let [DebtPaymentDeadline, setDebtPaymentDeadline] = useState("");
+    let [AmountofMoney, setAmountofMoney] = useState("0");
+    let [UndecidedHeir, setUndecidedHeir] = useState("0");
+    let [TotalPrice, setTotalPrice] = useState("0");
+    let [boxValues, setBoxValues] = useState([]);
 
     let [ShowNameDebt, setShowNameDebt] = useState(false);
     let [ShowCauseofUnpaidBalance, setShowCauseofUnpaidBalance] = useState(false);
@@ -34,19 +39,17 @@ export default function DebtAdd() {
     let [ShowAddress, setShowAddress] = useState(false);
     let [ShowObligationDateDebtPaymentDeadline, setShowObligationDateDebtPaymentDeadline] = useState(false);
 
-    const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
-        defaultValues: {
-            DebtType: "",
-            NameofDebt: "",
-            CauseofUnpaidBalance: "",
-            CreditorName: "",
-            PostCode: "",
-            Address: "",
-            ObligationDate: "",
-            DebtPaymentDeadline: "",
-            AmountofMoney: 0,
-        }
-    });
+    //Error state and button disabled
+    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+    let [DebtTypeError, setDebtTypeError] = useState(false);
+    let [NameofDebtError, setNameofDebtError] = useState(false);
+    let [CauseofUnpaidBalanceError, setCauseofUnpaidBalanceError] = useState(false);
+    let [CreditorNameError, setCreditorNameError] = useState(false);
+    let [AddressError, setAddressError] = useState(false);
+    let [ShowObligationDateDebtPaymentDeadlineError, setShowObligationDateDebtPaymentDeadlineError] = useState(false);
+    let [ObligationDateError, setObligationDateError] = useState(false);
+    let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
 
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
@@ -62,11 +65,11 @@ export default function DebtAdd() {
     const [isValid, setIsValid] = useState(true);
     const postalcodeDigit = (e) => {
         let digit_value = e.target.value;
-        let isValidInput = /^\d{7}$/.test(digit_value);        
+        let isValidInput = /^\d{7}$/.test(digit_value);
         if (digit_value.length == 8 || digit_value.length == 9 || digit_value.length == 10) {
             digit_value = digit_value.slice(0, 7)
             setPostCode(digit_value);
-        } 
+        }
         setPostCode(digit_value);
         setIsValid(isValidInput);
     }
@@ -85,6 +88,7 @@ export default function DebtAdd() {
         let selectedOption = event.target.options[event.target.selectedIndex];
         let selectedId = Number(selectedOption.value);
         setDebtType(selectedOption.text);
+        setisSumbitDisabled(false);
         if (selectedId === 1) {
             setShowPostCode(false);
             setShowAddress(false);
@@ -135,23 +139,177 @@ export default function DebtAdd() {
         }
     };
 
-
-    const onSubmit = async (defaultValues) => {
-        var value = JSON.stringify(defaultValues);
-        console.log(value);
-        if (value.PostCode != "") {
-            var Apiurl = "/";
-            const urlresponse = await fetch(Apiurl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(defaultValues),
-                mode: "no-cors",
-            });
+    //Amount input calculation function
+    const AmountofMoneyKeyPress = (e) => {
+        let amount_of_money = e.target.value;
+        amount_of_money = amount_of_money.replace(/,/g, '').replace('.', '');
+        amount_of_money = parseFloat(amount_of_money);
+        amount_of_money = amount_of_money.toLocaleString();
+        if (amount_of_money === "NaN") {
+            setAmountofMoney(0);
+            setUndecidedHeir(0);
         }
         else {
-            router.push('/declaration-printing/other-property/other-property-others');
+            setAmountofMoneyError(false);
+            setAmountofMoney(amount_of_money);
+            setUndecidedHeir(amount_of_money);
         }
-        //res.status(200).end()
+        setisSumbitDisabled(false);
+        AmountToTotalCalculation(amount_of_money);
+    }
+
+    //Box value calculation function    
+    function AmountToTotalCalculation(AmountofMoney) {
+        //Amount of money convert
+        if (AmountofMoney == 0 || AmountofMoney == "NaN") {
+            AmountofMoney = 0;
+        }
+        else {
+            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+            AmountofMoney = parseFloat(AmountofMoney);
+        }
+        let totalBoxValues = boxValues.reduce((total, value) => total + value, 0);
+        if (isNaN(totalBoxValues)) {
+            totalBoxValues = 0;
+        }
+        let heirValue = AmountofMoney - totalBoxValues;
+        if (heirValue < 0) {
+            setUndecidedHeir(heirValue.toLocaleString());
+            setShowIncorrectError(true);
+        }
+        else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(heirValue.toLocaleString());
+        }
+    }
+
+    //All input validation check and handling function
+    const inputHandlingFunction = (event) => {
+        setShowIncorrectError(false);
+        let inputId = event.currentTarget.id;
+        let inputValue = event.target.value;
+        if (inputId === "NameofDebt") {
+            setNameofDebt(inputValue);
+            setNameofDebtError(false);
+        }
+        else if(inputId === "CreditorName"){
+            setCreditorName(inputValue);
+            setCreditorNameError(false);
+        }
+        else if (inputId === "CauseofUnpaidBalance") {
+            setCauseofUnpaidBalance(inputValue);
+            setCauseofUnpaidBalanceError(false);
+        }
+        else if (inputId === "ObligationDate") {
+            setObligationDate(inputValue);
+            setObligationDateError(false);
+        }
+        else if (inputId === "DebtPaymentDeadline") {
+            setDebtPaymentDeadline(inputValue);            
+        }
+        else {
+            setAddress(inputValue);
+            setAddressError(false);
+        }
+        setisSumbitDisabled(false);
+    }
+
+    //Footer box values and calculation
+    let handleBoxValueChange = (e, index) => {
+        let newValue = parseFloat(e.target.value);
+        if (isNaN(newValue)) {
+            newValue = 0;
+        }
+        const updatedBoxValues = [...boxValues];
+        updatedBoxValues[index] = newValue;
+        setBoxValues(updatedBoxValues);
+
+        //Amount of money convert
+        if (AmountofMoney == 0) {
+            AmountofMoney = 0;
+        }
+        else {
+            AmountofMoney = parseFloat(AmountofMoney.replace(/,/g, '').replace('.', ''));
+        }
+        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
+        if (isNaN(totalBoxValues)) {
+            totalBoxValues = 0;
+        }
+        let heirValue = AmountofMoney - totalBoxValues;
+        if (heirValue < 0) {
+            setUndecidedHeir(heirValue.toLocaleString());
+            setShowIncorrectError(true);
+        }
+        else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(heirValue.toLocaleString());
+        }
+    };
+
+
+    //Submit API function 
+    const router = useRouter();
+    const onSubmit = () => {
+        let defaultValues = {
+            DebtType: DebtType,
+            NameofDebt: NameofDebt,
+            CauseofUnpaidBalance: CauseofUnpaidBalance,
+            CreditorName: CreditorName,
+            PostCode: PostCode,
+            Address: Address,
+            ObligationDate: ObligationDate,
+            DebtPaymentDeadline: DebtPaymentDeadline,
+            AmountofMoney: AmountofMoney,
+            UndecidedHeir: UndecidedHeir,
+            TotalPrice: AmountofMoney,
+            boxValues:boxValues,
+        };
+
+        //input Validation
+        if (defaultValues.DebtType === "") {
+            setDebtTypeError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.NameofDebt === "") {
+            if (ShowNameDebt === true) {
+                setNameofDebtError(true);
+                isSumbitDisabled = true;
+            }
+        }
+        if (defaultValues.CauseofUnpaidBalance === "") {
+            if (ShowCauseofUnpaidBalance === true) {
+                setCauseofUnpaidBalanceError(true);
+                isSumbitDisabled = true;
+            }
+        }
+        if (defaultValues.CreditorName === "") {
+            if (ShowCreditorName === true) {
+                setCreditorNameError(true);
+                isSumbitDisabled = true;
+            }
+        }
+        if (defaultValues.Address === "") {
+            if (ShowAddress === true) {
+                setAddressError(true);
+                isSumbitDisabled = true;
+            }
+        }
+        if (defaultValues.ObligationDate === "") {
+            if (ShowObligationDateDebtPaymentDeadline === true) {
+                setShowObligationDateDebtPaymentDeadlineError(true);
+                isSumbitDisabled = true;
+            }
+        }
+        //Api setup
+        if (isSumbitDisabled !== true) {
+            console.log("API allowed");
+            sessionStorage.setItem('Debt', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/debt`);
+        }
+        else {
+            console.log("API not allowed");
+            setisSumbitDisabled(true);
+        }
     };
     return (
         <>
@@ -169,13 +327,13 @@ export default function DebtAdd() {
                     </p>
                 </div>
 
-                <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                <form action="#" method="POST">
                     <div className="w-full flex items-center justify-between mb-7">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="FeePayeeName" className="form-label">
-                                        債務の種類
+                                    <label className="form-label">
+                                        債務の種類<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -187,64 +345,70 @@ export default function DebtAdd() {
                                             </option>
                                         ))}
                                     </select>
-
+                                    {DebtTypeError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
-
-                        {ShowNameDebt && (
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="NameofDebt" className="form-label">
-                                        債務の名称
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="NameofDebt"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("NameofDebt", { required: "NameofDebt is required" })}
-                                        aria-invalid={errors.NameofDebt ? "true" : "false"}
-                                    />
-                                    <div className="mt-3">
-                                        <p className="text-sm text-black tracking-2 font-medium">15文字以内で入力して下さい</p>
-                                    </div>
-                                    {errors.NameofDebt && <p className="text-red-500 mt-2" role="alert">{errors.NameofDebt?.message}</p>}
-                                </div>
-                            </div>
-                        )}
-
-                        {ShowCauseofUnpaidBalance && (
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="CauseofUnpaidBalance" className="form-label">
-                                        未払い金の発生原因
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="CauseofUnpaidBalance"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("CauseofUnpaidBalance", { required: "CauseofUnpaidBalance is required" })}
-                                        aria-invalid={errors.CauseofUnpaidBalance ? "true" : "false"}
-                                    />
-                                    <div className="mt-3">
-                                        <p className="text-sm text-black tracking-2 font-medium">15文字以内で入力して下さい</p>
-                                    </div>
-                                    {errors.CauseofUnpaidBalance && <p className="text-red-500 mt-2" role="alert">{errors.CauseofUnpaidBalance?.message}</p>}
-                                </div>
-                            </div>
-                        )}
                     </div>
+
+                    {ShowNameDebt && (
+                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                            <div className="label w-full inline-block">
+                                <label className="form-label">
+                                    債務の名称<i className="text-red-500">*</i>
+                                </label>
+                            </div>
+                            <div className="w-full inline-block mt-2">
+                                <input
+                                    type="text"
+                                    id="NameofDebt"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    onChange={inputHandlingFunction}
+                                    value={NameofDebt}
+                                />
+                                <div className="mt-3">
+                                    <p className="text-sm text-black tracking-2 font-medium">15文字以内で入力して下さい</p>
+                                </div>
+                                {NameofDebtError && (
+                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {ShowCauseofUnpaidBalance && (
+                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                            <div className="label w-full inline-block">
+                                <label className="form-label">
+                                    未払い金の発生原因<i className="text-red-500">*</i>
+                                </label>
+                            </div>
+                            <div className="w-full inline-block mt-2">
+                                <input
+                                    type="text"
+                                    id="CauseofUnpaidBalance"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    onChange={inputHandlingFunction}
+                                    value={CauseofUnpaidBalance}
+                                />
+                                <div className="mt-3">
+                                    <p className="text-sm text-black tracking-2 font-medium">15文字以内で入力して下さい</p>
+                                </div>
+                                {CauseofUnpaidBalanceError && (
+                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                )}
+                            </div>
+                        </div>
+                    )}
 
                     {ShowCreditorName && (
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="CreditorName" className="form-label">
-                                        債権者名
+                                    <label className="form-label">
+                                        債権者名<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -252,13 +416,15 @@ export default function DebtAdd() {
                                         type="text"
                                         id="CreditorName"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("CreditorName", { required: "CreditorName is required" })}
-                                        aria-invalid={errors.CreditorName ? "true" : "false"}
+                                        onChange={inputHandlingFunction}
+                                        value={CreditorName}
                                     />
                                     <div className="mt-3">
                                         <p className="text-sm text-black tracking-2 font-medium">生命保険会社・勤務先会社の所在地</p>
                                     </div>
-                                    {errors.CreditorName && <p className="text-red-500 mt-2" role="alert">{errors.CreditorName?.message}</p>}
+                                    {CreditorNameError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -268,7 +434,7 @@ export default function DebtAdd() {
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="PostCode" className="form-label">
+                                    <label className="form-label">
                                         郵便番号
                                     </label>
                                 </div>
@@ -295,8 +461,8 @@ export default function DebtAdd() {
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="Address" className="form-label">
-                                        住所
+                                    <label className="form-label">
+                                        住所<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -304,10 +470,12 @@ export default function DebtAdd() {
                                         type="text"
                                         id="Address"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Address", { required: "Address is required" })}
-                                        aria-invalid={errors.Address ? "true" : "false"}
+                                        onChange={inputHandlingFunction}
+                                        value={Address}
                                     />
-                                    {errors.Address && <p className="text-red-500 mt-2" role="alert">{errors.Address?.message}</p>}
+                                    {AddressError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -318,8 +486,8 @@ export default function DebtAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
-                                        <label htmlFor="ObligationDate" className="form-label">
-                                            債務発生日
+                                        <label className="form-label">
+                                            債務発生日<i className="text-red-500">*</i>
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
@@ -327,17 +495,19 @@ export default function DebtAdd() {
                                             type="date"
                                             id="ObligationDate"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("ObligationDate", { required: "ObligationDate is required" })}
-                                            aria-invalid={errors.ObligationDate ? "true" : "false"}
+                                            onChange={inputHandlingFunction}
+                                            value={ObligationDate}
                                         />
-                                        {errors.ObligationDate && <p className="text-red-500 mt-2" role="alert">{errors.ObligationDate?.message}</p>}
+                                        {ObligationDateError && (
+                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
 
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="DebtPaymentDeadline" className="form-label">
+                                    <label className="form-label">
                                         債務の弁済期限（あれば）
                                     </label>
                                 </div>
@@ -346,10 +516,9 @@ export default function DebtAdd() {
                                         type="date"
                                         id="DebtPaymentDeadline"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("DebtPaymentDeadline", { required: "DebtPaymentDeadline is required" })}
-                                        aria-invalid={errors.DebtPaymentDeadline ? "true" : "false"}
+                                        onChange={inputHandlingFunction}
+                                        value={DebtPaymentDeadline}
                                     />
-                                    {errors.DebtPaymentDeadline && <p className="text-red-500 mt-2" role="alert">{errors.DebtPaymentDeadline?.message}</p>}
                                 </div>
                             </div>
                         </div>
@@ -361,71 +530,42 @@ export default function DebtAdd() {
                     <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
-                                <label htmlFor="AmountofMoney" className="form-label">
-                                    金額
+                                <label className="form-label">
+                                    金額<i className="text-red-500">*</i>
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2">
+                            <div className="w-full inline-block mt-2 relative">
                                 <input
                                     type="text"
                                     id="AmountofMoney"
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    {...register("AmountofMoney", { required: "AmountofMoney is required" })}
-                                    aria-invalid={errors.AmountofMoney ? "true" : "false"}
+                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
+                                    value={AmountofMoney}
+                                    onChange={AmountofMoneyKeyPress}
+                                    onKeyPress={handleKeyPress}
                                 />
-                                {errors.AmountofMoney && <p className="text-red-500 mt-2" role="alert">{errors.AmountofMoney?.message}</p>}
+                                <UnitPriceIcon />
+                                {AmountofMoneyError && (
+                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                )}
                             </div>
                         </div>
                     </div>
 
 
 
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
+                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="heading text-center">
                             <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                         </div>
                         <div className="total-list pt-10">
-                            <ul>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>受取人</span>
-                                    <span>取得財産の価額</span>
-                                </li>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>山田　太郎</span>
-                                    <div className="text-right"><input type="text" className="border-2 h-10 text-right form-control w-50 outline-none"
-                                        onKeyPress={handleKeyPress}
-                                    /></div>
-                                </li>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>相続人未決定</span>
-                                    <span>{0}</span>
-                                </li>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>合計</span>
-                                    <span>{0}</span>
-                                </li>
-                            </ul>
+                            <PersonListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={AmountofMoney} />
                         </div>
+                        <IncorrectError IncorrectError={ShowIncorrectError} />
                     </div>
 
-
                     <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                        <div className="save-btn text-center">
-                            <BackButton />
-                        </div>
-                        <div className="save-btn text-center">
-
-                            <Link href="/declaration-printing/debt/debt-tax-public">
-                                <button
-
-                                    className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        保存して戻る
-                                    </span>
-                                </button>
-                            </Link>
-                        </div>
+                        <BackButton />
+                        <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                     </div>
                     <div className="heading text-center pt-8">
                         <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
