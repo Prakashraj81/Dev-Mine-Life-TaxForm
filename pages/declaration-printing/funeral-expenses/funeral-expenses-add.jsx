@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
 import IncorrectError from "../../../components/heir-list-box/incorrect-error";
-import PersonListBox from "../../../components/heir-list-box/heir-list-box";
+import HeirListBox from "../../../components/heir-list-box/heir-list-box";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 
@@ -327,7 +327,7 @@ export default function FuneralExpensesAdd() {
                                 <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                             </div>
                             <div className="total-list pt-10">                             
-                                <PersonListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={AmountPaid}  />
+                                <HeirListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={AmountPaid}  />
                             </div>
                             <IncorrectError IncorrectError={ShowIncorrectError}/>
                         </div>

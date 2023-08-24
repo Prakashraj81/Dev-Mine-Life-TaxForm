@@ -1,6 +1,6 @@
-import React from "react";
-import { ReactElement } from 'react';
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import AddIcon from '@mui/icons-material/Add';
@@ -8,6 +8,41 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import FullLayout from '../../components/layouts/full/FullLayout';
 
 export default function BasicInformation() {
+    let [HeirList, setHeirList] = useState([]);
+    let [heir_list, setheir_list] = useState([]);
+    heir_list = [
+        { id: 1, Name: "Gowtham", RelationshipWithDecedent: "child", heir: "Yes" },
+        { id: 2, Name: "Prakashraj", RelationshipWithDecedent: "Younger brother", heir: "No" },
+        { id: 3, Name: "Shree", RelationshipWithDecedent: "child", heir: "Yes" },
+        { id: 4, Name: "Nisar", RelationshipWithDecedent: "Older brother", heir: "No" },
+        { id: 5, Name: "Muthu", RelationshipWithDecedent: "child", heir: "Yes" },
+        { id: 6, Name: "Dhinesh", RelationshipWithDecedent: "child", heir: "Yes" },
+    ];
+    useEffect(() => {
+        let sessionValue = sessionStorage.getItem('Heir');
+        var tempArray = [];
+        tempArray[0] = JSON.parse(sessionValue);
+        if (tempArray[0] !== null) {
+            setHeirList(tempArray);
+        }
+        else {
+            setHeirList([]);
+        }
+    }, []);
+
+    const handleDelete = (index) => {
+        let updatedList = [...heir_list];
+        updatedList.splice(index, 1);
+        setheir_list(updatedList);
+    };
+
+    const router = useRouter();
+    const handleEdit = (Edit_Id) => {
+        let Id = encodeURIComponent(Edit_Id);
+        console.log("Edit_Id: " + Id +"-"+ Edit_Id);
+        router.push(`/basic-information/heir-edit?Id=${Id}`);
+    };
+
     return (
         <>
             <div className="basic-information-wrapper">
@@ -25,73 +60,74 @@ export default function BasicInformation() {
                 </div>
                 <div className="input-details">
                     <div className="decedent">
-                        <div className="block lg:flex xl:flex 2xl:flex justify-between items-center">
-                            <div className="w-6/12 inline-block float-left">
-                                <h5 className="text-sm tracking-2 text-custom-black">被相続人</h5>
-                            </div>
-                            <div className="w-6/12 inline-block text-right">
-                                <Link href="/basic-information/decendent">
-                                    <button id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
-                                        <ModeEditIcon className="text-white" />
-                                    </button>
-                                </Link>
-                            </div>
+                        <div className="decedent-list py-3">
+                            <div className="decedent-heading py-3"><span>被相続人</span></div>
+                            <table className="w-full border-t">
+                                {HeirList.map((list, index) => {
+                                    return (
+                                        <>
+                                            <tr>
+                                                <th className="text-left pt-3">氏名</th>
+                                                <th className="text-left pt-3">お亡くなりになった日</th>
+                                                <th className="text-right pt-3">
+                                                    <button value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                                        <ModeEditIcon className="text-white" />
+                                                    </button>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td className="text-left pt-3">{list.Name}</td>
+                                                <td className="text-left pt-3">{list.RelationshipWithDecedent}</td>
+                                            </tr>
+                                        </>
+                                    );
+                                })}
+                            </table>
                         </div>
-                        <div className="block py-4 lg:flex xl:flex 2xl:flex justify-between items-center">
-                            <div className="w-6/12 inline-block float-left">
-                                <p className="text-sm tracking-2 text-custom-black">氏名</p>
-                            </div>
-                            <div className="w-6/12 inline-block float-left">
-                                <p className="text-sm tracking-2 text-black">お亡くなりになった日</p>
-                            </div>
-                        </div>
-                        <div className="block lg:flex xl:flex 2xl:flex justify-between items-center">
-                            <div className="w-6/12 inline-block float-left">
-                                <p className="text-sm tracking-2 text-custom-black">Prakash</p>
-                            </div>
-                            <div className="w-6/12 inline-block float-left">
-                                <p className="text-sm tracking-2 text-black">2022-12-31</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="heir py-10 border-b-2">
-                        <div className="block lg:flex xl:flex 2xl:flex justify-between items-center">
-                            <div className="w-10/12 inline-block float-left">
-                                <h5 id="heir_name" className="text-sm tracking-2 text-custom-black">相続人</h5>
-                            </div>
-                            <div className="w-2/12 inline-block text-right">
-                                <div className="flex justify-end items-center">
-                                    <button id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
-                                        <ModeEditIcon className="text-white" />
-                                    </button>
-                                    <button id="decedent_delete" className="text-sm bg-red-600 ml-5 rounded-sm hover:bg-red-600 px-1 py-1 tracking-2 text-custom-black">
-                                        <DeleteOutlinedIcon className="text-white" />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="block py-4 lg:flex xl:flex 2xl:flex justify-between items-center">
-                            <div className="w-6/12 inline-block float-left">
-                                <p className="text-sm tracking-2 text-custom-black">氏名</p>
-                            </div>
-                            <div className="w-6/12 inline-block float-left">
-                                <p className="text-sm tracking-2 text-black">続柄</p>
-                            </div>
-                        </div>
-                        <div className="block lg:flex xl:flex 2xl:flex justify-between items-center">
-                            <div className="w-6/12 inline-block float-left">
-                                <p className="text-sm tracking-2 text-custom-black">Raj</p>
-                            </div>
-                            <div className="w-6/12 inline-block float-left">
-                                <p className="text-sm tracking-2 text-black">祖父</p>
-                            </div>
+                        <div className="heir-list py-10">
+                            <div className="heir-heading py-3"><span>相続人</span></div>
+                            <table className="w-full">
+                                {heir_list.map((list, index) => {
+                                    return (
+                                        <>
+                                            <React.Fragment key={index}>
+                                                <tr className="w-full border-t">
+                                                    <th className="text-left pt-3">氏名</th>
+                                                    <th className="text-left pt-3">続柄</th>
+                                                    <td className="text-left pt-3">
+                                                        {list.heir === "Yes" ? "法定相続人" : ""}
+                                                    </td>
+                                                    <td className="text-left pt-3">
+                                                        {list.heir === "Yes" ? "1/2_ _" : ""}
+                                                    </td>
+                                                    <th className="text-right pt-3">
+                                                        <button onClick={() => handleEdit(list.id)} id={list.id} value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                                            <ModeEditIcon className="text-white" />
+                                                        </button>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <td className="text-left pt-3">{list.Name}</td>
+                                                    <td className="text-left pt-3">{list.RelationshipWithDecedent}</td>
+                                                    <td className="text-left pt-3"></td>
+                                                    <td className="text-left pt-3"></td>
+                                                    <td className="text-right pt-3">
+                                                        <button onClick={() => handleDelete(index)} id={list.id} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                                            <DeleteOutlinedIcon className="text-white" />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </React.Fragment>
+                                        </>
+                                    );
+                                })}
+                            </table>
                         </div>
                     </div>
 
                     <div className="w-full inline-block text-right py-10">
                         <div className="add-btn">
-                            <Link href="/basic-information/heir-2">
+                            <Link href="/basic-information/heir">
                                 <button id="decedent_edit" className="text-sm text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
                                     <AddIcon className="text-white" />
                                     追加する
@@ -113,5 +149,5 @@ export default function BasicInformation() {
 
 
 BasicInformation.getLayout = function getLayout(page) {
-  return <FullLayout>{page}</FullLayout>;
+    return <FullLayout>{page}</FullLayout>;
 };

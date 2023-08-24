@@ -12,7 +12,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
-export default function Heir() {
+export default function HeirEdit() {
     let ProfessionList = [
         { id: 1, value: '公務員', label: '公務員' },
         { id: 2, value: '会社役員', label: '会社役員' },
@@ -66,6 +66,12 @@ export default function Heir() {
 
     let [DisabledRadioValue, setDisabledRadioValue] = useState('none');
     let [LegalHeirRadioValue, setLegalHeirRadioValue] = useState('no');
+
+    let router = useRouter();
+    useEffect(() => {        
+        const Edit_Id = router.query.Id;
+        console.log('Edit_Id:', Edit_Id);
+    }, []);
 
     //Disabled deduction radio button
     const handleDisabledRadio = (event) => {
@@ -161,7 +167,7 @@ export default function Heir() {
     }
 
     //Submit API function 
-    const router = useRouter();
+    //const router = useRouter();
     const onSubmit = () => {
         let defaultValues = {
             Name: Name,
@@ -533,6 +539,6 @@ export default function Heir() {
     )
 }
 
-Heir.getLayout = function getLayout(page) {
+HeirEdit.getLayout = function getLayout(page) {
     return <FullLayout>{page}</FullLayout>;
 };
