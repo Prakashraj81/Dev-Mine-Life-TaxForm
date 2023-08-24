@@ -13,10 +13,7 @@ export default function BasicInformation() {
     heir_list = [
         { id: 1, Name: "Gowtham", RelationshipWithDecedent: "child", heir: "Yes" },
         { id: 2, Name: "Prakashraj", RelationshipWithDecedent: "Younger brother", heir: "No" },
-        { id: 3, Name: "Shree", RelationshipWithDecedent: "child", heir: "Yes" },
-        { id: 4, Name: "Nisar", RelationshipWithDecedent: "Older brother", heir: "No" },
-        { id: 5, Name: "Muthu", RelationshipWithDecedent: "child", heir: "Yes" },
-        { id: 6, Name: "Dhinesh", RelationshipWithDecedent: "child", heir: "Yes" },
+        { id: 3, Name: "Shree", RelationshipWithDecedent: "child", heir: "Yes" },        
     ];
     useEffect(() => {
         let sessionValue = sessionStorage.getItem('Heir');
