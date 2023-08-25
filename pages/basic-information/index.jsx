@@ -11,9 +11,9 @@ export default function BasicInformation() {
     let [HeirList, setHeirList] = useState([]);
     let [heir_list, setheir_list] = useState([]);
     heir_list = [
-        { id: 1, Name: "Gowtham", RelationshipWithDecedent: "child", heir: "Yes" },
-        { id: 2, Name: "Prakashraj", RelationshipWithDecedent: "Younger brother", heir: "No" },
-        { id: 3, Name: "Shree", RelationshipWithDecedent: "child", heir: "Yes" },        
+        { id: 1, Name: "Gowtham", RelationshipWithDecedent: "Child", heir: "No" },
+        { id: 2, Name: "Prakashraj", RelationshipWithDecedent: "Child", heir: "No" },
+        { id: 3, Name: "Shree", RelationshipWithDecedent: "Younger brother", heir: "Yes" },
     ];
     useEffect(() => {
         let sessionValue = sessionStorage.getItem('Heir');
@@ -36,7 +36,7 @@ export default function BasicInformation() {
     const router = useRouter();
     const handleEdit = (Edit_Id) => {
         let Id = encodeURIComponent(Edit_Id);
-        console.log("Edit_Id: " + Id +"-"+ Edit_Id);
+        console.log("Edit_Id: " + Id + "-" + Edit_Id);
         router.push(`/basic-information/heir-edit?Id=${Id}`);
     };
 
@@ -59,27 +59,31 @@ export default function BasicInformation() {
                     <div className="decedent">
                         <div className="decedent-list py-3">
                             <div className="decedent-heading py-3"><span>被相続人</span></div>
-                            <table className="w-full border-t">
-                                {HeirList.map((list, index) => {
-                                    return (
-                                        <>
-                                            <tr>
-                                                <th className="text-left pt-3">氏名</th>
-                                                <th className="text-left pt-3">お亡くなりになった日</th>
-                                                <th className="text-right pt-3">
-                                                    <button value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                                        <ModeEditIcon className="text-white" />
-                                                    </button>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td className="text-left pt-3">{list.Name}</td>
-                                                <td className="text-left pt-3">{list.RelationshipWithDecedent}</td>
-                                            </tr>
-                                        </>
-                                    );
-                                })}
-                            </table>
+                            <div className="w-full block lg:flex xl:flex 2xl:flex justify-between items-center">
+                                <div className="w-full block lg:w-32">
+                                    <div className="w-full inline-block heading">
+                                        <label>氏名</label>
+                                    </div>
+                                    <div className="w-full inline-block heading pt-4">
+                                        <label>名前</label>
+                                    </div>
+                                </div>
+                                <div className="w-full block lg:w-32">
+                                    <div className="w-full inline-block heading">
+                                        <label>お亡くなりになった日</label>
+                                    </div>
+                                    <div className="w-full inline-block heading pt-4">
+                                        <label>01-01-01</label>
+                                    </div>
+                                </div>
+                                <div className="w-full block float-right text-right lg:w-32">
+                                <Link href="/basic-information/decendent">
+                                <button value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                            <ModeEditIcon className="text-white" />
+                                        </button>
+                                </Link>
+                                </div>
+                            </div>                            
                         </div>
                         <div className="heir-list py-10">
                             <div className="heir-heading py-3"><span>相続人</span></div>
@@ -89,19 +93,19 @@ export default function BasicInformation() {
                                         <>
                                             <React.Fragment key={index}>
                                                 <tr className="w-full border-t">
-                                                    <th className="text-left pt-3">氏名</th>
-                                                    <th className="text-left pt-3">続柄</th>
+                                                    <td className="text-left pt-3">氏名</td>
+                                                    <td className="text-left pt-3">続柄</td>
                                                     <td className="text-left pt-3">
                                                         {list.heir === "Yes" ? "法定相続人" : ""}
                                                     </td>
                                                     <td className="text-left pt-3">
                                                         {list.heir === "Yes" ? "1/2_ _" : ""}
                                                     </td>
-                                                    <th className="text-right pt-3">
+                                                    <td className="text-right pt-3">
                                                         <button onClick={() => handleEdit(list.id)} id={list.id} value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                                             <ModeEditIcon className="text-white" />
                                                         </button>
-                                                    </th>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td className="text-left pt-3">{list.Name}</td>

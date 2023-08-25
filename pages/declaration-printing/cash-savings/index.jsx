@@ -19,7 +19,7 @@ export default function CashSavings() {
         }
         else{
             setcashSavingsList([]);
-        }
+        }        
     }, []);
 
     return (

@@ -32,13 +32,13 @@ export default function CashSavingsAdd() {
     let [FinancialInstitutionName, setFinancialInstitutionName] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
-    let [AmountofMoney, setAmountofMoney] = useState(0);
+    let [AmountofMoney, setAmountofMoney] = useState("0");
 
     let [ShowFinancialInstitutionName, setShowFinancialInstitutionName] = useState(false);
     let [ShowPostCode, setShowPostCode] = useState(false);
     let [ShowAddress, setShowAddress] = useState(false);
-    let [UndecidedHeir, setUndecidedHeir] = useState(0);
-    let [totalPrice, settotalPrice] = useState(0);    
+    let [UndecidedHeir, setUndecidedHeir] = useState("0");
+    let [totalPrice, settotalPrice] = useState("0");    
     let [boxValues, setBoxValues] = useState([]);
 
     //Error state and button disabled

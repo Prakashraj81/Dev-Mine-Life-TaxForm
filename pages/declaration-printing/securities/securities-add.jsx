@@ -61,7 +61,7 @@ export default function SecuritiesAdd() {
 
     //Hide and Show Input   
     let [showAmountMoney, setshowAmountMoney] = useState(false);
-    let [showFinancialInstitutionName, setshowFinancialInstitutionNameInstitutionName] = useState(false);
+    let [showFinancialInstitutionName, setshowFinancialInstitutionName] = useState(false);
     let [showQuantityPrice, setshowQuantityPrice] = useState(false);
     let [showAddress, setshowAddress] = useState(true);
     let [showPostcode, setshowPostcode] = useState(true);
