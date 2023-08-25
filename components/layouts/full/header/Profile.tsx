@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import Link from "next/link";
 import {
   Avatar,
@@ -23,6 +24,12 @@ const Profile = () => {
   const handleClose2 = () => {
     setAnchorEl2(null);
   };
+
+  const router = useRouter();
+  const FunctionLogOut = () => {
+      sessionStorage.setItem('Login', "0");
+      router.push(`/`);
+  }
 
   return (
     <>
@@ -140,7 +147,8 @@ const Profile = () => {
           </MenuItem>
           <Box mt={1} py={1} px={2}>
             <Button
-              href="/auth/login"
+            href="#"
+             onClick={FunctionLogOut}
               variant="outlined"
               color="primary"
               component={Link}

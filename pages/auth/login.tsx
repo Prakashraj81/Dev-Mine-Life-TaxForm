@@ -1,39 +1,38 @@
 "use client";
-//import type { ReactElement } from 'react';
 import Link from "next/link";
-import { useState, Fragment } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import Register from './register';
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
 
-export default function Login(props) {
-  const { showregister } = props;
-  const [UserName, setUserName] = useState("");
-  const [Password, setPassword] = useState("");
+export default function Login(props) {  
+  let [UserName, setUserName] = useState("");
+  let [Password, setPassword] = useState(""); 
+  let [isSumbitDisabled, setisSumbitDisabled] = useState(false); 
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm({
-    defaultValues: {
-      UserName: "",
-      Password: "",
-    }
-  });
-
-
-  const onSubmit = async (defaultValues) => {
-    var value = JSON.stringify(defaultValues);
-    console.log(value);
-    var Apiurl = "/";
-    const urlresponse = await fetch(Apiurl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(defaultValues),
-      mode: "no-cors",
-    });
-    //res.status(200).end()
+  //Submit API function 
+  const router = useRouter();
+  const onSubmit = () => {
+    let defaultValues = {
+      UserName: UserName,
+      Password: Password,
   };
 
+     //Api setup
+     if (isSumbitDisabled !== true) {
+      console.log("API allowed");      
+      sessionStorage.setItem('Login', "1");
+      router.push(`/basic-information/decendent`);
+    }
+    else {
+      console.log("API not allowed");
+      sessionStorage.setItem('Login', "0");
+      setisSumbitDisabled(true);
+    }
+  }
+  
   return (
     <>
       <Header />
@@ -52,7 +51,7 @@ export default function Login(props) {
             </p>
           </div>
           <div className="login-forms">
-            <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+            <form action="#" method="POST">
               <div className="username-details mb-7">
                 <div className="label w-full inline-block">
                   <label htmlFor="usernameInput" className="form-label">
@@ -63,11 +62,8 @@ export default function Login(props) {
                   <input
                     type="text"
                     id="UserName"
-                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                    {...register("UserName", { required: "User Name is required" })}
-                    aria-invalid={errors.UserName ? "true" : "false"}
-                  />
-                  {errors.UserName && <p className="text-red-500" role="alert">{errors.UserName?.message}</p>}
+                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                    
+                  />                  
                 </div>
               </div>
 
@@ -81,18 +77,14 @@ export default function Login(props) {
                   <input
                     type="password"
                     id="Password"
-                    className="form-control w-full bg-custom-gray rounded focus:outline-none h-12 pl-3"
-                    {...register("Password", { required: "Password is required" })}
-                    aria-invalid={errors.Password ? "true" : "false"}
-                  />
-                  {errors.Password && <p className="text-red-500" role="alert">{errors.Password?.message}</p>}
+                    className="form-control w-full bg-custom-gray rounded focus:outline-none h-12 pl-3"                    
+                  />                  
                 </div>
               </div>
 
-
               <div className="login-btn pt-10 text-center">
-                <button
-                  type="submit"
+                <button      
+                onClick={onSubmit}            
                   className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
                 >
                   <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
