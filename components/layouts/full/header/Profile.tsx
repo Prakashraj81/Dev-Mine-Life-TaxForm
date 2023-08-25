@@ -147,7 +147,7 @@ const Profile = () => {
           </MenuItem>
           <Box mt={1} py={1} px={2}>
             <Button
-            href="#"
+              href=""
              onClick={FunctionLogOut}
               variant="outlined"
               color="primary"

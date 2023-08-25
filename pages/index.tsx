@@ -14,6 +14,9 @@ export default function Index({ preview }) {
   let sessionValue = 0;
   useEffect(() => {
     sessionValue = Number(sessionStorage.getItem('Login'));
+    if (sessionValue) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
     setAuthkey(sessionValue);
   });
   return (
