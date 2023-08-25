@@ -1,10 +1,16 @@
 "use client";
 import Link from "next/link";
-import { useState, Fragment, Controller } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import BackButton from "../../components/back-btn";
 import FullLayout from '../../components/layouts/full/FullLayout';
+import SubmitButton from "../../components/submit-btn";
 import PostcodeIcon from "../../components/inputbox-icon/textbox-postcode-icon";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 export default function Decendent() {
 
@@ -21,34 +27,50 @@ export default function Decendent() {
         { value: 'なし', label: 'なし' },
     ];
 
-    const [Name, setName] = useState("");
-    const [Furigana, setFurigana] = useState("");
-    const [DateofBirth, setDateofBirth] = useState("");
-    const [PostCode, setPostCode] = useState("");
-    const [Address, setAddress] = useState("");
-    const [InheritanceDivisionCompletionDate, setInheritanceDivisionCompletionDate] = useState("");
-    const [DateofDeath, setDateofDeath] = useState("");
-    const [Profession, setProfession] = useState("");
-    const [isErrorVisible, setErrorVisible] = useState(false);
+    let [Name, setName] = useState("");
+    let [Furigana, setFurigana] = useState("");
+    let [DateofBirth, setDateofBirth] = useState("");
+    let [PostCode, setPostCode] = useState("");
+    let [Address, setAddress] = useState("");
+    let [InheritanceDivisionCompletionDate, setInheritanceDivisionCompletionDate] = useState("");
+    let [DateofDeath, setDateofDeath] = useState("");
+    let [Profession, setProfession] = useState("");
+    let [isErrorVisible, setErrorVisible] = useState(false);    
 
-    const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
-        defaultValues: {
-            Name: "",
-            Furigana: "",
-            DateofBirth: "",
-            PostCode: "",
-            Address: "",
-            Profession: "",
-            InheritanceDivisionCompletionDate: "",
-            DateofDeath: "",
+    //Error state and button disabled
+    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+    let [NameError, setNameError] = useState(false);
+    let [FuriganaError, setFuriganaError] = useState(false);
+    let [DateofBirthError, setDateofBirthError] = useState(false);
+    let [AddressError, setAddressError] = useState(false);    
+    let [DateofDeathError, setDateofDeathError] = useState(false);
+    let [InheritanceDivisionCompletionDateError, setInheritanceDivisionCompletionDateError] = useState(false);    
+    let [ProfessionError, setProfessionError] = useState(false);        
+
+    //Disabled deduction radio button
+    const handleDisabledRadio = (event) => {
+        setDisabledRadioValue(event.target.value);        
+    };
+
+    //Legal heir radio button
+    const handleLegalHeirRadio = (event) => {
+        let radioValue = event.target.value;
+        setLegalHeirRadioValue(radioValue);        
+        if(radioValue === "Yes"){
+            setShowDisabledDeduction(true);
         }
-    });
+        else{
+            setShowDisabledDeduction(false);
+        }
+    };
 
-
-    const ProfessionDropdownChange = (event) => {
-        setProfession(event.target.value);
-    }
-
+    const handleProfessionType = (event) => {
+        let selectedOption = event.target.options[event.target.selectedIndex];
+        setProfession(selectedOption.text);
+        setProfessionError(false);
+        setisSumbitDisabled(false);
+    };
 
     //Postal code 7 digit limit function
     const [isValid, setIsValid] = useState(true);
@@ -72,23 +94,91 @@ export default function Decendent() {
         }
     };
 
-    const onSubmit = async (defaultValues) => {
-        var value = JSON.stringify(defaultValues);
-        console.log(value);
-        if (value.Name != "") {
-            var Apiurl = "/";
-            const urlresponse = await fetch(Apiurl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(defaultValues),
-                mode: "no-cors",
-            });
-            console.log("Success");
+    //All input validation check and handling function
+    const inputHandlingFunction = (event) => {
+        let inputId = event.currentTarget.id;
+        let inputValue = event.target.value;
+        if (inputId === "Name") {
+            setName(inputValue);
+            setNameError(false);
+        }
+        else if (inputId === "Furigana") {
+            setFurigana(inputValue);
+            setFuriganaError(false);
+        }
+        else if (inputId === "DateofBirth") {
+            setDateofBirth(inputValue);
+            setDateofBirthError(false);
+        }     
+        else if (inputId === "DateofDeath") {
+            setDateofDeath(inputValue);
+            setDateofDeathError(false);
+        }    
+        else if (inputId === "InheritanceDivisionCompletionDate") {
+            setInheritanceDivisionCompletionDate(inputValue);
+            setInheritanceDivisionCompletionDateError(false);
+        }        
+        else {
+            setAddress(inputValue);
+            setAddressError(false);
+        }
+        setisSumbitDisabled(false);
+    }
+
+    //Submit API function 
+    const router = useRouter();
+    const onSubmit = () => {
+        let defaultValues = {
+            Name: Name,
+            Furigana: Furigana,
+            DateofBirth: DateofBirth,
+            PostCode: PostCode,
+            Address: Address,            
+            Profession: Profession,            
+            DateofDeath: DateofDeath,    
+            InheritanceDivisionCompletionDate: InheritanceDivisionCompletionDate,                    
+        }
+
+        //input Validation
+        if (defaultValues.Name === "") {
+            setNameError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.Furigana === "") {
+            setFuriganaError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.DateofBirth === "") {
+            setDateofBirthError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.Address === "") {
+            setAddressError(true);
+            isSumbitDisabled = true;
+        }       
+        if (defaultValues.Profession === "") {
+            setProfessionError(true);
+            isSumbitDisabled = true;
+        }    
+        if (defaultValues.DateOfDeath === "") {
+            setDateofDeathError(true);
+            isSumbitDisabled = true;
+        }     
+        if (defaultValues.InheritanceDivisionCompletionDate === "") {
+            setInheritanceDivisionCompletionDateError(true);
+            isSumbitDisabled = true;
+        }               
+
+        //Api setup
+        if (isSumbitDisabled !== true) {
+            console.log("API allowed");
+            sessionStorage.setItem('Decendent', JSON.stringify(defaultValues));
+            router.push(`/`);
         }
         else {
-            console.log("Failed");
+            console.log("API not allowed");
+            setisSumbitDisabled(true);
         }
-        //res.status(200).end()
     };
 
     return (
@@ -107,13 +197,13 @@ export default function Decendent() {
                     </p>
                 </div>
                 <div className="user-forms">
-                    <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                <form action="#" method="POST">
                         <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
                                         <label htmlFor="Name" className="form-label">
-                                            お名前
+                                            お名前<i className="text-red-500">*</i>
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
@@ -121,10 +211,12 @@ export default function Decendent() {
                                             type="text"
                                             id="Name"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("Name", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.Name ? "true" : "false"}
+                                            onChange={inputHandlingFunction}
+                                            value={Name}
                                         />
-                                        {errors.Name && <p className="text-red-500" role="alert">{errors.Name?.message}</p>}
+                                        {NameError && (
+                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -133,7 +225,7 @@ export default function Decendent() {
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
                                         <label htmlFor="Furigana" className="form-label">
-                                            フリガナ
+                                            フリガナ<i className="text-red-500">*</i>
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
@@ -141,20 +233,22 @@ export default function Decendent() {
                                             type="text"
                                             id="Furigana"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("Furigana", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.Furigana ? "true" : "false"}
+                                            onChange={inputHandlingFunction}
+                                            value={Furigana}
                                         />
-                                        {errors.Furigana && <p className="text-red-500" role="alert">{errors.Furigana?.message}</p>}
+                                        {FuriganaError && (
+                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="w-full inline-block float-left mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            <div className="user-details lg:w-48 xl:w-48 2xl:w-48 block">
+                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="DateofBirth" className="form-label">
-                                        生年月日
+                                        生年月日<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -162,18 +256,20 @@ export default function Decendent() {
                                         type="date"
                                         id="DateofBirth"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"
-                                        {...register("DateofBirth", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.DateofBirth ? "true" : "false"}
+                                        onChange={inputHandlingFunction}
+                                        value={DateofBirth}
                                     />
-                                    {errors.DateofBirth && <p className="text-red-500" role="alert">{errors.DateofBirth?.message}</p>}
+                                    {DateofBirthError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="w-full inline-block float-left mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            <div className="user-details lg:w-48 xl:w-48 2xl:w-48 block">
+                        <div className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="PostCode" className="form-label">
+                                    <label className="form-label">
                                         郵便番号
                                     </label>
                                 </div>
@@ -198,8 +294,8 @@ export default function Decendent() {
                         <div className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="Address" className="form-label">
-                                        住所
+                                    <label className="form-label">
+                                        住所<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -207,10 +303,12 @@ export default function Decendent() {
                                         type="text"
                                         id="Address"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Address", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.Address ? "true" : "false"}
+                                        onChange={inputHandlingFunction}
+                                        value={Address}
                                     />
-                                    {errors.Address && <p className="text-red-500" role="alert">{errors.Address?.message}</p>}
+                                    {AddressError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -218,12 +316,12 @@ export default function Decendent() {
                         <div className="w-full inline-block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="Profession" className="form-label">
+                                    <label className="form-label">
                                         職業
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={ProfessionDropdownChange}>
+                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleProfessionType}>
                                         <option value=''></option>
                                         {ProfessionList.map((option) => (
                                             <option key={option.value}
@@ -232,7 +330,9 @@ export default function Decendent() {
                                             </option>
                                         ))}
                                     </select>
-                                    {isErrorVisible && <p className="text-red-500" role="alert">この項目は必須です</p>}
+                                    {ProfessionError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -243,7 +343,7 @@ export default function Decendent() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
-                                        <label htmlFor="DateofDeath" className="form-label">
+                                        <label className="form-label">
                                             お亡くなりになった日
                                         </label>
                                     </div>
@@ -252,10 +352,12 @@ export default function Decendent() {
                                             type="date"
                                             id="DateofDeath"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"
-                                            {...register("DateofDeath", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.DateofDeath ? "true" : "false"}
+                                            onChange={inputHandlingFunction}
+                                            value={DateofDeath}
                                         />
-                                        {errors.DateofDeath && <p className="text-red-500" role="alert">{errors.DateofDeath?.message}</p>}
+                                        {DateofDeathError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                     </div>
                                 </div>
                             </div>
@@ -271,11 +373,13 @@ export default function Decendent() {
                                         <input
                                             type="date"
                                             id="InheritanceDivisionCompletionDate"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"
-                                            {...register("InheritanceDivisionCompletionDate", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.InheritanceDivisionCompletionDate ? "true" : "false"}
-                                        />
-                                        {errors.InheritanceDivisionCompletionDate && <p className="text-red-500" role="alert">{errors.InheritanceDivisionCompletionDate?.message}</p>}
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"  
+                                            onChange={inputHandlingFunction}
+                                            value={InheritanceDivisionCompletionDate}                                          
+                                        />  
+                                        {InheritanceDivisionCompletionDateError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}                                      
                                     </div>
                                 </div>
                             </div>
@@ -285,18 +389,9 @@ export default function Decendent() {
                             <p className="text-xs text-black tracking-2 leading-7">未確定の場合は仮で入力してください。後から修正可能です</p>
                         </div>
 
-                        <div className="w-full flex justify-evenly items-center py-10">
+                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center mt-10">
                             <BackButton />
-                            <div className="save-btn text-center">
-                                <button
-                                    type="submit"
-                                    className="bg-primary-color rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        保存して戻る
-                                    </span>
-                                </button>
-                            </div>
+                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                         </div>
                     </form>
                 </div>

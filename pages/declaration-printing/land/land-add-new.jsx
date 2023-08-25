@@ -15,6 +15,10 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import TableOne from '../../../components/land-tables/table-one';
+import TableTwo from '../../../components/land-tables/table-two';
+import TableThree from '../../../components/land-tables/table-three';
+import TableFour from '../../../components/land-tables/table-four';
 
 export default function LandAdd() {
     let [Name, setName] = useState("");
@@ -35,10 +39,14 @@ export default function LandAdd() {
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
-    let [ShowImageOne, setShowImageOne] = useState(false);
+    let [ShowImageOne, setShowImageOne] = useState(true);
     let [ShowImageTwo, setShowImageTwo] = useState(false);
     let [ShowImageThree, setShowImageThree] = useState(false);
     let [ShowImageFour, setShowImageFour] = useState(false);
+    let [ShowTableOne, setShowTableOne] = useState(true);
+    let [ShowTableTwo, setShowTableTwo] = useState(false);
+    let [ShowTableThree, setShowTableThree] = useState(false);
+    let [ShowTableFour, setShowTableFour] = useState(false);
     let [NameError, setNameError] = useState(false);
     let [LotNumberError, setLotNumberError] = useState(false);
     let [ResidenceDisplayError, setResidenceDisplayError] = useState(false);
@@ -48,6 +56,25 @@ export default function LandAdd() {
     let [AcreageError, setAcreageError] = useState(false);
 
     let [DisabledRadioValue, setDisabledRadioValue] = useState('1');
+ 
+
+function createData(
+  name,
+  calories,
+  fat,
+  carbs,
+  protein,
+) {
+  return { name, calories, fat, carbs, protein };
+}
+
+const rows = [
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+];
 
     //Input keypress
     let handleKeyPress = (e) => {
@@ -121,30 +148,46 @@ export default function LandAdd() {
     //Disabled deduction radio button
     const handleDisabledRadio = (event) => {
         let SelectValue = Number(event.target.value);
-        setDisabledRadioValue(SelectValue);   
-        if(SelectValue === 1){
+        setDisabledRadioValue(SelectValue);
+        if (SelectValue === 1) {
             setShowImageOne(true);
-            setShowImageTwo(false);            
+            setShowImageTwo(false);
             setShowImageThree(false);
             setShowImageFour(false);
-        }     
-        else if(SelectValue === 2){
-            setShowImageOne(false);
-            setShowImageTwo(true);            
-            setShowImageThree(false);
-            setShowImageFour(false);
+            setShowTableOne(true);
+            setShowTableTwo(false);
+            setShowTableThree(false);
+            setShowTableFour(false);
         }
-        else if(SelectValue === 3){
+        else if (SelectValue === 2) {
             setShowImageOne(false);
-            setShowImageTwo(false);            
+            setShowImageTwo(true);
+            setShowImageThree(false);
+            setShowImageFour(false);
+            setShowTableOne(false);
+            setShowTableTwo(true);
+            setShowTableThree(false);
+            setShowTableFour(false);
+        }
+        else if (SelectValue === 3) {
+            setShowImageOne(false);
+            setShowImageTwo(false);
             setShowImageThree(true);
             setShowImageFour(false);
+            setShowTableOne(false);
+            setShowTableTwo(false);
+            setShowTableThree(true);
+            setShowTableFour(false);
         }
-        else{
+        else {
             setShowImageOne(false);
-            setShowImageTwo(false);            
+            setShowImageTwo(false);
             setShowImageThree(false);
             setShowImageFour(true);
+            setShowTableOne(false);
+            setShowTableTwo(false);
+            setShowTableThree(false);
+            setShowTableFour(true);
         }
     };
 
@@ -275,6 +318,7 @@ export default function LandAdd() {
             setisSumbitDisabled(true);
         }
     };
+
     return (
         <>
             <div className="land-wrapper">
@@ -582,11 +626,11 @@ export default function LandAdd() {
                     </div>
 
                     <div className="w-full flex items-center justify-between mt-3 mb-7">
-                        <div className="w-full lg:w-65 xl:w-65 2xl:w-65 block float-left">                            
+                        <div className="w-full lg:w-65 xl:w-65 2xl:w-65 block float-left">
                             <div className="w-full inline-block mt-2 relative">
                                 <FormControl>
                                     <label className="form-label" id="demo-row-radio-buttons-group-label">土地の詳細の入力</label>
-                                    <RadioGroup                                        
+                                    <RadioGroup
                                         aria-labelledby="demo-row-radio-buttons-group-label"
                                         name="row-radio-buttons-group"
                                         value={DisabledRadioValue}
@@ -616,21 +660,38 @@ export default function LandAdd() {
                             </div>
                         </div>
 
-                        <div className="w-full lg:w-35 xl:w-35 2xl:w-35 inline-block float-left">                            
+                        <div className="w-full lg:w-35 xl:w-35 2xl:w-35 inline-block float-left">
                             <div className="w-full inline-block mt-2">
-                               {ShowImageOne && (
-                                <Image className="mx-auto w-full" src="/land_item01.png" alt="image-one" height={100} width={200} priority />
-                               )}
-                               {ShowImageTwo && (
-                                <Image className="mx-auto w-full" src="/land_item02.png" alt="image-one" height={100} width={200} priority />
-                               )}
-                               {ShowImageThree && (
-                                <Image className="mx-auto w-full" src="/land_item03.png" alt="image-one" height={100} width={200} priority />
-                               )}
-                               {ShowImageFour && (
-                                <Image className="mx-auto w-full" src="/land_item04.png" alt="image-one" height={100} width={200} priority />
-                               )}                               
+                                {ShowImageOne && (
+                                    <Image className="mx-auto w-full" src="/land_item01.png" alt="image-one" height={100} width={200} priority />
+                                )}
+                                {ShowImageTwo && (
+                                    <Image className="mx-auto w-full" src="/land_item02.png" alt="image-one" height={100} width={200} priority />
+                                )}
+                                {ShowImageThree && (
+                                    <Image className="mx-auto w-full" src="/land_item03.png" alt="image-one" height={100} width={200} priority />
+                                )}
+                                {ShowImageFour && (
+                                    <Image className="mx-auto w-full" src="/land_item04.png" alt="image-one" height={100} width={200} priority />
+                                )}
                             </div>
+                        </div>
+                    </div>
+
+                    <div className="w-full inline-block py-5">
+                        <div classsName="table-columns">
+                            {ShowTableOne && (
+                                <TableOne/>
+                            )}           
+                            {ShowTableTwo && (
+                                <TableTwo/>
+                            )}     
+                            {ShowTableThree && (
+                                <TableThree/>
+                            )}           
+                            {ShowTableFour && (
+                                <TableFour/>     
+                            )}          
                         </div>
                     </div>
 

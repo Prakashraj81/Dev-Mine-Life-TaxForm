@@ -49,8 +49,8 @@ export default function Heir() {
     let [ShowAddress, setShowAddress] = useState(false);
     let [ShowDisabledDeduction, setShowDisabledDeduction] = useState(false);
     let [ShowLegalHeir, setShowLegalHeir] = useState(false);
-    let [UndecidedHeir, setUndecidedHeir] = useState(0);
-    let [totalPrice, settotalPrice] = useState(0);
+    let [UndecidedHeir, setUndecidedHeir] = useState("0");
+    let [totalPrice, settotalPrice] = useState("0");
     let [boxValues, setBoxValues] = useState([]);
 
     //Error state and button disabled
