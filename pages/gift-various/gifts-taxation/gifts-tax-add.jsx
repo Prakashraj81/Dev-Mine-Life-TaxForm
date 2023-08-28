@@ -121,13 +121,20 @@ export default function GiftTaxAdd() {
 
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
-    let [ShowIncorrectError, setShowIncorrectError] = useState(false);   
-    let [GiftTypeError, setGiftTypeError] = useState(false);  
-    
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+    let [GiftTypeError, setGiftTypeError] = useState(false);
+    let [DateofGiftError, setDateofGiftError] = useState(false);
+    let [PropertyTypeError, setPropertyTypeError] = useState(false);
+    let [AddressError, setAddressError] = useState(false);
+    let [LocationError, setLocationError] = useState(false);
+    let [GiftAmountError, setGiftAmountERror] = useState(false);
+    let [AmountofGiftTaxError, setAmountofGiftTaxError] = useState(false);
+    let [GiftRecipientError, setGiftRecipientError] = useState(false);
+
     //Gift type
-    const handleGiftType = (event) => {        
+    const handleGiftType = (event) => {
         let selectedOption = event.target.options[event.target.selectedIndex];
-        let selectedId = Number(selectedOption.value);       
+        let selectedId = Number(selectedOption.value);
         setisSumbitDisabled(false);
         setShowIncorrectError(false);
         setGiftType(selectedOption.text);
@@ -138,11 +145,11 @@ export default function GiftTaxAdd() {
     const [isValid, setIsValid] = useState(true);
     const postalcodeDigit = (e) => {
         let digit_value = e.target.value;
-        let isValidInput = /^\d{7}$/.test(digit_value);        
+        let isValidInput = /^\d{7}$/.test(digit_value);
         if (digit_value.length == 8 || digit_value.length == 9 || digit_value.length == 10) {
             digit_value = digit_value.slice(0, 7)
             setPostCode(digit_value);
-        } 
+        }
         setPostCode(digit_value);
         setIsValid(isValidInput);
     }
@@ -247,6 +254,33 @@ export default function GiftTaxAdd() {
     };
 
 
+    //All input validation check and handling function
+    const inputHandlingFunction = (event) => {
+        setShowIncorrectError(false);
+        let inputId = event.currentTarget.id;
+        let inputValue = event.target.value;
+        if (inputId === "GiftType") {
+            setGiftType(inputValue);
+            setGiftTypeError(false);
+        }   
+        else if(inputId === "DateofGift") {
+            setDateofGift(inputValue);
+            setDateofGiftError(false);
+        }   
+        else if(inputId === "Address") {
+            setAddress(inputValue);
+            setAddressError(false);
+        }   
+        else if(inputId === "Location") {
+            setLocation(inputValue);
+            setLocationError(false);
+        }   
+        else {
+
+        }
+        setisSumbitDisabled(false);
+    }
+
     //Submit API function 
     const router = useRouter();
     const onSubmit = () => {
@@ -264,11 +298,46 @@ export default function GiftTaxAdd() {
             Location: Location,
             Breadth: Breadth,
         };
-        
+
         //input Validation
         if (defaultValues.GiftType === "") {
             setGiftTypeError(true);
             isSumbitDisabled = true;
+        }
+        if (defaultValues.DateofGift === "") {
+            setDateofGiftError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.TypeofProperty === "") {
+            setPropertyTypeError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.Address === "") {
+            setAddressError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.Location === "") {
+            setLocationError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.AmountofGiftTax === "") {
+            setAmountofGiftTaxError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.GiftTaxReturnType === "") {
+            setGiftRecipientError(true);
+            isSumbitDisabled = true;
+        }
+        
+        //Api setup
+        if (isSumbitDisabled !== true) {
+            console.log("API allowed");
+            sessionStorage.setItem('GiftsTaxation', JSON.stringify(defaultValues));
+            router.push(`/gift-various/gifts-taxation`);
+        }
+        else {
+            console.log("API not allowed");
+            setisSumbitDisabled(true);
         }
     };
 
@@ -304,7 +373,7 @@ export default function GiftTaxAdd() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        贈与の種類
+                                        贈与の種類<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -325,8 +394,8 @@ export default function GiftTaxAdd() {
 
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
-                                <label htmlFor="DateofGift" className="form-label">
-                                    贈与を受けた日
+                                <label className="form-label">
+                                    贈与を受けた日<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -334,9 +403,12 @@ export default function GiftTaxAdd() {
                                     type="date"
                                     id="DateofGift"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    
+                                    onChange={inputHandlingFunction}
+                                    value={DateofGift}
                                 />
-                                
+                                {DateofGiftError && (
+                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -345,8 +417,8 @@ export default function GiftTaxAdd() {
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="TypeofProperty" className="form-label">
-                                        財産の種類
+                                    <label className="form-label">
+                                        財産の種類<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -358,13 +430,16 @@ export default function GiftTaxAdd() {
                                             </option>
                                         ))}
                                     </select>
+                                    {PropertyTypeError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
 
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
-                                <label htmlFor="PropertyDetails" className="form-label">
+                                <label className="form-label">
                                     財産の細目
                                 </label>
                             </div>
@@ -416,7 +491,7 @@ export default function GiftTaxAdd() {
                             <div className="user-details w-full inline-block">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        住所
+                                        住所<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -424,9 +499,12 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Address"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        
+                                        onChange={inputHandlingFunction}
+                                        value={Address}
                                     />
-                                    
+                                    {AddressError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -445,10 +523,8 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Breadth"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                        
                                     />
                                     <AreaIcon />
-                                    
                                 </div>
                             </div>
                         </div>
@@ -460,7 +536,7 @@ export default function GiftTaxAdd() {
                             <div className="user-details w-full block">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        所在場所
+                                        所在場所<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -468,9 +544,12 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Location"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        
+                                        onChange={inputHandlingFunction}
+                                        value={Location}
                                     />
-                                    
+                                    {LocationError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -490,9 +569,7 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Quantity"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        
                                     />
-                                   
                                 </div>
                             </div>
                         </div>
@@ -504,8 +581,8 @@ export default function GiftTaxAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
-                                        <label htmlFor="GiftAmount" className="form-label">
-                                            贈与を受けた額
+                                        <label className="form-label">
+                                            贈与を受けた額<i className="text-red-500">*</i>
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
@@ -513,17 +590,20 @@ export default function GiftTaxAdd() {
                                             type="text"
                                             id="GiftAmount"
                                             className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            
+                                            onChange={inputHandlingFunction}
+                                            value={GiftAmount}
                                         />
-                                       
+                                        {GiftAmountError && (
+                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
 
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="AmountofGiftTax" className="form-label">
-                                        贈与に伴って支払った贈与税額
+                                    <label className="form-label">
+                                        贈与に伴って支払った贈与税額<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -531,9 +611,12 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="AmountofGiftTax"
                                         className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        
+                                        onChange={inputHandlingFunction}
+                                        value={AmountofGiftTax}
                                     />
-                                    
+                                    {AmountofGiftTaxError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -550,7 +633,7 @@ export default function GiftTaxAdd() {
                             <div className="w-full inline-block mt-2 relative">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
                                     <option value=''></option>
-                                </select>
+                                </select>                                
                             </div>
                         </div>
                     </div>
@@ -559,25 +642,24 @@ export default function GiftTaxAdd() {
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    贈与を受けた人
+                                    贈与を受けた人<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                     <option value=''></option>
-                                        {HeirList.map((option) => (
-                                            <option key={option.id} value={option.id}>
-                                                {option.label}
-                                            </option>
-                                        ))}
+                                    <option value=''></option>
+                                    {HeirList.map((option) => (
+                                        <option key={option.id} value={option.id}>
+                                            {option.label}
+                                        </option>
+                                    ))}
                                 </select>
+                                {GiftRecipientError && (
+                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                )}
                             </div>
                         </div>
                     </div>
-
-
-
-
 
                     <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                         <BackButton />
@@ -593,7 +675,6 @@ export default function GiftTaxAdd() {
         </>
     )
 }
-
 
 GiftTaxAdd.getLayout = function getLayout(page) {
     return <FullLayout>{page}</FullLayout>;

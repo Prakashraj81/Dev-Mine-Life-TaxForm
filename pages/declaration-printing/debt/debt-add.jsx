@@ -85,9 +85,10 @@ export default function DebtAdd() {
     }, []);
 
     const handleDebitType = (event) => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        let selectedId = Number(selectedOption.value);
-        setDebtType(selectedOption.text);
+        let selectedValue = event.target.value;
+        let selectedOptions = DebtList.find(option => option.value === selectedValue);
+        let selectedId = Number(selectedOptions.id);        
+        setDebtType(selectedValue);
         setisSumbitDisabled(false);
         if (selectedId === 1) {
             setShowPostCode(false);
@@ -338,9 +339,9 @@ export default function DebtAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleDebitType}>
-                                        <option value=''></option>
+                                        <option value='' id="0"></option>
                                         {DebtList.map((option) => (
-                                            <option key={option.value} value={option.id}>
+                                            <option key={option.value} id={option.id} value={option.value}>
                                                 {option.label}
                                             </option>
                                         ))}

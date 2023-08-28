@@ -97,10 +97,12 @@ export default function SecuritiesAdd() {
 
     //Securities dropdown
     let selectId = 0;
-    const SecuritiesDropdownChange = (event) => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        setSecuritiesType(selectedOption.text);
-        selectId = Number(selectedOption.value);
+    const SecuritiesDropdownChange = (event) => {        
+        let selectedValue = event.target.value;
+        let selectedOptions = SecuritiesList.find(option => option.value === selectedValue);
+        selectId = Number(selectedOptions.id);    
+        setSecuritiesType(selectedValue);   
+        console.log(selectedValue);  
         if (selectId !== 0) {
             setSecuritiesTypeError(false);
             handleInputChange(selectId);
@@ -111,9 +113,10 @@ export default function SecuritiesAdd() {
     };
 
     const UnitDetailsDropdownChange = (event) => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        setSecuritiesType(selectedOption.text);
-        selectId = Number(selectedOption.value);
+        let selectedValue = event.target.value;
+        let selectedOptions = UnitDetailsList.find(option => option.value === selectedValue);
+        selectId = Number(selectedOptions.id);    
+        setUnitDetails(selectedValue);       
         if (selectId !== 0) {
             setUnitDetailsError(false);
             handleInputChange(selectId);
@@ -154,7 +157,7 @@ export default function SecuritiesAdd() {
             setshowPostcode(true);
             setshowAddress(true);
             setshowAmountMoney(true);
-            setshowFinancialInstitutionNameInstitutionName(false);
+            setshowFinancialInstitutionName(false);
             setshowQuantityPrice(false);
             setshowUnitDetails(false);
             setshowReducationAmount(false);
@@ -166,7 +169,7 @@ export default function SecuritiesAdd() {
             setshowAddress(true);
             setshowAmountMoney(false);
             setshowQuantityPrice(true);
-            setshowFinancialInstitutionNameInstitutionName(false);
+            setshowFinancialInstitutionName(false);
             setshowUnitDetails(false);
             setshowReducationAmount(false);
             setshowMoneyOrderQuantity(false);
@@ -541,9 +544,9 @@ export default function SecuritiesAdd() {
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={SecuritiesDropdownChange}>
-                                    <option value="0"></option>
+                                    <option value='' id="0"></option>
                                     {SecuritiesList.map((option) => (
-                                        <option key={option.value} value={option.id}>
+                                        <option key={option.value} id={option.id} value={option.value}>
                                             {option.label}
                                         </option>
                                     ))}
@@ -563,9 +566,9 @@ export default function SecuritiesAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={UnitDetailsDropdownChange}>
-                                        <option value="0"></option>
+                                        <option value='' id="0"></option>
                                         {UnitDetailsList.map((option) => (
-                                            <option key={option.value} value={option.id}>
+                                            <option key={option.value} id={option.id} value={option.value}>
                                                 {option.label}
                                             </option>
                                         ))}

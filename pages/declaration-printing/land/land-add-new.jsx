@@ -556,8 +556,8 @@ const rows = [
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={CondominiumsDropdownChange}>
-                                    <option value="0">---</option>
-                                    <option value="1">マンションである</option>
+                                    <option id="0">---</option>
+                                    <option id="1" value="マンションである">マンションである</option>
                                 </select>
                             </div>
                         </div>

@@ -86,19 +86,24 @@ export default function Heir() {
 
 
     const handleProfessionType = (event) => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        setProfession(selectedOption.text);
+        let selectedValue = event.target.value;
+        let selectedOptions = ProfessionList.find(option => option.value === selectedValue);
+        let selectedId = Number(selectedOptions.id);        
+        setProfession(selectedValue); 
         setisSumbitDisabled(false);
+        setProfessionError(false);
     };
 
     const handleRelationshipWithDecedent = (event) => {
+        let selectedValue = event.target.value;
         let selectedOption = event.target.options[event.target.selectedIndex];
         let selectedId = selectedOption.id;
-        setRelationshipWithDecedent(selectedOption.text);
+        setRelationshipWithDecedent(selectedValue);
         setisSumbitDisabled(false);
+        setRelationshipWithDecedentError(false);
         if (selectedId === "Disabled_deduction") {
             setShowDisabledDeduction(true);
-            setShowLegalHeir(false);
+            setShowLegalHeir(false);            
         }
         else if (selectedId === "Legal_heir") {
             setShowDisabledDeduction(false);
@@ -389,9 +394,9 @@ export default function Heir() {
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleProfessionType}>
-                                            <option value=''></option>
+                                            <option value='' id="0"></option>
                                             {ProfessionList.map((option) => (
-                                                <option key={option.value} value={option.id}>
+                                                <option key={option.value} id={option.id} value={option.value}>
                                                     {option.label}
                                                 </option>
                                             ))}
@@ -411,7 +416,7 @@ export default function Heir() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select id="RelationshipWithDecedent" onChange={handleRelationshipWithDecedent} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                        <option value=''></option>
+                                        <option value='' id=""></option>
                                         <option id="Disabled_deduction" value="夫"> 夫 </option>
                                         <option id="Disabled_deduction" value="妻"> 妻 </option>
                                         <optgroup label="息子">

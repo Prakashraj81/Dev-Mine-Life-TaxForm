@@ -19,7 +19,7 @@ const Menuitems = [
       {        
         title: "基礎情報の入力",
         icon: "disc",
-        href: "/",    
+        href: "/basic-information",    
       },
       {
         title: "被相続人",
@@ -30,12 +30,7 @@ const Menuitems = [
         title: "相続人",
         icon: "disc",
         href: "/basic-information/heir",
-      },
-      // {
-      //   title: "相続人2",
-      //   icon: "disc",
-      //   href: "/basic-information/heir-2",
-      // },
+      },      
     ],
   },  
 

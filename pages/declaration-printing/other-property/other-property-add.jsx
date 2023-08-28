@@ -68,9 +68,10 @@ export default function OtherPropertyAdd() {
 
 
     const handlePropertyType = (event) => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        let selectedId = Number(selectedOption.value);
-        setProperty(selectedOption.text);
+        let selectedValue = event.target.value;
+        let selectedOptions = PropertyList.find(option => option.value === selectedValue);
+        let selectedId = Number(selectedOptions.id);        
+        setProperty(selectedValue);        
         setisSumbitDisabled(false);
         if (selectedId === 1) {
             setShowContent(false);
@@ -397,9 +398,9 @@ export default function OtherPropertyAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handlePropertyType}>
-                                        <option value=''></option>
+                                        <option value='' id="0"></option>
                                         {PropertyList.map((option) => (
-                                            <option key={option.value} value={option.id}>
+                                            <option key={option.value} id={option.id} value={option.value}>
                                                 {option.label}
                                             </option>
                                         ))}

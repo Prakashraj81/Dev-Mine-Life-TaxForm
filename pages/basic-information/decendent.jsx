@@ -65,9 +65,11 @@ export default function Decendent() {
         }
     };
 
-    const handleProfessionType = (event) => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        setProfession(selectedOption.text);
+    const handleProfessionType = (event) => {        
+        let selectedValue = event.target.value;
+        let selectedOptions = ProfessionList.find(option => option.value === selectedValue);
+        let selectedId = Number(selectedOptions.id);        
+        setProfession(selectedValue);        
         setProfessionError(false);
         setisSumbitDisabled(false);
     };
@@ -322,10 +324,9 @@ export default function Decendent() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleProfessionType}>
-                                        <option value=''></option>
+                                        <option value='' id="0"></option>
                                         {ProfessionList.map((option) => (
-                                            <option key={option.value}
-                                                value={option.value}>
+                                            <option key={option.value} id={option.id} value={option.value}>
                                                 {option.label}
                                             </option>
                                         ))}

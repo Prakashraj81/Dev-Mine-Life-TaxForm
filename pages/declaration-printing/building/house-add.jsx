@@ -12,8 +12,8 @@ import AreaIcon from "../../../components/inputbox-icon/textbox-area-icon";
 
 export default function HouseAdd() {
     let KindsList = [
-        { id: 1, value: ' 家屋 ', label: ' 家屋 ' },
-        { id: 2, value: ' 構築物 ', label: ' 構築物 ' },
+        { id: 1, value: '家屋', label: '家屋' },
+        { id: 2, value: '構築物', label: '構築物' },
     ];
 
     let HowToUseList = [];
@@ -97,6 +97,7 @@ export default function HouseAdd() {
     let [PropertyTaxAssessmentValueError, setPropertyTaxAssessmentValueError] = useState(false);
     let [RentRatioError, setRentRatioError] = useState(false);
     let [InsertCertificateError, setInsertCertificateError] = useState(false);
+    let [HowtouseList, setHowtouseList] = useState();
 
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
@@ -145,24 +146,28 @@ export default function HouseAdd() {
 
     const handleKinds = (event) => {
         inputClear();
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        let selectedId = Number(selectedOption.value);
+        let selectedValue = event.target.value;
+        let selectedOptions = KindsList.find(option => option.value === selectedValue);
+        let selectedId = Number(selectedOptions.id);        
+        setKinds(selectedValue);        
         setisSumbitDisabled(false);
-        setShowIncorrectError(false);
-        setKinds(selectedOption.text);
+        setShowIncorrectError(false);        
         setKindsError(false);
         if (selectedId === 1) {
-            setShowStructureUsage(true);
-            HowToUseList = HowToUseList_House;
+            setShowStructureUsage(true);            
             setShowHowtoList0(false);
             setShowHowtoList1(true);
             setShowHowtoList2(false);
+            setHowtouseList(HowToUseList_House);           
+            console.log(HowtouseList);
         }
         else if (selectedId === 2) {
             setShowStructureUsage(false);
             setShowHowtoList0(false);
             setShowHowtoList1(false);
             setShowHowtoList2(true);
+            setHowtouseList(HowToUseList_Structure);            
+            console.log(HowtouseList);
         }
         else {
             setShowStructureUsage(false);
@@ -174,12 +179,13 @@ export default function HouseAdd() {
 
     //How to use dropdown box
     const handleHowToUse = (event) => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        let selectedId = selectedOption.value;
+        let selectedValue = event.target.value;
+        let selectedOptions = HowtouseList.find(option => option.value === selectedValue);
+        let selectedId = Number(selectedOptions.id);        
+        setHowToUse(selectedValue);
         setisSumbitDisabled(false);
         setShowIncorrectError(false);
-        setHowToUseError(false);
-        setHowToUse(selectedOption.text);
+        setHowToUseError(false);    
         if (selectedId === "RentRatio") {
             setShowRentRatio(true);
         }
@@ -190,18 +196,20 @@ export default function HouseAdd() {
 
     //Structure dropdown box
     const handleStructure = (event) => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        let selectedId = selectedOption.value;
-        setStructure(selectedOption.text);
+        let selectedValue = event.target.value;
+        let selectedOptions = StructureList.find(option => option.value === selectedValue);
+        let selectedId = Number(selectedOptions.id);        
+        setStructure(selectedValue);        
         setisSumbitDisabled(false);
         setShowIncorrectError(false);
         setStructureError(false);
     };
 
     const handleUsage = (event) => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        let selectedId = selectedOption.value;
-        setUsage(selectedOption.text);
+        let selectedValue = event.target.value;
+        let selectedOptions = UsageList.find(option => option.value === selectedValue);
+        let selectedId = Number(selectedOptions.id);        
+        setUsage(selectedValue);        
         setisSumbitDisabled(false);
         setShowIncorrectError(false);
         setUsageError(false);
@@ -486,9 +494,9 @@ export default function HouseAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleKinds}>
-                                        <option value=''></option>
+                                    <option value='' id="0"></option>
                                         {KindsList.map((option) => (
-                                            <option key={option.id} value={option.id}>
+                                            <option key={option.value} id={option.id} value={option.value}>
                                                 {option.label}
                                             </option>
                                         ))}
@@ -509,7 +517,7 @@ export default function HouseAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleHowToUse}>
-                                        <option value=''></option>
+                                        <option value='' id="0"></option>
                                     </select>
                                     {HowToUseError && (
                                         <p className="text-red-500" role="alert">この項目は必須です</p>
@@ -527,9 +535,9 @@ export default function HouseAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleHowToUse}>
-                                        <option value=''></option>
+                                        <option value='' id="0"></option>
                                         {HowToUseList_House.map((option) => (
-                                            <option key={option.id} value={option.id}>
+                                            <option key={option.value} id={option.id} value={option.value}>
                                                 {option.label}
                                             </option>
                                         ))}
@@ -550,9 +558,9 @@ export default function HouseAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleHowToUse}>
-                                        <option value=''></option>
+                                        <option value='' id="0"></option>
                                         {HowToUseList_Structure.map((option) => (
-                                            <option key={option.id} value={option.id}>
+                                            <option key={option.value} id={option.id} value={option.value}>
                                                 {option.label}
                                             </option>
                                         ))}
@@ -576,9 +584,9 @@ export default function HouseAdd() {
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleStructure}>
-                                            <option value=''></option>
+                                            <option value='' id="0"></option>
                                             {StructureList.map((option) => (
-                                                <option key={option.id} value={option.id}>
+                                                <option key={option.value} id={option.id} value={option.value}>
                                                     {option.label}
                                                 </option>
                                             ))}
@@ -598,9 +606,9 @@ export default function HouseAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleUsage}>
-                                        <option value=''></option>
+                                        <option value='' id="0"></option>
                                         {UsageList.map((option) => (
-                                            <option key={option.id} value={option.id}>
+                                            <option key={option.value} id={option.id} value={option.value}>
                                                 {option.label}
                                             </option>
                                         ))}

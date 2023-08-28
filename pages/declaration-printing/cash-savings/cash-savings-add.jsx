@@ -67,9 +67,10 @@ export default function CashSavingsAdd() {
 
     //Deposit type dropdown
     const handleDepositType = (event) => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        let selectedId = Number(selectedOption.value);
-        setDepositType(selectedOption.text);
+        let selectedValue = event.target.value;
+        let selectedOptions = DepositList.find(option => option.value === selectedValue);
+        let selectedId = Number(selectedOptions.id);        
+        setDepositType(selectedValue);
         setisSumbitDisabled(false);
         clearFunction();
         if (selectedId === 1) {
@@ -307,9 +308,9 @@ export default function CashSavingsAdd() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <select className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2" onChange={handleDepositType}>
-                                        <option value=''></option>
+                                        <option value='' id="0"></option>
                                         {DepositList.map((option) => (
-                                            <option key={option.value} value={option.id}>
+                                            <option key={option.value} id={option.id} value={option.value}>
                                                 {option.label}
                                             </option>
                                         ))}
