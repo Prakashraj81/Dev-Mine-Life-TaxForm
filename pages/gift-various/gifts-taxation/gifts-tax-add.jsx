@@ -4,6 +4,7 @@ import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import BackButton from "../../../components/back-btn";
+import SubmitButton from "../../../components/submit-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import FloorIcon from "../../../components/inputbox-icon/textbox-floor-icon";
@@ -64,6 +65,12 @@ export default function GiftTaxAdd() {
         { id: 2, value: '構築物', label: '構築物' },
     ];
 
+    let HeirList = [
+        { id: 1, value: 'Shree', label: 'Shree' },
+        { id: 2, value: 'Prakashraj', label: 'Prakashraj' },
+        { id: 3, value: 'Gowtham', label: 'Gowtham' },
+    ];
+
     let LandList = [
         { id: 1, value: '宅地', label: '宅地' },
         { id: 2, value: '借地権', label: '借地権' },
@@ -88,18 +95,18 @@ export default function GiftTaxAdd() {
     ]
 
 
-    const [GiftType, setGiftType] = useState("");
-    const [DateofGift, setDateofGift] = useState("");
-    const [TypeofProperty, setTypeofProperty] = useState("");
-    const [PropertyDetails, setPropertyDetails] = useState("");
-    const [PostCode, setPostCode] = useState("");
-    const [Address, setAddress] = useState("");
-    const [Quantity, setQuantity] = useState(0);
-    const [GiftAmount, setGiftAmount] = useState(0);
-    const [AmountofGiftTax, setAmountofGiftTax] = useState(0);
-    const [GiftTaxReturnType, setGiftTaxReturnType] = useState("");
-    const [Location, setLocation] = useState("");
-    const [Breadth, setBreadth] = useState(0);
+    let [GiftType, setGiftType] = useState("");
+    let [DateofGift, setDateofGift] = useState("");
+    let [TypeofProperty, setTypeofProperty] = useState("");
+    let [PropertyDetails, setPropertyDetails] = useState("");
+    let [PostCode, setPostCode] = useState("");
+    let [Address, setAddress] = useState("");
+    let [Quantity, setQuantity] = useState(0);
+    let [GiftAmount, setGiftAmount] = useState(0);
+    let [AmountofGiftTax, setAmountofGiftTax] = useState(0);
+    let [GiftTaxReturnType, setGiftTaxReturnType] = useState("");
+    let [Location, setLocation] = useState("");
+    let [Breadth, setBreadth] = useState(0);
 
 
     let [PropertyOptionsData, setPropertyOptionsData] = useState([]);
@@ -112,23 +119,20 @@ export default function GiftTaxAdd() {
     let [ShowGiftAmountandGiftTax, setShowGiftAmountandGiftTax] = useState(true);
     let [ShowBreadth, setShowBreadth] = useState(true);
 
-    const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
-        defaultValues: {
-            GiftType: "",
-            DateofGift: "",
-            TypeofProperty: "",
-            PropertyDetails: "",
-            PostCode: "",
-            Address: "",
-            Quantity: 0,
-            GiftAmount: 0,
-            AmountofGiftTax: 0,
-            GiftTaxReturnType: "",
-            Location: "",
-            Breadth: 0,
-        }
-    });
-
+    //Error state and button disabled
+    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);   
+    let [GiftTypeError, setGiftTypeError] = useState(false);  
+    
+    //Gift type
+    const handleGiftType = (event) => {        
+        let selectedOption = event.target.options[event.target.selectedIndex];
+        let selectedId = Number(selectedOption.value);       
+        setisSumbitDisabled(false);
+        setShowIncorrectError(false);
+        setGiftType(selectedOption.text);
+        setGiftTypeError(false);
+    };
 
     //Postal code 7 digit limit function
     const [isValid, setIsValid] = useState(true);
@@ -243,23 +247,29 @@ export default function GiftTaxAdd() {
     };
 
 
-
-    const onSubmit = async (defaultValues) => {
-        var value = JSON.stringify(defaultValues);
-        console.log(value);
-        if (value.PropertyName != "") {
-            var Apiurl = "/";
-            const urlresponse = await fetch(Apiurl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(defaultValues),
-                mode: "no-cors",
-            });
+    //Submit API function 
+    const router = useRouter();
+    const onSubmit = () => {
+        let defaultValues = {
+            GiftType: GiftType,
+            DateofGift: DateofGift,
+            TypeofProperty: TypeofProperty,
+            PropertyDetails: PropertyDetails,
+            PostCode: PostCode,
+            Address: Address,
+            Quantity: Quantity,
+            GiftAmount: GiftAmount,
+            AmountofGiftTax: AmountofGiftTax,
+            GiftTaxReturnType: GiftTaxReturnType,
+            Location: Location,
+            Breadth: Breadth,
+        };
+        
+        //input Validation
+        if (defaultValues.GiftType === "") {
+            setGiftTypeError(true);
+            isSumbitDisabled = true;
         }
-        else {
-            //router.push('/declaration-printing/other-property/other-property-others');
-        }
-        //res.status(200).end()
     };
 
 
@@ -288,7 +298,7 @@ export default function GiftTaxAdd() {
                     </p>
                 </div>
 
-                <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                <form action="#" method="POST">
                     <div className="w-full flex items-center justify-between mb-7">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="user-details">
@@ -298,7 +308,7 @@ export default function GiftTaxAdd() {
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
+                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleGiftType}>
                                         <option value=''></option>
                                         {GiftTypeList.map((option) => (
                                             <option key={option.value} value={option.id}>
@@ -306,6 +316,9 @@ export default function GiftTaxAdd() {
                                             </option>
                                         ))}
                                     </select>
+                                    {GiftTypeError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -321,10 +334,9 @@ export default function GiftTaxAdd() {
                                     type="date"
                                     id="DateofGift"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    {...register("DateofGift", { required: "この項目は必須です" })}
-                                    aria-invalid={errors.DateofGift ? "true" : "false"}
+                                    
                                 />
-                                {errors.DateofGift && <p className="text-red-500 mt-2" role="alert">{errors.DateofGift?.message}</p>}
+                                
                             </div>
                         </div>
                     </div>
@@ -412,10 +424,9 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Address"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Address", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.Address ? "true" : "false"}
+                                        
                                     />
-                                    {errors.Address && <p className="text-red-500 mt-2" role="alert">{errors.Address?.message}</p>}
+                                    
                                 </div>
                             </div>
                         </div>
@@ -434,11 +445,10 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Breadth"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                        {...register("Breadth", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.Breadth ? "true" : "false"}
+                                        
                                     />
                                     <AreaIcon />
-                                    {errors.Breadth && <p className="text-red-500 mt-2" role="alert">{errors.Breadth?.message}</p>}
+                                    
                                 </div>
                             </div>
                         </div>
@@ -458,10 +468,9 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Location"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Location", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.Location ? "true" : "false"}
+                                        
                                     />
-                                    {errors.Location && <p className="text-red-500 mt-2" role="alert">{errors.Location?.message}</p>}
+                                    
                                 </div>
                             </div>
                         </div>
@@ -481,10 +490,9 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Quantity"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("Quantity", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.Quantity ? "true" : "false"}
+                                        
                                     />
-                                    {errors.Quantity && <p className="text-red-500 mt-2" role="alert">{errors.Quantity?.message}</p>}
+                                   
                                 </div>
                             </div>
                         </div>
@@ -505,10 +513,9 @@ export default function GiftTaxAdd() {
                                             type="text"
                                             id="GiftAmount"
                                             className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("GiftAmount", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.GiftAmount ? "true" : "false"}
+                                            
                                         />
-                                        {errors.GiftAmount && <p className="text-red-500 mt-2" role="alert">{errors.GiftAmount?.message}</p>}
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -524,10 +531,9 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="AmountofGiftTax"
                                         className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        {...register("AmountofGiftTax", { required: "この項目は必須です" })}
-                                        aria-invalid={errors.AmountofGiftTax ? "true" : "false"}
+                                        
                                     />
-                                    {errors.AmountofGiftTax && <p className="text-red-500 mt-2" role="alert">{errors.AmountofGiftTax?.message}</p>}
+                                    
                                 </div>
                             </div>
                         </div>
@@ -558,7 +564,12 @@ export default function GiftTaxAdd() {
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                    <option value=''></option>
+                                     <option value=''></option>
+                                        {HeirList.map((option) => (
+                                            <option key={option.id} value={option.id}>
+                                                {option.label}
+                                            </option>
+                                        ))}
                                 </select>
                             </div>
                         </div>
@@ -569,19 +580,8 @@ export default function GiftTaxAdd() {
 
 
                     <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                        <div className="save-btn text-center">
-                            <BackButton />
-                        </div>
-                        <div className="save-btn text-center">
-                        <button
-type="sumbit"
-className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
->
-<span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-    保存して戻る
-</span>
-</button>
-                        </div>
+                        <BackButton />
+                        <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                     </div>
                     <div className="heading text-center pt-8">
                         <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
