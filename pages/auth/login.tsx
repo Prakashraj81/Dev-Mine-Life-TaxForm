@@ -24,7 +24,7 @@ export default function Login(props) {
      if (isSumbitDisabled !== true) {
       console.log("API allowed");      
       sessionStorage.setItem('Login', "1");
-      router.push(`/basic-information/decendent`);
+      router.push(`/`);
     }
     else {
       console.log("API not allowed");
@@ -84,7 +84,8 @@ export default function Login(props) {
 
               <div className="login-btn pt-10 text-center">
                 <button      
-                onClick={onSubmit}            
+                onClick={onSubmit}      
+                type="button"      
                   className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
                 >
                   <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
