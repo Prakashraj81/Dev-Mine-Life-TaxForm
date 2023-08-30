@@ -53,6 +53,10 @@ export default function OtherPropertyAdd() {
     let [ReductionRateError, setReductionRateError] = useState(false);
     let [ValuationError, setValuationError] = useState(false);
 
+    useEffect(() => {
+        
+      }, []);
+
     //Postal code 7 digit limit function
     const [isValid, setIsValid] = useState(true);
     const postalcodeDigit = (e) => {

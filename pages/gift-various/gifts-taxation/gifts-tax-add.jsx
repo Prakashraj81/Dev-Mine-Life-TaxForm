@@ -101,12 +101,12 @@ export default function GiftTaxAdd() {
     let [PropertyDetails, setPropertyDetails] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
-    let [Quantity, setQuantity] = useState(0);
-    let [GiftAmount, setGiftAmount] = useState(0);
-    let [AmountofGiftTax, setAmountofGiftTax] = useState(0);
+    let [Quantity, setQuantity] = useState("0");
+    let [GiftAmount, setGiftAmount] = useState("0");
+    let [AmountofGiftTax, setAmountofGiftTax] = useState("0");
     let [GiftTaxReturnType, setGiftTaxReturnType] = useState("");
     let [Location, setLocation] = useState("");
-    let [Breadth, setBreadth] = useState(0);
+    let [Breadth, setBreadth] = useState("0");
 
 
     let [PropertyOptionsData, setPropertyOptionsData] = useState([]);
@@ -252,7 +252,12 @@ export default function GiftTaxAdd() {
             setShowQuantity(true);
         }
     };
-
+    
+    function onchangeQuantity(e) {
+        let quantity = parseFloat(e.target.value);
+        setQuantity(quantity);
+        setisSumbitDisabled(false);
+    }
 
     //All input validation check and handling function
     const inputHandlingFunction = (event) => {
@@ -340,7 +345,6 @@ export default function GiftTaxAdd() {
             setisSumbitDisabled(true);
         }
     };
-
 
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
@@ -523,6 +527,8 @@ export default function GiftTaxAdd() {
                                         type="text"
                                         id="Breadth"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
+                                        onKeyPress={handleKeyPress}
+                                        value={Breadth}
                                     />
                                     <AreaIcon />
                                 </div>
@@ -568,7 +574,10 @@ export default function GiftTaxAdd() {
                                     <input
                                         type="text"
                                         id="Quantity"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                        
+                                        onChange={onchangeQuantity}
+                                        onKeyPress={handleKeyPress}
+                                        value={Quantity}
                                     />
                                 </div>
                             </div>
@@ -632,7 +641,7 @@ export default function GiftTaxAdd() {
                             </div>
                             <div className="w-full inline-block mt-2 relative">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                    <option value=''></option>
+                                    <option value='' id="0"></option>
                                 </select>                                
                             </div>
                         </div>
@@ -647,7 +656,7 @@ export default function GiftTaxAdd() {
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                    <option value=''></option>
+                                    <option value='' id="0"></option>
                                     {HeirList.map((option) => (
                                         <option key={option.id} value={option.id}>
                                             {option.label}
@@ -669,8 +678,6 @@ export default function GiftTaxAdd() {
                         <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
                     </div>
                 </form>
-
-
             </div>
         </>
     )

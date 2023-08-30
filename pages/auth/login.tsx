@@ -10,7 +10,25 @@ import BlankLayout from '../../components/layouts/blank/BlankLayout';
 export default function Login(props) {  
   let [UserName, setUserName] = useState("");
   let [Password, setPassword] = useState(""); 
+  
+  let [UserNameError, setUserNameError] = useState(false);
+  let [PasswordError, setPasswordError] = useState(false);
   let [isSumbitDisabled, setisSumbitDisabled] = useState(false); 
+
+  //All input validation check and handling function
+  const inputHandlingFunction = (event) => {
+    let inputId = event.currentTarget.id;
+    let inputValue = event.target.value;
+    if (inputId === "UserName") {
+      setUserName(inputValue);
+      setUserNameError(false);
+    }    
+    else {
+      setPassword(inputValue);
+      setPasswordError(false);
+    }
+    setisSumbitDisabled(false);
+}
 
   //Submit API function 
   const router = useRouter();
@@ -18,10 +36,18 @@ export default function Login(props) {
     let defaultValues = {
       UserName: UserName,
       Password: Password,
-  };
+    };
 
-     //Api setup
-     if (isSumbitDisabled !== true) {
+    if(defaultValues.UserName === ""){
+      setUserNameError(true);
+      isSumbitDisabled = true;
+    }
+    if(defaultValues.Password === ""){
+      setPasswordError(true);
+      isSumbitDisabled = true;
+    }
+    //Api setup
+    if (isSumbitDisabled !== true) {
       console.log("API allowed");      
       sessionStorage.setItem('Login', "1");
       router.push(`/`);
@@ -63,7 +89,12 @@ export default function Login(props) {
                     type="text"
                     id="UserName"
                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                    
-                  />                  
+                    onChange={inputHandlingFunction}
+                    value={UserName}
+                  />
+                  {UserNameError && (
+                      <p className="text-red-500" role="alert">この項目は必須です</p>
+                  )}            
                 </div>
               </div>
 
@@ -78,7 +109,12 @@ export default function Login(props) {
                     type="password"
                     id="Password"
                     className="form-control w-full bg-custom-gray rounded focus:outline-none h-12 pl-3"                    
-                  />                  
+                    onChange={inputHandlingFunction}
+                    value={Password}
+                  />
+                  {PasswordError && (
+                      <p className="text-red-500" role="alert">この項目は必須です</p>
+                  )}                    
                 </div>
               </div>
 
