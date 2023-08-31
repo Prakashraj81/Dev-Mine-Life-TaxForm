@@ -18,7 +18,7 @@ import BeenhereOutlinedIcon from '@mui/icons-material/BeenhereOutlined';
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
-  const handleClick2 = (event: any) => {
+  const handleClick2 = (event) => {
     setAnchorEl2(event.currentTarget);
   };
   const handleClose2 = () => {
@@ -27,7 +27,8 @@ const Profile = () => {
 
   const router = useRouter();  
   const FunctionLogOut = () => {   
-    let Logoutboolean = btoa(false);     
+    let bool = false;
+    let Logoutboolean = btoa(bool);     
     sessionStorage.setItem('Login', Logoutboolean);
     router.push(`/`);
   }
