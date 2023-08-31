@@ -1,64 +1,91 @@
 "use client";
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import axios from 'axios';
 import { useRouter } from 'next/router';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
-import Register from './register';
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
+import BackdropLoader from '../../components/loader/backdrop-loader';
 
-export default function Login(props) {  
+export default function Login(props) {
   let [UserName, setUserName] = useState("");
-  let [Password, setPassword] = useState(""); 
-  
+  let [Password, setPassword] = useState("");
+
+  let [isValidEmail, setisValidEmail] = useState(true);
+  let [LoginError, setLoginError] = useState(false);
+  let [ShowLoader, setShowLoader] = useState(false);
   let [UserNameError, setUserNameError] = useState(false);
   let [PasswordError, setPasswordError] = useState(false);
-  let [isSumbitDisabled, setisSumbitDisabled] = useState(false); 
+  let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
 
   //All input validation check and handling function
   const inputHandlingFunction = (event) => {
     let inputId = event.currentTarget.id;
     let inputValue = event.target.value;
     if (inputId === "UserName") {
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      setisValidEmail(emailPattern.test(inputValue));
       setUserName(inputValue);
       setUserNameError(false);
-    }    
+    }
     else {
       setPassword(inputValue);
       setPasswordError(false);
     }
     setisSumbitDisabled(false);
-}
+  }
 
   //Submit API function 
   const router = useRouter();
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    setShowLoader(true);
     let defaultValues = {
       UserName: UserName,
       Password: Password,
     };
 
-    if(defaultValues.UserName === ""){
+    if (defaultValues.UserName === "") {
       setUserNameError(true);
       isSumbitDisabled = true;
     }
-    if(defaultValues.Password === ""){
+    if (defaultValues.Password === "") {
       setPasswordError(true);
       isSumbitDisabled = true;
     }
+
+    let formData = new FormData();
+    formData.append('email', defaultValues.UserName);
+    formData.append('password', defaultValues.Password);
+
     //Api setup
     if (isSumbitDisabled !== true) {
-      console.log("API allowed");      
-      sessionStorage.setItem('Login', "1");
-      router.push(`/`);
+      axios.post("https://minelife-api.azurewebsites.net/user_login", formData)
+        .then(response => {
+          let encode_auth_key = btoa(response.data.auth_key);
+          let encode_login = btoa(response.data.is_authenticated);
+          sessionStorage.setItem('auth_key', encode_auth_key);
+          sessionStorage.setItem('Login', encode_login);
+          setLoginError(false);
+          setShowLoader(false);
+          router.push(`/`);
+        })
+        .catch(error => {
+          setLoginError(true);
+          setShowLoader(false);
+          console.error('Error:', error);
+        });
     }
     else {
-      console.log("API not allowed");
-      sessionStorage.setItem('Login', "0");
       setisSumbitDisabled(true);
+      setShowLoader(false);
     }
   }
-  
+
   return (
     <>
       <Header />
@@ -78,6 +105,18 @@ export default function Login(props) {
           </div>
           <div className="login-forms">
             <form action="#" method="POST">
+            <>
+                {LoginError && (
+                  <Stack className="pb-5" sx={{ width: '100%' }} spacing={2}>
+                    <Alert severity="error">IDまたはパスワードが違います</Alert>
+                  </Stack>
+                )}
+              </>
+              <>
+                {ShowLoader && (
+                  <BackdropLoader ShowLoader={ShowLoader}/>
+                )}
+              </>
               <div className="username-details mb-7">
                 <div className="label w-full inline-block">
                   <label htmlFor="usernameInput" className="form-label">
@@ -88,13 +127,14 @@ export default function Login(props) {
                   <input
                     type="text"
                     id="UserName"
-                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                    
+                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                     onChange={inputHandlingFunction}
                     value={UserName}
                   />
                   {UserNameError && (
-                      <p className="text-red-500" role="alert">この項目は必須です</p>
-                  )}            
+                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                  )}
+                  {isValidEmail ? null : <p className="text-red-500 mt-2" role="alert">形式が違います</p>}
                 </div>
               </div>
 
@@ -108,20 +148,20 @@ export default function Login(props) {
                   <input
                     type="password"
                     id="Password"
-                    className="form-control w-full bg-custom-gray rounded focus:outline-none h-12 pl-3"                    
+                    className="form-control w-full bg-custom-gray rounded focus:outline-none h-12 pl-3"
                     onChange={inputHandlingFunction}
                     value={Password}
                   />
                   {PasswordError && (
-                      <p className="text-red-500" role="alert">この項目は必須です</p>
-                  )}                    
+                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                  )}
                 </div>
               </div>
 
               <div className="login-btn pt-10 text-center">
-                <button      
-                onClick={onSubmit}      
-                type="button"      
+                <button
+                  onClick={onSubmit}
+                  type="button"
                   className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
                 >
                   <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">

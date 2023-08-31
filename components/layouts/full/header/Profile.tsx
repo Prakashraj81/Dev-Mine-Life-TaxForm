@@ -25,10 +25,11 @@ const Profile = () => {
     setAnchorEl2(null);
   };
 
-  const router = useRouter();
-  const FunctionLogOut = () => {
-      sessionStorage.setItem('Login', "0");
-      router.push(`/`);
+  const router = useRouter();  
+  const FunctionLogOut = () => {   
+    let Logoutboolean = btoa(false);     
+    sessionStorage.setItem('Login', Logoutboolean);
+    router.push(`/`);
   }
 
   return (

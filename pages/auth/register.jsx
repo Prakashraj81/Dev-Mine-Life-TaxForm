@@ -1,53 +1,189 @@
 "use client";
-//import type { ReactElement } from 'react';
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useState, Fragment } from "react";
-import { useForm } from "react-hook-form";
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
+import BackdropLoader from "../../components/loader/backdrop-loader";
+import { notifySuccess } from "../../components/toast/notify-success";
+import { notifyError } from "../../components/toast/notify-error";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// export const notifySuccess = (message) =>
+//   toast(<p style={{ fontSize: 16 }}>{message}</p>, {
+//     position: "top-right",
+//     autoClose: 5000,
+//     hideProgressBar: false,
+//     newestOnTop: false,
+//     closeOnClick: true,
+//     rtl: false,
+//     pauseOnFocusLoss: true,
+//     draggable: true,
+//     pauseOnHover: true,
+//     type: "success"
+//   });
 
 export default function Register(props) {
-  const [Name, setName] = useState("");
-  const [PhoneNo, setPhoneNo] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Password, setPassword] = useState("");
-  const [ConfirmPassword, setConfirmPassword] = useState("");
+  let [Name, setName] = useState("");
+  let [PhoneNo, setPhoneNo] = useState("");
+  let [Email, setEmail] = useState("");
+  let [Password, setPassword] = useState("");
+  let [ConfirmPassword, setConfirmPassword] = useState("");
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm({
-    defaultValues: {
-      Name: "",
-      PhoneNo: "",
-      Email: "",
-      Password: "",
-      ConfirmPassword: "",
+  let [isValidEmail, setisValidEmail] = useState(true);
+  let [RegisterError, setRegisterError] = useState(false);
+  let [ShowLoader, setShowLoader] = useState(false);
+  let [NameError, setNameError] = useState(false);
+  let [PhoneNoError, setPhoneNoError] = useState(false);
+  let [EmailError, setEmailError] = useState(false);
+  let [PasswordError, setPasswordError] = useState(false);
+  let [ConfirmPasswordError, setConfirmPasswordError] = useState(false);
+  let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+  let [SuccessToast, setSuccessToast] = useState(false);
+  let [ErrorToast, setErrorToast] = useState(false); 
+
+  //All input validation check and handling function
+  const inputHandlingFunction = (event) => {
+    let inputId = event.currentTarget.id;
+    let inputValue = event.target.value;
+    if (inputId === "Name") {
+      setName(inputValue);
+      setNameError(false);
     }
-  });
-
-  const onSubmit = async (defaultValues) => {
-    var value = JSON.stringify(defaultValues);
-    console.log(value);
-    if (value.Name != "") {
-      var Apiurl = "/";
-      const urlresponse = await fetch(Apiurl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(defaultValues),
-        mode: "no-cors",
-      });
+    else if (inputId === "PhoneNo") {
+      setPhoneNo(inputValue);
+      setPhoneNoError(false);
+    }
+    else if (inputId === "Email") {
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      setisValidEmail(emailPattern.test(inputValue));
+      setEmail(inputValue);
+      setEmailError(false);
+    }
+    else if (inputId === "Password") {
+      setPassword(inputValue);
+      setPasswordError(false);
     }
     else {
-
+      setConfirmPassword(inputValue);
+      setConfirmPasswordError(false);
     }
-    //res.status(200).end()
-  };
+    setisSumbitDisabled(false);
+  }
+
+  //Submit API function 
+  const router = useRouter();
+  const onSubmit = async () => {
+    setShowLoader(true);
+    if (Name === "") {
+      setNameError(true);
+      isSumbitDisabled = true;
+    }
+    if (PhoneNo === "") {
+      setPhoneNoError(true);
+      isSumbitDisabled = true;
+    }
+    if (Email === "") {
+      setEmailError(true);
+      isSumbitDisabled = true;
+    }
+    if (Password === "") {
+      setPasswordError(true);
+      isSumbitDisabled = true;
+    }
+    if (Password !== ConfirmPassword) {
+      setRegisterError(true);
+      isSumbitDisabled = true;
+    }
+
+    let formData = new FormData();
+    formData.append('name', Name);
+    formData.append('phone', PhoneNo);
+    formData.append('email', Email);
+    formData.append('password', Password);
+
+    const params = {
+      email: Email
+    };
+
+    //User email check Api
+    if (isSumbitDisabled !== true) {   
+      axios.get("https://minelife-api.azurewebsites.net/check_user_email", { params })
+        .then(response => {
+          if(response.data.message === "User Not Exist"){
+            register_user(formData);
+          }    
+          else{
+            notifyError("User Already Exist");   
+            setRegisterError(true);
+            setRegisterError(true);
+            setShowLoader(false);
+          }      
+        })
+        .catch(error => {
+          notifyError("User not created.");          
+          setRegisterError(true);
+          setShowLoader(false);
+          console.error('Error:', error);
+        });
+    }
+    else {
+      notifyError("User not created.");  
+      setisSumbitDisabled(true);
+      setShowLoader(false);
+    }
+  };  
+
+  //User register Api
+  const register_user = async(formData) => {    
+    if(formData !== null){
+      axios.post("https://minelife-api.azurewebsites.net/register_user", formData)
+      .then(response => {
+        notifySuccess("User create successful.");
+        console.log(response.data.message);
+        setRegisterError(false);
+        setShowLoader(false);
+        router.push(`/auth/login`);
+      })
+      .catch(error => {
+        notifyError("User not created.");          
+        setRegisterError(true);
+        setShowLoader(false);
+        console.error('Error:', error);
+      });
+    }    
+    else{
+      notifyError("formData is empty.");  
+      setisSumbitDisabled(true);
+      setShowLoader(false);
+    }
+  }
+
   return (
     <>
       <Header />
       <div className="register-form-wrapper py-14">
         <div className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
           <div className="register-forms">
-            <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+            <form action="#" method="POST">
+              <>
+                {RegisterError && (
+                  <Stack className="pb-5" sx={{ width: '100%' }} spacing={2}>
+                    <Alert severity="error">IDまたはパスワードが違います</Alert>
+                  </Stack>
+                )}
+              </>
+              <>
+                {ShowLoader && (
+                  <BackdropLoader ShowLoader={ShowLoader}/>
+                )}
+              </>
               <div className="username-details mb-7">
                 <div className="label w-full inline-block">
                   <label htmlFor="Name" className="form-label">
@@ -59,10 +195,12 @@ export default function Register(props) {
                     type="text"
                     id="Name"
                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                    {...register("Name", { required: "Name is required" })}
-                    aria-invalid={errors.Name ? "true" : "false"}
+                    onChange={inputHandlingFunction}
+                    value={Name}
                   />
-                  {errors.Name && <p className="text-red-500" role="alert">{errors.Name?.message}</p>}
+                  {NameError && (
+                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                  )}
                 </div>
               </div>
 
@@ -77,10 +215,12 @@ export default function Register(props) {
                     type="text"
                     id="PhoneNo"
                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                    {...register("PhoneNo", { required: "PhoneNo is required" })}
-                    aria-invalid={errors.PhoneNo ? "true" : "false"}
+                    onChange={inputHandlingFunction}
+                    value={PhoneNo}
                   />
-                  {errors.PhoneNo && <p className="text-red-500" role="alert">{errors.PhoneNo?.message}</p>}
+                  {PhoneNoError && (
+                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                  )}
                 </div>
                 <div className="mt-1">
                   <p className="text-xs font-medium text-black">
@@ -100,10 +240,13 @@ export default function Register(props) {
                     type="text"
                     id="Email"
                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                    {...register("Email", { required: "Email Address is required" })}
-                    aria-invalid={errors.Email ? "true" : "false"}
+                    onChange={inputHandlingFunction}
+                    value={Email}
                   />
-                  {errors.Email && <p className="text-red-500" role="alert">{errors.Email?.message}</p>}
+                  {EmailError && (
+                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                  )}
+                  {isValidEmail ? null : <p className="text-red-500 mt-2" role="alert">形式が違います</p>}
                 </div>
               </div>
 
@@ -118,10 +261,12 @@ export default function Register(props) {
                     type="password"
                     id="Password"
                     className="form-control w-full bg-custom-gray rounded focus:outline-none h-12 pl-3"
-                    {...register("Password", { required: "Password is required" })}
-                    aria-invalid={errors.Password ? "true" : "false"}
+                    onChange={inputHandlingFunction}
+                    value={Password}
                   />
-                  {errors.Password && <p className="text-red-500" role="alert">{errors.Password?.message}</p>}
+                  {PasswordError && (
+                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                  )}
                 </div>
               </div>
 
@@ -136,16 +281,19 @@ export default function Register(props) {
                     type="password"
                     id="ConfirmPassword"
                     className="form-control w-full bg-custom-gray rounded focus:outline-none h-12 pl-3"
-                    {...register("ConfirmPassword", { required: "ConfirmPassword is required" })}
-                    aria-invalid={errors.ConfirmPassword ? "true" : "false"}
+                    onChange={inputHandlingFunction}
+                    value={ConfirmPassword}
                   />
-                  {errors.ConfirmPassword && <p className="text-red-500" role="alert">{errors.ConfirmPassword?.message}</p>}
+                  {ConfirmPasswordError && (
+                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                  )}
                 </div>
               </div>
 
               <div className="login-btn pt-10 text-center">
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={onSubmit}
                   className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
                 >
                   <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">

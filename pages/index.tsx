@@ -1,4 +1,3 @@
-import type { ReactElement } from 'react';
 import React, { useState, useEffect } from "react";
 import { Grid, Box } from '@mui/material';
 import PageContainer from '../components/container/PageContainer';
@@ -12,10 +11,15 @@ import Login from './auth/login';
 export default function Index({ preview }) {
   let [Authkey, setAuthkey] = useState(0);
   let sessionValue = 0;
+  let value;
   useEffect(() => {
-    sessionValue = Number(sessionStorage.getItem('Login'));
-    if (sessionValue) {
-      window.history.replaceState({}, document.title, window.location.pathname);
+    let Loginvalue = sessionStorage.getItem('Login');
+    value = atob(Loginvalue);    
+    if(value === "true"){
+      sessionValue = 1
+    }
+    else{
+      sessionValue = 0;
     }
     setAuthkey(sessionValue);
   });
