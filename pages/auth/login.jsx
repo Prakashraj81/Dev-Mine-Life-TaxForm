@@ -7,6 +7,9 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import { InputAdornment, IconButton, Input, FormControl } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
@@ -22,6 +25,7 @@ export default function Login(props) {
   let [UserNameError, setUserNameError] = useState(false);
   let [PasswordError, setPasswordError] = useState(false);
   let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+  let [showPassword, setShowPassword] = useState(false);
 
   //All input validation check and handling function
   const inputHandlingFunction = (event) => {
@@ -86,6 +90,11 @@ export default function Login(props) {
     }
   }
 
+  //Password hide / show
+  const handleTogglePassword = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
   return (
     <>
       <Header />
@@ -105,7 +114,7 @@ export default function Login(props) {
           </div>
           <div className="login-forms">
             <form action="#" method="POST">
-            <>
+              <>
                 {LoginError && (
                   <Stack className="pb-5" sx={{ width: '100%' }} spacing={2}>
                     <Alert severity="error">IDまたはパスワードが違います</Alert>
@@ -114,12 +123,12 @@ export default function Login(props) {
               </>
               <>
                 {ShowLoader && (
-                  <BackdropLoader ShowLoader={ShowLoader}/>
+                  <BackdropLoader ShowLoader={ShowLoader} />
                 )}
               </>
               <div className="username-details mb-7">
                 <div className="label w-full inline-block">
-                  <label htmlFor="usernameInput" className="form-label">
+                  <label className="form-label">
                     メールアドレス
                   </label>
                 </div>
@@ -140,18 +149,26 @@ export default function Login(props) {
 
               <div className="password-details mb-7">
                 <div className="label w-full inline-block">
-                  <label htmlFor="passwordInput" className="form-label">
+                  <label className="form-label">
                     パスワード
                   </label>
                 </div>
                 <div className="w-full inline-block mt-2">
                   <input
-                    type="password"
-                    id="Password"
-                    className="form-control w-full bg-custom-gray rounded focus:outline-none h-12 pl-3"
+                    type={showPassword ? 'text' : 'password'}
+                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"  
+                    id="Password"  
                     onChange={inputHandlingFunction}
-                    value={Password}
+                    value={Password}                
                   />
+                  <div className="py-2 mt-2">
+                  <InputAdornment>
+                          <IconButton id="Icon" onClick={handleTogglePassword} >
+                            {showPassword ? <Visibility style={{ width: '18px', height: '18px' }} /> : <VisibilityOff style={{ width: '18px', height: '18px' }} />}                            
+                          </IconButton>
+                          <label className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</label>
+                        </InputAdornment>
+                  </div>
                   {PasswordError && (
                     <p className="text-red-500" role="alert">この項目は必須です</p>
                   )}
