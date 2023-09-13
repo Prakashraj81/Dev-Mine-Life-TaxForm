@@ -34,10 +34,10 @@ const Navbar = () => {
                                         <Link
                                             key={item.name}
                                             href={item.href}
-                                            className={
-                                                item.current ? 'bg-black' : 'navlinks hover:opacity-100',
+                                            className={`
+                                                ${item.current ? 'bg-black' : 'navlinks hover:opacity-100'}
                                                 'px-3 py-4 rounded-md text-base font-normal hover:text-black space-links'
-                                            }
+                                            `}
                                             aria-current={item.href ? 'page' : undefined}
                                         >
                                             {item.name}

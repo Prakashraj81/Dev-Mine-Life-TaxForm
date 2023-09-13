@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 const navigation = [
@@ -18,10 +18,10 @@ const Data = () => {
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={
-                                    item.current ? 'bg-gray-900 text-purple' : 'text-black hover:bg-gray-700 hover:text-purple',
-                                    'block  py-2 rounded-md text-base font-medium'
-                                }
+                                className={`
+                                ${item.current ? 'bg-gray-900 text-purple' : 'text-black hover:bg-gray-700 hover:text-purple'}
+                                block py-2 rounded-md text-base font-medium
+                            `}
                                 aria-current={item.current ? 'page' : undefined}
                             >
                                 {item.name}
@@ -29,7 +29,7 @@ const Data = () => {
                         ))}
                         <div className="mt-4"></div>
                         <button className='flex justify-center text-base w-full font-medium rounded-full bg-bgpink text-pink py-3 px-4 lg:px-8 navbutton hover:text-white'>Sign in</button>
-                        <button className='flex justify-center text-base w-full font-medium rounded-full bg-transparent border border-bgpink text-pink py-3 px-4 lg:px-8 navbutton hover:text-white hover:bg-pink'>Contact us</button>                        
+                        <button className='flex justify-center text-base w-full font-medium rounded-full bg-transparent border border-bgpink text-pink py-3 px-4 lg:px-8 navbutton hover:text-white hover:bg-pink'>Contact us</button>
                     </div>
                 </div>
             </div>
