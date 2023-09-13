@@ -126,8 +126,8 @@ if (paths.length >= 4) {
             <DropdownLink
               className={`${
                 item.id !== Id
-                  ? "w-full inline-block transition-all-all pl-0 px-3 py-7px active"
-                  : "transition ease-in-out delay-150 duration-300 deactive"
+                  ? "w-full inline-block transition-all-all pl-0 px-3 py-7px active delay-400 duration-500 ease-in-out transition-all transform "
+                  : "transition ease-in-out delay-150 duration-300 deactive delay-400 duration-500 ease-in-out transition-all transform"
               }`}
               initial={{ height: 0 }}
               animate={{ height: "60px" }}

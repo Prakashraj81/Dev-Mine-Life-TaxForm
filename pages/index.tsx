@@ -49,7 +49,3 @@ export default function Index({ preview }) {
     </>
   )
 }
-
-// Index.getLayout = function getLayout(page: ReactElement) {
-//   return <BlankLayout>{page}</BlankLayout>;
-// };

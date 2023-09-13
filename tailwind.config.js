@@ -7,6 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'custom-light-1':'#e8918830',
         'custom-light':'#e8918857',
         'custom-gray':'#ced4da40',
         'light-gray':'#dee2e6',
@@ -63,6 +64,8 @@ module.exports = {
         '65':'65%',
         '70': '70%',
         '80': '80%',
+        '85': '85%',
+        '90': '90%',
         '20': '20%', 
         '350':'350px',    
       },
