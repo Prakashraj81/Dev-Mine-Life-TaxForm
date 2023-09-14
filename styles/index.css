@@ -90,3 +90,6 @@ input {
 .py-2px {
   padding: 12px 0px !important;
 }
+.border-b-border {
+  border-bottom:1px solid #cecece;
+}
