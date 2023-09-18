@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function GiftTaxation() {
@@ -16,7 +17,7 @@ export default function GiftTaxation() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    3年以内贈与・相続時精算課税の情報を「追加する」ボタンをクリックし、ご入力ください。 わからない項目は「？」をご確認ください。
+                    3年以内贈与・相続時精算課税の情報を「<EditOutlinedIcon className="rotate-1"/>」ボタン、「<AddIcon/>追加する」ボタンをクリックし、ご入力ください。 わからない項目は「？」をご確認ください。
                     </p>
                 </div>
                 <div className="w-full inline-block text-left">

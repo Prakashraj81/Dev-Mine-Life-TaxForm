@@ -306,7 +306,7 @@ export default function Register(props) {
                   <p>
                     <span className="text-xs text-black font-medium">
                       Mine life 相続に登録することで、
-                      <Link href="../auth/rules" className="text-blue-600">
+                      <Link href="/pages/terms-of-use" className="text-blue-600">
                         利用規約
                       </Link>
                       に同意したものとみなします。

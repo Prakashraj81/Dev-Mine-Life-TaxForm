@@ -47,9 +47,7 @@ export default function SecuritiesAdd() {
     let [SecuritiesType, setSecuritiesType] = useState("");
     let [UnitDetails, setUnitDetails] = useState("");
     let [NameofSecurities, setNameofSecurities] = useState("");
-    let [PostCode, setPostCode] = useState("");
     let [FinancialInstitutionName, setFinancialInstitutionName] = useState("");
-    let [Address, setAddress] = useState("");
     let [UnitPrice, setUnitPrice] = useState(0);
     let [Quantity, setQuantity] = useState(0);
     let [AmountofMoney, setAmountofMoney] = useState(0);
@@ -63,8 +61,6 @@ export default function SecuritiesAdd() {
     let [showAmountMoney, setshowAmountMoney] = useState(false);
     let [showFinancialInstitutionName, setshowFinancialInstitutionName] = useState(false);
     let [showQuantityPrice, setshowQuantityPrice] = useState(false);
-    let [showAddress, setshowAddress] = useState(true);
-    let [showPostcode, setshowPostcode] = useState(true);
     let [showNameSecurities, setshowNameSecurities] = useState(true);
     let [Equitydividendmethod, setEquitydividendmethod] = useState(false);
     let [showUnitDetails, setshowUnitDetails] = useState(false);
@@ -77,23 +73,9 @@ export default function SecuritiesAdd() {
     let [SecuritiesTypeError, setSecuritiesTypeError] = useState(false);
     let [UnitDetailsError, setUnitDetailsError] = useState(false);
     let [NameofSecuritiesError, setNameofSecuritiesError] = useState(false);
-    let [AddressError, setAddressError] = useState(false);
     let [UnitPriceError, setUnitPriceError] = useState(false);
     let [FinancialInstitutionNameError, setFinancialInstitutionNameError] = useState(false);
-    let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
-
-    //Postal code 7 digit limit function
-    const [isValid, setIsValid] = useState(true);
-    const postalcodeDigit = (e) => {
-        let digit_value = e.target.value;
-        let isValidInput = /^\d{7}$/.test(digit_value);
-        if (digit_value.length == 8 || digit_value.length == 9 || digit_value.length == 10) {
-            digit_value = digit_value.slice(0, 7)
-            setPostCode(digit_value);
-        }
-        setPostCode(digit_value);
-        setIsValid(isValidInput);
-    }
+    let [AmountofMoneyError, setAmountofMoneyError] = useState(false);    
 
     //Securities dropdown
     let selectId = 0;
@@ -129,17 +111,13 @@ export default function SecuritiesAdd() {
 
     useEffect(() => {
         setshowNameSecurities(true);
-        setshowPostcode(true);
-        setshowAddress(true);
         setshowAmountMoney(true);
     }, []);
 
     function inputClear() {
         setUnitDetails("");
         setNameofSecurities("");
-        setPostCode("");
         setFinancialInstitutionName("");
-        setAddress("");
         setUnitPrice(0);
         setQuantity(0);
         setAmountofMoney(0);
@@ -154,8 +132,6 @@ export default function SecuritiesAdd() {
         inputClear();
         if (selectId === 0 || selectId === 4) {
             setshowNameSecurities(true);
-            setshowPostcode(true);
-            setshowAddress(true);
             setshowAmountMoney(true);
             setshowFinancialInstitutionName(false);
             setshowQuantityPrice(false);
@@ -165,8 +141,6 @@ export default function SecuritiesAdd() {
         }
         else if (selectId === 1 || selectId === 2) {
             setshowNameSecurities(true);
-            setshowPostcode(true);
-            setshowAddress(true);
             setshowAmountMoney(false);
             setshowQuantityPrice(true);
             setshowFinancialInstitutionName(false);
@@ -175,8 +149,6 @@ export default function SecuritiesAdd() {
             setshowMoneyOrderQuantity(false);
         }
         else if (selectId === 3) {
-            setshowPostcode(false);
-            setshowAddress(false);
             setshowAmountMoney(false);
             setshowQuantityPrice(true);
             setshowFinancialInstitutionName(true);
@@ -189,8 +161,6 @@ export default function SecuritiesAdd() {
             setshowNameSecurities(true);
             setshowAmountMoney(true);
             setshowFinancialInstitutionName(true);
-            setshowPostcode(false);
-            setshowAddress(false);
             setshowQuantityPrice(false);
             setshowUnitDetails(false);
             setshowReducationAmount(false);
@@ -201,8 +171,6 @@ export default function SecuritiesAdd() {
             setshowNameSecurities(true);
             setshowAmountMoney(true);
             setshowFinancialInstitutionName(true);
-            setshowPostcode(false);
-            setshowAddress(false);
             setshowQuantityPrice(false);
             setshowMoneyOrderQuantity(false);
             setshowReducationAmount(false);
@@ -214,8 +182,6 @@ export default function SecuritiesAdd() {
             setshowNameSecurities(true);
             setshowAmountMoney(true);
             setshowFinancialInstitutionName(true);
-            setshowPostcode(false);
-            setshowAddress(false);
             setshowQuantityPrice(false);
         }
         else if (selectId === 11) {
@@ -225,8 +191,6 @@ export default function SecuritiesAdd() {
             setshowNameSecurities(true);
             setshowAmountMoney(false);
             setshowFinancialInstitutionName(true);
-            setshowPostcode(false);
-            setshowAddress(false);
             setshowMoneyOrderQuantity(false);
         }
     }
@@ -355,8 +319,7 @@ export default function SecuritiesAdd() {
             setFinancialInstitutionNameError(false);
         }
         else {
-            setAddress(inputValue);
-            setAddressError(false);
+            
         }
         setisSumbitDisabled(false);
     }
@@ -443,9 +406,7 @@ export default function SecuritiesAdd() {
             SecuritiesType: SecuritiesType,
             UnitDetails: UnitDetails,
             NameofSecurities: NameofSecurities,
-            PostCode: PostCode,
             FinancialInstitutionName: FinancialInstitutionName,
-            Address: Address,
             UnitPrice: UnitPrice,
             Quantity: Quantity,
             MoneyOrder: MoneyOrder,
@@ -477,14 +438,7 @@ export default function SecuritiesAdd() {
                 setFinancialInstitutionNameError(true);
                 isSumbitDisabled = true;
             }
-        }
-
-        if (defaultValues.Address === "") {
-            if (showAddress === true) {
-                setAddressError(true);
-                isSumbitDisabled = true;
-            }
-        }
+        }        
 
         if (defaultValues.AmountofMoney !== "" || defaultValues.AmountofMoney === 0) {
             valueConvertFun(defaultValues.AmountofMoney);
@@ -535,14 +489,13 @@ export default function SecuritiesAdd() {
             <div className="w-full inline-block">
                 <form action="#" method="POST">
 
-                    <div className="w-full flex items-center justify-between mb-7">
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="label w-full inline-block">
+                    <div className="w-full flex items-center  mb-12">
+                            <div className="label w-25 inline-block">
                                 <label htmlFor="SecuritiesType" className="form-label">
                                     有価証券の種類<i className="text-red-500">*</i>
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2">
+                            <div className="w-50 inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={SecuritiesDropdownChange}>
                                     <option value='' id="0"></option>
                                     {SecuritiesList.map((option) => (
@@ -555,10 +508,11 @@ export default function SecuritiesAdd() {
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
                                 )}
                             </div>
-                        </div>
+                                      
+                    </div>
 
-                        {showUnitDetails && (
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                    {showUnitDetails && (
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="UnitDetails" className="form-label">
                                         受益証券の詳細<i className="text-red-500">*</i>
@@ -579,7 +533,6 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         )}
-                    </div>
 
                     {showNameSecurities && (
                         <div className="w-full inline-block items-center justify-between mb-7">
@@ -603,59 +556,9 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
-                    )}
+                    )}                    
 
-                    {showPostcode && (
-                        <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="PostCode" className="form-label">
-                                        郵便番号
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2 relative">
-                                    <input
-                                        type="text"
-                                        id="PostCode"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
-                                        onKeyPress={handleKeyPress}
-                                        onChange={postalcodeDigit}
-                                        value={PostCode}
-                                    />
-                                    <PostcodeIcon />
-                                </div>
-                                <div className="mt-3">
-                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
-                                </div>
-                                {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
-                            </div>
-                        </div>
-                    )}
-
-                    {showAddress && (
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="Address" className="form-label">
-                                        住所<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="Address"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        onChange={inputHandlingFunction}
-                                        value={Address}
-                                    />
-                                    {AddressError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
+                    
                     {showFinancialInstitutionName && (
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details">

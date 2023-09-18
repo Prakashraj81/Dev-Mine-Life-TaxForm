@@ -21,10 +21,13 @@
   }
 }
 
-.Sidebar-menu > a > div {
-  border: 2px solid #e891882e;
+.Sidebar-menu > a > div {  
   border-radius: 5px !important;
   transition-duration: 0.3s;
+}
+
+.Sidebar-menu > a > div.active {
+  background: #f2f2f2;
 }
 
 .Sidebar-menu > a > div:hover {
@@ -71,4 +74,44 @@
 
 .border-l-4 {
   border-left: 4px solid #e89188 !important;
+}
+
+.padding-left {  
+  padding-left: 35px !important;
+}
+
+
+
+.sidebar {
+  width: 250px;
+  height: 100%;
+  background-color: #fff;
+  color: #333;
+  position: fixed;
+  top: 0;
+  left: -250px;
+  transition: left 0.3s ease-in-out;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.menu-button {
+  background-color: #fff;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  padding: 10px;
+  border-bottom: 1px solid #555;
 }

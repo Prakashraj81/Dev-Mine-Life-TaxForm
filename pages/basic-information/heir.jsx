@@ -13,6 +13,9 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
 export default function Heir() {
+    const router = useRouter();
+    const propName = router.query.heirNo;
+
     let ProfessionList = [
         { id: 1, value: '公務員', label: '公務員' },
         { id: 2, value: '会社役員', label: '会社役員' },
@@ -61,7 +64,6 @@ export default function Heir() {
     let [DateofBirthError, setDateofBirthError] = useState(false);
     let [AddressError, setAddressError] = useState(false);
     let [TelephoneNumberError, setTelephoneNumberError] = useState(false);
-    let [ProfessionError, setProfessionError] = useState(false);
     let [RelationshipWithDecedentError, setRelationshipWithDecedentError] = useState(false);
 
     let [DisabledRadioValue, setDisabledRadioValue] = useState('none');
@@ -69,17 +71,17 @@ export default function Heir() {
 
     //Disabled deduction radio button
     const handleDisabledRadio = (event) => {
-        setDisabledRadioValue(event.target.value);        
+        setDisabledRadioValue(event.target.value);
     };
 
     //Legal heir radio button
     const handleLegalHeirRadio = (event) => {
         let radioValue = event.target.value;
-        setLegalHeirRadioValue(radioValue);        
-        if(radioValue === "Yes"){
+        setLegalHeirRadioValue(radioValue);
+        if (radioValue === "Yes") {
             setShowDisabledDeduction(true);
         }
-        else{
+        else {
             setShowDisabledDeduction(false);
         }
     };
@@ -88,8 +90,8 @@ export default function Heir() {
     const handleProfessionType = (event) => {
         let selectedValue = event.target.value;
         let selectedOptions = ProfessionList.find(option => option.value === selectedValue);
-        let selectedId = Number(selectedOptions.id);        
-        setProfession(selectedValue); 
+        let selectedId = Number(selectedOptions.id);
+        setProfession(selectedValue);
         setisSumbitDisabled(false);
         setProfessionError(false);
     };
@@ -103,7 +105,7 @@ export default function Heir() {
         setRelationshipWithDecedentError(false);
         if (selectedId === "Disabled_deduction") {
             setShowDisabledDeduction(true);
-            setShowLegalHeir(false);            
+            setShowLegalHeir(false);
         }
         else if (selectedId === "Legal_heir") {
             setShowDisabledDeduction(false);
@@ -165,8 +167,7 @@ export default function Heir() {
         setisSumbitDisabled(false);
     }
 
-    //Submit API function 
-    const router = useRouter();
+    //Submit API function     
     const onSubmit = () => {
         let defaultValues = {
             Name: Name,
@@ -180,7 +181,7 @@ export default function Heir() {
             InheritanceDivisionCompletionDate: InheritanceDivisionCompletionDate,
             DateofDeath: DateofDeath,
             DisabledRadioValue: DisabledRadioValue,
-            LegalHeirRadioValue:LegalHeirRadioValue,
+            LegalHeirRadioValue: LegalHeirRadioValue,
         }
 
         //input Validation
@@ -203,11 +204,7 @@ export default function Heir() {
         if (defaultValues.TelephoneNumber === "") {
             setTelephoneNumberError(true);
             isSumbitDisabled = true;
-        }
-        if (defaultValues.Profession === "") {
-            setProfessionError(true);
-            isSumbitDisabled = true;
-        }
+        }        
         if (defaultValues.RelationshipWithDecedent === "") {
             setRelationshipWithDecedentError(true);
             isSumbitDisabled = true;
@@ -231,7 +228,7 @@ export default function Heir() {
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
                         <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                            被相続人
+                            相続人 {propName}
                         </p>
                     </div>
                 </div>
@@ -389,7 +386,7 @@ export default function Heir() {
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
                                         <label className="form-label">
-                                            職業<i className="text-red-500">*</i>
+                                            職業
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
@@ -400,10 +397,7 @@ export default function Heir() {
                                                     {option.label}
                                                 </option>
                                             ))}
-                                        </select>
-                                        {ProfessionError && (
-                                            <p className="text-red-500" role="alert">この項目は必須です</p>
-                                        )}
+                                        </select>                                        
                                     </div>
                                 </div>
                             </div>
@@ -456,6 +450,11 @@ export default function Heir() {
                                             <option id="" value="甥">甥</option>
                                             <option id="" value="姪">姪</option>
                                             <option id="Legal_heir" value="孫">孫</option>
+                                            <option id="" value="配偶者">配偶者</option>
+                                            <option id="" value="孫">孫</option>
+                                            <option id="" value="兄弟姉妹">兄弟姉妹</option>
+                                            <option id="" value="父母">父母</option>
+                                            <option id="" value="おい・めい">おい・めい</option>
                                             <option id="" value="その他">その他</option>
                                         </optgroup>
                                     </select>
@@ -502,30 +501,30 @@ export default function Heir() {
                                     </div>
                                 </>
                             )}
-                            </div>
-                            {ShowLegalHeir && (
-                                <FormControl>
-                                    <label className="form-label" id="demo-row-radio-buttons-group-label">法定相続人ですか？</label>
-                                    <RadioGroup
-                                        row
-                                        aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="row-radio-buttons-group"
-                                        value={LegalHeirRadioValue}
-                                    >
-                                        <FormControlLabel value="Yes" control={<Radio />} onChange={handleLegalHeirRadio} label="はい" sx={{
-                                            '& .MuiSvgIcon-root': {
-                                                fontSize: 16,
-                                            },
-                                        }} />
-                                        <FormControlLabel value="No" control={<Radio />} onChange={handleLegalHeirRadio} label="いいえ" sx={{
-                                            '& .MuiSvgIcon-root': {
-                                                fontSize: 16,
-                                            },
-                                        }} />
-                                    </RadioGroup>
-                                </FormControl>
-                            )}
-                        
+                        </div>
+                        {ShowLegalHeir && (
+                            <FormControl>
+                                <label className="form-label" id="demo-row-radio-buttons-group-label">法定相続人ですか？</label>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    value={LegalHeirRadioValue}
+                                >
+                                    <FormControlLabel value="Yes" control={<Radio />} onChange={handleLegalHeirRadio} label="はい" sx={{
+                                        '& .MuiSvgIcon-root': {
+                                            fontSize: 16,
+                                        },
+                                    }} />
+                                    <FormControlLabel value="No" control={<Radio />} onChange={handleLegalHeirRadio} label="いいえ" sx={{
+                                        '& .MuiSvgIcon-root': {
+                                            fontSize: 16,
+                                        },
+                                    }} />
+                                </RadioGroup>
+                            </FormControl>
+                        )}
+
 
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center mt-10">
                             <BackButton />

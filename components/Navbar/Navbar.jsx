@@ -46,7 +46,9 @@ const Navbar = () => {
                                 </div>
                                 <div className='gap-6 hidden text-center lg:inline-block'>      
                                     <Link href="/auth/login" className="block text-blue-500">【Mine life相続】ログイン・無料登録</Link>                                              
-                                    <button className='inline-block text-center mt-3 text-sm font-medium bg-primary-color border border-primary-color text-white py-2 px-3 navbutton rounded-full hover:bg-white hover:text-primary-color'>ご相談・お問い合わせ</button>                                    
+                                    <Link href="/pages/contact-us">
+                                        <button className='inline-block text-center mt-3 text-sm font-medium bg-primary-color border border-primary-color text-white py-2 px-3 navbutton rounded-full hover:bg-white hover:text-primary-color'>ご相談・お問い合わせ</button>                                    
+                                    </Link>
                                 </div>
                             </div>  
                         </div>                                         

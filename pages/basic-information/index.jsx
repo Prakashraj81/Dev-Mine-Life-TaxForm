@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import FullLayout from '../../components/layouts/full/FullLayout';
@@ -35,10 +36,16 @@ export default function BasicInformation() {
 
     const router = useRouter();
     const handleEdit = (Edit_Id) => {
-        let Id = encodeURIComponent(Edit_Id);
-        console.log("Edit_Id: " + Id + "-" + Edit_Id);
+        let Id = encodeURIComponent(Edit_Id);        
         router.push(`/basic-information/heir-edit?Id=${Id}`);
     };
+
+    const handleHeirPage = () => {
+        router.push({
+            pathname: '/basic-information/heir',
+            query: { heirNo: '2' }, 
+        });
+    }
 
     return (
         <>
@@ -52,7 +59,7 @@ export default function BasicInformation() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        被相続人、相続を受ける方の情報を「」ボタン、「追加する」ボタンをクリックし、ご入力ください。入力が完了しましたら「入力終了（次へ）」をクリックし、財産情報の入力へ進んでくださ い。わからない項目は「？」をご確認ください。
+                        被相続人、相続を受ける方の情報を「<EditOutlinedIcon className="rotate-1"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。入力が完了しましたら「入力終了（次へ）」をクリックし、財産情報の入力へ進んでくださ い。わからない項目は「？」をご確認ください。
                     </p>
                 </div>
                 <div className="input-details">
@@ -128,12 +135,10 @@ export default function BasicInformation() {
 
                     <div className="w-full inline-block text-right py-10">
                         <div className="add-btn">
-                            <Link href="/basic-information/heir">
-                                <button id="decedent_edit" className="text-sm text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                        <button onClick={handleHeirPage} id="decedent_edit" className="text-sm text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
                                     <AddIcon className="text-white" />
                                     追加する
                                 </button>
-                            </Link>
                         </div>
                     </div>
 
@@ -142,6 +147,19 @@ export default function BasicInformation() {
                             無料de相続は法定相続人が１人以上いる相続人6人までの申告書作成ができます。法定相続情報人がいない場合や、相続人7人以上の場合は税理士法人マインライフまでお問い合わせください。
                         </p>
                     </div>
+                    <div className="end-btn text-center py-10">
+                        <Link href="/summary-pages/summary-property">
+                        <button
+                                type="button"
+                                
+                                className="cursor-pointer bg-primary-color rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                            >
+                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                入力終了（次へ）
+                                </span>
+                            </button>
+                        </Link>
+                    </div>      
                 </div>
             </div>
         </>

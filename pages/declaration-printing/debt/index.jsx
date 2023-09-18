@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import FullLayout from '../../../components/layouts/full/FullLayout';
@@ -33,7 +34,7 @@ export default function Debt() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        家庭用財産の情報を「追加する」ボタンをクリックし、ご入力ください。わからない項目は「？」をご確認ください。
+                    債務の情報を「<EditOutlinedIcon className="rotate-1"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。 わからない項目は「？」をご確認ください。
                     </p>
                 </div>
                 <div className="cash-list py-3">

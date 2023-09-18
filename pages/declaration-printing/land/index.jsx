@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function Land() {
@@ -16,7 +17,7 @@ export default function Land() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    家屋の情報を「追加する」ボタンをクリックし、ご入力ください。「」ボタンを押すと内容を複製して入力できます。わからない項目は「？」をご確認ください。
+                    土地の情報を「<EditOutlinedIcon className="rotate-1"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。 わからない項目は「？」をご確認ください。
                     </p>
                 </div>
                 <div className="w-full inline-block text-left">

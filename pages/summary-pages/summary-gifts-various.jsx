@@ -1,8 +1,7 @@
-"use client";
 import Link from "next/link";
 import { useState, Fragment, Controller } from "react";
-import { useForm } from "react-hook-form";
 import BackButton from "../../components/back-btn";
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FullLayout from '../../components/layouts/full/FullLayout';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { list } from "postcss";
@@ -58,7 +57,7 @@ export default function SummaryGiftVarious() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    入力したい項目の「」ボタンをクリックして各贈与・控除情報を入力してください。 入力が完了しましたら「入力終了（次へ）」をクリックして申告書印刷へ進んで下さい。 ご不明な点は「？」をご確認ください。
+                    入力したい項目の「<EditOutlinedIcon className="rotate-1"/>」ボタンをクリックして各贈与・控除情報を入力してください。 入力が完了しましたら「入力終了（次へ）」をクリックして申告書印刷へ進んで下さい。 ご不明な点は「？」をご確認ください。
                     </p>
                 </div>
                 <div className="summary-tables-wrapper max-w-screen-md mx-auto">
@@ -107,6 +106,19 @@ export default function SummaryGiftVarious() {
                 </div>
                 <div className="w-full flex justify-evenly items-center py-10">
                     <BackButton />
+                    <div className="end-btn text-center">
+                        <Link href="/property/declaration-printing">
+                        <button
+                                type="button"
+                                
+                                className="cursor-pointer bg-primary-color rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                            >
+                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                入力終了（次へ）
+                                </span>
+                            </button>
+                        </Link>
+                    </div>           
                 </div>
             </div>
         </>

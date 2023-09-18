@@ -63,7 +63,8 @@ export default function DeclarationPrinting() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    入力したい項目の「」ボタンをクリックして各贈与・控除情報を入力してください。 入力が完了しましたら「入力終了（次へ）」をクリックして申告書印刷へ進んで下さい。 ご不明な点は「？」をご確認ください。
+                    入力おつかれさまでした。ご入力いただいた情報を基に作成された相続税申告書のダウンロードができます。<br/>
+                    マイナンバーおよび提出日を手書きしてください。
                     </p>
                 </div>
                 <div className="summary-tables-wrapper max-w-screen-md mx-auto">

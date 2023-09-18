@@ -363,7 +363,7 @@ export default function Decendent() {
                                 </div>
                             </div>
 
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
+                            <div className="w-full hidden lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
                                         <label htmlFor="InheritanceDivisionCompletionDate" className="form-label">

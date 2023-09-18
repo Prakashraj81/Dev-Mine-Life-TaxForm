@@ -6,6 +6,27 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
+//sub-menu icons list
+import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
+import EscalatorWarningOutlinedIcon from '@mui/icons-material/EscalatorWarningOutlined';
+import CreditScoreOutlinedIcon from '@mui/icons-material/CreditScoreOutlined';
+//
+import SummarizeOutlinedIcon from '@mui/icons-material/SummarizeOutlined';
+import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
+import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
+import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
+import LandscapeOutlinedIcon from '@mui/icons-material/LandscapeOutlined';
+import HouseOutlinedIcon from '@mui/icons-material/HouseOutlined';
+import OtherHousesOutlinedIcon from '@mui/icons-material/OtherHousesOutlined';
+import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
+import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
+//
+import ScaleOutlinedIcon from '@mui/icons-material/ScaleOutlined';
+import CardGiftcardOutlinedIcon from '@mui/icons-material/CardGiftcardOutlined';
+import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
+import EjectOutlinedIcon from '@mui/icons-material/EjectOutlined';
+import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
+
 const Menuitems = [
   //First
   {
@@ -18,17 +39,17 @@ const Menuitems = [
     child: [
       {        
         title: "基礎情報の入力",
-        icon: "disc",
+        icon: <CreditScoreOutlinedIcon className="text-custom-black"/>,
         href: "/basic-information",    
       },
       {
         title: "被相続人",
-        icon: "disc",
+        icon: <AddAPhotoOutlinedIcon/>,
         href: "/basic-information/decendent",
       },
       {
         title: "相続人",
-        icon: "disc",
+        icon: <EscalatorWarningOutlinedIcon/>,
         href: "/basic-information/heir",
       },      
     ],
@@ -46,64 +67,64 @@ const Menuitems = [
     child: [
       {        
         title: "まとめ",
-        icon: "disc",
+        icon: <SummarizeOutlinedIcon/>,
         href: "/summary-pages/summary-property", 
         translateHeading: "summary-property",
         text: "summary-property",   
       },
       {        
         title: "現金預金(外貨含む)",
-        icon: "disc",
+        icon: <PaymentsOutlinedIcon/>,
         href: "/declaration-printing/cash-savings", 
         translateHeading: "Cash deposit (including foreign currency)",
         text: "Cash/savings",   
       },
       {
         title: "有価証券",
-        icon: "disc",
+        icon: <SecurityOutlinedIcon/>,
         href: "/declaration-printing/securities",
         translateHeading: "Securities",
         text: "Securities - stocks, bonds, corporate bonds, etc.",
       },      
       {
         title: "建物",
-        icon: "disc",
+        icon: <ApartmentOutlinedIcon/>,
         href: "/declaration-printing/building",
         translateHeading: "building",
         text: "House - home, rental, etc.",
       },     
       {
         title: "土地",
-        icon: "disc",
+        icon: <LandscapeOutlinedIcon/>,
         href: "/declaration-printing/land",
         translateHeading: "land",
         text: "land",
       },     
       {
         title: "家庭用財産",
-        icon: "disc",
+        icon: <HouseOutlinedIcon/>,
         href: "/declaration-printing/household-property",
         translateHeading: "household property",
-        text: "Other Assets - Automobile balance under management Compensatory assets, etc.",
+        text: "House hold property",
       },
       //doubt
       {
         title: "その他財産",
-        icon: "disc",
+        icon: <OtherHousesOutlinedIcon/>,
         href: "/declaration-printing/other-property",
         translateHeading: "Other assets",
         text: "Other Assets - Automobile balance under management Compensatory assets, etc.",
       },
       {
         title: "債務",
-        icon: "disc",
+        icon: <DevicesOutlinedIcon/>,
         href: "/declaration-printing/debt",        
         translateHeading: "debt",
         text: "debt",
       },  
       {
         title: "葬式費用",
-        icon: "disc",
+        icon: <PaymentOutlinedIcon/>,
         href: "/declaration-printing/funeral-expenses",
         translateHeading: "funeral expenses",
         text: "funeral expenses",
@@ -121,55 +142,41 @@ const Menuitems = [
     child: [
       {        
         title: "まとめ",
-        icon: "disc",
+        icon: <SummarizeOutlinedIcon/>,
         href: "/summary-pages/summary-gifts-various", 
         translateHeading: "summary-gifts-various",
         text: "summary-gifts-various",   
       },
       {
         title: "小規模宅地等の特例",
-        icon: "disc",
+        icon: <ScaleOutlinedIcon/>,
         translateHeading: "Exceptions for small-scale residential land, etc.",
         href: "/gift-various/exceptions-residential-land",
       },
       {        
         title: "生前贈与",
-        icon: "disc",
+        icon: <CardGiftcardOutlinedIcon/>,
         translateHeading: "lifetime gift",
         href: "/gift-various/gifts-taxation",    
       },      
       {
         title: "未成年控除",
-        icon: "disc",
+        icon: <AssignmentIndOutlinedIcon/>,
         translateHeading: "deduction for minors",
         href: "/gift-various/deduction-minors",
       },
       {
         title: "障害者控除",
-        icon: "disc",
+        icon: <EjectOutlinedIcon/>,
         translateHeading: "Disabled deduction",
         href: "/gift-various/allocation-amount",
       },      
       {        
         title: "相次相続控除",
-        icon: "disc",
+        icon: <AppRegistrationOutlinedIcon/>,
         translateHeading: "successive inheritance deduction",
         href: "/gift-various/successive-inheritance",    
-      },
-      // //doubt
-      // {
-      //   title: "相次相続控除-1",
-      //   icon: "disc",
-      //   translateHeading: "funeral",
-      //   href: "/gift-various/allocation-disability",
-      // },
-      // //doubt
-      // {        
-      //   title: "公益法人等への寄附・遺贈",
-      //   icon: "disc",
-      //   translateHeading: "Donations and bequests to public interest corporations, etc.",
-      //   href: "/404",    
-      // },
+      },  
     ],
   },
   {

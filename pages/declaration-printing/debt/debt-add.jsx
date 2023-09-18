@@ -22,7 +22,6 @@ export default function DebtAdd() {
     let [DebtType, setDebtType] = useState("");
     let [NameofDebt, setNameofDebt] = useState("");
     let [CauseofUnpaidBalance, setCauseofUnpaidBalance] = useState("");
-    let [CreditorName, setCreditorName] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
     let [ObligationDate, setObligationDate] = useState("");
@@ -34,7 +33,6 @@ export default function DebtAdd() {
 
     let [ShowNameDebt, setShowNameDebt] = useState(false);
     let [ShowCauseofUnpaidBalance, setShowCauseofUnpaidBalance] = useState(false);
-    let [ShowCreditorName, setShowCreditorName] = useState(false);
     let [ShowPostCode, setShowPostCode] = useState(false);
     let [ShowAddress, setShowAddress] = useState(false);
     let [ShowObligationDateDebtPaymentDeadline, setShowObligationDateDebtPaymentDeadline] = useState(false);
@@ -42,10 +40,7 @@ export default function DebtAdd() {
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
-    let [DebtTypeError, setDebtTypeError] = useState(false);
-    let [NameofDebtError, setNameofDebtError] = useState(false);
     let [CauseofUnpaidBalanceError, setCauseofUnpaidBalanceError] = useState(false);
-    let [CreditorNameError, setCreditorNameError] = useState(false);
     let [AddressError, setAddressError] = useState(false);
     let [ShowObligationDateDebtPaymentDeadlineError, setShowObligationDateDebtPaymentDeadlineError] = useState(false);
     let [ObligationDateError, setObligationDateError] = useState(false);
@@ -79,8 +74,7 @@ export default function DebtAdd() {
         setShowCauseofUnpaidBalance(false);
         setShowNameDebt(true);
         setShowPostCode(true);
-        setShowAddress(true);
-        setShowCreditorName(true);
+        setShowAddress(true);        
         setShowObligationDateDebtPaymentDeadline(true);
     }, []);
 
@@ -94,8 +88,7 @@ export default function DebtAdd() {
             setShowPostCode(false);
             setShowAddress(false);
             setShowCauseofUnpaidBalance(false);
-            setShowNameDebt(true);
-            setShowCreditorName(true);
+            setShowNameDebt(true);            
             setShowObligationDateDebtPaymentDeadline(true);
         }
         else if (selectedId === 2) {
@@ -103,7 +96,6 @@ export default function DebtAdd() {
             setShowPostCode(true);
             setShowAddress(true);
             setShowNameDebt(true);
-            setShowCreditorName(true);
             setShowObligationDateDebtPaymentDeadline(true);
         }
         else if (selectedId === 3) {
@@ -111,7 +103,6 @@ export default function DebtAdd() {
             setShowPostCode(true);
             setShowAddress(true);
             setShowCauseofUnpaidBalance(true);
-            setShowCreditorName(true);
             setShowObligationDateDebtPaymentDeadline(true);
         }
         else if (selectedId === 4) {
@@ -119,7 +110,6 @@ export default function DebtAdd() {
             setShowNameDebt(false);
             setShowPostCode(true);
             setShowAddress(true);
-            setShowCreditorName(true);
             setShowObligationDateDebtPaymentDeadline(true);
         }
         else if (selectedId === 5) {
@@ -127,7 +117,6 @@ export default function DebtAdd() {
             setShowNameDebt(true);
             setShowPostCode(true);
             setShowAddress(true);
-            setShowCreditorName(true);
             setShowObligationDateDebtPaymentDeadline(true);
         }
         else {
@@ -135,7 +124,6 @@ export default function DebtAdd() {
             setShowNameDebt(true);
             setShowPostCode(true);
             setShowAddress(true);
-            setShowCreditorName(true);
             setShowObligationDateDebtPaymentDeadline(true);
         }
     };
@@ -190,13 +178,8 @@ export default function DebtAdd() {
         let inputId = event.currentTarget.id;
         let inputValue = event.target.value;
         if (inputId === "NameofDebt") {
-            setNameofDebt(inputValue);
-            setNameofDebtError(false);
-        }
-        else if(inputId === "CreditorName"){
-            setCreditorName(inputValue);
-            setCreditorNameError(false);
-        }
+            setNameofDebt(inputValue);            
+        }   
         else if (inputId === "CauseofUnpaidBalance") {
             setCauseofUnpaidBalance(inputValue);
             setCauseofUnpaidBalanceError(false);
@@ -255,7 +238,6 @@ export default function DebtAdd() {
             DebtType: DebtType,
             NameofDebt: NameofDebt,
             CauseofUnpaidBalance: CauseofUnpaidBalance,
-            CreditorName: CreditorName,
             PostCode: PostCode,
             Address: Address,
             ObligationDate: ObligationDate,
@@ -266,29 +248,13 @@ export default function DebtAdd() {
             boxValues:boxValues,
         };
 
-        //input Validation
-        if (defaultValues.DebtType === "") {
-            setDebtTypeError(true);
-            isSumbitDisabled = true;
-        }
-        if (defaultValues.NameofDebt === "") {
-            if (ShowNameDebt === true) {
-                setNameofDebtError(true);
-                isSumbitDisabled = true;
-            }
-        }
+        //input Validation             
         if (defaultValues.CauseofUnpaidBalance === "") {
             if (ShowCauseofUnpaidBalance === true) {
                 setCauseofUnpaidBalanceError(true);
                 isSumbitDisabled = true;
             }
-        }
-        if (defaultValues.CreditorName === "") {
-            if (ShowCreditorName === true) {
-                setCreditorNameError(true);
-                isSumbitDisabled = true;
-            }
-        }
+        }       
         if (defaultValues.Address === "") {
             if (ShowAddress === true) {
                 setAddressError(true);
@@ -334,7 +300,7 @@ export default function DebtAdd() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        債務の種類<i className="text-red-500">*</i>
+                                        債務の名称
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -345,10 +311,7 @@ export default function DebtAdd() {
                                                 {option.label}
                                             </option>
                                         ))}
-                                    </select>
-                                    {DebtTypeError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
+                                    </select>                                    
                                 </div>
                             </div>
                         </div>
@@ -358,7 +321,7 @@ export default function DebtAdd() {
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    債務の名称<i className="text-red-500">*</i>
+                                    相手先
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -371,10 +334,7 @@ export default function DebtAdd() {
                                 />
                                 <div className="mt-3">
                                     <p className="text-sm text-black tracking-2 font-medium">15文字以内で入力して下さい</p>
-                                </div>
-                                {NameofDebtError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
+                                </div>                                
                             </div>
                         </div>
                     )}
@@ -403,33 +363,7 @@ export default function DebtAdd() {
                             </div>
                         </div>
                     )}
-
-                    {ShowCreditorName && (
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
-                                        債権者名<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="CreditorName"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        onChange={inputHandlingFunction}
-                                        value={CreditorName}
-                                    />
-                                    <div className="mt-3">
-                                        <p className="text-sm text-black tracking-2 font-medium">生命保険会社・勤務先会社の所在地</p>
-                                    </div>
-                                    {CreditorNameError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    
 
                     {ShowPostCode && (
                         <div className="w-full block items-center justify-between mb-7">

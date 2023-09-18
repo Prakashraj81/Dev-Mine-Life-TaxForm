@@ -93,3 +93,6 @@ input {
 .border-b-border {
   border-bottom:1px solid #cecece;
 }
+.rotate-1 {
+  transform: rotate(-7deg);
+}
