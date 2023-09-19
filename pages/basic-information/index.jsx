@@ -8,13 +8,13 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import FullLayout from '../../components/layouts/full/FullLayout';
 
-export default function BasicInformation() {
+export default function BasicInformation() {   
     let [HeirList, setHeirList] = useState([]);
     let [heir_list, setheir_list] = useState([]);
     heir_list = [
         { id: 1, Name: "Gowtham", RelationshipWithDecedent: "Child", heir: "No" },
-        { id: 2, Name: "Prakashraj", RelationshipWithDecedent: "Child", heir: "No" },
-        { id: 3, Name: "Shree", RelationshipWithDecedent: "Younger brother", heir: "Yes" },
+        // { id: 2, Name: "Prakashraj", RelationshipWithDecedent: "Child", heir: "No" },
+        // { id: 3, Name: "Shree", RelationshipWithDecedent: "Younger brother", heir: "Yes" },
     ];
     useEffect(() => {
         let sessionValue = sessionStorage.getItem('Heir');
@@ -36,8 +36,8 @@ export default function BasicInformation() {
 
     const router = useRouter();
     const handleEdit = (Edit_Id) => {
-        let Id = encodeURIComponent(Edit_Id);        
-        router.push(`/basic-information/heir-edit?Id=${Id}`);
+        Edit_Id = btoa(Edit_Id);        
+        router.push(`/basic-information/heir?Id=${Edit_Id}`);
     };
 
     const handleHeirPage = () => {
@@ -129,7 +129,7 @@ export default function BasicInformation() {
                                         </>
                                     );
                                 })}
-                            </table>
+                            </table>                            
                         </div>
                     </div>
 
