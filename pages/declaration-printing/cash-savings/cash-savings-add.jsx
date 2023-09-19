@@ -422,7 +422,7 @@ export default function CashSavingsAdd() {
                             </div>
                         </div>
 
-                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                        <div className="Total-property-section hidden py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                             <div className="heading text-center">
                                 <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                             </div>

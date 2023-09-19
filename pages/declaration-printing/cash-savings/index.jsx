@@ -78,10 +78,10 @@ export default function CashSavings() {
                     </Link>
                 </div>
                 <div className="Total-property-section py-5 md:py-10 lg:py-20 xl:py-20 2xl:py-20 px-5 md:px-10 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
-                    <div className="heading text-center">
+                    <div className="heading hidden text-center">
                         <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                     </div>
-                    <div className="total-list pt-10">
+                    <div className="total-list hidden pt-10">
                         <ul>
                             <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                 <span>山田　太郎</span>
