@@ -66,7 +66,7 @@ const Menuitems = [
     iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
-        title: "まとめ  (5,000)",
+        title: "まとめ  (8)",
         icon: <SummarizeOutlinedIcon/>,
         href: "/summary-pages/summary-property", 
         translateHeading: "summary-property",
@@ -107,7 +107,7 @@ const Menuitems = [
         translateHeading: "household property",
         text: "House hold property",
       },
-      //doubt
+     
       {
         title: "その他財産",
         icon: <OtherHousesOutlinedIcon/>,
@@ -141,7 +141,7 @@ const Menuitems = [
     iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
-        title: "まとめ",
+        title: "まとめ  (5)",
         icon: <SummarizeOutlinedIcon/>,
         href: "/summary-pages/summary-gifts-various", 
         translateHeading: "summary-gifts-various",
