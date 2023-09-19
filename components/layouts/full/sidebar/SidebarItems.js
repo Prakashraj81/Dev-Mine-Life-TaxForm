@@ -104,11 +104,11 @@ if (paths.length >= 4) {
   return ( 
     <Box sx={{ px: 0 }}>     
        {Menuitems.map((item, index) => (
-        <Accordion className="py-1 shadow-none border-0 p-0"
+        <Accordion className="py-1 shadow-none accordion-top-div border-0 p-0"
         expanded={expanded === item.id} onChange={handleChange(item.id)}
         >
         <AccordionSummary
-          className="p-0 inline-block w-full"          
+          className="p-0 inline-block accordion-div-main w-full"          
           aria-controls="panel1a-content"
           disablePadding
           id={item.id}
@@ -122,7 +122,7 @@ if (paths.length >= 4) {
               button
               selected={location === item.href}
               key={index}
-              className={`div-item inline-block w-full p-0 ${activeDivIndex === item.id ? 'border-l-4 active-0' : ''}`}              
+              className={`div-item accordion-div-item inline-block w-full p-0 ${activeDivIndex === item.id ? 'border-l-4 active-0' : ''}`}              
             >
             <ListItemIcon className={`${ location === item.href ? "text-black" : "text-primary-color" }`}>
                 {item.icon}
