@@ -146,7 +146,7 @@
 .mui-style-xmzdpb-MuiPaper-root-MuiAccordion-root.Mui-expanded, .mui-style-xmzdpb-MuiPaper-root-MuiAccordion-root {
   box-shadow:none !important;  
 }
-.mui-style-xmzdpb-MuiPaper-root-MuiAccordion-root:before {
+.mui-style-xmzdpb-MuiPaper-root-MuiAccordion-root:before, .mui-style-11f2y1l::before {
   opacity: 0 !important; 
 }
 .mui-style-1dgfu6o-MuiButtonBase-root-MuiListItem-root {
