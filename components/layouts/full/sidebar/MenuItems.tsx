@@ -66,7 +66,7 @@ const Menuitems = [
     iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
-        title: "まとめ",
+        title: "まとめ  (5,000)",
         icon: <SummarizeOutlinedIcon/>,
         href: "/summary-pages/summary-property", 
         translateHeading: "summary-property",
