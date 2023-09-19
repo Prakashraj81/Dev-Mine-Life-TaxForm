@@ -35,7 +35,7 @@ export default function CashSavings() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    現金・預貯金の情報を「<EditOutlinedIcon className="rotate-1"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。 わからない項目は「？」をご確認ください。
+                    現金・預貯金の情報を「<EditOutlinedIcon className="rotate-1"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
                     </p>
                 </div>
                 <div className="cash-list py-3">

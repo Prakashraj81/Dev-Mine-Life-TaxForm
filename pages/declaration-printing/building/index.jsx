@@ -3,6 +3,7 @@ import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import BackButton from "../../../components/back-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 
@@ -19,7 +20,7 @@ export default function House() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    家屋の情報を「追加する」ボタンをクリックし、ご入力ください。「」ボタンを押すと内容を複製して入力できます。わからない項目は「？」をご確認ください。
+                    家屋の情報を「<EditOutlinedIcon className="rotate-1"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
                     </p>
                 </div>
                 

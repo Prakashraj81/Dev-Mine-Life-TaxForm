@@ -128,7 +128,7 @@ export default function Decendent() {
     }
 
     //Submit API function 
-    const router = useRouter();
+    let router = useRouter();
     const onSubmit = () => {
         let defaultValues = {
             Name: Name,
@@ -183,6 +183,12 @@ export default function Decendent() {
         }
     };
 
+
+  
+    const goToPreviousPage = () => {
+        router.back(); // This navigates to the previous page
+    };
+
     return (
         <>
             <div className="basic-information-wrapper">
@@ -195,7 +201,7 @@ export default function Decendent() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        以下の内容を入力して[保存して戻る]ボタンを押して下さい。
+                        以下の内容を入力して[保存]ボタンを押して下さい。
                     </p>
                 </div>
                 <div className="user-forms">
@@ -386,12 +392,20 @@ export default function Decendent() {
                             </div>
                         </div>
 
-                        <div className="w-full inline-block text-left lg:text-center xl:text-center 2xl:text-center content">
-                            <p className="text-xs text-black tracking-2 leading-7">未確定の場合は仮で入力してください。後から修正可能です</p>
-                        </div>
+                        
 
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center mt-10">
-                            <BackButton />
+                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center mt-20">                            
+                            <div className="back-btn text-center">
+                <button
+                    type='button'
+                    onClick={goToPreviousPage}
+                    className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                >
+                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                    保存せず戻る
+                    </span>
+                </button>
+            </div>
                             <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                         </div>
                     </form>

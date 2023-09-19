@@ -16,7 +16,7 @@ export default function SuccessiveInheritance() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        相次相続控除の情報を「<AddIcon/>追加する」ボタンをクリックし、ご入力ください。 わからない項目は「？」をご確認ください。
+                        相次相続控除の情報を「<AddIcon/>追加する」ボタンをクリックし、ご入力ください。
                     </p>
                 </div>
                 <div className="w-full inline-block text-left">

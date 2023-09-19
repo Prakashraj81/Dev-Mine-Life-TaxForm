@@ -57,7 +57,7 @@ export default function SummaryGiftVarious() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    入力したい項目の「<EditOutlinedIcon className="rotate-1"/>」ボタンをクリックして各贈与・控除情報を入力してください。 入力が完了しましたら「入力終了（次へ）」をクリックして申告書印刷へ進んで下さい。 ご不明な点は「？」をご確認ください。
+                    入力したい項目の「<EditOutlinedIcon className="rotate-1"/>」ボタンをクリックして各贈与・控除情報を入力してください。 入力が完了しましたら「入力終了（次へ）」をクリックして申告書印刷へ進んで下さい。 
                     </p>
                 </div>
                 <div className="summary-tables-wrapper max-w-screen-md mx-auto">

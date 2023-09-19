@@ -95,7 +95,7 @@ export default function LandAdd() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        以下の内容を入力して[保存して戻る]ボタンを押して下さい。
+                        以下の内容を入力して[保存]ボタンを押して下さい。
                     </p>
                 </div>
                 <div className="page-description">
@@ -851,7 +851,7 @@ export default function LandAdd() {
                                     className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
                                 >
                                     <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        保存して戻る
+                                        保存
                                     </span>
                                 </button>
                             </Link>

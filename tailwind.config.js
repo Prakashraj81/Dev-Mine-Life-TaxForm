@@ -19,6 +19,7 @@ module.exports = {
         'border-light':'#e891882e',
         'border': '#cecece',
         'input-color':'#cccccc96',
+        'custom-black': '#707070',
       },
       padding: {
         '5px': '5px !important',

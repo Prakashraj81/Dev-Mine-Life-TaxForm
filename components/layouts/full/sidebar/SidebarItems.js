@@ -18,7 +18,7 @@ import Menuitems from "./MenuItems";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-
+import BackdropLoader from "../../../loader/backdrop-loader";
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -34,8 +34,10 @@ if (paths.length >= 4) {
   location = paths.join('/');  
 } 
 
-  const [open, setOpen] = React.useState(true);
-  const [activeDivIndex, setActiveDivIndex] = useState(null);
+  let [open, setOpen] = React.useState(true);
+  let [ShowLoader, setShowLoader] = useState(false);
+  let [activeDivIndex, setActiveDivIndex] = useState(null);
+  let [isClassRemoved, setIsClassRemoved] = useState(false);  
 
   const handleClick = (index) => {          
     if (open === index) {
@@ -50,16 +52,19 @@ if (paths.length >= 4) {
   const [visible, setvisible] = useState(false);
 
   const SubMenuOpen = (id) => {
+    setShowLoader(true);
     let menu_id = id;
     if (Id === menu_id) {
       setActiveDivIndex(null); 
       setvisible(false);
       setId(0);
     } else {
+      setIsClassRemoved(true);
       setActiveDivIndex(menu_id === activeDivIndex ? null : menu_id); 
       setvisible(true);
       setId(menu_id);
     }
+    setShowLoader(true);
   };
 
   const DropdownLink = styled(motion.a)`
@@ -90,21 +95,25 @@ if (paths.length >= 4) {
     setMenuOpen(!isMenuOpen);
   };
 
+  //Accordion function
+  const [expanded, setExpanded] = useState(false);
+  const handleChange = (panel) => (event, isExpanded) => {
+      setExpanded(isExpanded ? panel : false);
+  };
 
-  return (    
-    <Box sx={{ px: 3 }}>     
-
-
+  return ( 
+    <Box sx={{ px: 0 }}>     
        {Menuitems.map((item, index) => (
-        <Accordion className="py-3  shadow-none border-0 p-0">
+        <Accordion className="py-1 shadow-none border-0 p-0"
+        expanded={expanded === item.id} onChange={handleChange(item.id)}
+        >
         <AccordionSummary
-          className="p-0"
-          expandIcon={<ExpandMoreIcon onClick={() => handleClick(index)}/>}
+          className="p-0 inline-block w-full"          
           aria-controls="panel1a-content"
           disablePadding
           id={item.id}
           key={item.title}
-          onClick={() => handleClick(index)}
+          onClick={() => handleClick(index)}                     
         >
           <NextLink href={item.href}>
         <ListItem
@@ -113,17 +122,27 @@ if (paths.length >= 4) {
               button
               selected={location === item.href}
               key={index}
-              className={`div-item p-0 ${activeDivIndex === item.id ? 'border-l-4 active' : ''}`}              
+              className={`div-item inline-block w-full p-0 ${activeDivIndex === item.id ? 'border-l-4 active-0' : ''}`}              
             >
-            <ListItemText
-                className={`${location === item.href ? "text-black p-0" : "p-0"}`}
+            <ListItemIcon className={`${ location === item.href ? "text-black" : "text-primary-color" }`}>
+                {item.icon}
+              </ListItemIcon>
+
+              <ListItemText
+                className={`${location === item.href ? "text-black" : ""}`}
                 id={`${item.id}`}
               >
-                <span className={`${ location === item.href ? "text-black p-0" : " p-0 text-custom-black" }`}>
-                {item.icon}
-              </span>
                 {item.title}
-              </ListItemText>              
+              </ListItemText>
+              <ListItemIcon
+                className="transition ease-in-out delay-150 duration-300"                
+              >
+                {item.href === "" && item.id === Id
+                  ? item.iconOpened
+                  : item.child
+                  ? item.iconClosed
+                  : null}
+              </ListItemIcon>             
             </ListItem>
             </NextLink>
         </AccordionSummary>
@@ -140,29 +159,33 @@ if (paths.length >= 4) {
             >
               {item.child.map((sub, index) => (
                 <>
+                <NextLink
+                      className={`${
+                        location === sub.href ? "text-primary-color" : "hover:text-primary-color"
+                      }`}
+                      href={sub.href}
+                    >
                   <List
                     component="li"
-                    className="w-full flex items-center tracking-2 text-black pl-0 px-3 py-10px text-base hover:text-primary-color"
+                    className="w-full inline-block items-center tracking-2 text-black pl-0 px-3 py-10px text-base hover:text-primary-color"
                     disablePadding
-                    key={sub.title}
-                    item={item}
+                    key={sub.title}                    
                   >
-                    <span
-                    className={`${
+                    <span>
+                      <i className={`${
                       location === sub.href ? "text-lg text-primary-color mr-2" : "hover:text-primary-color mr-2"
-                    }`}
-                    >
-                      <i className="text-custom-black">{sub.icon}</i>
+                    }`}>{sub.icon}</i>
                     </span>
-                    <NextLink
+                    <span
                       className={`${
                         location === sub.href ? "text-primary-color" : "hover:text-primary-color"
                       }`}
                       href={sub.href}
                     >
                       {sub.title}
-                    </NextLink>
+                    </span>
                   </List>
+                  </NextLink>
                 </>
               ))}
             </AccordionDetails>
@@ -171,6 +194,10 @@ if (paths.length >= 4) {
           )}        
       </Accordion>
       ))}
+
+
+
+
 
 
 
