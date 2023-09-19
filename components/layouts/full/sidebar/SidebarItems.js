@@ -122,7 +122,7 @@ if (paths.length >= 4) {
               button
               selected={location === item.href}
               key={index}
-              className={`div-item accordion-div-item inline-block w-full p-0 ${activeDivIndex === item.id ? 'border-l-4 active-0' : ''}`}              
+              className={`div-item accordion-div-item test inline-block w-full p-0 ${activeDivIndex === item.id ? 'border-l-4 active-0' : ''}`}              
             >
             <ListItemIcon className={`${ location === item.href ? "text-black" : "text-primary-color" }`}>
                 {item.icon}
