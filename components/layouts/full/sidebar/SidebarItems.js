@@ -115,7 +115,7 @@ if (paths.length >= 4) {
           key={item.title}
           onClick={() => handleClick(index)}                     
         >
-          <NextLink href={item.href}>
+          <NextLink className="accordion-link" href={item.href}>
         <ListItem
               onClick={() => SubMenuOpen(item.id)}
               id={`${item.id}`}
