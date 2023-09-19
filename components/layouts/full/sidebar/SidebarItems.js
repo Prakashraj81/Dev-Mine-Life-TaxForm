@@ -167,7 +167,7 @@ if (paths.length >= 4) {
                     >
                   <List
                     component="li"
-                    className="w-full inline-block items-center tracking-2 text-black pl-0 px-3 py-10px text-base hover:text-primary-color"
+                    className="w-full flex items-center tracking-2 text-black pl-0 px-3 py-10px text-base hover:text-primary-color"
                     disablePadding
                     key={sub.title}                    
                   >
