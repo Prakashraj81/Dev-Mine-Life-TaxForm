@@ -146,8 +146,6 @@ export default function SuccessiveInheritanceAdd() {
                             </div>
                         </div>
 
-
-
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">

@@ -516,7 +516,8 @@ export default function SecuritiesAdd() {
                                       
                     </div>
 
-                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
+                    {showUnitDetails && (
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="UnitDetails" className="form-label">
                                         受益証券の詳細<i className="text-red-500">*</i>
@@ -536,8 +537,10 @@ export default function SecuritiesAdd() {
                                     )}
                                 </div>
                             </div>
+                        )}
 
-                            <div className="w-full inline-block items-center justify-between mb-7">
+                    {showNameSecurities && (
+                        <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="NameofSecurities" className="form-label">
@@ -557,9 +560,11 @@ export default function SecuritiesAdd() {
                                     )}
                                 </div>
                             </div>
-                        </div>              
+                        </div>
+                    )}                    
 
                     
+                    {showFinancialInstitutionName && (
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
@@ -581,6 +586,9 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
+                    )}
+
+                    {showQuantityPrice && (
                         <div className="w-full flex items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="user-details">
@@ -625,7 +633,9 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
+                    )}
 
+                    {showMoneyOrderQuantity && (
                         <div className="w-full flex items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="user-details">
@@ -663,8 +673,11 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
+                    )}
 
 
+
+                    {showReducationAmount && (
                         <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
@@ -684,6 +697,9 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
+                    )}
+
+                    {showQuantityPrice && (
                         <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
@@ -700,6 +716,9 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
+                    )}
+
+                    {showAmountMoney && (
                         <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
@@ -722,6 +741,8 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
+                    )}
+
 
                     <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="heading text-center">

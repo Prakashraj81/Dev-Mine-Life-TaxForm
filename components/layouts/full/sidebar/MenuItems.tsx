@@ -27,6 +27,10 @@ import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined
 import EjectOutlinedIcon from '@mui/icons-material/EjectOutlined';
 import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
 
+//pages
+import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+
 const Menuitems = [
   //First
   {
@@ -185,6 +189,24 @@ const Menuitems = [
     translateHeading: "funeral",
     href: "/property/declaration-printing",
     icon: <CardGiftcardIcon />,
+    iconClosed: <KeyboardArrowRightIcon />,
+    iconOpened: <KeyboardArrowDownIcon />,
+  },  
+  {
+    id:5,
+    title: "FAQ",    
+    translateHeading: "FAQ",
+    href: "/pages/FAQ",
+    icon: <LiveHelpIcon />,
+    iconClosed: <KeyboardArrowRightIcon />,
+    iconOpened: <KeyboardArrowDownIcon />,
+  },
+  {
+    id:6,
+    title: "サポートチケット",    
+    translateHeading: "FAQ",
+    href: "/pages/support-ticket",
+    icon: <LocalActivityIcon />,
     iconClosed: <KeyboardArrowRightIcon />,
     iconOpened: <KeyboardArrowDownIcon />,
   },

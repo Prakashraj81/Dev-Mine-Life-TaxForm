@@ -11,6 +11,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import Select from 'react-select';
 
 export default function Decendent() {
 
@@ -35,6 +36,7 @@ export default function Decendent() {
     let [InheritanceDivisionCompletionDate, setInheritanceDivisionCompletionDate] = useState("");
     let [DateofDeath, setDateofDeath] = useState("");
     let [Profession, setProfession] = useState("");
+    let [TaxOffice, setTaxOffice] = useState("");
     let [isErrorVisible, setErrorVisible] = useState(false);    
 
     //Error state and button disabled
@@ -46,7 +48,8 @@ export default function Decendent() {
     let [AddressError, setAddressError] = useState(false);    
     let [DateofDeathError, setDateofDeathError] = useState(false);
     let [InheritanceDivisionCompletionDateError, setInheritanceDivisionCompletionDateError] = useState(false);    
-    let [ProfessionError, setProfessionError] = useState(false);        
+    let [ProfessionError, setProfessionError] = useState(false);   
+    let [isClearable, setIsClearable] = useState(true);     
 
     //Disabled deduction radio button
     const handleDisabledRadio = (event) => {
@@ -138,7 +141,8 @@ export default function Decendent() {
             Address: Address,            
             Profession: Profession,            
             DateofDeath: DateofDeath,    
-            InheritanceDivisionCompletionDate: InheritanceDivisionCompletionDate,                    
+            InheritanceDivisionCompletionDate: InheritanceDivisionCompletionDate,   
+            TaxOffice: TaxOffice,                 
         }
 
         //input Validation
@@ -183,11 +187,27 @@ export default function Decendent() {
         }
     };
 
+ const colourOptions = [
+        { value: 'blue', label: 'blue',},
+        { value: 'purple', label: 'purple',},
+        { value: 'Black', label: 'Black', },        
+      ];
 
+      const onChangeTaxOffice = (TaxOffice) => {
+        if(TaxOffice === null){
+            console.log("TaxOffice");
+            setTaxOffice("");
+        }
+        else{
+            console.log(TaxOffice.value);
+            setTaxOffice(TaxOffice.value);            
+        }    
+      }
   
     const goToPreviousPage = () => {
         router.back(); // This navigates to the previous page
     };
+
 
     return (
         <>
@@ -205,7 +225,7 @@ export default function Decendent() {
                     </p>
                 </div>
                 <div className="user-forms">
-                <form action="#" method="POST">
+                <form action="#" method="POST">                
                         <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">
@@ -346,7 +366,7 @@ export default function Decendent() {
 
 
 
-                        <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                        <div className="w-full inline-block mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
@@ -367,7 +387,8 @@ export default function Decendent() {
                                     )}
                                     </div>
                                 </div>
-                            </div>
+                            </div>                            
+
 
                             <div className="w-full hidden lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">
@@ -390,6 +411,28 @@ export default function Decendent() {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div className="w-full inline-block mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
+                                <div className="user-details">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                        申告書の提出先<i className="text-red-500">*</i>
+                                    </label>
+                                    <span className="text-xs tracking-2 leading-7 text-custom-black py-1 w-full inline-block">被相続人の住所を管轄する税務署</span>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <Select
+                                    onChange={onChangeTaxOffice}
+                                    className="form-control w-full"                  
+                                    isClearable={isClearable}  
+                                    placeholder={""}      
+                                    options={colourOptions}                                    
+                                    />                                    
+                                    </div>                                
+                                </div>
+                            </div>                        
                         </div>
 
                         

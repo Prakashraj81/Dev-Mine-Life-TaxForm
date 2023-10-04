@@ -8,9 +8,10 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import FullLayout from '../../components/layouts/full/FullLayout';
 
-export default function BasicInformation() {   
+export default function BasicInformation() {
     let [HeirList, setHeirList] = useState([]);
     let [heir_list, setheir_list] = useState([]);
+    let [showEndButton, setshowEndButton] = useState(false);
     heir_list = [
         { id: 1, Name: "Gowtham", RelationshipWithDecedent: "Child", heir: "No" },
         // { id: 2, Name: "Prakashraj", RelationshipWithDecedent: "Child", heir: "No" },
@@ -26,6 +27,13 @@ export default function BasicInformation() {
         else {
             setHeirList([]);
         }
+        //Heir list length (API)        
+        if(heir_list.length !== 0){
+            setshowEndButton(true);
+        }
+        else{
+            setshowEndButton(false);
+        }
     }, []);
 
     const handleDelete = (index) => {
@@ -36,14 +44,14 @@ export default function BasicInformation() {
 
     const router = useRouter();
     const handleEdit = (Edit_Id) => {
-        Edit_Id = btoa(Edit_Id);        
+        Edit_Id = btoa(Edit_Id);
         router.push(`/basic-information/heir?Id=${Edit_Id}`);
     };
 
     const handleHeirPage = () => {
         router.push({
             pathname: '/basic-information/heir',
-            query: { heirNo: '2' }, 
+            query: { heirNo: '2' },
         });
     }
 
@@ -59,7 +67,7 @@ export default function BasicInformation() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        被相続人、相続を受ける方の情報を「<EditOutlinedIcon className="rotate-1"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。入力が完了しましたら「入力終了（次へ）」をクリックし、財産情報の入力へ進んでくださ い。わからない項目は「？」をご確認ください。
+                        被相続人、相続を受ける方の情報を「<EditOutlinedIcon className="rotate-1" />」ボタン、「追加する」ボタンをクリックし、ご入力ください。入力が完了しましたら「入力終了（次へ）」をクリックし、財産情報の入力へ進んでくださ い。わからない項目は「？」をご確認ください。
                     </p>
                 </div>
                 <div className="input-details">
@@ -84,13 +92,13 @@ export default function BasicInformation() {
                                     </div>
                                 </div>
                                 <div className="w-full block float-right text-right lg:w-32">
-                                <Link href="/basic-information/decendent">
-                                <button value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                    <Link href="/basic-information/decendent">
+                                        <button value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <ModeEditIcon className="text-white" />
                                         </button>
-                                </Link>
+                                    </Link>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                         <div className="heir-list py-10">
                             <div className="heir-heading py-3"><span>相続人</span></div>
@@ -129,37 +137,34 @@ export default function BasicInformation() {
                                         </>
                                     );
                                 })}
-                            </table>                            
+                            </table>
                         </div>
                     </div>
 
                     <div className="w-full inline-block text-right py-10">
                         <div className="add-btn">
-                        <button onClick={handleHeirPage} id="decedent_edit" className="text-sm text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
-                                    <AddIcon className="text-white" />
-                                    追加する
-                                </button>
+                            <button onClick={handleHeirPage} id="decedent_edit" className="text-sm text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                                <AddIcon className="text-white" />
+                                追加する
+                            </button>
                         </div>
                     </div>
-
                     <div className="page-description">
                         <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                             無料de相続は法定相続人が１人以上いる相続人6人までの申告書作成ができます。法定相続情報人がいない場合や。
                         </p>
                     </div>
+                    {showEndButton && (
                     <div className="end-btn text-center py-10">
                         <Link href="/summary-pages/summary-property">
-                        <button
-                                type="button"
-                                
-                                className="cursor-pointer bg-primary-color rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                            >
+                            <button type="button" className="cursor-pointer bg-primary-color rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300">
                                 <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                入力終了（次へ）
+                                    入力終了（次へ）
                                 </span>
                             </button>
                         </Link>
-                    </div>      
+                    </div>
+                    )}
                 </div>
             </div>
         </>

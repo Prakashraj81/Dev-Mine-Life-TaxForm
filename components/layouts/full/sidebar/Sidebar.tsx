@@ -16,15 +16,7 @@ const Sidebar = ({isMobileSidebarOpen, onSidebarClose, isSidebarOpen }: ItemType
 
   if (lgUp) {
     return (
-      <Box
-        sx={{
-          width: sidebarWidth,
-          flexShrink: 0,
-        }}
-      >
-        {/* ------------------------------------------- */}
-        {/* Sidebar for desktop */}
-        {/* ------------------------------------------- */}
+      <Box sx={{ width: sidebarWidth, flexShrink: 0 }}>       
         <Drawer
           anchor="left"
           open={isSidebarOpen}
@@ -35,29 +27,14 @@ const Sidebar = ({isMobileSidebarOpen, onSidebarClose, isSidebarOpen }: ItemType
               boxSizing: 'border-box',
             },
           }}
-        >
-          {/* ------------------------------------------- */}
-          {/* Sidebar Box */}
-          {/* ------------------------------------------- */}
-          <Box
-            sx={{
-              height: '100%',
-            }}
-          >
-            {/* ------------------------------------------- */}
-            {/* Logo */}
-            {/* ------------------------------------------- */}
+        >          
+          <Box sx={{height: '100%'}}>            
             <Box px={3}>
               <Logo />
             </Box>
-            <Box>
-              {/* ------------------------------------------- */}
-              {/* Sidebar Items */}
-              {/* ------------------------------------------- */}
-              <SidebarItems />
-              
-            </Box>
-            
+            <Box>              
+              <SidebarItems />              
+            </Box>            
           </Box>
         </Drawer>
       </Box>
@@ -76,16 +53,10 @@ const Sidebar = ({isMobileSidebarOpen, onSidebarClose, isSidebarOpen }: ItemType
           boxShadow: (theme) => theme.shadows[8],
         },
       }}
-    >
-      {/* ------------------------------------------- */}
-      {/* Logo */}
-      {/* ------------------------------------------- */}
+    >      
       <Box px={2}>
         <Logo />
-      </Box>
-      {/* ------------------------------------------- */}
-      {/* Sidebar For Mobile */}
-      {/* ------------------------------------------- */}
+      </Box>      
       <SidebarItems />      
     </Drawer>
   );

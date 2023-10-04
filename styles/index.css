@@ -96,3 +96,15 @@ input {
 .rotate-1 {
   transform: rotate(-7deg);
 }
+
+.mui-style-13cymwt-control, .mui-style-t3ipsp-control  {
+  height: 3rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  background-color: #ced4da40 !important;
+  border: 0 !important;  
+  align-items: center !important;
+}
+.mui-style-qbdosj-Input:focus, .mui-style-t3ipsp-control:focus  {
+  outline: none;
+}

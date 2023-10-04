@@ -44,8 +44,7 @@ if (paths.length >= 4) {
       setOpen((prevopen) => !prevopen);
     } else {
       setOpen(index);
-    }
-    console.log("index:" + index);
+    }    
   };
 
   const [Id, setId] = useState(0);
@@ -103,7 +102,7 @@ if (paths.length >= 4) {
 
   return ( 
     <Box sx={{ px: 0 }}>     
-       {Menuitems.map((item, index) => (
+      {Menuitems.map((item, index) => (
         <Accordion className="py-1 shadow-none accordion-top-div border-0 p-0"
         expanded={expanded === item.id} onChange={handleChange(item.id)}
         >
@@ -167,13 +166,16 @@ if (paths.length >= 4) {
                     >
                   <List
                     component="li"
-                    className="w-full flex items-center tracking-2 text-black pl-0 px-3 py-10px text-base hover:text-primary-color"
+                    className={`${
+                      location === sub.href ? "w-full flex items-center tracking-2 sub-li-active text-primary-color pl-0 px-3 py-10px text-base" : "w-full flex items-center tracking-2 text-custom-black pl-0 px-3 py-10px text-base hover:text-primary-color mr-2"
+                    }`}
+                    
                     disablePadding
                     key={sub.title}                    
                   >
                     <span>
                       <i className={`${
-                      location === sub.href ? "text-lg text-primary-color mr-2" : "hover:text-primary-color mr-2"
+                      location === sub.href ? "text-lg text-primary-color mr-2" : " hover:text-primary-color mr-2"
                     }`}>{sub.icon}</i>
                     </span>
                     <span
