@@ -191,25 +191,7 @@ const Menuitems = [
     icon: <CardGiftcardIcon />,
     iconClosed: <KeyboardArrowRightIcon />,
     iconOpened: <KeyboardArrowDownIcon />,
-  },  
-  {
-    id:5,
-    title: "FAQ",    
-    translateHeading: "FAQ",
-    href: "/pages/FAQ",
-    icon: <LiveHelpIcon />,
-    iconClosed: <KeyboardArrowRightIcon />,
-    iconOpened: <KeyboardArrowDownIcon />,
-  },
-  {
-    id:6,
-    title: "サポートチケット",    
-    translateHeading: "FAQ",
-    href: "/pages/support-ticket",
-    icon: <LocalActivityIcon />,
-    iconClosed: <KeyboardArrowRightIcon />,
-    iconOpened: <KeyboardArrowDownIcon />,
-  },
+  },    
 ];
 
 export default Menuitems;

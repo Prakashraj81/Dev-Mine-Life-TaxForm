@@ -625,6 +625,10 @@ const rows = [
                         </div>
                     </div>
 
+                    <div className="w-full inline-block mt-3 mb-7">
+                        <img src="/images/land-screenshot.jpg" className="w-full" alt="image" height={300} width={200}/>
+                    </div>                    
+
                     <div className="w-full flex items-center justify-between mt-3 mb-7">
                         <div className="w-full lg:w-65 xl:w-65 2xl:w-65 block float-left">
                             <div className="w-full inline-block mt-2 relative">

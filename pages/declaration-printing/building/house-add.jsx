@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import BackButton from "../../../components/back-btn";
@@ -836,6 +837,12 @@ export default function HouseAdd() {
                     {InsertCertificateError && (
                         <p className="text-red-500 mt-10" role="alert">この項目は必須です</p>
                     )}
+
+
+                    <div className="w-full inline-block mt-20">
+                        <img src="/images/building-screenshot.jpg" className="w-full" alt="image" height={500} width={200}/>
+                    </div>
+
 
                     <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="heading text-center">
