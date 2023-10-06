@@ -109,14 +109,12 @@ input {
   outline: none;
 }
 .cricle {
-  width: 0.7em;
-  height: 0.7em;
+  width: 1.5em;
+  height: 1.5em;
+  text-align:center;
+  font-size:12px;
   display: inline-block !important;
-  color: #FFF !important;
+  color: #E88C87 !important;
   border: 1px solid #E88C87 !important;
   border-radius: 100px !important;
-}
-.cricle-text {
-  fill: #E88C87 !important;
-  color: #E88C87 !important;
 }

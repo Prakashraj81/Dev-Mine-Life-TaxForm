@@ -493,10 +493,7 @@ export default function HouseAdd() {
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                    <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">1</text>
-                                </svg> 所在<i className="text-red-500">*</i>
+                                    <span className="cricle">1</span> 所在<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2 relative">
@@ -512,10 +509,7 @@ export default function HouseAdd() {
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                    <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">2</text>
-                                </svg> 地日<i className="text-red-500">*</i>
+                                    <span className="cricle">2</span> 地日<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2 relative">
@@ -530,10 +524,7 @@ export default function HouseAdd() {
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                    <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">3</text>
-                                </svg> 地積 ㎡<i className="text-red-500">*</i>
+                                    <span className="cricle">3</span> 地積 ㎡<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2 relative">
@@ -550,10 +541,7 @@ export default function HouseAdd() {
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label htmlFor="InsertCertificate" className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">4</text>
-                                </svg> 証明書を挿入<i className="text-red-500">*</i>
+                                <span className="cricle">4</span> 証明書を挿入<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">

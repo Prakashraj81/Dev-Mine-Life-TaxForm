@@ -342,10 +342,7 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">1</text>
-                                </svg> 所在<i className="text-red-500">*</i>
+                                <span className="cricle">1</span> 所在<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -363,10 +360,7 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">2</text>
-                                </svg> 建物の名称<i className="text-red-500">*</i>
+                                <span className="cricle">2</span> 建物の名称<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -386,10 +380,7 @@ const rows = [
                         <div className="user-details">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">3</text>
-                                </svg> 構造
+                                <span className="cricle">3</span> 構造
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -417,10 +408,7 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">4</text>
-                                </svg> 床面積 ㎡
+                                <span className="cricle">4</span> 床面積 ㎡
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">
@@ -439,10 +427,7 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">5</text>
-                                </svg> 所在及び地番
+                                <span className="cricle">5</span> 所在及び地番
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -461,10 +446,7 @@ const rows = [
                         <div className="user-details">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">6</text>
-                                </svg> 地目
+                                <span className="cricle">7</span> 地目
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -492,10 +474,7 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">7</text>
-                                </svg> 地積㎡
+                                <span className="cricle">8</span> 地積㎡
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">
@@ -514,10 +493,7 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">8</text>
-                                </svg> 家屋番号</label>
+                                <span className="cricle">9</span> 家屋番号</label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
@@ -535,10 +511,7 @@ const rows = [
                         <div className="user-details">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">9</text>
-                                </svg> 種類
+                                <span className="cricle">10</span> 種類
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -560,10 +533,7 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">10</text>
-                                </svg> 床面積 ㎡<i className="text-red-500">*</i>
+                                <span className="cricle">11</span> 床面積 ㎡<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">
@@ -585,10 +555,7 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">11</text>
-                                </svg> 構造</label>
+                                <span className="cricle">12</span> 構造</label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={CondominiumsDropdownChange}>
@@ -603,10 +570,7 @@ const rows = [
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">12</text>
-                                </svg> 敷地権の種類
+                                <span className="cricle">13</span> 敷地権の種類
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -637,10 +601,7 @@ const rows = [
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">13</text>
-                                </svg> 敷地権の割合
+                                <span className="cricle">14</span> 敷地権の割合
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
