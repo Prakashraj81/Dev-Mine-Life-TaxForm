@@ -339,14 +339,14 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    名称<i className="text-red-500">*</i>
+                                    <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">1</span> 所在<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
                                     id="Name"
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
                                 {NameError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
@@ -357,14 +357,14 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    地番<i className="text-red-500">*</i>
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">2</span> 建物の名称<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
                                     id="LotNumber"
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
                                 {LotNumberError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
@@ -377,7 +377,7 @@ const rows = [
                         <div className="user-details">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    住居表示
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">3</span> 構造
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -405,14 +405,14 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    姓
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">4</span> 床面積 ㎡
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
                                     id="SurName"
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
                                 {SurNameError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
@@ -423,14 +423,14 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    名
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">5</span> 所在及び地番
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
                                     id="GivenName"
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
                                 {GivenNameError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
@@ -442,7 +442,7 @@ const rows = [
                         <div className="user-details">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    住所
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">6</span> 地目
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -470,14 +470,14 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    姓
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">7</span> 地積㎡
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
                                     id="SurName"
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
                                 {SurNameError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
@@ -488,14 +488,13 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    名
-                                </label>
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">8</span> 家屋番号</label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
                                     id="GivenName"
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
                                 {GivenNameError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
@@ -507,7 +506,7 @@ const rows = [
                         <div className="user-details">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    住所
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">9</span> 種類
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -529,7 +528,7 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    地積<i className="text-red-500">*</i>
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">10</span> 床面積 ㎡<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">
@@ -551,8 +550,7 @@ const rows = [
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    マンションの場合
-                                </label>
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">11</span>  構造</label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={CondominiumsDropdownChange}>
@@ -567,7 +565,7 @@ const rows = [
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    持分比率(ある場合)
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">12</span> 敷地権の種類
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -598,7 +596,7 @@ const rows = [
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    敷地権割合
+                                <span className="border border-primary-color px-2 py-1 text-primary-color rounded-full text-center">13</span> 敷地権の割合
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -629,11 +627,13 @@ const rows = [
                         <img src="/images/screenshot-1.jpg" className="w-full" alt="image" height={300} width={200}/>
                     </div>                    
 
+                    <div className="bg-custom-light py-3 px-5 w-full inline-block">
+                        <label className="form-label" id="demo-row-radio-buttons-group-label">土地の詳細の入力</label>
+                    </div>
                     <div className="w-full flex items-center justify-between mt-3 mb-7">
                         <div className="w-full lg:w-65 xl:w-65 2xl:w-65 block float-left">
-                            <div className="w-full inline-block mt-2 relative">
-                                <FormControl>
-                                    <label className="form-label" id="demo-row-radio-buttons-group-label">土地の詳細の入力</label>
+                            <div className="w-full inline-block mt-2 relative">                            
+                                <FormControl>                                    
                                     <RadioGroup
                                         aria-labelledby="demo-row-radio-buttons-group-label"
                                         name="row-radio-buttons-group"
