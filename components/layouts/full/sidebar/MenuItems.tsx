@@ -91,9 +91,16 @@ const Menuitems = [
         text: "Securities - stocks, bonds, corporate bonds, etc.",
       },      
       {
-        title: "建物",
+        title: "建物 (version-1)",
         icon: <ApartmentOutlinedIcon/>,
-        href: "/declaration-printing/building",
+        href: "/declaration-printing/building/house-add",
+        translateHeading: "building",
+        text: "House - home, rental, etc.",
+      },    
+      {
+        title: "建物 (version-2)",
+        icon: <ApartmentOutlinedIcon/>,
+        href: "/declaration-printing/building/house-add-1",
         translateHeading: "building",
         text: "House - home, rental, etc.",
       },     

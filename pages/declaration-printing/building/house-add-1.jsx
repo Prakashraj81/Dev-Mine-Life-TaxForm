@@ -484,346 +484,76 @@ export default function HouseAdd() {
                     </p>
                 </div>
 
-                <form action="#" method="POST">
-                    <div className="w-full flex items-center justify-between mb-7">
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="user-details">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
-                                        種類<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleKinds}>
-                                    <option value='' id="0"></option>
-                                        {KindsList.map((option) => (
-                                            <option key={option.value} id={option.id} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {KindsError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                        {ShowHowtoList0 && (
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
-                                        利用方法<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleHowToUse}>
-                                        <option value='' id="0"></option>
-                                    </select>
-                                    {HowToUseError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {ShowHowtoList1 && (
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
-                                        利用方法<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleHowToUse}>
-                                        <option value='' id="0"></option>
-                                        {HowToUseList_House.map((option) => (
-                                            <option key={option.value} id={option.id} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {HowToUseError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {ShowHowtoList2 && (
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
-                                        利用方法<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleHowToUse}>
-                                        <option value='' id="0"></option>
-                                        {HowToUseList_Structure.map((option) => (
-                                            <option key={option.value} id={option.id} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {HowToUseError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                </div>
-                            </div>
-                        )}
+                <div className="w-full inline-block mb-7">
+                        <img src="/images/screenshot-2.jpg" className="w-full" alt="image" height={500} width={200}/>
                     </div>
 
-                    {ShowStructureUsage && (
-                        <div className="w-full flex items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="user-details">
-                                    <div className="label w-full inline-block">
-                                        <label className="form-label">
-                                            構造<i className="text-red-500">*</i>
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleStructure}>
-                                            <option value='' id="0"></option>
-                                            {StructureList.map((option) => (
-                                                <option key={option.value} id={option.id} value={option.value}>
-                                                    {option.label}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {StructureError && (
-                                            <p className="text-red-500" role="alert">この項目は必須です</p>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
-                                        用途<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleUsage}>
-                                        <option value='' id="0"></option>
-                                        {UsageList.map((option) => (
-                                            <option key={option.value} id={option.id} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {UsageError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {ShowStructureUsage && (
+                <form action="#" method="POST">
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        建物全体の階数<i className="text-red-500">*</i>
+                                    <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">1</text>
+                                </svg> 所在<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2 relative">
                                     <input
                                         type="text"
-                                        id="NumberofFloors"
-                                        onKeyPress={handleKeyPress}
-                                        onChange={inputHandlingFunction}
-                                        value={NumberofFloors}
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                    />
-                                    {NumberofFloorsError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                    <FloorIcon />
+                                        id="NumberofFloors"                                        
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
+                                    />                                    
                                 </div>
                             </div>
                         </div>
-                    )}
-
-
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label htmlFor="postcode" className="form-label">
-                                    郵便番号
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2 relative">
-                                <input
-                                    type="text"
-                                    id="PostCode"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
-                                    onKeyPress={handleKeyPress}
-                                    onChange={postalcodeDigit}
-                                    value={PostCode}
-                                />
-                                <PostcodeIcon />
-                            </div>
-                            <div className="mt-3">
-                                <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
-                            </div>
-                            {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
-                        </div>
-                    </div>
-
-
-
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
-                                    住居表示<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    id="ResidenceDisplay"
-                                    onChange={inputHandlingFunction}
-                                    value={ResidenceDisplay}
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                />
-                                {ResidenceDisplayError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
-                                    面積<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2 relative">
-                                <input
-                                    type="text"
-                                    id="Area"
-                                    onKeyPress={handleKeyPress}
-                                    onChange={inputHandlingFunction}
-                                    value={Area}
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                />
-                                <AreaIcon />
-                                {AreaError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div className="w-full flex items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
-                                    固定資産税評価額<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    id="PropertyTaxAssessmentValue"
-                                    onChange={PropertyTaxAssessmentKeyPress}
-                                    onKeyPress={handleKeyPress}
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                />
-                                {PropertyTaxAssessmentValueError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-
-                        {ShowRentRatio && (
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                        <div className="w-full block items-center justify-between mb-7">
+                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        賃貸割合<i className="text-red-500">*</i>
+                                    <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">2</text>
+                                </svg> 地日<i className="text-red-500">*</i>
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
+                                <div className="w-full inline-block mt-2 relative">
                                     <input
-                                        type="text"
-                                        id="RentRatio"
-                                        onKeyPress={handleKeyPress}
-                                        onChange={inputHandlingFunction}
-                                        value={RentRatio}
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    />
-                                    {RentRatioError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-
-
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label htmlFor="OwnershipRatio" className="form-label">
-                                    持分比率(ある場合)
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <div className="flex justify-between items-center">
-                                    <div><input
-                                        type="text"
-                                        id="OwnershipRatio"
-                                        onKeyPress={handleKeyPress}
-                                        onChange={Ownershipfunction}
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    /></div>
-                                    <div>
-                                        <span className="text-3xl text-gray-500">/</span>
-                                    </div>
-                                    <div><input
-                                        type="text"
-                                        id="Ratio"
-                                        onChange={Ratiofunction}
-                                        onKeyPress={handleKeyPress}
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    /></div>
+                                        type="text"                                                                              
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
+                                    />                                    
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label htmlFor="Valuation" className="form-label">
-                                    評価額
-                                </label>
+                        <div className="w-full block items-center justify-between mb-7">
+                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                    <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">3</text>
+                                </svg> 地積 ㎡<i className="text-red-500">*</i>
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2 relative">
+                                    <input
+                                        type="text"                                                                              
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
+                                    />        
+                                    <AreaIcon/>                            
+                                </div>
                             </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    id="Valuation"
-                                    value={Valuation}
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                />
-                            </div>
-                        </div>
-                    </div>
+                        </div>              
 
                     <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label htmlFor="InsertCertificate" className="form-label">
-                                    証明書を挿入<i className="text-red-500">*</i>
+                                <svg class="cricle MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text class="cricle-text MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">4</text>
+                                </svg> 証明書を挿入<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">

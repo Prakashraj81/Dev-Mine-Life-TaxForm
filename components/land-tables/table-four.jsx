@@ -19,10 +19,10 @@ export default function TableFour() {
            <Table aria-label="customized table">
                         <TableHead>
                             <TableRow className="bg-custom-light text-black">
-                                <TableCell></TableCell>
+                                <TableCell className="w-width-10">いいえ</TableCell>
                                 <TableCell>路線価</TableCell>
                                 <TableCell>地区区分</TableCell>
-                                <TableCell>正面選択</TableCell>
+                                {/* <TableCell>正面選択</TableCell> */}
                                 <TableCell>角地・準角地の選択</TableCell>
                             </TableRow>
                         </TableHead>
@@ -46,7 +46,7 @@ export default function TableFour() {
                                         <option value="7">大工場地区</option>
                                     </select>
                                 </TableCell>
-                                <TableCell></TableCell>
+                                {/* <TableCell></TableCell> */}
                                 <TableCell className="w-3/12 inline-block">
                                 <select className="w-70 h-8 border focus:outline-none">
                                         <option value="">選択</option>
@@ -74,7 +74,7 @@ export default function TableFour() {
                                         <option value="7">大工場地区</option>
                                     </select>
                                 </TableCell>
-                                <TableCell></TableCell>
+                                {/* <TableCell></TableCell> */}
                                 <TableCell className="w-3/12 inline-block">
                                 <select className="w-70 h-8 border focus:outline-none">
                                         <option value="">選択</option>
@@ -102,7 +102,7 @@ export default function TableFour() {
                                         <option value="7">大工場地区</option>
                                     </select>
                                 </TableCell>
-                                <TableCell></TableCell>
+                                {/* <TableCell></TableCell> */}
                                 <TableCell className="w-3/12 inline-block">
                                 <select className="w-70 h-8 border focus:outline-none">
                                         <option value="">選択</option>
