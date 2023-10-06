@@ -626,7 +626,7 @@ const rows = [
                     </div>
 
                     <div className="w-full inline-block mt-3 mb-7">
-                        <img src="/images/land-screenshot.jpg" className="w-full" alt="image" height={300} width={200}/>
+                        <img src="/images/screenshot-1.jpg" className="w-full" alt="image" height={300} width={200}/>
                     </div>                    
 
                     <div className="w-full flex items-center justify-between mt-3 mb-7">

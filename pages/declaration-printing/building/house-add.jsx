@@ -840,7 +840,7 @@ export default function HouseAdd() {
 
 
                     <div className="w-full inline-block mt-20">
-                        <img src="/images/building-screenshot.jpg" className="w-full" alt="image" height={500} width={200}/>
+                        <img src="/images/screenshot-2.jpg" className="w-full" alt="image" height={500} width={200}/>
                     </div>
 
 
