@@ -93,15 +93,15 @@ const Menuitems = [
       {
         title: "建物 (version-1)",
         icon: <ApartmentOutlinedIcon/>,
-        href: "/declaration-printing/building/house-add",
+        href: "/declaration-printing/building",
         translateHeading: "building",
         text: "House - home, rental, etc.",
       },    
       {
         title: "建物 (version-2)",
         icon: <ApartmentOutlinedIcon/>,
-        href: "/declaration-printing/building/house-add-1",
-        translateHeading: "building",
+        href: "/declaration-printing/building-1",
+        translateHeading: "building-1",
         text: "House - home, rental, etc.",
       },     
       {

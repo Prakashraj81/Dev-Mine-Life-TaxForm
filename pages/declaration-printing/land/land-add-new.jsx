@@ -20,25 +20,7 @@ import TableTwo from '../../../components/land-tables/table-two';
 import TableThree from '../../../components/land-tables/table-three';
 import TableFour from '../../../components/land-tables/table-four';
 
-export default function LandAdd() {
-    let [Name, setName] = useState("");
-    let [LotNumber, setLotNumber] = useState("");
-    let [ResidenceDisplay, setResidenceDisplay] = useState("");
-    let [Owner, setOwner] = useState([]);
-    let [User, setUser] = useState([]);
-    let [SurName, setSurName] = useState("");
-    let [GivenName, setGivenName] = useState("");
-    let [Address, setAddress] = useState("");
-    let [Acreage, setAcreage] = useState("0");
-    let [AmountofMoney, setAmountofMoney] = useState("0");
-
-    let [UndecidedHeir, setUndecidedHeir] = useState("0");
-    let [totalPrice, settotalPrice] = useState("0");
-    let [boxValues, setBoxValues] = useState([]);
-
-    //Error state and button disabled
-    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
-    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+export default function LandAdd() { 
     let [ShowImageOne, setShowImageOne] = useState(true);
     let [ShowImageTwo, setShowImageTwo] = useState(false);
     let [ShowImageThree, setShowImageThree] = useState(false);
@@ -47,16 +29,13 @@ export default function LandAdd() {
     let [ShowTableTwo, setShowTableTwo] = useState(false);
     let [ShowTableThree, setShowTableThree] = useState(false);
     let [ShowTableFour, setShowTableFour] = useState(false);
-    let [NameError, setNameError] = useState(false);
-    let [LotNumberError, setLotNumberError] = useState(false);
-    let [ResidenceDisplayError, setResidenceDisplayError] = useState(false);
-    let [SurNameError, setSurNameError] = useState(false);
-    let [GivenNameError, setGivenNameError] = useState(false);
-    let [AddressError, setAddressError] = useState(false);
-    let [AcreageError, setAcreageError] = useState(false);
-
     let [DisabledRadioValue, setDisabledRadioValue] = useState('1');
- 
+
+    let [QuestionOne, setQuestionOne] = useState("");
+    let [ShowQuestionYes, setShowQuestionYes] = useState(false);
+    let [ShowQuestionNo, setShowQuestionNo] = useState(false);
+
+    let [QuestionTwo, setQuestionTwo] = useState("");
 
 function createData(
   name,
@@ -84,65 +63,24 @@ const rows = [
         if (!numericRegex.test(keyValue)) {
             e.preventDefault();
         }
-    };
+    };   
 
-    //Acreage function
-    let onChangeAcreage = (event) => {
-        let inputId = event.currentTarget.id;
-        let inputValue = event.target.value;
-        setAcreage(inputValue);
-    };
-
-    //ownership-ratio calculation 
-    const Ownershipfunction = (e) => {
-        setShowIncorrectError(false);
-        let ownership_value = Number(e.target.value);
-        setOwnership(ownership_value);
-        let propertyValue = PropertyTaxAssessmentValue;
-        if (propertyValue !== "") {
-            propertyValue = propertyValue.replace(/,/g, '').replace('.', '');
-            propertyValue = parseFloat(propertyValue);
-        }
-        if (Ratio > 0 && propertyValue > 0) {
-            ownership_value = ownership_value * propertyValue;
-            ownership_value = ownership_value / Ratio;
-            ownership_value = ownership_value.toLocaleString()
-            setValuation(ownership_value);
-            setUndecidedHeir(ownership_value);
-            setTotalPrice(ownership_value);
+    const handleQuestionOne = (event) => {
+        let radioValue = event.target.value;
+        setQuestionOne(radioValue);
+        if (radioValue === "Yes") {
+            setShowQuestionYes(true);
+            setShowQuestionNo(false);
         }
         else {
-
+            setShowQuestionYes(false);
+            setShowQuestionNo(true);
         }
     }
 
-    const Ratiofunction = (e) => {
-        setShowIncorrectError(false);
-        let ratio_value = Number(e.target.value);
-        setRatio(ratio_value);
-        let propertyValue = PropertyTaxAssessmentValue;
-        if (propertyValue !== "") {
-            propertyValue = propertyValue.replace(/,/g, '').replace('.', '');
-            propertyValue = parseFloat(propertyValue);
-        }
-        if (propertyValue > 0 && Ownership > 0) {
-            var value = Ownership * propertyValue;
-            if (ratio_value > 0) {
-                value = value / ratio_value;
-                value = value.toLocaleString();
-            }
-            else {
-                value = propertyValue;
-            }
-            setAmountofMoney(value.toLocaleString());
-            setUndecidedHeir(value.toLocaleString());
-            setTotalPrice(value.toLocaleString());
-        }
-        else {
-            setAmountofMoney(propertyValue.toLocaleString());
-            setUndecidedHeir(propertyValue.toLocaleString());
-            setTotalPrice(propertyValue.toLocaleString());
-        }
+    const handleQuestionTwo = (event) => {
+        let radioValue = event.target.value;
+        setQuestionTwo(radioValue);        
     }
 
     //Disabled deduction radio button
@@ -189,135 +127,7 @@ const rows = [
             setShowTableThree(false);
             setShowTableFour(true);
         }
-    };
-
-    const RightSiteRatiofunction = (event) => {
-
-    }
-
-    const RightRatiofunction = (event) => {
-
-    }
-
-    const CondominiumsDropdownChange = (event) => {
-
-    }
-
-    //All input validation check and handling function
-    const inputHandlingFunction = (event) => {
-        let inputId = event.currentTarget.id;
-        let inputValue = event.target.value;
-        if (inputId === "ResidenceDisplay") {
-            setResidenceDisplay(inputValue);
-            setResidenceDisplayError(false);
-        }
-        else {
-            setAddress(inputValue);
-            setAddressError(false);
-        }
-        setisSumbitDisabled(false);
-    }
-
-
-    function valueConvertFun(convertValue) {
-        if (convertValue === 0) {
-            convertValue = 0;
-            setAmountofMoneyError(true);
-            setisSumbitDisabled(true);
-        }
-        else {
-            convertValue = convertValue.replace(/,/g, '').replace('.', '');
-            convertValue = parseFloat(convertValue);
-            if (convertValue === 0) {
-                setAmountofMoneyError(true);
-                setisSumbitDisabled(true);
-            }
-            else {
-                setAmountofMoneyError(false);
-            }
-        }
-    }
-
-    //Box value calculation function    
-    function AmountToTotalCalculation(AmountofMoney) {
-        //Amount of money convert
-        if (AmountofMoney == 0 || AmountofMoney == "NaN") {
-            AmountofMoney = 0;
-        }
-        else {
-            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
-            AmountofMoney = parseFloat(AmountofMoney);
-        }
-        let totalBoxValues = boxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = AmountofMoney - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    }
-
-    //Footer box values and calculation
-    let handleBoxValueChange = (e, index) => {
-        let newValue = parseFloat(e.target.value);
-        if (isNaN(newValue)) {
-            newValue = 0;
-        }
-        const updatedBoxValues = [...boxValues];
-        updatedBoxValues[index] = newValue;
-        setBoxValues(updatedBoxValues);
-
-        //Amount of money convert
-        if (AmountofMoney == 0) {
-            AmountofMoney = 0;
-        }
-        else {
-            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
-            AmountofMoney = parseFloat(AmountofMoney);
-        }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = AmountofMoney - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    };
-
-
-    //Submit API function 
-    const router = useRouter();
-    const onSubmit = () => {
-        let defaultValues = {
-
-        };
-
-        //input Validation
-
-
-        //Api setup
-        if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('Land', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/land`);
-        }
-        else {
-            console.log("API not allowed");
-            setisSumbitDisabled(true);
-        }
-    };
+    };    
 
     return (
         <>
@@ -338,317 +148,183 @@ const rows = [
                         <img src="/images/screenshot-1.jpg" className="w-full" alt="image" height={300} width={200}/>
                     </div>    
                 <form action="#" method="POST">
-                    <div className="w-full flex items-center justify-between mb-7">
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="label w-full inline-block">
-                                <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">1</text>
-                                    </svg>
-                                    </span> <span>所在</span><i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                />
-                                {NameError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="label w-full inline-block">
-                                <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">2</text>
-                                    </svg>
-                                    </span> 建物の名称<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                />
-                                {LotNumberError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details">
-                            <div className="label w-full inline-block">
-                                <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">3</text>
-                                    </svg>
-                                    </span> 構造</label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    onChange={inputHandlingFunction}
-                                    value={ResidenceDisplay}
-                                />
-                                {ResidenceDisplayError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div className="label w-full inline-block">
-                        <label className="form-label">
-                            所有者<i className="text-red-500">*</i>
-                        </label>
-                    </div>
-                    <div className="w-full flex items-center justify-between mt-3 mb-7">
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="label w-full inline-block">
-                                <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">4</text>
-                                    </svg>
-                                    </span> 床面積 ㎡</label>
-                            </div>
-                            <div className="w-full inline-block mt-2 relative">
-                                <input
-                                    type="text"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                />
-                                <AreaIcon/>
-                                {SurNameError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="label w-full inline-block">
-                                <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">5</text>
-                                    </svg>
-                                    </span> 所在及び地番</label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                />
-                                {GivenNameError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details">
-                            <div className="label w-full inline-block">
-                            <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">6</text>
-                                    </svg>
-                                    </span> 地目</label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    onChange={inputHandlingFunction}
-                                    value={Address}
-                                />
-                                {AddressError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div className="label w-full inline-block">
-                        <label className="form-label">
-                            使用者<i className="text-red-500">*</i>
-                        </label>
-                    </div>
-                    <div className="w-full flex items-center justify-between mt-3 mb-7">
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="label w-full inline-block">
-                            <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">7</text>
-                                    </svg>
-                                    </span> 地積㎡</label>
-                            </div>
-                            <div className="w-full inline-block mt-2 relative">
-                                <input
-                                    type="text"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                />
-                                <AreaIcon/>
-                                {SurNameError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="label w-full inline-block">
-                            <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">8</text>
-                                    </svg>
-                                    </span> 家屋番号</label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                />
-                                {GivenNameError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details">
-                            <div className="label w-full inline-block">
-                            <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">9</text>
-                                    </svg>
-                                    </span> 種類</label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    onChange={inputHandlingFunction}
-                                    value={Address}
-                                />
-                                {AddressError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="w-full flex items-center justify-between mt-3 mb-7">
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 block float-left">
-                            <div className="label w-full inline-block">
-                            <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">10</text>
-                                    </svg>
-                                    </span> 構造<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    id="Acreage"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                    onKeyPress={handleKeyPress}
-                                    onChange={onChangeAcreage}
-                                    value={Acreage}
-                                />
-                                {AcreageError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="label w-full inline-block">
-                            <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">11</text>
-                                    </svg>
-                                    </span> 床面積 ㎡</label>
-                            </div>
-                            <div className="w-full inline-block mt-2 relative">
-                                <input
-                                    type="text"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"                                    
-                                />
-                                <AreaIcon />                                
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                            <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">12</text>
-                                    </svg>
-                                    </span> 敷地権の種類</label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                            <input
-                                    type="text"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"                                    
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="w-full block items-center justify-between mb-14">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                            <label className="form-label flex items-center">
-                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12"></circle>
-                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">13</text>
-                                    </svg>
-                                    </span> 敷地権の割合</label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <div className="flex justify-between items-center">
-                                    <div><input
-                                        type="text"
-                                        id="RightSiteRatio"
-                                        onKeyPress={handleKeyPress}
-                                        onChange={RightSiteRatiofunction}
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    /></div>
-                                    <div>
-                                        <span className="text-3xl text-gray-500">/</span>
+                    <FormControl>
+                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            value={QuestionOne}
+                        >
+                            <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionOne} label="はい" sx={{
+                                '& .MuiSvgIcon-root': {
+                                    fontSize: 16,
+                                },
+                            }} />
+                            <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionOne} label="いいえ" sx={{
+                                '& .MuiSvgIcon-root': {
+                                    fontSize: 16,
+                                },
+                            }} />
+                        </RadioGroup>
+                    </FormControl>
+                    <div className="w-full inline-block py-3">
+                        <label>【登記簿謄本の情報の入力（建物の登記簿謄本をご用意ください）】</label>
+                    </div>    
+                    {ShowQuestionYes && (
+                        <>
+                        <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">所在及び地番</label>
                                     </div>
-                                    <div><input
-                                        type="text"
-                                        id="Ratio"
-                                        onChange={RightRatiofunction}
-                                        onKeyPress={handleKeyPress}
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    /></div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">地目</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>                                    
 
-                    <div className="bg-custom-light py-3 px-5 w-full inline-block">
+                            <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">地積㎡</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2 relative">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                        <AreaIcon/>
+                                    </div>
+                                </div>
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">敷地権の種類</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">敷地権の割合</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>                                
+                            </div>
+                        </>
+                    )}
+                    {ShowQuestionNo && (
+                        <>
+                        <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">所在</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">地番</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">地目</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">地積 ㎡</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2 relative">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                        <AreaIcon/>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}       
+
+
+                    <div className="mt-5">
+                    <FormControl>
+                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">2. 被相続人が所有されていた不動産は路線価地域の土地でしょうか。</label>
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            value={QuestionTwo}
+                        >
+                            <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionTwo} label="はい" sx={{
+                                '& .MuiSvgIcon-root': {
+                                    fontSize: 16,
+                                },
+                            }} />
+                            <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionTwo} label="いいえ" sx={{
+                                '& .MuiSvgIcon-root': {
+                                    fontSize: 16,
+                                },
+                            }} />
+                        </RadioGroup>
+                    </FormControl>           
+
+                    </div>                   
+                                                    
+
+                    <div className="bg-custom-light mt-10 py-3 px-5 w-full inline-block">
                         <label className="form-label" id="demo-row-radio-buttons-group-label">土地の詳細の入力</label>
                     </div>
                     <div className="w-full flex items-center justify-between mt-3 mb-7">
@@ -718,28 +394,8 @@ const rows = [
                                 <TableFour/>     
                             )}          
                         </div>
-                    </div>
-
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                        <div className="heading text-center">
-                            <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
-                        </div>
-                        <div className="total-list pt-10">
-                            <HeirListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={AmountofMoney} />
-                        </div>
-                        <IncorrectError IncorrectError={ShowIncorrectError} />
-                    </div>
-
-                    <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                        <BackButton />
-                        <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                    </div>
-                    <div className="heading text-center pt-8">
-                        <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
-                    </div>
+                    </div>                    
                 </form>
-
-
             </div>
         </>
     )
