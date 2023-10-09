@@ -6,8 +6,8 @@ import Drawerdata from "./Drawerdata";
 import Image from 'next/image';
 
 const navigation = [
-    { name: 'サービス', href: '/pages/service', current: false },
-    { name: 'お客様の声', href: '/pages/customer-voice', current: false },
+    //{ name: 'サービス', href: '/pages/service', current: false },
+    //{ name: 'お客様の声', href: '/pages/customer-voice', current: false },
     { name: '私たちについて', href: '/pages/about-us', current: false },
     { name: '相続税申告ガイド', href: '/pages/inheritance-tax-declaration-guide', current: false },
 ];
@@ -29,7 +29,7 @@ const Navbar = () => {
                             <div>
                                      
                             <div className="hidden lg:flex items-center border-right">
-                                <div className="flex justify-end space-x-6">
+                                <div className="flex justify-end space-x-12">
                                     {navigation.map((item) => (
                                         <Link
                                             key={item.name}

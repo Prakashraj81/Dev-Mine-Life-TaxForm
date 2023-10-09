@@ -107,7 +107,7 @@ export default function ContactUs() {
                             </div>
                         </div>
 
-                        <div className="checkbox-list pb-7">
+                        <div className="hidden checkbox-list pb-7">
                             <label className="text-base font-medium block">ご都合の良い時間帯<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></label>
                             <div className="checkbox-form-list block mt-5 rounded border border-border">
                                 <span class="list-item-first px-5 py-3 block border-b-border hover:bg-custom-light-1">
