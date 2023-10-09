@@ -36,6 +36,10 @@ export default function LandAdd() {
     let [ShowQuestionNo, setShowQuestionNo] = useState(false);
 
     let [QuestionTwo, setQuestionTwo] = useState("");
+    let [QuestionTwoImage, setQuestionTwoImage] = useState(false);
+
+    let [LandYesImage, setLandYesImage] = useState(false);
+    let [LandNoImage, setLandNoImage] = useState(false);
 
 function createData(
   name,
@@ -69,10 +73,14 @@ const rows = [
         let radioValue = event.target.value;
         setQuestionOne(radioValue);
         if (radioValue === "Yes") {
+            setLandYesImage(true);
+            setLandNoImage(false);
             setShowQuestionYes(true);
             setShowQuestionNo(false);
         }
         else {
+            setLandYesImage(false);
+            setLandNoImage(true);
             setShowQuestionYes(false);
             setShowQuestionNo(true);
         }
@@ -80,7 +88,13 @@ const rows = [
 
     const handleQuestionTwo = (event) => {
         let radioValue = event.target.value;
-        setQuestionTwo(radioValue);        
+        setQuestionTwo(radioValue);   
+        if(radioValue === "Yes"){
+            setQuestionTwoImage(true);
+        }     
+        else{
+            setQuestionTwoImage(false);
+        }
     }
 
     //Disabled deduction radio button
@@ -145,8 +159,13 @@ const rows = [
                     </p>
                 </div>
                 <div className="w-full inline-block mb-7">
-                        <img src="/images/screenshot-1.jpg" className="w-full" alt="image" height={300} width={200}/>
-                    </div>    
+                    {LandYesImage && (
+                        <img src="/screenshots/land-yes.png" className="w-full" alt="image" height={500} width={200} />
+                    )}  
+                    {LandNoImage && (
+                        <img src="/screenshots/land-no.png" className="w-full" alt="image" height={500} width={200} />
+                    )}                     
+                </div>
                 <form action="#" method="POST">
                     <FormControl>
                         <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
@@ -319,9 +338,17 @@ const rows = [
                                 },
                             }} />
                         </RadioGroup>
-                    </FormControl>           
-
-                    </div>                   
+                    </FormControl>  
+                </div>        
+                <div className="w-full inline-block mb-7">
+    {QuestionTwoImage && (
+        <div>
+            <img src="/screenshots/land-second-yes.png" className="w-full" alt="image" height={500} width={200} />
+            <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />
+            <img src="/screenshots/land-second-yes-2.png" className="w-full" alt="image" height={500} width={200} />
+        </div>
+    )}
+</div>           
                                                     
 
                     <div className="bg-custom-light mt-10 py-3 px-5 w-full inline-block">

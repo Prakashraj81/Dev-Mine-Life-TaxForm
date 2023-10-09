@@ -17,13 +17,17 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
 export default function HouseAdd() {
-    let [BuildingRadioValue, setBuildingRadioValue] = useState('No');
+    let [BuildingRadioValue, setBuildingRadioValue] = useState('');
     let [ShowYes, setShowYes] = useState(false);
     let [ShowNo, setShowNo] = useState(false);
-    let [QuestionThree, setQuestionThree] = useState('No');
+
+    let [BuildingYesImage, setBuildingYesImage] = useState(false);
+    let [BuildingNoImage, setBuildingNoImage] = useState(false);
+
+    let [QuestionThree, setQuestionThree] = useState('');
     let [ShowYesOption3, setShowYesOption3] = useState(false);
     let [ShowNoOption3, setShowNoOption3] = useState(false);
-    let [QuestionFour, setQuestionFour] = useState('No');
+    let [QuestionFour, setQuestionFour] = useState('');
     let [ShowYesOption4, setShowYesOption4] = useState(false);
     let [ShowNoOption4, setShowNoOption4] = useState(false);
 
@@ -32,10 +36,14 @@ export default function HouseAdd() {
         let radioValue = event.target.value;
         setBuildingRadioValue(radioValue);
         if (radioValue === "Yes") {
+            setBuildingYesImage(true);
+            setBuildingNoImage(false);
             setShowYes(true);
             setShowNo(false);
         }
         else {
+            setBuildingYesImage(false);
+            setBuildingNoImage(true);
             setShowYes(false);
             setShowNo(true);
         }
@@ -85,7 +93,12 @@ export default function HouseAdd() {
                 </div>
 
                 <div className="w-full inline-block mb-7">
-                    <img src="/images/screenshot-2.jpg" className="w-full" alt="image" height={500} width={200} />
+                    {BuildingYesImage && (
+                        <img src="/screenshots/building-yes.png" className="w-full" alt="image" height={500} width={200} />
+                    )}  
+                    {BuildingNoImage && (
+                        <img src="/screenshots/building-no.png" className="w-full" alt="image" height={500} width={200} />
+                    )}                     
                 </div>
 
                 <form action="#" method="POST">
@@ -360,7 +373,10 @@ export default function HouseAdd() {
 
                 <div className="mb-7">
                     <label className="form-label text-lg mb-7">2. 固定資産税課税明細（固定資産税評価証明書）の情報の入力</label>
-                    <div className="w-full flex items-center justify-between mt-5 mb-7">
+                    <div className="w-full inline-block mt-5 mb-7">
+                        <img src="/screenshots/building-second.png" className="w-full" alt="image" height={500} width={50} />                    
+                    </div>
+                    <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
                                         <label className="form-label">家屋の所在</label>
