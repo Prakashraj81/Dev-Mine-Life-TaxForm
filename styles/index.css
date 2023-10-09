@@ -118,3 +118,51 @@ input {
   border: 1px solid #E88C87 !important;
   border-radius: 100px !important;
 }
+
+
+.mui-style-vnkopk-MuiStepLabel-iconContainer {
+  /* -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox; */
+  display: block !important;
+  padding-right: 8px;
+}
+.mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  fill: currentColor;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  font-size: 1.5rem;
+  display: block;
+  -webkit-transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  color: rgba(0, 0, 0, 0.38);
+}
+.mui-style-1kdffsf-MuiStepIcon-text {
+  fill: #ffffff;
+  font-size: 0.75rem;
+  font-family: 'Noto Sans JP',sans-serif;
+}
+.text-mui {
+  fill: #E88C87 !important;
+}
+.cricle-mui {
+  width: 0.75em !important;
+  height: 0.75em !important;
+  fill: #FFF !important;
+  color: #FFF !important;
+  border: 1px solid #E88C87 !important;
+  border-radius: 100px !important;
+}

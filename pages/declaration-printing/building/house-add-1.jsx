@@ -493,7 +493,7 @@ export default function HouseAdd() {
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                    <span className="cricle">1</span> 所在<i className="text-red-500">*</i>
+                                    所在<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2 relative">
@@ -509,7 +509,7 @@ export default function HouseAdd() {
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                    <span className="cricle">2</span> 地日<i className="text-red-500">*</i>
+                                    Input form ②
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2 relative">
@@ -524,15 +524,29 @@ export default function HouseAdd() {
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                    <span className="cricle">3</span> 地積 ㎡<i className="text-red-500">*</i>
+                                    Input form ③
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2 relative">
+                                <div className="w-full inline-block mt-2">
                                     <input
                                         type="text"                                                                              
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                    />        
-                                    <AreaIcon/>                            
+                                    />                                                                   
+                                </div>
+                            </div>
+                        </div>      
+                        <div className="w-full block items-center justify-between mb-7">
+                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                    Input form ④
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"                                                                              
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
+                                    />                                                                   
                                 </div>
                             </div>
                         </div>              
@@ -541,7 +555,7 @@ export default function HouseAdd() {
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label htmlFor="InsertCertificate" className="form-label">
-                                <span className="cricle">4</span> 証明書を挿入<i className="text-red-500">*</i>
+                                    証明書を挿入<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">

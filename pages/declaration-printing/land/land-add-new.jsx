@@ -341,14 +341,17 @@ const rows = [
                     <div className="w-full flex items-center justify-between mb-7">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">1</span> 所在<i className="text-red-500">*</i>
+                                <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">1</text>
+                                    </svg>
+                                    </span> <span>所在</span><i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
-                                    id="Name"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
                                 {NameError && (
@@ -359,14 +362,17 @@ const rows = [
 
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">2</span> 建物の名称<i className="text-red-500">*</i>
+                                <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">2</text>
+                                    </svg>
+                                    </span> 建物の名称<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
-                                    id="LotNumber"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
                                 {LotNumberError && (
@@ -379,14 +385,16 @@ const rows = [
                     <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">3</span> 構造
-                                </label>
+                                <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">3</text>
+                                    </svg>
+                                    </span> 構造</label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
-                                    id="ResidenceDisplay"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     onChange={inputHandlingFunction}
                                     value={ResidenceDisplay}
@@ -407,14 +415,16 @@ const rows = [
                     <div className="w-full flex items-center justify-between mt-3 mb-7">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">4</span> 床面積 ㎡
-                                </label>
+                                <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">4</text>
+                                    </svg>
+                                    </span> 床面積 ㎡</label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">
                                 <input
                                     type="text"
-                                    id="SurName"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
                                 />
                                 <AreaIcon/>
@@ -426,14 +436,16 @@ const rows = [
 
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">5</span> 所在及び地番
-                                </label>
+                                <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">5</text>
+                                    </svg>
+                                    </span> 所在及び地番</label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
-                                    id="GivenName"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
                                 {GivenNameError && (
@@ -445,14 +457,16 @@ const rows = [
                     <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">7</span> 地目
-                                </label>
+                            <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">6</text>
+                                    </svg>
+                                    </span> 地目</label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
-                                    id="Address"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     onChange={inputHandlingFunction}
                                     value={Address}
@@ -473,14 +487,16 @@ const rows = [
                     <div className="w-full flex items-center justify-between mt-3 mb-7">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">8</span> 地積㎡
-                                </label>
+                            <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">7</text>
+                                    </svg>
+                                    </span> 地積㎡</label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">
                                 <input
                                     type="text"
-                                    id="SurName"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
                                 <AreaIcon/>
@@ -492,13 +508,16 @@ const rows = [
 
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">9</span> 家屋番号</label>
+                            <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">8</text>
+                                    </svg>
+                                    </span> 家屋番号</label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
-                                    id="GivenName"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
                                 {GivenNameError && (
@@ -510,14 +529,16 @@ const rows = [
                     <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">10</span> 種類
-                                </label>
+                            <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">9</text>
+                                    </svg>
+                                    </span> 種類</label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
-                                    id="Address"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     onChange={inputHandlingFunction}
                                     value={Address}
@@ -532,11 +553,15 @@ const rows = [
                     <div className="w-full flex items-center justify-between mt-3 mb-7">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 block float-left">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">11</span> 床面積 ㎡<i className="text-red-500">*</i>
+                            <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">10</text>
+                                    </svg>
+                                    </span> 構造<i className="text-red-500">*</i>
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2 relative">
+                            <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
                                     id="Acreage"
@@ -545,7 +570,6 @@ const rows = [
                                     onChange={onChangeAcreage}
                                     value={Acreage}
                                 />
-                                <AreaIcon />
                                 {AcreageError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
                                 )}
@@ -554,14 +578,19 @@ const rows = [
 
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">12</span> 構造</label>
+                            <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">11</text>
+                                    </svg>
+                                    </span> 床面積 ㎡</label>
                             </div>
-                            <div className="w-full inline-block mt-2">
-                                <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={CondominiumsDropdownChange}>
-                                    <option id="0">---</option>
-                                    <option id="1" value="マンションである">マンションである</option>
-                                </select>
+                            <div className="w-full inline-block mt-2 relative">
+                                <input
+                                    type="text"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"                                    
+                                />
+                                <AreaIcon />                                
                             </div>
                         </div>
                     </div>
@@ -569,30 +598,18 @@ const rows = [
                     <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">13</span> 敷地権の種類
-                                </label>
+                            <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">12</text>
+                                    </svg>
+                                    </span> 敷地権の種類</label>
                             </div>
                             <div className="w-full inline-block mt-2">
-                                <div className="flex justify-between items-center">
-                                    <div><input
-                                        type="text"
-                                        id="OwnershipRatio"
-                                        onKeyPress={handleKeyPress}
-                                        onChange={Ownershipfunction}
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    /></div>
-                                    <div>
-                                        <span className="text-3xl text-gray-500">/</span>
-                                    </div>
-                                    <div><input
-                                        type="text"
-                                        id="Ratio"
-                                        onChange={Ratiofunction}
-                                        onKeyPress={handleKeyPress}
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    /></div>
-                                </div>
+                            <input
+                                    type="text"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"                                    
+                                />
                             </div>
                         </div>
                     </div>
@@ -600,9 +617,12 @@ const rows = [
                     <div className="w-full block items-center justify-between mb-14">
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
-                                <label className="form-label">
-                                <span className="cricle">14</span> 敷地権の割合
-                                </label>
+                            <label className="form-label flex items-center">
+                                <span className="MuiStepLabel-iconContainer mui-style-vnkopk-MuiStepLabel-iconContainer"><svg className="cricle-mui MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root mui-style-dnt8r5-MuiSvgIcon-root-MuiStepIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12"></circle>
+                                    <text className="text-mui MuiStepIcon-text mui-style-1kdffsf-MuiStepIcon-text" x="12" y="12" text-anchor="middle" dominant-baseline="central">13</text>
+                                    </svg>
+                                    </span> 敷地権の割合</label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <div className="flex justify-between items-center">
