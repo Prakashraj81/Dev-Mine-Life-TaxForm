@@ -199,15 +199,7 @@ const rows = [
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         以下の内容を入力して[保存]ボタンを押して下さい。
                     </p>
-                </div>
-                <div className="w-full inline-block mb-7">
-                    {LandYesImage && (
-                        <img src="/screenshots/land-yes.png" className="w-full" alt="image" height={500} width={200} />
-                    )}  
-                    {LandNoImage && (
-                        <img src="/screenshots/land-no.png" className="w-full" alt="image" height={500} width={200} />
-                    )}                     
-                </div>
+                </div>                
                 <form action="#" method="POST">
                     <FormControl>
                         <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
@@ -228,10 +220,19 @@ const rows = [
                                 },
                             }} />
                         </RadioGroup>
-                    </FormControl>
+                    </FormControl>                    
+
+                    <div className="w-full inline-block mb-7">
+                    {LandYesImage && (
+                        <img src="/screenshots/land-yes.png" className="w-full" alt="image" height={500} width={200} />
+                    )}  
+                    {LandNoImage && (
+                        <img src="/screenshots/land-no.png" className="w-full" alt="image" height={500} width={200} />
+                    )}                     
+                    </div>
                     <div className="w-full inline-block py-3">
                         <label>【登記簿謄本の情報の入力（建物の登記簿謄本をご用意ください）】</label>
-                    </div>    
+                    </div>   
                     {ShowQuestionYes && (
                         <>
                         <div className="w-full flex items-center justify-between mb-7">
