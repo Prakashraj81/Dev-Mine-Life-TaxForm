@@ -36,7 +36,8 @@ export default function LandAdd() {
     let [ShowQuestionNo, setShowQuestionNo] = useState(false);
 
     let [QuestionTwo, setQuestionTwo] = useState("");
-    let [QuestionTwoImage, setQuestionTwoImage] = useState(false);
+    let [QuestionTwoImageYes, setQuestionTwoImageYes] = useState(false);
+    let [QuestionTwoImageNo, setQuestionTwoImageNo] = useState(false);
 
     let [LandYesImage, setLandYesImage] = useState(false);
     let [LandNoImage, setLandNoImage] = useState(false);
@@ -96,10 +97,12 @@ const rows = [
         let radioValue = event.target.value;
         setQuestionTwo(radioValue);   
         if(radioValue === "Yes"){
-            setQuestionTwoImage(true);
+            setQuestionTwoImageYes(true);
+            setQuestionTwoImageNo(false);
         }     
         else{
-            setQuestionTwoImage(false);
+            setQuestionTwoImageNo(true);
+            setQuestionTwoImageYes(false);
         }
     }
 
@@ -384,10 +387,22 @@ const rows = [
                     </FormControl>  
                 </div>        
                 <div className="w-full inline-block mb-7">
-    {QuestionTwoImage && (
-        <div>
+    {QuestionTwoImageYes && (
+        <>
+        <div className="mt-5">
             <img src="/screenshots/land-second-image.png" className="w-full" alt="image" height={500} width={200} />           
         </div>
+        </>
+    )}
+    {QuestionTwoImageNo && (
+        <>
+        <div className="mt-5">
+            <img src="/screenshots/land-second-yes.png" className="w-full" alt="image" height={500} width={200} />           
+        </div>
+        <div className="mt-3">
+        <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />           
+    </div>
+        </>
     )}
 </div>           
                                                     
