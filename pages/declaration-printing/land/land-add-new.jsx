@@ -20,7 +20,7 @@ import TableTwo from '../../../components/land-tables/table-two';
 import TableThree from '../../../components/land-tables/table-three';
 import TableFour from '../../../components/land-tables/table-four';
 
-export default function LandAdd() { 
+export default function LandAdd() {
     let [ShowImageOne, setShowImageOne] = useState(true);
     let [ShowImageTwo, setShowImageTwo] = useState(false);
     let [ShowImageThree, setShowImageThree] = useState(false);
@@ -39,32 +39,43 @@ export default function LandAdd() {
     let [QuestionTwoImageYes, setQuestionTwoImageYes] = useState(false);
     let [QuestionTwoImageNo, setQuestionTwoImageNo] = useState(false);
 
+    let [QuestionThree, setQuestionThree] = useState("");
+    let [ShowYesOption3, setShowYesOption3] = useState(false);
+    let [ShowNoOption3, setShowNoOption3] = useState(false);
+
+    let [QuestionFour, setQuestionFour] = useState("");
+    let [ShowYesOption4, setShowYesOption4] = useState(false);
+    let [ShowNoOption4, setShowNoOption4] = useState(false);
+
+    let [OptionQuestionFour, setOptionQuestionFour] = useState("");
+    let [ShowOptionFour, setShowOptionFour] = useState(false);
+
     let [LandYesImage, setLandYesImage] = useState(false);
     let [LandNoImage, setLandNoImage] = useState(false);
 
     let [AmountofMoney, setAmountofMoney] = useState(0);
     let [UndecidedHeir, setUndecidedHeir] = useState(0);
     let [totalPrice, settotalPrice] = useState(0);
-    let [boxValues, setBoxValues] = useState([]);    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [boxValues, setBoxValues] = useState([]); let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
 
-function createData(
-  name,
-  calories,
-  fat,
-  carbs,
-  protein,
-) {
-  return { name, calories, fat, carbs, protein };
-}
+    function createData(
+        name,
+        calories,
+        fat,
+        carbs,
+        protein,
+    ) {
+        return { name, calories, fat, carbs, protein };
+    }
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+    const rows = [
+        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+        createData('Eclair', 262, 16.0, 24, 6.0),
+        createData('Cupcake', 305, 3.7, 67, 4.3),
+        createData('Gingerbread', 356, 16.0, 49, 3.9),
+    ];
 
     //Input keypress
     let handleKeyPress = (e) => {
@@ -74,7 +85,7 @@ const rows = [
         if (!numericRegex.test(keyValue)) {
             e.preventDefault();
         }
-    };   
+    };
 
     const handleQuestionOne = (event) => {
         let radioValue = event.target.value;
@@ -95,14 +106,53 @@ const rows = [
 
     const handleQuestionTwo = (event) => {
         let radioValue = event.target.value;
-        setQuestionTwo(radioValue);   
-        if(radioValue === "Yes"){
+        setQuestionTwo(radioValue);
+        if (radioValue === "Yes") {
             setQuestionTwoImageYes(true);
             setQuestionTwoImageNo(false);
-        }     
-        else{
+        }
+        else {
             setQuestionTwoImageNo(true);
             setQuestionTwoImageYes(false);
+        }
+    }
+
+    const handleQuestionThree = () => {
+        let radioValue = event.target.value;
+        setQuestionThree(radioValue);
+        if (radioValue === "Yes") {
+            setShowYesOption3(true);
+            setShowNoOption3(false);
+        }
+        else {
+            setShowNoOption3(true);
+            setShowYesOption3(false);
+        }
+    }
+
+    const handleQuestionFour = () => {
+        let radioValue = event.target.value;
+        setQuestionFour(radioValue);
+        if (radioValue === "Yes") {
+            setShowYesOption4(true);
+            setShowNoOption4(false);
+        }
+        else {
+            setShowNoOption4(true);
+            setShowYesOption4(false);
+        }
+    }
+
+    const handleOptionQuestionFour = () =>{
+        let radioValue = event.target.value;
+        setOptionQuestionFour(radioValue);
+        if (radioValue === "Yes") {
+            setShowOptionFour(true);
+            setShowNoOption4(false);
+        }
+        else {
+            setShowNoOption4(true);
+            setShowOptionFour(false);
         }
     }
 
@@ -150,7 +200,7 @@ const rows = [
             setShowTableThree(false);
             setShowTableFour(true);
         }
-    };    
+    };
 
 
     const handleBoxValueChange = (e, index) => {
@@ -185,7 +235,7 @@ const rows = [
     //Submit API function 
     const router = useRouter();
     const onSubmit = () => {
-        
+
     };
 
     return (
@@ -202,7 +252,7 @@ const rows = [
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         以下の内容を入力して[保存]ボタンを押して下さい。
                     </p>
-                </div>                
+                </div>
                 <form action="#" method="POST">
                     <FormControl>
                         <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
@@ -223,22 +273,22 @@ const rows = [
                                 },
                             }} />
                         </RadioGroup>
-                    </FormControl>                    
+                    </FormControl>
 
                     <div className="w-full inline-block mb-7">
-                    {LandYesImage && (
-                        <img src="/screenshots/land-yes.png" className="w-full" alt="image" height={500} width={200} />
-                    )}  
-                    {LandNoImage && (
-                        <img src="/screenshots/land-no.png" className="w-full" alt="image" height={500} width={200} />
-                    )}                     
+                        {LandYesImage && (
+                            <img src="/screenshots/land-yes.png" className="w-full" alt="image" height={500} width={200} />
+                        )}
+                        {LandNoImage && (
+                            <img src="/screenshots/land-no.png" className="w-full" alt="image" height={500} width={200} />
+                        )}
                     </div>
                     <div className="w-full inline-block py-3">
                         <label>【登記簿謄本の情報の入力（建物の登記簿謄本をご用意ください）】</label>
-                    </div>   
+                    </div>
                     {ShowQuestionYes && (
                         <>
-                        <div className="w-full flex items-center justify-between mb-7">
+                            <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
                                         <label className="form-label">所在及び地番</label>
@@ -274,7 +324,7 @@ const rows = [
                                             type="text"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         />
-                                        <AreaIcon/>
+                                        <AreaIcon />
                                     </div>
                                 </div>
 
@@ -302,13 +352,13 @@ const rows = [
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         />
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </>
                     )}
                     {ShowQuestionNo && (
                         <>
-                        <div className="w-full flex items-center justify-between mb-7">
+                            <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
                                         <label className="form-label">所在</label>
@@ -356,64 +406,195 @@ const rows = [
                                             type="text"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         />
-                                        <AreaIcon/>
+                                        <AreaIcon />
                                     </div>
                                 </div>
                             </div>
                         </>
-                    )}       
+                    )}
 
 
                     <div className="mt-5">
-                    <FormControl>
-                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">2. 被相続人が所有されていた不動産は路線価地域の土地でしょうか。</label>
-                        <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
-                            value={QuestionTwo}
-                        >
-                            <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionTwo} label="はい" sx={{
-                                '& .MuiSvgIcon-root': {
-                                    fontSize: 16,
-                                },
-                            }} />
-                            <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionTwo} label="いいえ" sx={{
-                                '& .MuiSvgIcon-root': {
-                                    fontSize: 16,
-                                },
-                            }} />
-                        </RadioGroup>
-                    </FormControl>  
-                </div>        
-                <div className="w-full inline-block mb-7">
-    {QuestionTwoImageYes && (
-        <>
-        <div className="mt-5">
-            <img src="/screenshots/land-second-image.png" className="w-full" alt="image" height={500} width={200} />           
-        </div>
-        </>
-    )}
-    {QuestionTwoImageNo && (
-        <>
-        <div className="mt-5">
-            <img src="/screenshots/land-second-yes.png" className="w-full" alt="image" height={500} width={200} />           
-        </div>
-        <div className="mt-3">
-        <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />           
-    </div>
-        </>
-    )}
-</div>           
-                                                    
+                        <FormControl>
+                            <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">2. 被相続人が所有されていた不動産は路線価地域の土地でしょうか。</label>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                value={QuestionTwo}
+                            >
+                                <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionTwo} label="はい" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                                <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionTwo} label="いいえ" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                            </RadioGroup>
+                        </FormControl>
+                    </div>
+                    <div className="w-full inline-block mb-7">
+                        {QuestionTwoImageYes && (
+                            <>
+                                <div className="mt-5">
+                                    <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>
+                            </>
+                        )}
+                        {QuestionTwoImageNo && (
+                            <>
+<div className="mt-5">
+                                    <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>
+                                <div className="mt-5">
+                                    <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+
+                    <div className="mb-7">
+                        <FormControl>
+                            <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">3. 所有されていた物件に共有者はいましたか。</label>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                value={QuestionThree}
+                            >
+                                <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionThree} label="はい" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                                <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionThree} label="いいえ" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                            </RadioGroup>
+                        </FormControl>
+                        {ShowYesOption3 && (
+                            <>
+                                <div className="w-full block items-center justify-between mb-7">
+                                    <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                        <div className="label w-full inline-block">
+                                            <label className="form-label">賃貸割合の入力</label>
+                                        </div>
+                                        <div className="w-full inline-block mt-2">
+                                            <div className="flex justify-between items-center">
+                                                <div><input
+                                                    type="text"
+                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                /></div>
+                                                <div>
+                                                    <span className="text-3xl text-gray-500">/</span>
+                                                </div>
+                                                <div><input
+                                                    type="text"
+                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                /></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                        {ShowNoOption3 && (
+                            <></>
+                        )}
+                    </div>
+
+
+                    <div className="mb-7">
+                        <FormControl>
+                            <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">4. 所有されていた物件（土地もしくはその上に建築した建物）を相続開始時に賃貸されていましたか。</label>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                value={QuestionFour}
+                            >
+                                <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionFour} label="はい" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                                <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionFour} label="いいえ" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                            </RadioGroup>
+                        </FormControl>
+                        {ShowYesOption4 && (
+                            <>
+                                <div className="w-full block items-center justify-between mb-7">
+                                    <div className="user-details w-full block">
+
+                                        <FormControl>
+                                            <label className="form-label text-lg my-3" id="demo-row-radio-buttons-group-label">・土地の上に建物を建築して建物を賃貸していましたか。（建物は被相続人所有）</label>
+                                            <RadioGroup
+                                                row
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="row-radio-buttons-group"
+                                                value={OptionQuestionFour}
+                                            >
+                                                <FormControlLabel value="Yes" control={<Radio />} onChange={handleOptionQuestionFour} label="はい" sx={{
+                                                    '& .MuiSvgIcon-root': {
+                                                        fontSize: 16,
+                                                    },
+                                                }} />
+                                                <FormControlLabel value="No" control={<Radio />} onChange={handleOptionQuestionFour} label="いいえ" sx={{
+                                                    '& .MuiSvgIcon-root': {
+                                                        fontSize: 16,
+                                                    },
+                                                }} />
+                                            </RadioGroup>
+                                        </FormControl>
+                                        <div className="label w-full inline-block my-3">
+                                            <label className="form-label">賃貸割合の入力</label>
+                                        </div>
+                                        {ShowOptionFour &&(
+                                            <>
+                                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48  inline-block mt-2">
+                                            <div className="flex justify-between items-center">
+                                                <div><input
+                                                    type="text"
+                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                /></div>
+                                                <div>
+                                                    <span className="text-3xl text-gray-500">/</span>
+                                                </div>
+                                                <div><input
+                                                    type="text"
+                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                /></div>
+                                            </div>
+                                        </div>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                        {ShowNoOption4 && (
+                            <></>
+                        )}
+                    </div>
+
 
                     <div className="bg-custom-light mt-10 py-3 px-5 w-full inline-block">
                         <label className="form-label" id="demo-row-radio-buttons-group-label">土地の詳細の入力</label>
                     </div>
                     <div className="w-full flex items-center justify-between mt-3 mb-7">
                         <div className="w-full lg:w-65 xl:w-65 2xl:w-65 block float-left">
-                            <div className="w-full inline-block mt-2 relative">                            
-                                <FormControl>                                    
+                            <div className="w-full inline-block mt-2 relative">
+                                <FormControl>
                                     <RadioGroup
                                         aria-labelledby="demo-row-radio-buttons-group-label"
                                         name="row-radio-buttons-group"
@@ -465,35 +646,35 @@ const rows = [
                     <div className="w-full inline-block py-5">
                         <div classsName="table-columns">
                             {ShowTableOne && (
-                                <TableOne/>
-                            )}           
+                                <TableOne />
+                            )}
                             {ShowTableTwo && (
-                                <TableTwo/>
-                            )}     
+                                <TableTwo />
+                            )}
                             {ShowTableThree && (
-                                <TableThree/>
-                            )}           
+                                <TableThree />
+                            )}
                             {ShowTableFour && (
-                                <TableFour/>     
-                            )}          
+                                <TableFour />
+                            )}
                         </div>
-                    </div>     
+                    </div>
                     <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="heading text-center">
                             <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                         </div>
                         <div className="total-list pt-10">
-                        <HeirListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={AmountofMoney}  />
+                            <HeirListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={AmountofMoney} />
                         </div>
-                        <IncorrectError IncorrectError={ShowIncorrectError}/>
+                        <IncorrectError IncorrectError={ShowIncorrectError} />
                     </div>
-                    <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">                        
+                    <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                         <BackButton />
-                        <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled}/>
+                        <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                     </div>
                     <div className="heading text-center pt-8">
                         <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
-                    </div>               
+                    </div>
                 </form>
             </div>
         </>
