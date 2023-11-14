@@ -408,15 +408,16 @@ export default function GiftTaxAdd() {
                                     数量/㎡
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2">
+                            <div className="w-full inline-block mt-2 relative">
                                 <input
                                     type="text"
                                     id="Quantity"
-                                    className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12"
                                     onChange={onchangeQuantity}
                                     onKeyPress={handleKeyPress}
                                     value={Quantity}
                                 />
+                                <AreaIcon />
                             </div>
                         </div>
                     </div>
