@@ -340,7 +340,7 @@ export default function GiftTaxAdd() {
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
                         <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                            その他の財産1
+                        生前贈与
                         </p>
                     </div>
                 </div>
