@@ -143,7 +143,7 @@ export default function LandAdd() {
         }
     }
 
-    const handleOptionQuestionFour = () =>{
+    const handleOptionQuestionFour = () => {
         let radioValue = event.target.value;
         setOptionQuestionFour(radioValue);
         if (radioValue === "Yes") {
@@ -446,7 +446,7 @@ export default function LandAdd() {
                         )}
                         {QuestionTwoImageNo && (
                             <>
-<div className="mt-5">
+                                <div className="mt-5">
                                     <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
                                 </div>
                                 <div className="mt-5">
@@ -559,23 +559,23 @@ export default function LandAdd() {
                                         <div className="label w-full inline-block my-3">
                                             <label className="form-label">賃貸割合の入力</label>
                                         </div>
-                                        {ShowOptionFour &&(
+                                        {ShowOptionFour && (
                                             <>
-                                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48  inline-block mt-2">
-                                            <div className="flex justify-between items-center">
-                                                <div><input
-                                                    type="text"
-                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                /></div>
-                                                <div>
-                                                    <span className="text-3xl text-gray-500">/</span>
+                                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48  inline-block mt-2">
+                                                    <div className="flex justify-between items-center">
+                                                        <div><input
+                                                            type="text"
+                                                            className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                        /></div>
+                                                        <div>
+                                                            <span className="text-3xl text-gray-500">/</span>
+                                                        </div>
+                                                        <div><input
+                                                            type="text"
+                                                            className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                        /></div>
+                                                    </div>
                                                 </div>
-                                                <div><input
-                                                    type="text"
-                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                /></div>
-                                            </div>
-                                        </div>
                                             </>
                                         )}
                                     </div>

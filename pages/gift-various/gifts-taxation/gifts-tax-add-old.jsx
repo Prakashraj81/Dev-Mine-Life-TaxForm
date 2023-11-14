@@ -13,9 +13,9 @@ import AreaIcon from "../../../components/inputbox-icon/textbox-area-icon";
 export default function GiftTaxAdd() {
 
     let GiftTypeList = [
-        // { id: 1, value: '一般贈与', label: '一般贈与' },
-        // { id: 2, value: '特例贈与', label: '特例贈与' },
-        // { id: 3, value: '相続時精算課税', label: '相続時精算課税' },
+        { id: 1, value: '一般贈与', label: '一般贈与' },
+        { id: 2, value: '特例贈与', label: '特例贈与' },
+        { id: 3, value: '相続時精算課税', label: '相続時精算課税' },
         { id: 4, value: '特定贈与', label: '特定贈与' },
     ];
 
@@ -159,7 +159,28 @@ export default function GiftTaxAdd() {
         setGiftType(selectedId);
     };
 
-
+    const PropertyDetailsChange = (event) => {
+        var selectedOption = event.target.options[event.target.selectedIndex];
+        setPropertyDetails(selectedOption.text);
+        let DetailsId = Number(selectedOption.value);
+        let property_value = TypeofProperty;
+        if (property_value === "現金・預貯金" || property_value === "外貨" || property_value === "Cash/savings" || property_value === "foreign currency") {
+            if (DetailsId === 2) {
+                setShowBreadth(false);
+                setShowPostCode(false);
+                setShowAddress(false);
+                setShowLocation(true);
+                setShowQuantity(true);
+            }
+            else {
+                setShowBreadth(false);
+                setShowLocation(false);
+                setShowQuantity(false);
+                setShowPostCode(true);
+                setShowAddress(true);
+            }
+        }
+    }
 
     //Property select box
     const handlePropertyChange = (event) => {
@@ -231,7 +252,7 @@ export default function GiftTaxAdd() {
             setShowQuantity(true);
         }
     };
-
+    
     function onchangeQuantity(e) {
         let quantity = parseFloat(e.target.value);
         setQuantity(quantity);
@@ -246,19 +267,19 @@ export default function GiftTaxAdd() {
         if (inputId === "GiftType") {
             setGiftType(inputValue);
             setGiftTypeError(false);
-        }
-        else if (inputId === "DateofGift") {
+        }   
+        else if(inputId === "DateofGift") {
             setDateofGift(inputValue);
             setDateofGiftError(false);
-        }
-        else if (inputId === "Address") {
+        }   
+        else if(inputId === "Address") {
             setAddress(inputValue);
             setAddressError(false);
-        }
-        else if (inputId === "Location") {
+        }   
+        else if(inputId === "Location") {
             setLocation(inputValue);
             setLocationError(false);
-        }
+        }   
         else {
 
         }
@@ -312,7 +333,7 @@ export default function GiftTaxAdd() {
             setGiftRecipientError(true);
             isSumbitDisabled = true;
         }
-
+        
         //Api setup
         if (isSumbitDisabled !== true) {
             console.log("API allowed");
@@ -375,73 +396,45 @@ export default function GiftTaxAdd() {
                             </div>
                         </div>
 
-                    </div>
-
-
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full block">
+                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    所在場所<i className="text-red-500">*</i>
+                                    贈与を受けた日<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
                                 <input
-                                    type="text"
-                                    id="Location"
+                                    type="date"
+                                    id="DateofGift"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     onChange={inputHandlingFunction}
-                                    value={Location}
+                                    value={DateofGift}
                                 />
-                                {LocationError && (
+                                {DateofGiftError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
                                 )}
                             </div>
                         </div>
                     </div>
 
-
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
-                                    数量/㎡
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    id="Quantity"
-                                    className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    onChange={onchangeQuantity}
-                                    onKeyPress={handleKeyPress}
-                                    value={Quantity}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-
                     <div className="w-full flex items-center justify-between mb-7">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        贈与を受けた額<i className="text-red-500">*</i>
+                                        財産の種類<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="GiftAmount"
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        onChange={inputHandlingFunction}
-                                        value={GiftAmount}
-                                    />
-                                    {GiftAmountError && (
+                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handlePropertyChange}>
+                                        <option value=''></option>
+                                        {PropertyList.map((option) => (
+                                            <option key={option.value} value={option.id}>
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {PropertyTypeError && (
                                         <p className="text-red-500" role="alert">この項目は必須です</p>
                                     )}
                                 </div>
@@ -451,23 +444,192 @@ export default function GiftTaxAdd() {
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    贈与に伴って支払った贈与税額<i className="text-red-500">*</i>
+                                    財産の細目
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    id="AmountofGiftTax"
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    onChange={inputHandlingFunction}
-                                    value={AmountofGiftTax}
-                                />
-                                {AmountofGiftTaxError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
+                                <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={PropertyDetailsChange}>
+                                    <option value=''></option>
+                                    {PropertyOptionsData.map((option) => (
+                                        <option key={option.value} value={option.id}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
                     </div>
+
+                    {ShowPostCode && (
+                        <div className="w-full block items-center justify-between mb-7">
+                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label w-full inline-block">
+                                        所在場所
+                                    </label>
+                                    <label className="form-label w-full inline-block mt-3">
+                                        郵便番号
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2 relative">
+                                    <input
+                                        type="text"
+                                        id="PostCode"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
+                                        onKeyPress={handleKeyPress}
+                                        onChange={postalcodeDigit}
+                                        value={PostCode}
+                                    />
+                                    <PostcodeIcon />
+                                </div>
+                                <div className="mt-3">
+                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
+                                </div>
+                                {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
+                            </div>
+                        </div>
+                    )}
+
+                    {ShowAddress && (
+                        <div className="w-full block items-center justify-between mb-7">
+                            <div className="user-details w-full inline-block">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                        住所<i className="text-red-500">*</i>
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        id="Address"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        onChange={inputHandlingFunction}
+                                        value={Address}
+                                    />
+                                    {AddressError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {ShowBreadth && (
+                        <div className="w-full block items-center justify-between mb-7">
+                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                        広さ
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2 relative">
+                                    <input
+                                        type="text"
+                                        id="Breadth"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
+                                        onKeyPress={handleKeyPress}
+                                        value={Breadth}
+                                    />
+                                    <AreaIcon />
+                                </div>
+                            </div>
+                        </div>
+
+                    )}
+
+                    {ShowLocation && (
+                        <div className="w-full block items-center justify-between mb-7">
+                            <div className="user-details w-full block">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                        所在場所<i className="text-red-500">*</i>
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        id="Location"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        onChange={inputHandlingFunction}
+                                        value={Location}
+                                    />
+                                    {LocationError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                    )}
+
+                    {ShowQuantity && (
+                        <div className="w-full block items-center justify-between mb-7">
+                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                        数量
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        id="Quantity"
+                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                        
+                                        onChange={onchangeQuantity}
+                                        onKeyPress={handleKeyPress}
+                                        value={Quantity}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    )}
+
+                    {ShowGiftAmountandGiftTax && (
+                        <div className="w-full flex items-center justify-between mb-7">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <div className="user-details">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">
+                                            贈与を受けた額<i className="text-red-500">*</i>
+                                        </label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            id="GiftAmount"
+                                            className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            onChange={inputHandlingFunction}
+                                            value={GiftAmount}
+                                        />
+                                        {GiftAmountError && (
+                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                        贈与に伴って支払った贈与税額<i className="text-red-500">*</i>
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        id="AmountofGiftTax"
+                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        onChange={inputHandlingFunction}
+                                        value={AmountofGiftTax}
+                                    />
+                                    {AmountofGiftTaxError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
 
                     <div className="w-full block items-center justify-between mb-7">
@@ -480,7 +642,7 @@ export default function GiftTaxAdd() {
                             <div className="w-full inline-block mt-2 relative">
                                 <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
                                     <option value='' id="0"></option>
-                                </select>
+                                </select>                                
                             </div>
                         </div>
                     </div>
@@ -489,7 +651,7 @@ export default function GiftTaxAdd() {
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                贈与を受けた人<i className="text-red-500">*</i>
+                                    贈与を受けた人<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
