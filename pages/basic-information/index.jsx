@@ -67,7 +67,7 @@ export default function BasicInformation() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        被相続人、相続を受ける方の情報を「<EditOutlinedIcon className="rotate-1" />」ボタン、「追加する」ボタンをクリックし、ご入力ください。入力が完了しましたら「入力終了（次へ）」をクリックし、財産情報の入力へ進んでくださ い。わからない項目は「？」をご確認ください。
+                        被相続人、相続を受ける方の情報を「<EditOutlinedIcon className="rotate-1" />」ボタン、「追加する」ボタンをクリックし、ご入力ください。入力が完了しましたら「入力終了（次へ）」をクリックし、財産情報の入力へ進んでくださ い。
                     </p>
                 </div>
                 <div className="input-details">
