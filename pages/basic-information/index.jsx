@@ -149,9 +149,9 @@ export default function BasicInformation() {
                             </button>
                         </div>
                     </div>
-                    <div className="page-description">
+                    <div className="page-description">                        
                         <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                            無料de相続は法定相続人が１人以上いる相続人6人までの申告書作成ができます。法定相続情報人がいない場合や。
+                            無料de相続は相続人6人までの申告書作成ができます。法定相続人がいない場合や。
                         </p>
                     </div>
                     {showEndButton && (
