@@ -134,7 +134,7 @@ const Menuitems = [
         text: "debt",
       },  
       {
-        title: "葬式費用",
+        title: "葬儀費用",
         icon: <PaymentOutlinedIcon/>,
         href: "/declaration-printing/funeral-expenses",
         translateHeading: "funeral expenses",
