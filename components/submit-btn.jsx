@@ -12,7 +12,7 @@ export default function SubmitButton({ onSubmit, isSumbitDisabled }) {
                     className={isSumbitDisabled ? "cursor-not-allowed bg-custom-light rounded px-10 py-3 text-white" : "cursor-pointer bg-primary-color rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"}
                 >
                     <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                      保存
+                       保存
                     </span>
                 </button>
             </div>

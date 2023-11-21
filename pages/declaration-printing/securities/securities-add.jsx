@@ -13,14 +13,17 @@ import InfoIcon from '@mui/icons-material/Info';
 
 export default function SecuritiesAdd() {
     let SecuritiesList = [
-        { id: 1, value: '特定同族会社の株式出資（配当還元方式）', label: '特定同族会社の株式出資（配当還元方式）' },
-        { id: 2, value: '特定同族会社の株式出資（その他の方式）', label: '特定同族会社の株式出資（その他の方式）' },
-        { id: 3, value: '上記以外の株式（上場株式など）', label: '上記以外の株式（上場株式など）' },
-        { id: 4, value: '出資', label: '出資' },
-        { id: 5, value: '公債', label: '公債' },
-        { id: 6, value: '社債', label: '社債' },
-        { id: 7, value: '証券投資信託の受益証券', label: '証券投資信託の受益証券' },
-        { id: 8, value: '貸付信託の受益証券', label: '貸付信託の受益証券' },
+        { id: 1, value: '上場株式及び出資', label: '上場株式及び出資' },
+        { id: 2, value: '公債及び社債', label: '公債及び社債' },
+        { id: 3, value: '証券投資信託・貸付信託の受益証券', label: '証券投資信託・貸付信託の受益証券' },
+        // { id: 1, value: '特定同族会社の株式出資（配当還元方式）', label: '特定同族会社の株式出資（配当還元方式）' },
+        // { id: 2, value: '特定同族会社の株式出資（その他の方式）', label: '特定同族会社の株式出資（その他の方式）' },
+        // { id: 3, value: '上記以外の株式（上場株式など）', label: '上記以外の株式（上場株式など）' },
+        // { id: 4, value: '出資', label: '出資' },
+        // { id: 5, value: '公債', label: '公債' },
+        // { id: 6, value: '社債', label: '社債' },
+        // { id: 7, value: '証券投資信託の受益証券', label: '証券投資信託の受益証券' },
+        // { id: 8, value: '貸付信託の受益証券', label: '貸付信託の受益証券' },
     ];
 
     let UnitDetailsList = [
@@ -520,35 +523,11 @@ export default function SecuritiesAdd() {
                                       
                     </div>
 
-                    {showUnitDetails && (
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="UnitDetails" className="form-label">
-                                        受益証券の詳細<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={UnitDetailsDropdownChange}>
-                                        <option value='' id="0"></option>
-                                        {UnitDetailsList.map((option) => (
-                                            <option key={option.value} id={option.id} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {UnitDetailsError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                    {showNameSecurities && (
-                        <div className="w-full inline-block items-center justify-between mb-7">
+                    <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="NameofSecurities" className="form-label">
-                                    有価証券の名称・銘柄<i className="text-red-500">*</i>
+                                    有価証券の名称・銘柄 <i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -565,11 +544,8 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
-                    )}                    
 
-                    
-                    {showFinancialInstitutionName && (
-                        <div className="w-full block items-center justify-between mb-7">
+                <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="FinancialInstitutionName" className="form-label">
@@ -590,24 +566,19 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
-                    )}
-
-                    {showQuantityPrice && (
+                    
+                    
                         <div className="w-full flex items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
                                         <label className="form-label flex items-center">
-                                        株式数・口数 <InfoIcon style={buttonStyle} className="ml-2  text-blue-500" />
+                                        単位 
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
-                                            type="text"
-                                            id="UnitPrice"
-                                            value={UnitPrice}
-                                            onChange={onchangeUnitPrice}
-                                            onKeyPress={handleKeyPress}
+                                            type="text"                                            
                                             autocomplete="off"
                                             className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
                                         />
@@ -622,112 +593,26 @@ export default function SecuritiesAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="Quantity" className="form-label">
-                                        数量
+                                    数量
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <input
                                         type="text"
-                                        id="Quantity"
-                                        value={Quantity}
-                                        onChange={onchangeQuantity}
-                                        onKeyPress={handleKeyPress}
+                                        id="Quantity"                                       
                                         className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     />
                                 </div>
                             </div>
                         </div>
-                    )}
 
-                    {showMoneyOrderQuantity && (
-                        <div className="w-full flex items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="user-details">
-                                    <div className="label w-full inline-block">
-                                        <label className="form-label">
-                                            為替
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            value={MoneyOrder}
-                                            onChange={MoneyOrderKeyPress}
-                                            onKeyPress={handleKeyPress}
-                                            className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                    
 
+                    <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        数量
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        value={Quantity}
-                                        onChange={MoneyOrderQuantityKeyPress}
-                                        onKeyPress={handleKeyPress}
-                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-
-
-                    {showReducationAmount && (
-                        <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="ReductionAmount" className="form-label">
-                                        減額金額
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="ReductionAmount"
-                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        value={ReductionAmount}
-                                        onChange={ReductionAmountKeyPress}
-                                        onKeyPress={handleKeyPress}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {showQuantityPrice && (
-                        <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="AmountofMoney" className="form-label">
-                                        金額
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        value={AmountofMoney}
-                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {showAmountMoney && (
-                        <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
-                                        金額<i className="text-red-500">*</i>
+                                    金額<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -745,7 +630,6 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
-                    )}
 
                     <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="heading text-center">

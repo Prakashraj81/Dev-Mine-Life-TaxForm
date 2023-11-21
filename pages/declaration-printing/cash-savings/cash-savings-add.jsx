@@ -378,7 +378,7 @@ export default function CashSavingsAdd() {
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
                                         <label htmlFor="FinancialInstitutionName" className="form-label">
-                                            金融機関名<i className="text-red-500">*</i>
+                                            金融機関名<i className="text-red-500">*</i> <span>（例：みずほ銀行　新宿支店）</span>
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">

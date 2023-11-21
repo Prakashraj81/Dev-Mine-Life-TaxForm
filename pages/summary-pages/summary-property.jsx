@@ -63,6 +63,22 @@ const tableList = [
         icon: <ModeEditIcon className="text-white" />,
         path: "/declaration-printing/funeral-expenses",
     },
+    {
+        id: 9,
+        heading: "死亡保険金等",
+        amount: 0,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/death-benefit",
+    },
+    {
+        id: 10,
+        heading: "死亡退職金等",
+        amount: 0,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/death-retirement-allowance",
+    }, 
+
+    
 ]
 
 export default function SummaryProperty() {

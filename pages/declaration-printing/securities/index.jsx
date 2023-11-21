@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import BackButton from "../../../components/back-btn";
+import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function Securities() {
@@ -69,31 +69,10 @@ export default function Securities() {
                             追加する
                         </button>
                     </Link>
-                </div>
-                <div className="Total-property-section py-5 md:py-10 lg:py-20 xl:py-20 2xl:py-20 px-5 md:px-10 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-sm xl:max-w-screen-sm 2xl:max-w-screen-sm">
-                    <div className="heading text-center">
-                        <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
+                </div>                
+                <div className="back-btn pt-5 md:pt-10 lg:pt-20 xl:pt-20 2xl:pt-20 text-center">
+                        <BackButtonIndex />
                     </div>
-                    <div className="total-list pt-10">
-                        <ul>
-                            <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                <span>山田　太郎</span>
-                                <span>0</span>
-                            </li>
-                            <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                <span>相続人未決定</span>
-                                <span>{totalValuation}</span>
-                            </li>
-                            <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                <span>合計</span>
-                                <span>{totalValuation}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="back-btn pt-5 md:pt-10 lg:pt-20 xl:pt-20 2xl:pt-20 text-center">
-                        <BackButton />
-                    </div>
-                </div>
             </div>
         </>
     )

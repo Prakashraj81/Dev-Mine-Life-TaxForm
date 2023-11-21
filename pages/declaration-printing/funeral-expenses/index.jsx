@@ -3,7 +3,7 @@ import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import BackButton from "../../../components/back-btn";
+import BackButtonIndex from "../../../components/back-btn-index";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FullLayout from '../../../components/layouts/full/FullLayout';
 
@@ -91,7 +91,7 @@ export default function FuneralExpenses() {
                             </li>
                         </ul>
                     </div>
-                    <BackButton />
+                    <BackButtonIndex />
                 </div>
             </div>
         </>

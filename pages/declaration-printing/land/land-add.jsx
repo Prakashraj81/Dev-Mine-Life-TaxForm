@@ -1,88 +1,213 @@
-import React from "react";
+"use client";
 import Link from "next/link";
-import { useState, Fragment, Controller } from "react";
-import { useForm } from "react-hook-form";
+import Image from "next/image";
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import BackButton from "../../../components/back-btn";
+import SubmitButton from "../../../components/submit-btn";
+import IncorrectError from "../../../components/heir-list-box/incorrect-error";
+import HeirListBox from "../../../components/heir-list-box/heir-list-box";
 import FullLayout from '../../../components/layouts/full/FullLayout';
+import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import AreaIcon from "../../../components/inputbox-icon/textbox-area-icon";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import TableOne from '../../../components/land-tables/table-one';
+import TableTwo from '../../../components/land-tables/table-two';
+import TableThree from '../../../components/land-tables/table-three';
+import TableFour from '../../../components/land-tables/table-four';
 
 export default function LandAdd() {
+    let [ShowImageOne, setShowImageOne] = useState(true);
+    let [ShowImageTwo, setShowImageTwo] = useState(false);
+    let [ShowImageThree, setShowImageThree] = useState(false);
+    let [ShowImageFour, setShowImageFour] = useState(false);
+    let [ShowTableOne, setShowTableOne] = useState(true);
+    let [ShowTableTwo, setShowTableTwo] = useState(false);
+    let [ShowTableThree, setShowTableThree] = useState(false);
+    let [ShowTableFour, setShowTableFour] = useState(false);
+    let [DisabledRadioValue, setDisabledRadioValue] = useState('1');
 
-    const [RadioBtn, setRadioBtn] = useState("");
-    const [selectedOption, setSelectedOption] = useState("");
-    const [WhereAbouts, setWhereAbouts] = useState("");
-    const [BuildingName, setBuildingName] = useState("");
-    const [Title, setTitle] = useState("");
-    const [FLoorArea, setFLoorArea] = useState("");
-    const [Location, setLocation] = useState("");
-    const [Landmark, setLandmark] = useState("");
-    const [LandTitle, setLandTitle] = useState("");
-    const [RankNumber1, setRankNumber1] = useState("");
-    const [RankNumber2, setRankNumber2] = useState("");
-    const [Structure, setStructure] = useState("");
-    const [LandofRightSite, setLandofRightSite] = useState("");
-    const [RightofSIteRatio, setRightofSIteRatio] = useState("");
-    const [WhereAboutHouse, setWhereAboutHouse] = useState("");
-    const [PropertyNumber, setPropertyNumber] = useState("");
-    const [ArchitecturalStudy, setArchitecturalStudy] = useState("");
-    const [LandPrice, setLandPrice] = useState("");
-    //Show no
-    const [HouseNumber, setHouseNumber] = useState("");
-    const [CommonHousing, setCommonHousing] = useState("");
+    let [QuestionOne, setQuestionOne] = useState("");
+    let [ShowQuestionYes, setShowQuestionYes] = useState(false);
+    let [ShowQuestionNo, setShowQuestionNo] = useState(false);
 
-    //Input hide show
-    let [ShowYes, setShowYes] = useState(false);
-    let [ShowNo, setShowNo] = useState(false);
+    let [QuestionTwo, setQuestionTwo] = useState("");
+    let [QuestionTwoImageYes, setQuestionTwoImageYes] = useState(false);
+    let [QuestionTwoImageNo, setQuestionTwoImageNo] = useState(false);
 
-    const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
-        defaultValues: {
-            RadioBtn: "",
-            WhereAbouts: "",
-            BuildingName: "",
-            Title: "",
-            FLoorArea: "",
-            Location: "",
-            Landmark: "",
-            LandTitle: "",
-            RankNumber1: "",
-            RankNumber2: "",
-            Structure: "",
-            LandofRightSite: "",
-            RightofSIteRatio: "",
-            WhereAboutHouse: "",
-            PropertyNumber: "",
-            ArchitecturalStudy: "",
-            LandPrice: "",
-            //Show no
-            HouseNumber: "",
-            CommonHousing: ""
+    let [QuestionThree, setQuestionThree] = useState("");
+    let [ShowYesOption3, setShowYesOption3] = useState(false);
+    let [ShowNoOption3, setShowNoOption3] = useState(false);
+
+    
+
+    let [LandYesImage, setLandYesImage] = useState(false);
+    let [LandNoImage, setLandNoImage] = useState(false);
+
+    let [AmountofMoney, setAmountofMoney] = useState(0);
+    let [UndecidedHeir, setUndecidedHeir] = useState(0);
+    let [totalPrice, settotalPrice] = useState(0);
+    let [boxValues, setBoxValues] = useState([]); let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+
+    function createData(
+        name,
+        calories,
+        fat,
+        carbs,
+        protein,
+    ) {
+        return { name, calories, fat, carbs, protein };
+    }
+
+    const rows = [
+        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+        createData('Eclair', 262, 16.0, 24, 6.0),
+        createData('Cupcake', 305, 3.7, 67, 4.3),
+        createData('Gingerbread', 356, 16.0, 49, 3.9),
+    ];
+
+    //Input keypress
+    let handleKeyPress = (e) => {
+        const keyCode = e.keyCode || e.which;
+        const keyValue = String.fromCharCode(keyCode);
+        const numericRegex = /^[0-9\b]+$/;
+        if (!numericRegex.test(keyValue)) {
+            e.preventDefault();
         }
-    });
+    };
 
-    const RadioButton = (event) => {
-        let radio_btn_value = event.target.value;
-        setSelectedOption(radio_btn_value);
-        if (radio_btn_value === "Yes") {
-            setShowNo(false);
-            setShowYes(true);
+    const handleQuestionOne = (event) => {
+        let radioValue = event.target.value;
+        setQuestionOne(radioValue);
+        if (radioValue === "Yes") {
+            setLandYesImage(true);
+            setLandNoImage(false);
+            setShowQuestionYes(true);
+            setShowQuestionNo(false);
         }
         else {
-            setShowYes(false);
-            setShowNo(true);
+            setLandYesImage(false);
+            setLandNoImage(true);
+            setShowQuestionYes(false);
+            setShowQuestionNo(true);
+        }
+    }
+
+    const handleQuestionTwo = (event) => {
+        let radioValue = event.target.value;
+        setQuestionTwo(radioValue);
+        if (radioValue === "Yes") {
+            setQuestionTwoImageYes(true);
+            setQuestionTwoImageNo(false);
+        }
+        else {
+            setQuestionTwoImageNo(true);
+            setQuestionTwoImageYes(false);
+        }
+    }
+
+    const handleQuestionThree = () => {
+        let radioValue = event.target.value;
+        setQuestionThree(radioValue);
+        if (radioValue === "Yes") {
+            setShowYesOption3(true);
+            setShowNoOption3(false);
+        }
+        else {
+            setShowNoOption3(true);
+            setShowYesOption3(false);
+        }
+    }
+    
+
+    //Disabled deduction radio button
+    const handleDisabledRadio = (event) => {
+        let SelectValue = Number(event.target.value);
+        setDisabledRadioValue(SelectValue);
+        if (SelectValue === 1) {
+            setShowImageOne(true);
+            setShowImageTwo(false);
+            setShowImageThree(false);
+            setShowImageFour(false);
+            setShowTableOne(true);
+            setShowTableTwo(false);
+            setShowTableThree(false);
+            setShowTableFour(false);
+        }
+        else if (SelectValue === 2) {
+            setShowImageOne(false);
+            setShowImageTwo(true);
+            setShowImageThree(false);
+            setShowImageFour(false);
+            setShowTableOne(false);
+            setShowTableTwo(true);
+            setShowTableThree(false);
+            setShowTableFour(false);
+        }
+        else if (SelectValue === 3) {
+            setShowImageOne(false);
+            setShowImageTwo(false);
+            setShowImageThree(true);
+            setShowImageFour(false);
+            setShowTableOne(false);
+            setShowTableTwo(false);
+            setShowTableThree(true);
+            setShowTableFour(false);
+        }
+        else {
+            setShowImageOne(false);
+            setShowImageTwo(false);
+            setShowImageThree(false);
+            setShowImageFour(true);
+            setShowTableOne(false);
+            setShowTableTwo(false);
+            setShowTableThree(false);
+            setShowTableFour(true);
         }
     };
 
 
-    const onSubmit = async (defaultValues) => {
-        var value = JSON.stringify(defaultValues);
-        console.log(value);
-        var Apiurl = "/";
-        const urlresponse = await fetch(Apiurl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(defaultValues),
-            mode: "no-cors",
-        });
+    const handleBoxValueChange = (e, index) => {
+        setBoxValues([0]);
+        let newValue = parseFloat(e.target.value);
+        let updatedBoxValues = [...boxValues];
+        updatedBoxValues[index] = isNaN(newValue) ? 0 : newValue;
+        updatedBoxValues = updatedBoxValues.map((value) => (value === undefined ? 0 : value));
+        setBoxValues(updatedBoxValues);
+
+        //Amount of money convert
+        if (AmountofMoney == 0) {
+            AmountofMoney = 0;
+        }
+        else {
+            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+            AmountofMoney = parseFloat(AmountofMoney);
+        }
+        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
+        totalBoxValues = isNaN(totalBoxValues) ? 0 : totalBoxValues;
+        let heirValue = AmountofMoney - totalBoxValues;
+        if (heirValue < 0) {
+            setUndecidedHeir(heirValue.toLocaleString());
+            setShowIncorrectError(true);
+        }
+        else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(heirValue.toLocaleString());
+        }
     };
+
+    //Submit API function 
+    const router = useRouter();
+    const onSubmit = () => {
+
+    };
+
     return (
         <>
             <div className="land-wrapper">
@@ -98,771 +223,344 @@ export default function LandAdd() {
                         以下の内容を入力して[保存]ボタンを押して下さい。
                     </p>
                 </div>
-                <div className="page-description">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        登記簿謄本の情報の入力
-                    </p>
-                </div>
-                <form action="/action_page.php" method="POST" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="w-full inline-block float-left mt-3">
-                        <div className="label w-full inline-block">
-                            <label className="form-label">
-                                1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか
-                            </label>
+                <form action="#" method="POST">
+                    <FormControl>
+                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            value={QuestionOne}
+                        >
+                            <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionOne} label="はい" sx={{
+                                '& .MuiSvgIcon-root': {
+                                    fontSize: 16,
+                                },
+                            }} />
+                            <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionOne} label="いいえ" sx={{
+                                '& .MuiSvgIcon-root': {
+                                    fontSize: 16,
+                                },
+                            }} />
+                        </RadioGroup>
+                    </FormControl>
+
+                    <div className="w-full inline-block mb-7">
+                        {LandYesImage && (
+                            <img src="/screenshots/land-yes.png" className="w-full" alt="image" height={500} width={200} />
+                        )}
+                        {LandNoImage && (
+                            <img src="/screenshots/land-no.png" className="w-full" alt="image" height={500} width={200} />
+                        )}
+                    </div>
+                    <div className="w-full inline-block py-3">
+                        <label>【登記簿謄本の情報の入力（建物の登記簿謄本をご用意ください）】</label>
+                    </div>
+                    {ShowQuestionYes && (
+                        <>
+                            <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">所在及び地番</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">地目</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">地積㎡</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2 relative">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                        <AreaIcon />
+                                    </div>
+                                </div>
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">敷地権の種類</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">敷地権の割合</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                    {ShowQuestionNo && (
+                        <>
+                            <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">所在</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">地番</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">地目</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label">地積 ㎡</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2 relative">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                        <AreaIcon />
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
+
+
+                    <div className="mt-5">
+                        <FormControl>
+                            <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">2. 被相続人が所有されていた不動産は路線価地域の土地でしょうか。</label>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                value={QuestionTwo}
+                            >
+                                <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionTwo} label="はい" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                                <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionTwo} label="いいえ" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                            </RadioGroup>
+                        </FormControl>
+                    </div>
+                    <div className="w-full inline-block mb-7">
+                        {QuestionTwoImageYes && (
+                            <>
+                                <div className="mt-5">
+                                    <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>
+                            </>
+                        )}
+                        {QuestionTwoImageNo && (
+                            <>
+                                <div className="mt-5">
+                                    <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>
+                                <div className="mt-5">
+                                    <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+
+                    <div className="mb-7">
+                        <FormControl>
+                            <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">3. 所有されていた物件に共有者はいましたか。</label>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                value={QuestionThree}
+                            >
+                                <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionThree} label="はい" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                                <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionThree} label="いいえ" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                            </RadioGroup>
+                        </FormControl>
+                        {ShowYesOption3 && (
+                            <>
+                                <div className="w-full block items-center justify-between mb-7">
+                                    <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                        <div className="label w-full inline-block">
+                                            <label className="form-label">賃貸割合の入力</label>
+                                        </div>
+                                        <div className="w-full inline-block mt-2">
+                                            <div className="flex justify-between items-center">
+                                                <div><input
+                                                    type="text"
+                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                /></div>
+                                                <div>
+                                                    <span className="text-3xl text-gray-500">/</span>
+                                                </div>
+                                                <div><input
+                                                    type="text"
+                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                /></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                        {ShowNoOption3 && (
+                            <></>
+                        )}
+                    </div>
+
+
+                   
+
+
+                    <div className="bg-custom-light mt-10 py-3 px-5 w-full inline-block">
+                        <label className="form-label" id="demo-row-radio-buttons-group-label">土地の詳細の入力</label>
+                    </div>
+                    <div className="w-full flex items-center justify-between mt-3 mb-7">
+                        <div className="w-full lg:w-65 xl:w-65 2xl:w-65 block float-left">
+                            <div className="w-full inline-block mt-2 relative">
+                                <FormControl>
+                                    <RadioGroup
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                        value={DisabledRadioValue}>
+                                        
+                                        <FormControlLabel value="3" className="mt-3" control={<Radio />} onChange={handleDisabledRadio} label="パターン３（２つの道路（正面と側方）に接している場合）" sx={{
+                                            '& .MuiSvgIcon-root': {
+                                                fontSize: 16,
+                                            },
+                                        }} />
+                                        <FormControlLabel value="4" className="mt-3" control={<Radio />} onChange={handleDisabledRadio} label="パターン４（３つの道路に接している場合）" sx={{
+                                            '& .MuiSvgIcon-root': {
+                                                fontSize: 16,
+                                            },
+                                        }} />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>
                         </div>
-                        <div className="w-full flex items-center mt-2">
-                            <label>
-                                <div>
-                                    <input className="mr-1" id="Yes" type="radio" checked={selectedOption === 'Yes'} onChange={RadioButton} value="Yes" />
-                                    <label for="Yes">Yes</label>
-                                </div>
-                            </label>
-                            <label className="pl-3">
-                                <div>
-                                    <input className="mr-1" id="No" type="radio" checked={selectedOption === 'No'} onChange={RadioButton} value="No" />
-                                    <label for="No">No</label>
-                                </div>
-                            </label>
+
+                        <div className="w-full lg:w-35 xl:w-35 2xl:w-35 inline-block float-left">
+                            <div className="w-full inline-block mt-2">
+                                {ShowImageOne && (
+                                    <Image className="mx-auto w-full" src="/land_item01.png" alt="image-one" height={100} width={200} priority />
+                                )}
+                                {ShowImageTwo && (
+                                    <Image className="mx-auto w-full" src="/land_item02.png" alt="image-one" height={100} width={200} priority />
+                                )}
+                                {ShowImageThree && (
+                                    <Image className="mx-auto w-full" src="/land_item03.png" alt="image-one" height={100} width={200} priority />
+                                )}
+                                {ShowImageFour && (
+                                    <Image className="mx-auto w-full" src="/land_item04.png" alt="image-one" height={100} width={200} priority />
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    {ShowYes && (
-                        <>
-                            <div className="w-full block items-center justify-between mb-7">
-                                <div className="user-details w-full block">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="WhereAbouts" className="form-label">
-                                            所在
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="WhereAbouts"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("WhereAbouts", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.WhereAbouts ? "true" : "false"}
-                                        />
-                                        {errors.WhereAbouts && <p className="text-red-500 mt-2" role="alert">{errors.WhereAbouts?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full block items-center justify-between mb-7">
-                                <div className="user-details w-full block">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="BuildingName" className="form-label">
-                                            建物の名称
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="BuildingName"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("BuildingName", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.BuildingName ? "true" : "false"}
-                                        />
-                                        {errors.BuildingName && <p className="text-red-500 mt-2" role="alert">{errors.BuildingName?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="user-details">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="Title" className="form-label">
-                                                进称
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="Title"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                {...register("Title", { required: "この項目は必須です" })}
-                                                aria-invalid={errors.Title ? "true" : "false"}
-                                            />
-                                            {errors.Title && <p className="text-red-500 mt-2" role="alert">{errors.Title?.message}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="FLoorArea" className="form-label">
-                                            床面積m2
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="FLoorArea"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("FLoorArea", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.FLoorArea ? "true" : "false"}
-                                        />
-                                        {errors.FLoorArea && <p className="text-red-500 mt-2" role="alert">{errors.FLoorArea?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full block items-center justify-between mb-7">
-                                <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="Location" className="form-label">
-                                            所在及び地
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="Location"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("Location", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.Location ? "true" : "false"}
-                                        />
-                                        {errors.Location && <p className="text-red-500 mt-2" role="alert">{errors.Location?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="user-details">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="Landmark" className="form-label">
-                                                地目
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="Landmark"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                {...register("Landmark", { required: "この項目は必須です" })}
-                                                aria-invalid={errors.Landmark ? "true" : "false"}
-                                            />
-                                            {errors.Landmark && <p className="text-red-500 mt-2" role="alert">{errors.Landmark?.message}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="LandTitle" className="form-label">
-                                            地権m2
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="LandTitle"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("LandTitle", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.LandTitle ? "true" : "false"}
-                                        />
-                                        {errors.LandTitle && <p className="text-red-500 mt-2" role="alert">{errors.LandTitle?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="user-details">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="RankNumber1" className="form-label">
-                                                順位番号
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="RankNumber1"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                {...register("RankNumber1", { required: "この項目は必須です" })}
-                                                aria-invalid={errors.RankNumber1 ? "true" : "false"}
-                                            />
-                                            {errors.RankNumber1 && <p className="text-red-500 mt-2" role="alert">{errors.RankNumber1?.message}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="RankNumber2" className="form-label">
-                                            順位番号
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="RankNumber2"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("RankNumber2", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.RankNumber2 ? "true" : "false"}
-                                        />
-                                        {errors.RankNumber2 && <p className="text-red-500 mt-2" role="alert">{errors.RankNumber2?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="user-details">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="Structure" className="form-label">
-                                                構造
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="Structure"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                {...register("Structure", { required: "この項目は必須です" })}
-                                                aria-invalid={errors.Structure ? "true" : "false"}
-                                            />
-                                            {errors.Structure && <p className="text-red-500 mt-2" role="alert">{errors.Structure?.message}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="LandofRightSite" className="form-label">
-                                            敷地権の地
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="LandofRightSite"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("LandofRightSite", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.LandofRightSite ? "true" : "false"}
-                                        />
-                                        {errors.LandofRightSite && <p className="text-red-500 mt-2" role="alert">{errors.LandofRightSite?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="user-details">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="RightofSIteRatio" className="form-label">
-                                                敷地権の割合
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="RightofSIteRatio"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                {...register("RightofSIteRatio", { required: "この項目は必須です" })}
-                                                aria-invalid={errors.RightofSIteRatio ? "true" : "false"}
-                                            />
-                                            {errors.RightofSIteRatio && <p className="text-red-500 mt-2" role="alert">{errors.RightofSIteRatio?.message}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="label w-full inline-block py-3">
-                                <label className="form-label">
-                                    2．固定資産税課税明細（固定資産税評価証明書）の情報の入力
-                                </label>
-                            </div>
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="user-details">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="WhereAboutHouse" className="form-label">
-                                                家屋の所在
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="WhereAboutHouse"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                {...register("WhereAboutHouse", { required: "この項目は必須です" })}
-                                                aria-invalid={errors.WhereAboutHouse ? "true" : "false"}
-                                            />
-                                            {errors.WhereAboutHouse && <p className="text-red-500 mt-2" role="alert">{errors.WhereAboutHouse?.message}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="PropertyNumber" className="form-label">
-                                            物件号
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="PropertyNumber"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("PropertyNumber", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.PropertyNumber ? "true" : "false"}
-                                        />
-                                        {errors.PropertyNumber && <p className="text-red-500 mt-2" role="alert">{errors.PropertyNumber?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="user-details">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="ArchitecturalStudy" className="form-label">
-                                                建築考次
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="ArchitecturalStudy"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                {...register("ArchitecturalStudy", { required: "この項目は必須です" })}
-                                                aria-invalid={errors.ArchitecturalStudy ? "true" : "false"}
-                                            />
-                                            {errors.ArchitecturalStudy && <p className="text-red-500 mt-2" role="alert">{errors.ArchitecturalStudy?.message}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="LandPrice" className="form-label">
-                                            地価
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="LandPrice"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("LandPrice", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.LandPrice ? "true" : "false"}
-                                        />
-                                        {errors.LandPrice && <p className="text-red-500 mt-2" role="alert">{errors.LandPrice?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full block items-center justify-between mb-7">
-                                <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="OwnershipRatio" className="form-label">
-                                            3．所有されていた物件に共有者はいましたか。
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <label>
-                                            <div>
-                                                <input className="mr-1" type="radio" value="Yes" {...register("RadioBtn")} />
-                                                Yes
-                                            </div>
-                                        </label>
-                                        <label>
-                                            <div>
-                                                <input className="mr-1" type="radio" value="No" {...register("RadioBtn")} />
-                                                No
-                                            </div>
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <div className="flex justify-between items-center">
-                                            <div><input
-                                                type="text"
-                                                id="OwnershipRatio"
-                                                className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            /></div>
-                                            <div>
-                                                <span className="text-3xl text-gray-500">/</span>
-                                            </div>
-                                            <div><input
-                                                type="text"
-                                                id="Ratio"
-                                                className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            /></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full block items-center justify-between mb-7">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="OwnershipRatio" className="form-label">
-                                        4．所有されていた物件は相続開始時に賃貸されていましたか。
-                                    </label>
-                                </div>
-                                <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                    <div className="w-full inline-block mt-2">
-                                        <label>
-                                            <div>
-                                                <input className="mr-1" type="radio" value="Yes" {...register("RadioBtn")} />
-                                                Yes
-                                            </div>
-                                        </label>
-                                        <label>
-                                            <div>
-                                                <input className="mr-1" type="radio" value="No" {...register("RadioBtn")} />
-                                                No
-                                            </div>
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <div className="flex justify-between items-center">
-                                            <div><input
-                                                type="text"
-                                                id="OwnershipRatio"
-                                                className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            /></div>
-                                            <div>
-                                                <span className="text-3xl text-gray-500">/</span>
-                                            </div>
-                                            <div><input
-                                                type="text"
-                                                id="Ratio"
-                                                className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            /></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </>
-                    )}
-
-
-                    {ShowNo && (
-                        <>
-                            <div className="w-full block items-center justify-between mb-7">
-                                <div className="user-details w-full block">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="WhereAbouts" className="form-label">
-                                            所在
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="WhereAbouts"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("WhereAbouts", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.WhereAbouts ? "true" : "false"}
-                                        />
-                                        {errors.WhereAbouts && <p className="text-red-500 mt-2" role="alert">{errors.WhereAbouts?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full block items-center justify-between mb-7">
-                                <div className="user-details w-full block">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="HouseNumber" className="form-label">
-                                            家屋番号
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="HouseNumber"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("HouseNumber", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.HouseNumber ? "true" : "false"}
-                                        />
-                                        {errors.HouseNumber && <p className="text-red-500 mt-2" role="alert">{errors.HouseNumber?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full block items-center justify-between mb-7">
-                                <div className="user-details w-full block">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="CommonHousing" className="form-label">
-                                            共同住宅 類
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="CommonHousing"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("CommonHousing", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.CommonHousing ? "true" : "false"}
-                                        />
-                                        {errors.CommonHousing && <p className="text-red-500 mt-2" role="alert">{errors.CommonHousing?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="user-details">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="Structure" className="form-label">
-                                                構造
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="Structure"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                {...register("Structure", { required: "この項目は必須です" })}
-                                                aria-invalid={errors.Structure ? "true" : "false"}
-                                            />
-                                            {errors.Structure && <p className="text-red-500 mt-2" role="alert">{errors.Structure?.message}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="FloorArea" className="form-label">
-                                            床面積m2
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="FloorArea"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("FloorArea", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.FloorArea ? "true" : "false"}
-                                        />
-                                        {errors.FloorArea && <p className="text-red-500 mt-2" role="alert">{errors.FloorArea?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="label w-full inline-block py-3">
-                                <label className="form-label">
-                                    2．固定資産税課税明細（固定資産税評価証明書）の情報の入力
-                                </label>
-                            </div>
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="user-details">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="WhereAboutHouse" className="form-label">
-                                                家屋の所在
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="WhereAboutHouse"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                {...register("WhereAboutHouse", { required: "この項目は必須です" })}
-                                                aria-invalid={errors.WhereAboutHouse ? "true" : "false"}
-                                            />
-                                            {errors.WhereAboutHouse && <p className="text-red-500 mt-2" role="alert">{errors.WhereAboutHouse?.message}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="PropertyNumber" className="form-label">
-                                            物件号
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="PropertyNumber"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("PropertyNumber", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.PropertyNumber ? "true" : "false"}
-                                        />
-                                        {errors.PropertyNumber && <p className="text-red-500 mt-2" role="alert">{errors.PropertyNumber?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="user-details">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="ArchitecturalStudy" className="form-label">
-                                                建築考次
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="ArchitecturalStudy"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                {...register("ArchitecturalStudy", { required: "この項目は必須です" })}
-                                                aria-invalid={errors.ArchitecturalStudy ? "true" : "false"}
-                                            />
-                                            {errors.ArchitecturalStudy && <p className="text-red-500 mt-2" role="alert">{errors.ArchitecturalStudy?.message}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="LandPrice" className="form-label">
-                                            地価
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="LandPrice"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            {...register("LandPrice", { required: "この項目は必須です" })}
-                                            aria-invalid={errors.LandPrice ? "true" : "false"}
-                                        />
-                                        {errors.LandPrice && <p className="text-red-500 mt-2" role="alert">{errors.LandPrice?.message}</p>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full block items-center justify-between mb-7">
-                                <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="OwnershipRatio" className="form-label">
-                                            3．所有されていた物件に共有者はいましたか。
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <label>
-                                            <div>
-                                                <input className="mr-1" type="radio" value="Yes" {...register("RadioBtn")} />
-                                                Yes
-                                            </div>
-                                        </label>
-                                        <label>
-                                            <div>
-                                                <input className="mr-1" type="radio" value="No" {...register("RadioBtn")} />
-                                                No
-                                            </div>
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <div className="flex justify-between items-center">
-                                            <div><input
-                                                type="text"
-                                                id="OwnershipRatio"
-                                                className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            /></div>
-                                            <div>
-                                                <span className="text-3xl text-gray-500">/</span>
-                                            </div>
-                                            <div><input
-                                                type="text"
-                                                id="Ratio"
-                                                className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            /></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full block items-center justify-between mb-7">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="OwnershipRatio" className="form-label">
-                                        4．所有されていた物件は相続開始時に賃貸されていましたか。
-                                    </label>
-                                </div>
-                                <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                    <div className="w-full inline-block mt-2">
-                                        <label>
-                                            <div>
-                                                <input className="mr-1" type="radio" value="Yes" {...register("RadioBtn")} />
-                                                Yes
-                                            </div>
-                                        </label>
-                                        <label>
-                                            <div>
-                                                <input className="mr-1" type="radio" value="No" {...register("RadioBtn")} />
-                                                No
-                                            </div>
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <div className="flex justify-between items-center">
-                                            <div><input
-                                                type="text"
-                                                id="OwnershipRatio"
-                                                className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            /></div>
-                                            <div>
-                                                <span className="text-3xl text-gray-500">/</span>
-                                            </div>
-                                            <div><input
-                                                type="text"
-                                                id="Ratio"
-                                                className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            /></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </>
-                    )}
-
-
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
+                    <div className="w-full inline-block py-5">
+                        <div classsName="table-columns">
+                            {ShowTableOne && (
+                                <TableOne />
+                            )}
+                            {ShowTableTwo && (
+                                <TableTwo />
+                            )}
+                            {ShowTableThree && (
+                                <TableThree />
+                            )}
+                            {ShowTableFour && (
+                                <TableFour />
+                            )}
+                        </div>
+                    </div>
+                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="heading text-center">
                             <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
                         </div>
                         <div className="total-list pt-10">
-                            <ul>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>受取人</span>
-                                    <span>取得財産の価額</span>
-                                </li>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>山田　太郎</span>
-                                    <span>0</span>
-                                </li>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>相続人未決定</span>
-                                    <span>0</span>
-                                </li>
-                                <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                    <span>合計</span>
-                                    <span>0</span>
-                                </li>
-                            </ul>
+                            <HeirListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={AmountofMoney} />
                         </div>
+                        <IncorrectError IncorrectError={ShowIncorrectError} />
                     </div>
-
-
                     <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                         <BackButton />
-                        <div className="save-btn text-center">
-                            <Link href="/declaration-printing/life-insurance/life-insurance-rights">
-                                <button
-
-                                    className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        保存
-                                    </span>
-                                </button>
-                            </Link>
-                        </div>
+                        <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                     </div>
                     <div className="heading text-center pt-8">
                         <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
                     </div>
                 </form>
-
-
             </div>
         </>
     )

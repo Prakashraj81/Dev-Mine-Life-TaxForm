@@ -5,6 +5,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+import PersonOffIcon from '@mui/icons-material/PersonOff';
 
 //sub-menu icons list
 import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
@@ -20,6 +21,8 @@ import HouseOutlinedIcon from '@mui/icons-material/HouseOutlined';
 import OtherHousesOutlinedIcon from '@mui/icons-material/OtherHousesOutlined';
 import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
+import CardMembershipSharpIcon from '@mui/icons-material/CardMembershipSharp';
 //
 import ScaleOutlinedIcon from '@mui/icons-material/ScaleOutlined';
 import CardGiftcardOutlinedIcon from '@mui/icons-material/CardGiftcardOutlined';
@@ -48,7 +51,7 @@ const Menuitems = [
       },
       {
         title: "被相続人",
-        icon: <AddAPhotoOutlinedIcon/>,
+        icon: <PersonOffIcon/>,
         href: "/basic-information/decendent",
       },
       {
@@ -89,19 +92,12 @@ const Menuitems = [
         href: "/declaration-printing/securities",
         translateHeading: "Securities",
         text: "Securities - stocks, bonds, corporate bonds, etc.",
-      },      
+      },          
       {
-        title: "建物 (version-1)",
+        title: "建物",
         icon: <ApartmentOutlinedIcon/>,
         href: "/declaration-printing/building",
         translateHeading: "building",
-        text: "House - home, rental, etc.",
-      },    
-      {
-        title: "建物 (version-2)",
-        icon: <ApartmentOutlinedIcon/>,
-        href: "/declaration-printing/building-1",
-        translateHeading: "building-1",
         text: "House - home, rental, etc.",
       },     
       {
@@ -140,6 +136,20 @@ const Menuitems = [
         translateHeading: "funeral expenses",
         text: "funeral expenses",
       },
+      {
+        title: "死亡保険金等",
+        icon: <LoyaltyIcon/>,
+        href: "/declaration-printing/death-benefit",
+        translateHeading: "Death benefit etc",
+        text: "Death benefit etc",
+      },
+      {
+        title: "死亡退職金等",
+        icon: <CardMembershipSharpIcon/>,
+        href: "/declaration-printing/death-retirement-allowance",
+        translateHeading: "Death retirement allowance, etc",
+        text: "Death retirement allowance, etc",
+      },      
     ],
   },
   //Third  

@@ -45,10 +45,8 @@ export default function Decendent() {
     let [NameError, setNameError] = useState(false);
     let [FuriganaError, setFuriganaError] = useState(false);
     let [DateofBirthError, setDateofBirthError] = useState(false);
-    let [AddressError, setAddressError] = useState(false);    
     let [DateofDeathError, setDateofDeathError] = useState(false);
     let [InheritanceDivisionCompletionDateError, setInheritanceDivisionCompletionDateError] = useState(false);    
-    let [ProfessionError, setProfessionError] = useState(false);   
     let [isClearable, setIsClearable] = useState(true);     
 
     //Disabled deduction radio button
@@ -73,7 +71,6 @@ export default function Decendent() {
         let selectedOptions = ProfessionList.find(option => option.value === selectedValue);
         let selectedId = Number(selectedOptions.id);        
         setProfession(selectedValue);        
-        setProfessionError(false);
         setisSumbitDisabled(false);
     };
 
@@ -125,7 +122,6 @@ export default function Decendent() {
         }        
         else {
             setAddress(inputValue);
-            setAddressError(false);
         }
         setisSumbitDisabled(false);
     }
@@ -157,15 +153,7 @@ export default function Decendent() {
         if (defaultValues.DateofBirth === "") {
             setDateofBirthError(true);
             isSumbitDisabled = true;
-        }
-        if (defaultValues.Address === "") {
-            setAddressError(true);
-            isSumbitDisabled = true;
-        }       
-        if (defaultValues.Profession === "") {
-            setProfessionError(true);
-            isSumbitDisabled = true;
-        }    
+        }          
         if (defaultValues.DateOfDeath === "") {
             setDateofDeathError(true);
             isSumbitDisabled = true;
@@ -323,7 +311,7 @@ export default function Decendent() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        住所<i className="text-red-500">*</i>
+                                        住所
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -333,10 +321,7 @@ export default function Decendent() {
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         onChange={inputHandlingFunction}
                                         value={Address}
-                                    />
-                                    {AddressError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
+                                    />                                    
                                 </div>
                             </div>
                         </div>
@@ -356,10 +341,7 @@ export default function Decendent() {
                                                 {option.label}
                                             </option>
                                         ))}
-                                    </select>
-                                    {ProfessionError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
+                                    </select>                                    
                                 </div>
                             </div>
                         </div>

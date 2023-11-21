@@ -13,10 +13,10 @@ import AreaIcon from "../../../components/inputbox-icon/textbox-area-icon";
 export default function GiftTaxAdd() {
 
     let GiftTypeList = [
-        // { id: 1, value: '一般贈与', label: '一般贈与' },
-        // { id: 2, value: '特例贈与', label: '特例贈与' },
-        // { id: 3, value: '相続時精算課税', label: '相続時精算課税' },
-        { id: 4, value: '特定贈与', label: '特定贈与' },
+        { id: 1, value: '暦年贈与', label: '暦年贈与' },
+        { id: 2, value: '相続時精算課税贈与', label: '相続時精算課税贈与' },
+        //{ id: 3, value: '相続時精算課税', label: '相続時精算課税' },
+        //{ id: 4, value: '特定贈与', label: '特定贈与' },
     ];
 
     let PropertyList = [
@@ -382,7 +382,7 @@ export default function GiftTaxAdd() {
                         <div className="user-details w-full block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    所在場所<i className="text-red-500">*</i>
+                                所在場所等<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -405,7 +405,7 @@ export default function GiftTaxAdd() {
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    数量/㎡
+                                数量/㎡
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">
@@ -431,7 +431,7 @@ export default function GiftTaxAdd() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        贈与を受けた額<i className="text-red-500">*</i>
+                                    贈与を受けた額<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -475,7 +475,7 @@ export default function GiftTaxAdd() {
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    贈与税申告書の提出先
+                                贈与税申告書の提出先  
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">

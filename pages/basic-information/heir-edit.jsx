@@ -59,7 +59,6 @@ export default function HeirEdit() {
     let [NameError, setNameError] = useState(false);
     let [FuriganaError, setFuriganaError] = useState(false);
     let [DateofBirthError, setDateofBirthError] = useState(false);
-    let [AddressError, setAddressError] = useState(false);
     let [TelephoneNumberError, setTelephoneNumberError] = useState(false);
     let [ProfessionError, setProfessionError] = useState(false);
     let [RelationshipWithDecedentError, setRelationshipWithDecedentError] = useState(false);
@@ -161,7 +160,6 @@ export default function HeirEdit() {
         }
         else {
             setAddress(inputValue);
-            setAddressError(false);
         }
         setisSumbitDisabled(false);
     }
@@ -196,11 +194,7 @@ export default function HeirEdit() {
         if (defaultValues.DateofBirth === "") {
             setDateofBirthError(true);
             isSumbitDisabled = true;
-        }
-        if (defaultValues.Address === "") {
-            setAddressError(true);
-            isSumbitDisabled = true;
-        }
+        }        
         if (defaultValues.TelephoneNumber === "") {
             setTelephoneNumberError(true);
             isSumbitDisabled = true;
@@ -340,7 +334,7 @@ export default function HeirEdit() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        住所<i className="text-red-500">*</i>
+                                        住所
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -350,10 +344,7 @@ export default function HeirEdit() {
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         onChange={inputHandlingFunction}
                                         value={Address}
-                                    />
-                                    {AddressError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
+                                    />                                   
                                 </div>
                             </div>
                         </div>

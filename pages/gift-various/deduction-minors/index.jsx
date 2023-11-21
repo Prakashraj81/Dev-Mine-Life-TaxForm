@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
-import BackButton from "../../../components/back-btn";
+import BackButtonIndex from "../../../components/back-btn-index";
 import SubmitButton from "../../../components/submit-btn";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
 import IncorrectError from "../../../components/heir-list-box/incorrect-error";
@@ -143,7 +143,7 @@ export default function DeductionMinors() {
                     </div>
 
                     <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                        <BackButton />
+                        <BackButtonIndex />
                         <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                     </div>
                 </form>

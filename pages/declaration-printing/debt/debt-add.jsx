@@ -83,49 +83,7 @@ export default function DebtAdd() {
         let selectedOptions = DebtList.find(option => option.value === selectedValue);
         let selectedId = Number(selectedOptions.id);        
         setDebtType(selectedValue);
-        setisSumbitDisabled(false);
-        if (selectedId === 1) {
-            setShowPostCode(false);
-            setShowAddress(false);
-            setShowCauseofUnpaidBalance(false);
-            setShowNameDebt(true);            
-            setShowObligationDateDebtPaymentDeadline(true);
-        }
-        else if (selectedId === 2) {
-            setShowCauseofUnpaidBalance(false);
-            setShowPostCode(true);
-            setShowAddress(true);
-            setShowNameDebt(true);
-            setShowObligationDateDebtPaymentDeadline(true);
-        }
-        else if (selectedId === 3) {
-            setShowNameDebt(false);
-            setShowPostCode(true);
-            setShowAddress(true);
-            setShowCauseofUnpaidBalance(true);
-            setShowObligationDateDebtPaymentDeadline(true);
-        }
-        else if (selectedId === 4) {
-            setShowCauseofUnpaidBalance(false);
-            setShowNameDebt(false);
-            setShowPostCode(true);
-            setShowAddress(true);
-            setShowObligationDateDebtPaymentDeadline(true);
-        }
-        else if (selectedId === 5) {
-            setShowCauseofUnpaidBalance(false);
-            setShowNameDebt(true);
-            setShowPostCode(true);
-            setShowAddress(true);
-            setShowObligationDateDebtPaymentDeadline(true);
-        }
-        else {
-            setShowCauseofUnpaidBalance(false);
-            setShowNameDebt(true);
-            setShowPostCode(true);
-            setShowAddress(true);
-            setShowObligationDateDebtPaymentDeadline(true);
-        }
+        setisSumbitDisabled(false);        
     };
 
     //Amount input calculation function
@@ -248,13 +206,7 @@ export default function DebtAdd() {
             boxValues:boxValues,
         };
 
-        //input Validation             
-        if (defaultValues.CauseofUnpaidBalance === "") {
-            if (ShowCauseofUnpaidBalance === true) {
-                setCauseofUnpaidBalanceError(true);
-                isSumbitDisabled = true;
-            }
-        }       
+        //input Validation       
         if (defaultValues.Address === "") {
             if (ShowAddress === true) {
                 setAddressError(true);
@@ -300,7 +252,7 @@ export default function DebtAdd() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                    債務の種類
+                                    債務の名称
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -317,8 +269,7 @@ export default function DebtAdd() {
                         </div>
                     </div>
 
-                    {ShowNameDebt && (
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
                                     相手先
@@ -337,7 +288,6 @@ export default function DebtAdd() {
                                 </div>                                
                             </div>
                         </div>
-                    )}
 
                     {ShowCauseofUnpaidBalance && (
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
@@ -365,8 +315,7 @@ export default function DebtAdd() {
                     )}
                     
 
-                    {ShowPostCode && (
-                        <div className="w-full block items-center justify-between mb-7">
+                    <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
@@ -390,9 +339,7 @@ export default function DebtAdd() {
                                 {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
                             </div>
                         </div>
-                    )}
 
-                    {ShowAddress && (
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details w-full">
                                 <div className="label w-full inline-block">
@@ -414,9 +361,7 @@ export default function DebtAdd() {
                                 </div>
                             </div>
                         </div>
-                    )}
-
-                    {ShowObligationDateDebtPaymentDeadline && (
+                    
                         <div className="w-full flex items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="user-details">
@@ -457,9 +402,6 @@ export default function DebtAdd() {
                                 </div>
                             </div>
                         </div>
-                    )}
-
-
 
 
                     <div className="w-full block items-center justify-between mb-7">

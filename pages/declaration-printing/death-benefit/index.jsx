@@ -4,28 +4,28 @@ import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import BackButton from "../../../components/back-btn";
+import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 
-export default function House() {
+export default function DeathBenefit() {
     return (
         <>
             <div className="house-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
                         <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                            家屋
+                            死亡保険金等
                         </p>
                     </div>
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    家屋の情報を「<EditOutlinedIcon className="rotate-1 text-primary-gray"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
+                    死亡保険金等の情報を「<EditOutlinedIcon className="rotate-1 text-primary-gray"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
                     </p>
                 </div>
                 
                 <div className="w-full inline-block text-left">
-                    <Link href="/declaration-printing/building-1/house-add-1">
+                    <Link href="/declaration-printing/death-benefit/death-benefit-add">
                         <button id="decedent_edit" className="text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
                             <AddIcon className="text-white" />
                             追加する
@@ -52,13 +52,13 @@ export default function House() {
                             </li>
                         </ul>
                     </div>
-                    <BackButton />
+                    <BackButtonIndex />
                 </div>
             </div>
         </>
     )
 }
 
-House.getLayout = function getLayout(page) {
+DeathBenefit.getLayout = function getLayout(page) {
   return <FullLayout>{page}</FullLayout>;
 };

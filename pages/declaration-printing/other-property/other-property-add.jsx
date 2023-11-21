@@ -46,7 +46,6 @@ export default function OtherPropertyAdd() {
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
-    let [PropertyError, setPropertyError] = useState(false);
     let [PropertyNameError, setPropertyNameError] = useState(false);
     let [AddressError, setAddressError] = useState(false);
     let [DateofAcquisitionError, setDateofAcquisitionError] = useState(false);
@@ -55,7 +54,7 @@ export default function OtherPropertyAdd() {
 
     useEffect(() => {
         
-      }, []);
+    }, []);
 
     //Postal code 7 digit limit function
     const [isValid, setIsValid] = useState(true);
@@ -331,11 +330,7 @@ export default function OtherPropertyAdd() {
             boxValues:boxValues,
         }
 
-        //input Validation
-        if (defaultValues.Property === "") {
-            setPropertyContentError(true);
-            isSumbitDisabled = true;
-        }
+        //input Validation        
         if (defaultValues.PropertyName === "") {
             setPropertyNameError(true);
             isSumbitDisabled = true;
@@ -397,7 +392,7 @@ export default function OtherPropertyAdd() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        財産の種類<i className="text-red-500">*</i>
+                                    相手先
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -408,10 +403,7 @@ export default function OtherPropertyAdd() {
                                                 {option.label}
                                             </option>
                                         ))}
-                                    </select>
-                                    {PropertyError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
+                                    </select>                                    
                                 </div>
                             </div>
                         </div>
