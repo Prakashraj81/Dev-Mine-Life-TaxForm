@@ -6,6 +6,7 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import HeirList from "../../../components/heir-list-box/heir-list";
+import BackButtonIndex from "../../../components/back-btn-index";
 
 export default function Debt() {
     let [DebtList, setDebtList] = useState([]);
@@ -73,7 +74,9 @@ export default function Debt() {
                         </button>
                     </Link>
                 </div>
-                {TotalPrice ? <><HeirList TotalPrice={TotalPrice} /></>: <><HeirList TotalPrice={"1,00,000"} /></>}
+                <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">                    
+                    <BackButtonIndex />
+                </div>
             </div>
         </>
     )

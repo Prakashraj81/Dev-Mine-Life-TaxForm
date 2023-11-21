@@ -261,7 +261,7 @@ export default function LandAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">所在及び地番</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">1</div>所在及び地番</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -273,7 +273,7 @@ export default function LandAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">地目</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">2</div>地目</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -287,7 +287,7 @@ export default function LandAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">地積㎡</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">3</div>地積㎡</label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
@@ -300,7 +300,7 @@ export default function LandAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">敷地権の種類</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">4</div>敷地権の種類</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -314,7 +314,7 @@ export default function LandAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">敷地権の割合</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">5</div>敷地権の割合</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -331,7 +331,7 @@ export default function LandAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">所在</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">1</div>所在</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -343,7 +343,7 @@ export default function LandAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">地番</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">2</div>地番</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -357,7 +357,7 @@ export default function LandAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">地目</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">3</div>地目</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -369,7 +369,7 @@ export default function LandAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">地積 ㎡</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">4</div>地積 ㎡</label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input

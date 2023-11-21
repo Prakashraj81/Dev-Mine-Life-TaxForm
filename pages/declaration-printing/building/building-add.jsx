@@ -168,7 +168,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">所在</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">1</div>所在</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -180,7 +180,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">建物の名称</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">2</div>建物の名称</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -193,7 +193,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">構造</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">3</div>構造</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -205,7 +205,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">床面積m²</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">4</div>床面積m²</label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
@@ -220,7 +220,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">所在及び地番</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">5</div>所在及び地番</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -232,7 +232,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">地目</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">6</div>地目</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -246,7 +246,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">地積㎡</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">7</div>地積㎡</label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
@@ -259,7 +259,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">家屋番号</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">8</div>家屋番号</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -273,7 +273,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">種類</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">9</div>種類</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -285,7 +285,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label">構造</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">10</div>構造</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -299,7 +299,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">床面積 ㎡</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">11</div>床面積 ㎡</label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
@@ -312,7 +312,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label">敷地権の種類</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">12</div>敷地権の種類</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -326,7 +326,7 @@ export default function HouseAdd() {
                             <div className="w-full inline-block mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">敷地権の割合</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">13</div>敷地権の割合</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -343,7 +343,7 @@ export default function HouseAdd() {
                         <div className="w-full flex items-center justify-between pt-5 mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">所在</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">1</div>所在</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -355,33 +355,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label">家屋番号</label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label className="form-label">種類</label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                    <label className="form-label">構造</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">2</div>家屋番号</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -395,7 +369,33 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">床面積 ㎡</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">3</div>種類</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                    <label className="form-label flex items-center"><div className="circle-no">4</div>構造</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                    <label className="form-label flex items-center"><div className="circle-no">5</div>床面積 ㎡</label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
@@ -417,7 +417,7 @@ export default function HouseAdd() {
                     <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">家屋の所在</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">1</div>家屋の所在</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -429,7 +429,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label">家屋番号</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">2</div>家屋番号</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -443,7 +443,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label">種類・用途</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">3</div>種類・用途</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -455,7 +455,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label">価格</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">4</div>価格</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input

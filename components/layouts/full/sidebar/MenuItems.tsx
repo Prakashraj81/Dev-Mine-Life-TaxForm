@@ -114,7 +114,20 @@ const Menuitems = [
         translateHeading: "household property",
         text: "House hold property",
       },
-     
+      {
+        title: "死亡保険金等",
+        icon: <LoyaltyIcon/>,
+        href: "/declaration-printing/death-benefit",
+        translateHeading: "Death benefit etc",
+        text: "Death benefit etc",
+      },
+      {
+        title: "死亡退職金等",
+        icon: <CardMembershipSharpIcon/>,
+        href: "/declaration-printing/death-retirement-allowance",
+        translateHeading: "Death retirement allowance, etc",
+        text: "Death retirement allowance, etc",
+      },     
       {
         title: "その他財産",
         icon: <OtherHousesOutlinedIcon/>,
@@ -135,21 +148,7 @@ const Menuitems = [
         href: "/declaration-printing/funeral-expenses",
         translateHeading: "funeral expenses",
         text: "funeral expenses",
-      },
-      {
-        title: "死亡保険金等",
-        icon: <LoyaltyIcon/>,
-        href: "/declaration-printing/death-benefit",
-        translateHeading: "Death benefit etc",
-        text: "Death benefit etc",
-      },
-      {
-        title: "死亡退職金等",
-        icon: <CardMembershipSharpIcon/>,
-        href: "/declaration-printing/death-retirement-allowance",
-        translateHeading: "Death retirement allowance, etc",
-        text: "Death retirement allowance, etc",
-      },      
+      },       
     ],
   },
   //Third  
