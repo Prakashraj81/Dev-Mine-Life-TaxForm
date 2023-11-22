@@ -33,6 +33,7 @@ import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutl
 //pages
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import PostAddIcon from '@mui/icons-material/PostAdd';
 
 const Menuitems = [
   //First
@@ -207,13 +208,22 @@ const Menuitems = [
   },
   {
     id:4,
+    title: "分割情報の入力",    
+    translateHeading: "Entering division information",
+    href: "/division-information",
+    icon: <PostAddIcon />,
+    iconClosed: <KeyboardArrowRightIcon />,
+    iconOpened: <KeyboardArrowDownIcon />,
+  },    
+  {
+    id:5,
     title: "申告書の印刷",    
     translateHeading: "funeral",
     href: "/property/declaration-printing",
     icon: <CardGiftcardIcon />,
     iconClosed: <KeyboardArrowRightIcon />,
     iconOpened: <KeyboardArrowDownIcon />,
-  },    
+  },      
 ];
 
 export default Menuitems;
