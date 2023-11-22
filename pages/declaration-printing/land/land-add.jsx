@@ -409,19 +409,21 @@ export default function LandAdd() {
                     <div className="w-full inline-block mb-7">
                         {QuestionTwoImageYes && (
                             <>
-                            <div className="mt-5">
-                                    <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
-                                </div>                                
-                                <div className="mt-5">
+                               <div className="mt-5">
                                     <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />
                                 </div>
+                                
+                                <div className="mt-5">
+                                    <img src="/screenshots/land-second-no-2.png" className="w-full" alt="image" height={500} width={200} />
+                                </div> 
                             </>
                         )}
                         {QuestionTwoImageNo && (
                             <>
                                 <div className="mt-5">
-                                    <img src="/screenshots/land-second-no-2.png" className="w-full" alt="image" height={500} width={200} />
-                                </div>
+                                    <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>                                
+                                
                                 <div className="mt-5">
                                     <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
                                 </div>
@@ -478,7 +480,15 @@ export default function LandAdd() {
                             </>
                         )}
                         {ShowNoOption3 && (
-                            <></>
+                            <>
+                            {/* <div className="mt-5">
+                                 <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />
+                             </div>
+                             
+                             <div className="mt-5">
+                                 <img src="/screenshots/land-second-no-2.png" className="w-full" alt="image" height={500} width={200} />
+                             </div>  */}
+                         </>
                         )}
                     </div>
 
