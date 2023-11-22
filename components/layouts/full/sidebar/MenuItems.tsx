@@ -148,7 +148,13 @@ const Menuitems = [
         href: "/declaration-printing/funeral-expenses",
         translateHeading: "funeral expenses",
         text: "funeral expenses",
-      },       
+      },  
+      {        
+        title: "生前贈与",
+        icon: <CardGiftcardOutlinedIcon/>,
+        translateHeading: "gift during life",
+        href: "/gift-various/gifts-taxation",    
+      },        
     ],
   },
   //Third  
@@ -173,12 +179,12 @@ const Menuitems = [
         translateHeading: "Exceptions for small-scale residential land, etc.",
         href: "/gift-various/exceptions-residential-land",
       },
-      {        
-        title: "生前贈与",
-        icon: <CardGiftcardOutlinedIcon/>,
-        translateHeading: "lifetime gift",
-        href: "/gift-various/gifts-taxation",    
-      },      
+      // {        
+      //   title: "生前贈与",
+      //   icon: <CardGiftcardOutlinedIcon/>,
+      //   translateHeading: "lifetime gift",
+      //   href: "/gift-various/gifts-taxation",    
+      // },      
       {
         title: "未成年控除",
         icon: <AssignmentIndOutlinedIcon/>,
