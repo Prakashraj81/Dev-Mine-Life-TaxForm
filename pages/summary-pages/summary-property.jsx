@@ -44,39 +44,46 @@ const tableList = [
     },
     {
         id: 6,
-        heading: "その他財産",
-        amount: 4321,
-        icon: <ModeEditIcon className="text-white" />,
-        path: "/declaration-printing/other-property",
-    },
-    {
-        id: 7,
-        heading: "債務",
-        amount: 0,
-        icon: <ModeEditIcon className="text-white" />,
-        path: "/declaration-printing/debt",
-    },
-    {
-        id: 8,
-        heading: "葬式費用",
-        amount: 700,
-        icon: <ModeEditIcon className="text-white" />,
-        path: "/declaration-printing/funeral-expenses",
-    },
-    {
-        id: 9,
         heading: "死亡保険金等",
         amount: 0,
         icon: <ModeEditIcon className="text-white" />,
         path: "/declaration-printing/death-benefit",
     },
     {
-        id: 10,
+        id: 7,
         heading: "死亡退職金等",
         amount: 0,
         icon: <ModeEditIcon className="text-white" />,
         path: "/declaration-printing/death-retirement-allowance",
     }, 
+    {
+        id: 8,
+        heading: "その他財産",
+        amount: 4321,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/other-property",
+    },
+    {
+        id: 9,
+        heading: "債務",
+        amount: 0,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/debt",
+    },
+    {
+        id: 10,
+        heading: "葬式費用",
+        amount: 700,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/declaration-printing/funeral-expenses",
+    },    
+    {
+        id: 11,
+        heading: "生前贈与",
+        amount: 0,
+        icon: <ModeEditIcon className="text-white" />,
+        path: "/gift-various/gifts-taxation",
+    },    
 
     
 ]
