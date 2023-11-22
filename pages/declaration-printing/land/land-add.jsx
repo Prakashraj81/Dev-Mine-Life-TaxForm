@@ -409,6 +409,9 @@ export default function LandAdd() {
                     <div className="w-full inline-block mb-7">
                         {QuestionTwoImageYes && (
                             <>
+                            <div className="mt-5">
+                                    <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>                                
                                 <div className="mt-5">
                                     <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />
                                 </div>
@@ -417,7 +420,7 @@ export default function LandAdd() {
                         {QuestionTwoImageNo && (
                             <>
                                 <div className="mt-5">
-                                    <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
+                                    <img src="/screenshots/land-second-no-2.png" className="w-full" alt="image" height={500} width={200} />
                                 </div>
                                 <div className="mt-5">
                                     <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
