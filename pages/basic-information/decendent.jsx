@@ -402,13 +402,11 @@ export default function Decendent() {
                                     <span className="text-xs tracking-2 leading-7 text-custom-black py-1 w-full inline-block">被相続人の住所を管轄する税務署</span>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <Select
-                                    onChange={onChangeTaxOffice}
-                                    className="form-control w-full"                  
-                                    isClearable={isClearable}  
-                                    placeholder={""}      
-                                    options={colourOptions}                                    
-                                    />                                    
+                                <input
+                                            type="text"
+                                            id="Where"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"                                                                                 
+                                        />                               
                                     </div>                                
                                 </div>
                             </div>                        
