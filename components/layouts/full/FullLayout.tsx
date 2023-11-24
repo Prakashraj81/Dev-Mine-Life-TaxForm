@@ -47,7 +47,7 @@ const FullLayout: React.FC<Props> = ({ children }) => {
               <div className="w-full inline-block">
                 <div className="w-full lg:w-80 xl:w-80 2xl:w-80 inline-block float-left px-0 lg:px-10 xl:px-10 2xl:px-10 py-0 lg:py-10 xl:py-10 2xl:py-10">
                   <div className="top-stepper-sec max-w-screen-md mx-auto">
-                    <TopStepper />
+                    <TopStepper/>
                   </div>
                   <div className="page-wrapper">
                     {children}

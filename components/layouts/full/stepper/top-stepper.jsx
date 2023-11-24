@@ -6,9 +6,10 @@ import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-const steps = ['入力', '確認', '出力'];
+
 
 export default function TopStepper() {
+  const steps = ['入力', '確認', '出力'];
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
 
@@ -31,11 +32,10 @@ export default function TopStepper() {
   const handleNext = () => {
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
-        ? // It's the last step, but not all steps have been completed,
-          // find the first step that has been completed
+        ? 
           steps.findIndex((step, i) => !(i in completed))
         : activeStep + 1;
-    setActiveStep(newActiveStep);
+    setActiveStep(newActiveStep);    
   };
 
   const handleBack = () => {
@@ -72,9 +72,7 @@ export default function TopStepper() {
       <div>
         {allStepsCompleted() ? (
           <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
-            </Typography>
+           
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />
               <Button onClick={handleReset}>Reset</Button>
@@ -82,22 +80,17 @@ export default function TopStepper() {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            {/* <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
-              Step1 {activeStep + 1}
-            </Typography> */}
+            
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              {/* <Button
+              <Button
                 color="inherit"
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 sx={{ mr: 1 }}
               >
                 Back
-              </Button> */}
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleNext} sx={{ mr: 1 }}>
-                Next
               </Button>
+              <Box sx={{ flex: '1 1 auto' }} />              
               {activeStep !== steps.length &&
                 (completed[activeStep] ? (
                   <Typography variant="caption" sx={{ display: 'inline-block' }}>
@@ -107,7 +100,7 @@ export default function TopStepper() {
                   <Button onClick={handleComplete}>
                     {completedSteps() === totalSteps() - 1
                       ? 'Finish'
-                      : 'Complete Step'}
+                      : 'Next'}
                   </Button>
                 ))}
             </Box>
