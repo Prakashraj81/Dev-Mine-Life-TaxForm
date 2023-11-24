@@ -74,7 +74,7 @@ const Menuitems = [
     iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
-        title: "まとめ  (8)",
+        title: "まとめ  (11)",
         icon: <SummarizeOutlinedIcon/>,
         href: "/summary-pages/summary-property", 
         translateHeading: "summary-property",
@@ -168,7 +168,7 @@ const Menuitems = [
     iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
-        title: "まとめ  (5)",
+        title: "まとめ  (4)",
         icon: <SummarizeOutlinedIcon/>,
         href: "/summary-pages/summary-gifts-various", 
         translateHeading: "summary-gifts-various",
