@@ -387,25 +387,8 @@ export default function OtherPropertyAdd() {
                 </div>
 
                 <form action="#" method="POST">
-                    <div className="w-full flex items-center justify-between mb-7">
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="user-details">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
-                                    相手先
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    id="Nameofproperty"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                    
-                                />                    
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                    <div className="w-full flex items-center justify-between mb-7"> 
+                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
                                     財産の名称<i className="text-red-500">*</i>
@@ -422,6 +405,26 @@ export default function OtherPropertyAdd() {
                                 {PropertyNameError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
                                 )}
+                            </div>
+                        </div>
+
+                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                            <div className="user-details">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                    相手先
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handlePropertyType}>
+                                        <option value='' id="0"></option>
+                                        {PropertyList.map((option) => (
+                                            <option key={option.value} id={option.id} value={option.value}>
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>                                    
+                                </div>
                             </div>
                         </div>
                     </div>
