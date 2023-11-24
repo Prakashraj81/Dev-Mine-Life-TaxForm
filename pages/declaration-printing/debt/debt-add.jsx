@@ -256,14 +256,11 @@ export default function DebtAdd() {
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleDebitType}>
-                                        <option value='' id="0"></option>
-                                        {DebtList.map((option) => (
-                                            <option key={option.value} id={option.id} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>                                    
+                                <input
+                                    type="text"
+                                    id="NameofDebt"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                   
+                                />                                 
                                 </div>
                             </div>
                         </div>
