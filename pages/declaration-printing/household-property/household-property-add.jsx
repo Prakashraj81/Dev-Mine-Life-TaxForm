@@ -251,8 +251,9 @@ export default function HouseholdPropertyAdd() {
                                     />
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
 
+                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                             <BackButton />
                             <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
@@ -260,6 +261,7 @@ export default function HouseholdPropertyAdd() {
                         <div className="heading text-center pt-8">
                             <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
                         </div>
+                        </div>                        
                     </form>
                 </div>
             </div>
