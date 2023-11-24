@@ -381,14 +381,11 @@ export default function Heir() {
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
-                                        <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleProfessionType}>
-                                            <option value='' id="0"></option>
-                                            {ProfessionList.map((option) => (
-                                                <option key={option.value} id={option.id} value={option.value}>
-                                                    {option.label}
-                                                </option>
-                                            ))}
-                                        </select>                                        
+                                    <input
+                                        type="text"
+                                        id="Profession"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                        
+                                    />                                        
                                     </div>
                                 </div>
                             </div>
