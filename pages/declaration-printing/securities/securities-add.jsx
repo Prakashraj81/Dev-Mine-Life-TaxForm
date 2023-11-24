@@ -630,16 +630,7 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
-
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                        <div className="heading text-center">
-                            <h5 className="text-sm text-black tracking-2 font-medium">財産の合計</h5>
-                        </div>
-                        <div className="total-list pt-10">
-                        <HeirListBox FunhandleBoxValueChange={handleBoxValueChange} FunHandleKeyPress={handleKeyPress} VarUndecidedHeir={UndecidedHeir} VarAmountofMoney={AmountofMoney}  />
-                        </div>
-                        <IncorrectError IncorrectError={ShowIncorrectError}/>
-                    </div>
+                    
                     <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">                        
                         <BackButton />
                         <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled}/>
