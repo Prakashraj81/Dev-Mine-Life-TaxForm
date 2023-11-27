@@ -11,18 +11,19 @@ import BackButtonIndex from "../../../components/back-btn-index";
 export default function Debt() {
     let [DebtList, setDebtList] = useState([]);
     let [TotalPrice, setTotalPrice] = useState("0");
+    let totalValuation = 0;
     var tempArray = [];
-    useEffect(() => {
-        let sessionValue = sessionStorage.getItem('Debt');
-        tempArray = [];
-        tempArray[0] = JSON.parse(sessionValue);
-        if (tempArray[0] !== null) {
-            setDebtList(tempArray);
-        }
-        else {
-            setDebtList([]);
-        }
-    }, []);    
+    // useEffect(() => {
+    //     let sessionValue = sessionStorage.getItem('Debt');
+    //     tempArray = [];
+    //     tempArray[0] = JSON.parse(sessionValue);
+    //     if (tempArray[0] !== null) {
+    //         setDebtList(tempArray);
+    //     }
+    //     else {
+    //         setDebtList([]);
+    //     }
+    // }, []);    
     return (
         <>
             <div className="life-insurance-wrapper">
@@ -48,7 +49,7 @@ export default function Debt() {
                             return (
                                 <tr key={index}>                       
                                     <td className="py-2 px-2 border-r border border-light-gray">{list.NameofDebt}</td>             
-                                    <td className="py-2 px-2 border-r border border-light-gray">{list.DebtType}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.OtherParty}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">{list.AmountofMoney.toLocaleString()}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
                                         <button id="cash_Edit" value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">

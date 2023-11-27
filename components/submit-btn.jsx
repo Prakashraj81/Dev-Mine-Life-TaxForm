@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function SubmitButton({ onSubmit, isSumbitDisabled }) {
+export default function SubmitButton({ title, onSubmit, isSumbitDisabled }) {
     let [ShowLoader, setShowLoader] = useState(true);
     return (
         <>     
@@ -10,9 +10,9 @@ export default function SubmitButton({ onSubmit, isSumbitDisabled }) {
                     onClick={onSubmit}
                     disabled={isSumbitDisabled}
                     className={isSumbitDisabled ? "cursor-not-allowed bg-custom-light rounded px-10 py-3 text-white" : "cursor-pointer bg-primary-color rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"}
-                >
+                >                   
                     <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                       保存
+                       {title}
                     </span>
                 </button>
             </div>

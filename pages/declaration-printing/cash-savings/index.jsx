@@ -6,7 +6,7 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-
+import CashSavingsAdd from "./cash-savings-add";
 
 export default function CashSavings() {
     let [cashSavingsList, setcashSavingsList] = useState([]);
@@ -71,7 +71,7 @@ export default function CashSavings() {
                 </div>
                 <div className="w-full inline-block text-left">
                     <Link href="/declaration-printing/cash-savings/cash-savings-add">
-                        <button id="decedent_edit" className="text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                        <button id="decedent_edit" className="text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2">
                             <AddIcon className="text-white" />
                             追加する
                         </button>

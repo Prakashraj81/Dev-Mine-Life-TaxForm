@@ -1,13 +1,17 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
+import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import StepForm from "./stepper";
+import BackdropLoader from '../../../components/loader/backdrop-loader';
 import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
 
 export default function OtherPropertyAdd() {
@@ -21,6 +25,7 @@ export default function OtherPropertyAdd() {
 
     let [Property, setProperty] = useState("");
     let [PropertyName, setPropertyName] = useState("");
+    let [OtherParty, setOtherParty] = useState("");
     let [DateofAcquisition, setDateofAcquisition] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Valuation, setValuation] = useState("0");
@@ -52,9 +57,78 @@ export default function OtherPropertyAdd() {
     let [ReductionRateError, setReductionRateError] = useState(false);
     let [ValuationError, setValuationError] = useState(false);
 
-    useEffect(() => {
-        
-    }, []);
+    // Proceed to next step
+    let [ShowLoader, setShowLoader] = useState(false);
+    let [InputFocus, setInputFocus] = useState(false);
+    let [activeStep, setActiveStep] = useState(0);
+    let [StepOne, setStepOne] = useState(true);
+    let [StepTwo, setStepTwo] = useState(false);
+    let [StepThree, setStepThree] = useState(false);
+    let [PrevButton, setPrevButton] = useState(true);
+    let [submitTitle, setsubmitTitle] = useState("Next");
+    let [PageValidation, setPageValidation] = useState(false);  
+
+
+    //Stepper "Next" function
+    let handleNext = () => {
+       setActiveStep((prev) => prev + 1);
+       if(activeStep === 0){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 2;
+           setStepOne(false);
+           setStepTwo(false);
+           setStepThree(true);
+           setPrevButton(false);
+           setsubmitTitle("保存");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);   
+           setPageValidation(true);  
+           PageValidation = true;
+           SubmitFinalFunction(PageValidation); 
+       }
+    }
+    //Stepper "Back" function
+    let handleBack = () => {                
+       setActiveStep((prev) => prev - 1);
+       if(activeStep === 0 || activeStep < 0){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(true);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else if(activeStep === 2){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);            
+       }
+    } 
 
     //Postal code 7 digit limit function
     const [isValid, setIsValid] = useState(true);
@@ -208,11 +282,9 @@ export default function OtherPropertyAdd() {
             setQuantity(quantity);
             setValuation(totalPrice.toLocaleString());
             setUndecidedHeir(totalPrice.toLocaleString());
-            AmountToTotalCalculation(totalPrice.toLocaleString());
         }
         else {
             setQuantity(0);
-            AmountToTotalCalculation(0);
         }
         setisSumbitDisabled(false);
     }
@@ -232,33 +304,9 @@ export default function OtherPropertyAdd() {
             setUndecidedHeir(valuation);
         }
         setisSumbitDisabled(false);
-        AmountToTotalCalculation(valuation);
     }
 
-    //Box value calculation function    
-    function AmountToTotalCalculation(Valuation) {
-        //Amount of money convert
-        if (Valuation == 0 || Valuation == "NaN") {
-            Valuation = 0;
-        }
-        else {
-            Valuation = Valuation.replace(/,/g, '').replace('.', '');
-            Valuation = parseFloat(Valuation);
-        }
-        let totalBoxValues = boxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = Valuation - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    }
+  
 
     //All input validation check and handling function
     const inputHandlingFunction = (event) => {
@@ -268,6 +316,9 @@ export default function OtherPropertyAdd() {
         if (inputId === "PropertyName") {
             setPropertyName(inputValue);
             setPropertyNameError(false);
+        }
+        else if(inputId === "OtherParty"){
+            setOtherParty(inputValue);
         }
         else if (inputId === "DateofAcquisition") {
             setDateofAcquisition(inputValue);
@@ -281,41 +332,12 @@ export default function OtherPropertyAdd() {
     }
 
 
-    //Footer box values and calculation
-    let handleBoxValueChange = (e, index) => {
-        let newValue = parseFloat(e.target.value);
-        if (isNaN(newValue)) {
-            newValue = 0;
-        }
-        const updatedBoxValues = [...boxValues];
-        updatedBoxValues[index] = newValue;
-        setBoxValues(updatedBoxValues);
-        //Amount of money convert
-        if (Valuation === 0) {
-            Valuation = 0;
-        }
-        else {
-            Valuation = parseFloat(Valuation.replace(/,/g, '').replace('.', ''));
-        }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = Valuation - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    };
-
+    
     //Submit API function 
     const router = useRouter();
+    let defaultValues = {};
     const onSubmit = () => {
-        let defaultValues = {
+        defaultValues = {
             Property: Property,
             PropertyName: PropertyName,
             DateofAcquisition: DateofAcquisition,
@@ -361,17 +383,35 @@ export default function OtherPropertyAdd() {
         }
         //Api setup
         if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('OtherProperty', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/other-property`);
+            handleNext();              
         }
         else {
             console.log("API not allowed");
             setisSumbitDisabled(true);
         }
     };
+
+    const SubmitFinalFunction = (PageValidation) => {
+        if(PageValidation === true){
+            console.log("API allowed");
+            sessionStorage.setItem('OtherProperty', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/other-property`);
+        }    
+        else{
+            setPageValidation(false);
+        }      
+    }
+        
     return (
         <>
+         <>
+        {ShowLoader && (
+            <BackdropLoader ShowLoader={ShowLoader} />
+        )}
+        </>
+            <div className="top-stepper-sec max-w-screen-md mx-auto py-10">
+                <StepForm handleBack={handleBack} activeStep={activeStep} handleNext={handleNext} />
+            </div>
             <div className="other-property-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -387,7 +427,9 @@ export default function OtherPropertyAdd() {
                 </div>
 
                 <form action="#" method="POST">
-                    <div className="w-full flex items-center justify-between mb-7"> 
+                    {StepOne && (
+                        <>
+                        <div className="w-full flex items-center justify-between mb-7"> 
                     <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
@@ -419,7 +461,9 @@ export default function OtherPropertyAdd() {
                                 <input
                                     type="text"
                                     id="OtherParty"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                    
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3" 
+                                    onChange={inputHandlingFunction}
+                                    value={OtherParty}                                   
                                 />                          
                                 </div>
                             </div>
@@ -618,19 +662,91 @@ export default function OtherPropertyAdd() {
                             </div>
                         </div>
                     )}
+                        </>
+                    )}
                     
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                    {StepTwo && (
+                            <>
+                            <Fragment>
+                                <List disablePadding>
+                                    <ListItem>
+                                    <ListItemText primary="財産の名称" secondary={PropertyName ? PropertyName : "提供されていない"} />
+                                    {PropertyName ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"PropertyName"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="相手先" secondary={OtherParty ? OtherParty : "提供されていない"} />
+                                    {OtherParty ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"OtherParty"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="評価額" secondary={Valuation ? Valuation : "提供されていない"} />
+                                    {Valuation ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"Valuation"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />                                                                    
+                                </List>      
+                            </Fragment>
+                            </>
+                        )}
+
+                        {StepThree && (
+                            <>
+                            <Box className="py-7">
+                            <Typography variant="h4" className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" align="center">
+                                ありがとう！
+                            </Typography>
+                            <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                                その他の財産 詳細は正常に保存されました...
+                            </Typography>
+                            </Box>                           
+                            </>
+                        )}
+
+                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton />
-                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                            {StepThree ? <></> : 
+                            <>
+                            {PrevButton ? <BackButton /> : 
+                            <>
+                            <button
+                                type='button'
+                                onClick={handleBack}
+                                className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                            >
+                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                戻る
+                                </span>
+                            </button>
+                            </>
+                            }
+                            </>
+                            }                            
+                            <SubmitButton title={submitTitle} onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                         </div>
+                        {StepThree || StepTwo ? <></> : 
                         <div className="heading text-center pt-8">
                             <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
                         </div>
-                        </div>        
-                </form>
-
-
+                        }                        
+                        </div>   
+                   </form>
             </div>
         </>
     )

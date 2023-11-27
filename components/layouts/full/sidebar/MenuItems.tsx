@@ -161,6 +161,15 @@ const Menuitems = [
   //Third  
   {
     id:3,
+    title: "分割情報の入力",    
+    translateHeading: "Entering division information",
+    href: "/division-information",
+    icon: <PostAddIcon />,
+    iconClosed: <KeyboardArrowRightIcon />,
+    iconOpened: <KeyboardArrowDownIcon />,
+  },    
+  {
+    id:4,
     title: "贈与・各種控除",    
     href: "",
     icon: <NoteAltIcon />,
@@ -205,16 +214,7 @@ const Menuitems = [
         href: "/gift-various/successive-inheritance",    
       },  
     ],
-  },
-  {
-    id:4,
-    title: "分割情報の入力",    
-    translateHeading: "Entering division information",
-    href: "/division-information",
-    icon: <PostAddIcon />,
-    iconClosed: <KeyboardArrowRightIcon />,
-    iconOpened: <KeyboardArrowDownIcon />,
-  },    
+  },  
   {
     id:5,
     title: "申告書の印刷",    

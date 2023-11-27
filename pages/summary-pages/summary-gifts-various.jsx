@@ -51,7 +51,7 @@ export default function SummaryGiftVarious() {
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
                         <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                        3年以内贈与・各種特例・税額控除の入力
+                        まとめ
                         </p>
                     </div>
                 </div>

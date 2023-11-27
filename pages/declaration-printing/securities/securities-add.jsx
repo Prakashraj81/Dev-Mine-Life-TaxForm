@@ -1,12 +1,17 @@
+"use client";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
 import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import StepForm from "./stepper";
+import BackdropLoader from '../../../components/loader/backdrop-loader';
 import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
 import InfoIcon from '@mui/icons-material/Info';
 
@@ -78,7 +83,82 @@ export default function SecuritiesAdd() {
     let [NameofSecuritiesError, setNameofSecuritiesError] = useState(false);
     let [UnitPriceError, setUnitPriceError] = useState(false);
     let [FinancialInstitutionNameError, setFinancialInstitutionNameError] = useState(false);
-    let [AmountofMoneyError, setAmountofMoneyError] = useState(false);    
+    let [AmountofMoneyError, setAmountofMoneyError] = useState(false);   
+    
+    
+    // Proceed to next step
+    let [ShowLoader, setShowLoader] = useState(false);
+    let [InputFocus, setInputFocus] = useState(false);
+    let [activeStep, setActiveStep] = useState(0);
+    let [StepOne, setStepOne] = useState(true);
+    let [StepTwo, setStepTwo] = useState(false);
+    let [StepThree, setStepThree] = useState(false);
+    let [PrevButton, setPrevButton] = useState(true);
+    let [submitTitle, setsubmitTitle] = useState("Next");
+    let [PageValidation, setPageValidation] = useState(false);  
+
+
+    //Stepper "Next" function
+    let handleNext = () => {
+       setActiveStep((prev) => prev + 1);
+       if(activeStep === 0){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 2;
+           setStepOne(false);
+           setStepTwo(false);
+           setStepThree(true);
+           setPrevButton(false);
+           setsubmitTitle("保存");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);   
+           setPageValidation(true);  
+           PageValidation = true;
+           SubmitFinalFunction(PageValidation); 
+       }
+    }
+    //Stepper "Back" function
+    let handleBack = () => {                
+       setActiveStep((prev) => prev - 1);
+       if(activeStep === 0 || activeStep < 0){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(true);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else if(activeStep === 2){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);            
+       }
+    } 
+
 
     //Securities dropdown
     let selectId = 0;
@@ -276,47 +356,15 @@ export default function SecuritiesAdd() {
         }
     };
 
-    let flag = 0;
-    function onchangeUnitPrice(e) {
+    const UnitPriceKeyPress = (e) => {
         let unit_price = parseFloat(e.target.value);
-        if(isNaN(unit_price)){
-            setUnitPrice(0);
-        }
-        else{
-            setUnitPrice(unit_price);
-        }
-        let qty = Quantity;
-        if (qty > 0) {
-            flag = 1;
-            onchangeQuantity(e);
-        }
-        else {
-            flag = 0;
-        }
+        setUnitPrice(unit_price);
     }
 
-    function onchangeQuantity(e) {
-        let u_price = UnitPrice;
-        let quantity;
-        if (flag == 1) {
-            quantity = Quantity;
-        }
-        else {
-            quantity = parseFloat(e.target.value);
-        }
-        if (quantity > 0) {
-            let totalPrice = u_price * quantity;
-            setQuantity(quantity);
-            setAmountofMoney(totalPrice.toLocaleString());
-            setUndecidedHeir(totalPrice.toLocaleString());
-            AmountToTotalCalculation(totalPrice.toLocaleString());
-        }
-        else {
-            setQuantity(0);
-            AmountToTotalCalculation(0);
-        }
-        setisSumbitDisabled(false);
-    }
+    const QuantityKeyPress = (e) => {
+        let unit_price = parseFloat(e.target.value);
+        setQuantity(unit_price);
+    }    
 
     //All input validation check and handling function
     const inputHandlingFunction = (event) => {
@@ -380,41 +428,13 @@ export default function SecuritiesAdd() {
             }
         }
     }
-
-
-    const handleBoxValueChange = (e, index) => {
-        setBoxValues([0]);
-        let newValue = parseFloat(e.target.value);
-        let updatedBoxValues = [...boxValues];
-        updatedBoxValues[index] = isNaN(newValue) ? 0 : newValue;
-        updatedBoxValues = updatedBoxValues.map((value) => (value === undefined ? 0 : value));
-        setBoxValues(updatedBoxValues);
-
-        //Amount of money convert
-        if (AmountofMoney == 0) {
-            AmountofMoney = 0;
-        }
-        else {
-            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
-            AmountofMoney = parseFloat(AmountofMoney);
-        }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
-        totalBoxValues = isNaN(totalBoxValues) ? 0 : totalBoxValues;
-        let heirValue = AmountofMoney - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    };
+    
 
     //Submit API function 
     const router = useRouter();
+    let defaultValues = {};
     const onSubmit = () => {
-        let defaultValues = {
+        defaultValues = {
             SecuritiesType: SecuritiesType,
             UnitDetails: UnitDetails,
             NameofSecurities: NameofSecurities,
@@ -454,27 +474,11 @@ export default function SecuritiesAdd() {
 
         if (defaultValues.AmountofMoney !== "" || defaultValues.AmountofMoney === 0) {
             valueConvertFun(defaultValues.AmountofMoney);
-        }
-
-        if (defaultValues.UndecidedHeir !== "") {
-            if(defaultValues.UndecidedHeir === 0){
-                UndecidedHeir = 0;
-            }    
-            else{
-                UndecidedHeir = defaultValues.UndecidedHeir.replace(/,/g, '').replace('.', '');
-                UndecidedHeir = parseFloat(UndecidedHeir);
-            }        
-            if (defaultValues.UndecidedHeir < 0) {
-                setShowIncorrectError(true);
-                isSumbitDisabled = true;
-            }
-        }
+        }        
 
         //Api setup
         if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('securities', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/securities`);
+            handleNext();              
         }
         else {
             console.log("API not allowed");
@@ -482,8 +486,27 @@ export default function SecuritiesAdd() {
         }
     };
 
+    const SubmitFinalFunction = (PageValidation) => {
+        if(PageValidation === true){
+            console.log("API allowed");
+            sessionStorage.setItem('securities', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/securities`);
+        }    
+        else{
+            setPageValidation(false);
+        }      
+    }
+
     return (
         <>
+        <>
+        {ShowLoader && (
+            <BackdropLoader ShowLoader={ShowLoader} />
+        )}
+        </>
+            <div className="top-stepper-sec max-w-screen-md mx-auto py-10">
+                <StepForm handleBack={handleBack} activeStep={activeStep} handleNext={handleNext} />
+            </div>
             <div className="securities-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -500,15 +523,16 @@ export default function SecuritiesAdd() {
             </div>
             <div className="w-full inline-block">
                 <form action="#" method="POST">
-
-                    <div className="w-full flex items-center  mb-12">
+                    {StepOne && (
+                        <>
+                        <div className="w-full flex items-center  mb-12">
                             <div className="label w-25 inline-block">
                                 <label htmlFor="SecuritiesType" className="form-label">
                                     有価証券の種類<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-50 inline-block mt-2">
-                                <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={SecuritiesDropdownChange}>
+                                <select id="SecuritiesType" className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={SecuritiesDropdownChange}>
                                     <option value='0' id="0"></option>
                                     {SecuritiesList.map((option) => (
                                         <option key={option.value} id={option.id} value={option.value}>
@@ -545,7 +569,7 @@ export default function SecuritiesAdd() {
                             </div>
                         </div>
 
-                <div className="w-full block items-center justify-between mb-7">
+                        <div className="w-full block items-center justify-between mb-7">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="FinancialInstitutionName" className="form-label">
@@ -578,9 +602,13 @@ export default function SecuritiesAdd() {
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
-                                            type="text"                                            
+                                            type="text"   
+                                            id="UnitPrice"                                         
                                             autocomplete="off"
                                             className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
+                                            value={UnitPrice}
+                                            onChange={UnitPriceKeyPress}
+                                            onKeyPress={handleKeyPress}
                                         />
                                         <UnitPriceIcon />
                                         {UnitPriceError && (
@@ -601,14 +629,16 @@ export default function SecuritiesAdd() {
                                         type="text"
                                         id="Quantity"                                       
                                         className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        value={Quantity}
+                                        onChange={QuantityKeyPress}
+                                        onKeyPress={handleKeyPress}
                                     />
                                 </div>
                             </div>
                         </div>
 
-                    
 
-                    <div className="w-full inline-block items-center justify-between mb-7">
+                        <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
@@ -630,16 +660,125 @@ export default function SecuritiesAdd() {
                                 </div>
                             </div>
                         </div>
+                        </>
+                    )}                   
+
                     
+                    
+                        {StepTwo && (
+                            <>
+                            <Fragment>
+                                <List disablePadding>
+                                    <ListItem>
+                                    <ListItemText className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" primary="有価証券の種類" secondary={SecuritiesType ? SecuritiesType : "提供されていない"} />
+                                    {SecuritiesType ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"SecuritiesType"} onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" primary="有価証券の名称・銘柄" secondary={NameofSecurities ? NameofSecurities : "提供されていない"} />
+                                    {NameofSecurities ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"NameofSecurities"} onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="金融機関名" secondary={FinancialInstitutionName ? FinancialInstitutionName : "提供されていない"} />
+                                    {FinancialInstitutionName ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"FinancialInstitutionName"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="単位" secondary={UnitPrice ? UnitPrice : "提供されていない"} />
+                                    {UnitPrice ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"UnitPrice"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="数量" secondary={Quantity ? Quantity : "提供されていない"} />
+                                    {Quantity ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"Quantity"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="金額" secondary={AmountofMoney ? AmountofMoney : "提供されていない"} />
+                                    {AmountofMoney ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"AmountofMoney"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />                                    
+                                </List>      
+                            </Fragment>
+                            </>
+                        )}
+
+                        {StepThree && (
+                            <>
+                            <Box className="py-7">
+                            <Typography variant="h4" className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" align="center">
+                                ありがとう！
+                            </Typography>
+                            <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                                有価証券 詳細は正常に保存されました...
+                            </Typography>
+                            </Box>                           
+                            </>
+                        )}
+
                         <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton />
-                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                            {StepThree ? <></> : 
+                            <>
+                            {PrevButton ? <BackButton /> : 
+                            <>
+                            <button
+                                type='button'
+                                onClick={handleBack}
+                                className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                            >
+                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                戻る
+                                </span>
+                            </button>
+                            </>
+                            }
+                            </>
+                            }                            
+                            <SubmitButton title={submitTitle} onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                         </div>
+                        {StepThree || StepTwo ? <></> : 
                         <div className="heading text-center pt-8">
                             <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
                         </div>
-                        </div>        
+                        }                        
+                        </div>   
                 </form>
             </div>
         </>

@@ -1,13 +1,18 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
 import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import StepForm from "./stepper";
+import BackdropLoader from '../../../components/loader/backdrop-loader';
+
 
 export default function CashSavingsAdd() {
     let DepositList = [
@@ -26,8 +31,8 @@ export default function CashSavingsAdd() {
         { id: 2, name: "Shree", name1: "Shree" },
         { id: 3, name: "Prakashraj", name1: "Prakashraj" },
         { id: 4, name: "Gowtham", name1: "Gowtham" },
-    ]
-
+    ];
+    
     let [DepositType, setDepositType] = useState("");
     let [FinancialInstitutionName, setFinancialInstitutionName] = useState("");
     let [PostCode, setPostCode] = useState("");
@@ -49,6 +54,113 @@ export default function CashSavingsAdd() {
     let [AddressError, setAddressError] = useState(false);
     let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
 
+     // Proceed to next step
+     let [ShowLoader, setShowLoader] = useState(false);
+     let [InputFocus, setInputFocus] = useState(false);
+     let [activeStep, setActiveStep] = useState(0);
+     let [StepOne, setStepOne] = useState(true);
+     let [StepTwo, setStepTwo] = useState(false);
+     let [StepThree, setStepThree] = useState(false);
+     let [PrevButton, setPrevButton] = useState(true);
+     let [submitTitle, setsubmitTitle] = useState("Next");
+     let [PageValidation, setPageValidation] = useState(false);
+
+     const inputRef1 = useRef(null);
+     const inputRef2 = useRef(null);
+     const inputRef3 = useRef(null);
+     const inputRef4 = useRef(null);
+     const inputRef5 = useRef(null);   
+     
+  // Edit button click and focus on specific input function
+  const handleButtonClick = (inputId) => {    
+    const inputRef = getInputRefById(inputId);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }   
+    handleBack(); 
+    console.log("inputRef1.current.value:" + inputRef);
+    setDepositType(DepositType);
+  };
+
+  //Input ref based on Id function
+  const getInputRefById = (inputId) => {
+    switch (inputId) {
+      case 'DepositType':
+        return inputRef1;
+      case 'PostCode':
+        return inputRef2;
+        case 'FinancialInstitutionName':
+        return inputRef3;
+        case 'Address':
+        return inputRef4;
+        case 'AmountofMoney':
+        return inputRef5;
+      default:
+        return null;
+    }        
+  };
+
+     //Stepper "Next" function
+     let handleNext = () => {
+        setActiveStep((prev) => prev + 1);
+        if(activeStep === 0){
+            activeStep = 1;
+            setStepOne(false);
+            setStepTwo(true);
+            setStepThree(false);
+            setPrevButton(false);
+            setShowLoader(false);
+        }
+        else if(activeStep === 1){
+            activeStep = 2;
+            setStepOne(false);
+            setStepTwo(false);
+            setStepThree(true);
+            setPrevButton(false);
+            setsubmitTitle("保存");
+            setShowLoader(false);
+        }
+        else {
+            setShowLoader(false);   
+            setPageValidation(true);  
+            PageValidation = true;
+            SubmitFinalFunction(PageValidation); 
+        }
+     }
+     //Stepper "Back" function
+     let handleBack = () => {                
+        setActiveStep((prev) => prev - 1);
+        if(activeStep === 0 || activeStep < 0){
+            activeStep = 0;
+            setStepOne(true);
+            setStepTwo(false);
+            setStepThree(false);
+            setPrevButton(false);
+            setShowLoader(false);
+        }
+        else if(activeStep === 1){
+            activeStep = 0;
+            setStepOne(true);
+            setStepTwo(false);
+            setStepThree(false);
+            setPrevButton(true);
+            setsubmitTitle("Next");
+            setShowLoader(false);
+        }
+        else if(activeStep === 2){
+            activeStep = 1;
+            setStepOne(false);
+            setStepTwo(true);
+            setStepThree(false);
+            setPrevButton(false);
+            setsubmitTitle("Next");
+            setShowLoader(false);
+        }
+        else {
+            setShowLoader(false);            
+        }
+     } 
+    
     useEffect(() => {
         setShowFinancialInstitutionName(true);
         setShowPostCode(false);
@@ -230,8 +342,10 @@ export default function CashSavingsAdd() {
 
     //Submit API function 
     const router = useRouter();
+    let defaultValues = {};
     const onSubmit = () => {
-        let defaultValues = {
+        setShowLoader(true);
+        defaultValues = {
             DepositType: DepositType,
             FinancialInstitutionName: FinancialInstitutionName,
             PostCode: PostCode,
@@ -272,9 +386,7 @@ export default function CashSavingsAdd() {
 
         //Api setup
         if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('cashSavings', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/cash-savings`);
+            handleNext();              
         }
         else {
             console.log("API not allowed");
@@ -282,8 +394,28 @@ export default function CashSavingsAdd() {
         }
     };
 
-    return (
+    const SubmitFinalFunction = (PageValidation) => {
+        if(PageValidation === true){
+            console.log("API allowed");
+            sessionStorage.setItem('cashSavings', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/cash-savings`);
+        }    
+        else{
+            setPageValidation(false);
+        }      
+    }
+
+   
+    return (        
         <>
+        <>
+        {ShowLoader && (
+            <BackdropLoader ShowLoader={ShowLoader} />
+        )}
+        </>
+            <div className="top-stepper-sec max-w-screen-md mx-auto py-10">
+                <StepForm handleBack={handleBack} activeStep={activeStep} handleNext={handleNext} />
+            </div>
             <div className="cash-savings-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -299,15 +431,17 @@ export default function CashSavingsAdd() {
                 </div>
                 <div className="w-full inline-block">
                     <form action="#" method="POST">
-                        <div className="w-full inline-block items-center justify-between mb-7">
+                        {StepOne && (
+                            <>
+                            <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="Deposit" className="form-label">
+                                    <label htmlFor="DepositType" className="form-label">
                                         預金の種類<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <select className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2" onChange={handleDepositType}>
+                                    <select ref={inputRef1} id="DepositType" className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2" onChange={handleDepositType}>
                                         <option value='' id="0"></option>
                                         {DepositList.map((option) => (
                                             <option key={option.value} id={option.id} value={option.value}>
@@ -333,6 +467,7 @@ export default function CashSavingsAdd() {
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
                                             type="text"
+                                            ref={inputRef2}
                                             id="PostCode"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
                                             onKeyPress={handleKeyPress}
@@ -360,6 +495,7 @@ export default function CashSavingsAdd() {
                                     <div className="w-full inline-block mt-2">
                                         <input
                                             type="text"
+                                            ref={inputRef3}
                                             id="Address"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             onChange={inputHandlingFunction}
@@ -384,6 +520,7 @@ export default function CashSavingsAdd() {
                                     <div className="w-full inline-block mt-2">
                                         <input
                                             type="text"
+                                            ref={inputRef4}
                                             id="FinancialInstitutionName"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             onChange={inputHandlingFunction}
@@ -409,6 +546,7 @@ export default function CashSavingsAdd() {
                                 <div className="w-full inline-block mt-2">
                                     <input
                                         type="text"
+                                        ref={inputRef5}
                                         value={AmountofMoney}
                                         onChange={AmountofMoneyKeyPress}
                                         onKeyPress={handleKeyPress}
@@ -421,17 +559,112 @@ export default function CashSavingsAdd() {
                                 </div>
                             </div>
                         </div>
+                            </>
+                        )}
+                        {StepTwo && (
+                            <>
+                            <Fragment>
+                                <List disablePadding>
+                                    <ListItem>
+                                    <ListItemText className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" primary="預金の種類" secondary={DepositType ? DepositType : "提供されていない"} />
+                                    {DepositType ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"DepositType"} onClick={() => handleButtonClick('DepositType')}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="郵便番号" secondary={PostCode ? PostCode : "提供されていない"} />
+                                    {PostCode ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"PostCode"}  onClick={() => handleButtonClick('PostCode')}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="住所" secondary={Address ? Address : "提供されていない"} />
+                                    {Address ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"Address"}  onClick={() => handleButtonClick('Address')}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="金融機関名" secondary={FinancialInstitutionName ? FinancialInstitutionName : "提供されていない"} />
+                                    {FinancialInstitutionName ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"FinancialInstitutionName"}  onClick={() => handleButtonClick('FinancialInstitutionName')}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="金額" secondary={AmountofMoney ? AmountofMoney : "提供されていない"} />
+                                    {AmountofMoney ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"AmountofMoney"}  onClick={() => handleButtonClick('AmountofMoney')}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />                                    
+                                </List>      
+                            </Fragment>
+                            </>
+                        )}
+
+                        {StepThree && (
+                            <>
+                            <Box className="py-7">
+                            <Typography variant="h4" className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" align="center">
+                                ありがとう！
+                            </Typography>
+                            <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                                現金・預貯金 詳細は正常に保存されました...
+                            </Typography>
+                            </Box>                           
+                            </>
+                        )}
 
                         <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton />
-                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                            {StepThree ? <></> : 
+                            <>
+                            {PrevButton ? <BackButton /> : 
+                            <>
+                            <button
+                                type='button'
+                                onClick={handleBack}
+                                className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                            >
+                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                戻る
+                                </span>
+                            </button>
+                            </>
+                            }
+                            </>
+                            }                            
+                            <SubmitButton title={submitTitle} onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                         </div>
+                        {StepThree || StepTwo ? <></> : 
                         <div className="heading text-center pt-8">
                             <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
                         </div>
+                        }                        
                         </div>        
-                    </form>
+                    </form>   
                 </div>
             </div>
         </>

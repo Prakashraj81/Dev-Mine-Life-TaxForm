@@ -1,13 +1,17 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
+import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import StepForm from "./stepper";
+import BackdropLoader from '../../../components/loader/backdrop-loader';
 import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
 
 export default function DebtAdd() {
@@ -21,6 +25,7 @@ export default function DebtAdd() {
 
     let [DebtType, setDebtType] = useState("");
     let [NameofDebt, setNameofDebt] = useState("");
+    let [OtherParty, setOtherParty] = useState("");
     let [CauseofUnpaidBalance, setCauseofUnpaidBalance] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
@@ -40,11 +45,86 @@ export default function DebtAdd() {
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+    let [NameofDebtError, setNameofDebtError] = useState(false);
     let [CauseofUnpaidBalanceError, setCauseofUnpaidBalanceError] = useState(false);
     let [AddressError, setAddressError] = useState(false);
     let [ShowObligationDateDebtPaymentDeadlineError, setShowObligationDateDebtPaymentDeadlineError] = useState(false);
     let [ObligationDateError, setObligationDateError] = useState(false);
     let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
+
+
+    // Proceed to next step
+    let [ShowLoader, setShowLoader] = useState(false);
+    let [InputFocus, setInputFocus] = useState(false);
+    let [activeStep, setActiveStep] = useState(0);
+    let [StepOne, setStepOne] = useState(true);
+    let [StepTwo, setStepTwo] = useState(false);
+    let [StepThree, setStepThree] = useState(false);
+    let [PrevButton, setPrevButton] = useState(true);
+    let [submitTitle, setsubmitTitle] = useState("Next");
+    let [PageValidation, setPageValidation] = useState(false);  
+
+
+    //Stepper "Next" function
+    let handleNext = () => {
+       setActiveStep((prev) => prev + 1);
+       if(activeStep === 0){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 2;
+           setStepOne(false);
+           setStepTwo(false);
+           setStepThree(true);
+           setPrevButton(false);
+           setsubmitTitle("保存");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);   
+           setPageValidation(true);  
+           PageValidation = true;
+           SubmitFinalFunction(PageValidation); 
+       }
+    }
+    //Stepper "Back" function
+    let handleBack = () => {                
+       setActiveStep((prev) => prev - 1);
+       if(activeStep === 0 || activeStep < 0){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(true);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else if(activeStep === 2){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);            
+       }
+    } 
 
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
@@ -137,7 +217,10 @@ export default function DebtAdd() {
         let inputValue = event.target.value;
         if (inputId === "NameofDebt") {
             setNameofDebt(inputValue);            
-        }   
+        } 
+        else if (inputId === "OtherParty") {
+            setOtherParty(inputValue);            
+        }  
         else if (inputId === "CauseofUnpaidBalance") {
             setCauseofUnpaidBalance(inputValue);
             setCauseofUnpaidBalanceError(false);
@@ -156,45 +239,73 @@ export default function DebtAdd() {
         setisSumbitDisabled(false);
     }
 
-    //Footer box values and calculation
-    let handleBoxValueChange = (e, index) => {
-        let newValue = parseFloat(e.target.value);
-        if (isNaN(newValue)) {
-            newValue = 0;
-        }
-        const updatedBoxValues = [...boxValues];
-        updatedBoxValues[index] = newValue;
-        setBoxValues(updatedBoxValues);
+   //Box value calculation function    
+   function AmountToTotalCalculation(AmountofMoney) {
+    //Amount of money convert
+    if (AmountofMoney == 0 || AmountofMoney == "NaN") {
+        AmountofMoney = 0;
+    }
+    else {
+        AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+        AmountofMoney = parseFloat(AmountofMoney);
+    }
+    let totalBoxValues = boxValues.reduce((total, value) => total + value, 0);
+    if (isNaN(totalBoxValues)) {
+        totalBoxValues = 0;
+    }
+    let heirValue = AmountofMoney - totalBoxValues;
+    if (heirValue < 0) {
+        setUndecidedHeir(heirValue.toLocaleString());
+        setShowIncorrectError(true);
+    }
+    else {
+        setShowIncorrectError(false);
+        setUndecidedHeir(heirValue.toLocaleString());
+    }
+}
 
-        //Amount of money convert
-        if (AmountofMoney == 0) {
-            AmountofMoney = 0;
-        }
-        else {
-            AmountofMoney = parseFloat(AmountofMoney.replace(/,/g, '').replace('.', ''));
-        }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = AmountofMoney - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    };
+ //Footer box values and calculation
+let handleBoxValueChange = (e, index) => {
+    let newValue = parseFloat(e.target.value);
+    if (isNaN(newValue)) {
+        newValue = 0;
+    }
+    const updatedBoxValues = [...boxValues];
+    updatedBoxValues[index] = newValue;
+    setBoxValues(updatedBoxValues);
+
+    //Amount of money convert
+    if (AmountofMoney == 0) {
+        AmountofMoney = 0;
+    }
+    else {
+        AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+        AmountofMoney = parseFloat(AmountofMoney);
+    }
+    let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
+    if (isNaN(totalBoxValues)) {
+        totalBoxValues = 0;
+    }
+    let heirValue = AmountofMoney - totalBoxValues;
+    if (heirValue < 0) {
+        setUndecidedHeir(heirValue.toLocaleString());
+        setShowIncorrectError(true);
+    }
+    else {
+        setShowIncorrectError(false);
+        setUndecidedHeir(heirValue.toLocaleString());
+    }
+};
 
 
     //Submit API function 
     const router = useRouter();
+    let defaultValues = {};
     const onSubmit = () => {
-        let defaultValues = {
+        defaultValues = {
             DebtType: DebtType,
             NameofDebt: NameofDebt,
+            OtherParty: OtherParty,
             CauseofUnpaidBalance: CauseofUnpaidBalance,
             PostCode: PostCode,
             Address: Address,
@@ -206,7 +317,11 @@ export default function DebtAdd() {
             boxValues:boxValues,
         };
 
-        //input Validation       
+        //input Validation  
+        if (defaultValues.NameofDebt === "") {
+            setNameofDebtError(true);
+            isSumbitDisabled = true;
+        }     
         if (defaultValues.Address === "") {
             if (ShowAddress === true) {
                 setAddressError(true);
@@ -221,17 +336,34 @@ export default function DebtAdd() {
         }
         //Api setup
         if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('Debt', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/debt`);
+            handleNext();              
         }
         else {
             console.log("API not allowed");
             setisSumbitDisabled(true);
         }
     };
+
+    const SubmitFinalFunction = (PageValidation) => {
+        if(PageValidation === true){
+            console.log("API allowed");
+            sessionStorage.setItem('Debt', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/debt`);
+        }    
+        else{
+            setPageValidation(false);
+        }      
+    }
     return (
         <>
+        <>
+        {ShowLoader && (
+            <BackdropLoader ShowLoader={ShowLoader} />
+        )}
+        </>
+            <div className="top-stepper-sec max-w-screen-md mx-auto py-10">
+                <StepForm handleBack={handleBack} activeStep={activeStep} handleNext={handleNext} />
+            </div>
             <div className="other-property-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -247,21 +379,28 @@ export default function DebtAdd() {
                 </div>
 
                 <form action="#" method="POST">
-                    <div className="w-full flex items-center justify-between mb-7">
+                    {StepOne && (
+                        <>
+                        <div className="w-full flex items-center justify-between mb-7">
                         <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                    債務の名称
+                                    債務の名称<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
                                     id="NameofDebt"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                   
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"  
+                                    onChange={inputHandlingFunction}
+                                    value={NameofDebt}                                 
                                 />                                 
                                 </div>
+                                {NameofDebtError && (
+                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -275,10 +414,10 @@ export default function DebtAdd() {
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
-                                    id="NameofDebt"
+                                    id="OtherParty"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     onChange={inputHandlingFunction}
-                                    value={NameofDebt}
+                                    value={OtherParty}
                                 />
                                 <div className="mt-3">
                                     <p className="text-sm text-black tracking-2 font-medium">15文字以内で入力して下さい</p>
@@ -424,20 +563,147 @@ export default function DebtAdd() {
                             </div>
                         </div>
                     </div>
+                        </>
+                    )}
                     
 
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                    {StepTwo && (
+                            <>
+                            <Fragment>
+                                <List disablePadding>
+                                <ListItem>
+                                    <ListItemText primary="債務の名称" secondary={NameofDebt ? NameofDebt : "提供されていない"} />
+                                    {NameofDebt ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"NameofDebt"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="相手先" secondary={OtherParty ? OtherParty : "提供されていない"} />
+                                    {OtherParty ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"OtherParty"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" primary="未払い金の発生原因" secondary={CauseofUnpaidBalance ? CauseofUnpaidBalance : "提供されていない"} />
+                                    {CauseofUnpaidBalance ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"CauseofUnpaidBalance"} onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" primary="郵便番号" secondary={PostCode ? PostCode : "提供されていない"} />
+                                    {PostCode ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"PostCode"} onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="住所" secondary={Address ? Address : "提供されていない"} />
+                                    {Address ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"Address"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="債務発生日" secondary={ObligationDate ? ObligationDate : "提供されていない"} />
+                                    {ObligationDate ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"ObligationDate"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="債務の弁済期限（あれば）" secondary={DebtPaymentDeadline ? DebtPaymentDeadline : "提供されていない"} />
+                                    {DebtPaymentDeadline ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"DebtPaymentDeadline"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="金額" secondary={AmountofMoney ? AmountofMoney : "提供されていない"} />
+                                    {AmountofMoney ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"AmountofMoney"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />                                    
+                                </List>      
+                            </Fragment>
+                            </>
+                        )}
+
+                        {StepThree && (
+                            <>
+                            <Box className="py-7">
+                            <Typography variant="h4" className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" align="center">
+                                ありがとう！
+                            </Typography>
+                            <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                                債務 詳細は正常に保存されました...
+                            </Typography>
+                            </Box>                           
+                            </>
+                        )}
+
+                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton />
-                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                            {StepThree ? <></> : 
+                            <>
+                            {PrevButton ? <BackButton /> : 
+                            <>
+                            <button
+                                type='button'
+                                onClick={handleBack}
+                                className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                            >
+                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                戻る
+                                </span>
+                            </button>
+                            </>
+                            }
+                            </>
+                            }                            
+                            <SubmitButton title={submitTitle} onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                         </div>
+                        {StepThree || StepTwo ? <></> : 
                         <div className="heading text-center pt-8">
                             <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
                         </div>
-                        </div>        
+                        }                        
+                        </div>   
                 </form>
-
-
             </div>
         </>
     )
