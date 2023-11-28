@@ -1,14 +1,18 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
+import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
+import StepForm from "./stepper";
+import BackdropLoader from '../../../components/loader/backdrop-loader';
 import AreaIcon from "../../../components/inputbox-icon/textbox-area-icon";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -43,7 +47,19 @@ export default function LandAdd() {
     let [ShowYesOption3, setShowYesOption3] = useState(false);
     let [ShowNoOption3, setShowNoOption3] = useState(false);
 
-    
+    //Input items
+    let [LocationLotNumberYes, setLocationLotNumberYes] = useState("");
+    let [GroundGrainYes, setGroundGrainYes] = useState("");
+    let [LandAreaYes, setLandAreaYes] = useState("");
+    let [TypesofSiteRightsYes, setTypesofSiteRightsYes] = useState("");
+    let [PercentageofSiteRightsYes, setPercentageofSiteRightsYes] = useState("");
+
+    let [LocationNo, setLocationNo] = useState("");
+    let [LotNumberNo, setLotNumberNo] = useState("");
+    let [GroundGrainNo, setGroundGrainNo] = useState("");
+    let [LandAreaNo, setLandAreaNo] = useState("");
+
+    let [SharePercentage, setSharePercentage] = useState("");
 
     let [LandYesImage, setLandYesImage] = useState(false);
     let [LandNoImage, setLandNoImage] = useState(false);
@@ -71,6 +87,81 @@ export default function LandAdd() {
         createData('Cupcake', 305, 3.7, 67, 4.3),
         createData('Gingerbread', 356, 16.0, 49, 3.9),
     ];
+
+
+    // Proceed to next step
+    let [ShowLoader, setShowLoader] = useState(false);
+    let [InputFocus, setInputFocus] = useState(false);
+    let [activeStep, setActiveStep] = useState(0);
+    let [StepOne, setStepOne] = useState(true);
+    let [StepTwo, setStepTwo] = useState(false);
+    let [StepThree, setStepThree] = useState(false);
+    let [PrevButton, setPrevButton] = useState(true);
+    let [submitTitle, setsubmitTitle] = useState("Next");
+    let [PageValidation, setPageValidation] = useState(false);  
+
+
+    //Stepper "Next" function
+    let handleNext = () => {
+       setActiveStep((prev) => prev + 1);
+       if(activeStep === 0){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 2;
+           setStepOne(false);
+           setStepTwo(false);
+           setStepThree(true);
+           setPrevButton(false);
+           setsubmitTitle("保存");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);   
+           setPageValidation(true);  
+           PageValidation = true;
+           SubmitFinalFunction(PageValidation); 
+       }
+    }
+    //Stepper "Back" function
+    let handleBack = () => {                
+       setActiveStep((prev) => prev - 1);
+       if(activeStep === 0 || activeStep < 0){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(true);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else if(activeStep === 2){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);            
+       }
+    } 
+
 
     //Input keypress
     let handleKeyPress = (e) => {
@@ -204,12 +295,56 @@ export default function LandAdd() {
 
     //Submit API function 
     const router = useRouter();
+    let defaultValues = {};
     const onSubmit = () => {
+        // defaultValues = {
+        //     NameofLifeInsurance: NameofLifeInsurance,
+        //     PostCode: PostCode,
+        //     Address: Address,
+        //     Valuation: Valuation,
+        //     UndecidedHeir: UndecidedHeir,
+        //     TotalPrice: Valuation,
+        // };
 
+        // //input Validation
+        // if (defaultValues.NameofLifeInsurance === "") {
+        //     setNameofLifeInsuranceError(true);
+        //     isSumbitDisabled = true;
+        // }
+        // if (defaultValues.Address === "") {
+        //     setAddressError(true);
+        //     isSumbitDisabled = true;
+        // }
+        //Api setup
+        if (isSumbitDisabled !== true) {
+            handleNext();              
+        }
+        else {
+            console.log("API not allowed");
+            setisSumbitDisabled(true);
+        }
     };
 
+    const SubmitFinalFunction = (PageValidation) => {
+        if(PageValidation === true){
+            console.log("API allowed");
+            sessionStorage.setItem('Land', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/land`);
+        }    
+        else{
+            setPageValidation(false);
+        }      
+    }
     return (
         <>
+        <>
+        {ShowLoader && (
+            <BackdropLoader ShowLoader={ShowLoader} />
+        )}
+        </>
+            <div className="top-stepper-sec max-w-screen-md mx-auto pt-0 py-10">
+                <StepForm handleBack={handleBack} activeStep={activeStep} handleNext={handleNext} />
+            </div>
             <div className="land-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -224,7 +359,9 @@ export default function LandAdd() {
                     </p>
                 </div>
                 <form action="#" method="POST">
-                    <FormControl>
+                    {StepOne && (
+                        <>
+                        <FormControl>
                         <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
                         <RadioGroup
                             row
@@ -427,11 +564,7 @@ export default function LandAdd() {
 
                                 <div className="mt-5">
                                     <img src="/screenshots/land-second-no-2.png" className="w-full" alt="image" height={500} width={200} />
-                                </div>                           
-                                
-                                {/* <div className="mt-5">
-                                    <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
-                                </div> */}
+                                </div>                                  
                             </>
                         )}
                     </div>
@@ -485,15 +618,7 @@ export default function LandAdd() {
                             </>
                         )}
                         {ShowNoOption3 && (
-                            <>
-                            {/* <div className="mt-5">
-                                 <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />
-                             </div>
-                             
-                             <div className="mt-5">
-                                 <img src="/screenshots/land-second-no-2.png" className="w-full" alt="image" height={500} width={200} />
-                             </div>  */}
-                         </>
+                            <></>
                         )}
                     </div>
 
@@ -562,16 +687,217 @@ export default function LandAdd() {
                             )}
                         </div>
                     </div>
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                        </>
+                    )}
+                    {StepTwo && (
+                            <>
+                            <Fragment>
+                                <List disablePadding>
+                                    <ListItemText>
+                                    <label className="form-label text-lg">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
+                                    </ListItemText>
+
+                                    {ShowQuestionYes && (                                     
+                                    <>
+                                    <ListItem>
+                                    <ListItemText primary="所在及び地番" secondary={LocationLotNumberYes ? LocationLotNumberYes : "提供されていない"} />
+                                    {LocationLotNumberYes ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"LocationLotNumberYes"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="地目" secondary={GroundGrainYes ? GroundGrainYes : "提供されていない"} />
+                                    {GroundGrainYes ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"GroundGrainYes"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="地積㎡" secondary={LandAreaYes ? LandAreaYes : "提供されていない"} />
+                                    {LandAreaYes ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"LandAreaYes"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="敷地権の種類" secondary={TypesofSiteRightsYes ? TypesofSiteRightsYes : "提供されていない"} />
+                                    {TypesofSiteRightsYes ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"TypesofSiteRightsYes"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider /> 
+
+                                    <ListItem>
+                                    <ListItemText primary="敷地権の割合" secondary={PercentageofSiteRightsYes ? PercentageofSiteRightsYes : "提供されていない"} />
+                                    {PercentageofSiteRightsYes ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"PercentageofSiteRightsYes"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider /> 
+                                    </>                                  
+                                    
+                                    )}    
+                                    
+                                    {ShowQuestionNo && (
+                                        <>
+                                    <ListItem>
+                                    <ListItemText primary="所在" secondary={LocationNo ? LocationNo : "提供されていない"} />
+                                    {LocationNo ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"LocationNo"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="地番" secondary={LotNumberNo ? LotNumberNo : "提供されていない"} />
+                                    {LotNumberNo ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"LotNumberNo"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="地目" secondary={GroundGrainNo ? GroundGrainNo : "提供されていない"} />
+                                    {GroundGrainNo ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"GroundGrainNo"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="地積 ㎡" secondary={LandAreaNo ? LandAreaNo : "提供されていない"} />
+                                    {LandAreaNo ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"LandAreaNo"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+                                    </>
+                                    )}   
+
+                                    <ListItemText>
+                                    <label className="form-label text-lg">2. 被相続人が所有されていた不動産は路線価地域の土地でしょうか。</label>
+                                    </ListItemText>
+
+                                    {QuestionTwoImageYes && (
+                                        <>
+                                    <ListItem>
+                                    <ListItemText secondary={"Yes"} />
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon onClick={handleBack}/>
+                                    </ListItemIcon>                                   
+                                    </ListItem>
+
+                                    <Divider />
+                                        </>
+                                    )}
+
+                                    {QuestionTwoImageNo && (
+                                        <>
+                                    <ListItem>
+                                    <ListItemText secondary={"No"} />
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon onClick={handleBack}/>
+                                    </ListItemIcon>                                   
+                                    </ListItem>
+
+                                    <Divider />
+                                        </>
+                                    )}
+
+                                    <ListItemText>
+                                    <label className="form-label text-lg">3. 所有されていた物件に共有者はいましたか。</label>
+                                    </ListItemText>
+
+                                    {ShowYesOption3 ? <>
+                                    <ListItem>
+                                    <ListItemText primary="共有割合の入力" secondary={SharePercentage ? SharePercentage : "提供されていない"} />
+                                    {SharePercentage ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"SharePercentage"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+                                    </>
+                                     : 
+                                    <></>
+                                    }                           
+                                </List>      
+                            </Fragment>
+                            </>
+                        )}
+
+                        {StepThree && (
+                            <>
+                            <Box className="py-7">
+                            <Typography variant="h4" className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" align="center">
+                                ありがとう！
+                            </Typography>
+                            <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                                土地 詳細は正常に保存されました...
+                            </Typography>
+                            </Box>                           
+                            </>
+                        )}
+
+                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton />
-                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                            {StepThree ? <></> : 
+                            <>
+                            {PrevButton ? <BackButton /> : 
+                            <>
+                            <button
+                                type='button'
+                                onClick={handleBack}
+                                className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                            >
+                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                戻る
+                                </span>
+                            </button>
+                            </>
+                            }
+                            </>
+                            }                            
+                            <SubmitButton title={submitTitle} onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                         </div>
+                        {StepThree || StepTwo ? <></> : 
                         <div className="heading text-center pt-8">
                             <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
                         </div>
-                        </div>        
-                </form>
+                        }                        
+                        </div>   
+                   </form>
             </div>
         </>
     )

@@ -446,7 +446,7 @@ export default function DeathRetirementAllowanceAdd() {
                                 ありがとう！
                             </Typography>
                             <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                                家庭用財産 詳細は正常に保存されました...
+                                死亡退職金等 詳細は正常に保存されました...
                             </Typography>
                             </Box>                           
                             </>

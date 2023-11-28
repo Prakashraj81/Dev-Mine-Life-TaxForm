@@ -101,16 +101,14 @@ export default function GiftTaxAdd() {
 
 
     let [GiftType, setGiftType] = useState("");
-    let [DateofGift, setDateofGift] = useState("");
-    let [TypeofProperty, setTypeofProperty] = useState("");
-    let [PropertyDetails, setPropertyDetails] = useState("");
+    let [AmountDonated, setAmountDonated] = useState("");
+    let [GiftTaxAmount, setGiftTaxAmount] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
     let [Quantity, setQuantity] = useState("0");
     let [GiftAmount, setGiftAmount] = useState("0");
     let [AmountofGiftTax, setAmountofGiftTax] = useState("0");
-    let [WhereGiftTax, setWhereGiftTax] = useState("");
-    let [GiftTaxReturnType, setGiftTaxReturnType] = useState("");
+    let [GiftTaxReturnType, setGiftTaxReturnType] = useState("");    
     let [Location, setLocation] = useState("");
     let [Breadth, setBreadth] = useState("0");
     let [HeirListType, setHeirListType] = useState("");
@@ -129,8 +127,8 @@ export default function GiftTaxAdd() {
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
     let [GiftTypeError, setGiftTypeError] = useState(false);
-    let [DateofGiftError, setDateofGiftError] = useState(false);
-    let [PropertyTypeError, setPropertyTypeError] = useState(false);
+    let [AmountDonatedError, setAmountDonatedError] = useState(false);
+    let [GiftTaxAmountError, setGiftTaxAmountError] = useState(false);
     let [AddressError, setAddressError] = useState(false);
     let [LocationError, setLocationError] = useState(false);
     let [GiftAmountError, setGiftAmountERror] = useState(false);
@@ -328,6 +326,10 @@ export default function GiftTaxAdd() {
         setisSumbitDisabled(false);
     }
 
+    const handleGiftTaxReturnType = (e) => {
+        setGiftTaxReturnType("");
+    }
+
     //All input validation check and handling function
     const inputHandlingFunction = (event) => {
         setShowIncorrectError(false);
@@ -337,9 +339,12 @@ export default function GiftTaxAdd() {
             setGiftType(inputValue);
             setGiftTypeError(false);
         }
-        else if (inputId === "DateofGift") {
-            setDateofGift(inputValue);
-            setDateofGiftError(false);
+        else if (inputId === "AmountDonated") {
+            setAmountDonated(inputValue);
+            setAmountDonatedError(false);
+        }
+        else if (inputId === "GiftTaxAmount"){
+            setGiftTaxAmount(inputValue);
         }
         else if (inputId === "Address") {
             setAddress(inputValue);
@@ -361,17 +366,11 @@ export default function GiftTaxAdd() {
     const onSubmit = () => {
         defaultValues = {
             GiftType: GiftType,
-            DateofGift: DateofGift,
-            TypeofProperty: TypeofProperty,
-            PropertyDetails: PropertyDetails,
-            PostCode: PostCode,
-            Address: Address,
-            Quantity: Quantity,
-            GiftAmount: GiftAmount,
-            AmountofGiftTax: AmountofGiftTax,
-            GiftTaxReturnType: GiftTaxReturnType,
             Location: Location,
-            Breadth: Breadth,
+            Quantity: Quantity,
+            AmountDonated: AmountDonated,
+            GiftTaxAmount: GiftTaxAmount,
+            GiftTaxReturnType: GiftTaxReturnType,            
             HeirListType: HeirListType,
         };
 
@@ -379,29 +378,17 @@ export default function GiftTaxAdd() {
         if (defaultValues.GiftType === "") {
             setGiftTypeError(true);
             isSumbitDisabled = true;
-        }
-        if (defaultValues.DateofGift === "") {
-            setDateofGiftError(true);
-            isSumbitDisabled = true;
-        }
-        if (defaultValues.TypeofProperty === "") {
-            setPropertyTypeError(true);
-            isSumbitDisabled = true;
-        }
-        if (defaultValues.Address === "") {
-            setAddressError(true);
-            isSumbitDisabled = true;
-        }
+        }        
         if (defaultValues.Location === "") {
             setLocationError(true);
             isSumbitDisabled = true;
         }
-        if (defaultValues.AmountofGiftTax === "") {
-            setAmountofGiftTaxError(true);
+        if (defaultValues.AmountDonated === "") {
+            setAmountDonatedError(true);
             isSumbitDisabled = true;
         }
-        if (defaultValues.GiftTaxReturnType === "") {
-            setGiftRecipientError(true);
+        if (defaultValues.GiftTaxAmount === "") {
+            setGiftTaxAmountError(true);
             isSumbitDisabled = true;
         }
         if (defaultValues.HeirListType === "") {
@@ -541,18 +528,18 @@ export default function GiftTaxAdd() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                    贈与を受けた額<i className="text-red-500">*</i>
+                                        贈与を受けた額<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <input
                                         type="text"
-                                        id="GiftAmount"
+                                        id="AmountDonated"
                                         className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         onChange={inputHandlingFunction}
-                                        value={GiftAmount}
+                                        value={AmountDonated}
                                     />
-                                    {GiftAmountError && (
+                                    {AmountDonatedError && (
                                         <p className="text-red-500" role="alert">この項目は必須です</p>
                                     )}
                                 </div>
@@ -568,12 +555,12 @@ export default function GiftTaxAdd() {
                             <div className="w-full inline-block mt-2">
                                 <input
                                     type="text"
-                                    id="AmountofGiftTax"
+                                    id="GiftTaxAmount"
                                     className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     onChange={inputHandlingFunction}
-                                    value={AmountofGiftTax}
+                                    value={GiftTaxAmount}
                                 />
-                                {AmountofGiftTaxError && (
+                                {GiftTaxAmountError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
                                 )}
                             </div>
@@ -589,7 +576,7 @@ export default function GiftTaxAdd() {
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">
-                                <select id="WhereGiftTax" className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
+                                <select id="GiftTaxReturnType" className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleGiftTaxReturnType}>
                                     <option value='' id="0"></option>
                                 </select>
                             </div>
@@ -659,10 +646,10 @@ export default function GiftTaxAdd() {
                                     <Divider />
 
                                     <ListItem>
-                                    <ListItemText primary="贈与を受けた額" secondary={GiftAmount ? GiftAmount : "提供されていない"} />
-                                    {GiftAmount ?
+                                    <ListItemText primary="贈与を受けた額" secondary={AmountDonated ? AmountDonated : "提供されていない"} />
+                                    {AmountDonated ?
                                     <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"GiftAmount"}  onClick={handleBack}/>
+                                    <EditIcon id={"AmountDonated"}  onClick={handleBack}/>
                                     </ListItemIcon>
                                     :<></>}
                                     </ListItem>
@@ -681,10 +668,10 @@ export default function GiftTaxAdd() {
                                     <Divider />
 
                                     <ListItem>
-                                    <ListItemText primary="贈与税申告書の提出先" secondary={WhereGiftTax ? WhereGiftTax : "提供されていない"} />
-                                    {WhereGiftTax ?
+                                    <ListItemText primary="贈与税申告書の提出先" secondary={GiftTaxAmount ? GiftTaxAmount : "提供されていない"} />
+                                    {GiftTaxAmount ?
                                     <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"WhereGiftTax"}  onClick={handleBack}/>
+                                    <EditIcon id={"GiftTaxAmount"}  onClick={handleBack}/>
                                     </ListItemIcon>
                                     :<></>}
                                     </ListItem>
@@ -692,10 +679,10 @@ export default function GiftTaxAdd() {
                                     <Divider /> 
 
                                     <ListItem>
-                                    <ListItemText primary="贈与を受けた人" secondary={GiftTaxReturnType ? GiftTaxReturnType : "提供されていない"} />
-                                    {GiftTaxReturnType ?
+                                    <ListItemText primary="贈与を受けた人" secondary={HeirListType ? HeirListType : "提供されていない"} />
+                                    {HeirListType ?
                                     <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"GiftTaxReturnType"}  onClick={handleBack}/>
+                                    <EditIcon id={"HeirListType"}  onClick={handleBack}/>
                                     </ListItemIcon>
                                     :<></>}
                                     </ListItem>
@@ -713,7 +700,7 @@ export default function GiftTaxAdd() {
                                 ありがとう！
                             </Typography>
                             <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                                有価証券 詳細は正常に保存されました...
+                                生前贈与 詳細は正常に保存されました...
                             </Typography>
                             </Box>                           
                             </>

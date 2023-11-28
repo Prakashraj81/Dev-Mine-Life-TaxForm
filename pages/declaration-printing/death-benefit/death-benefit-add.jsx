@@ -359,7 +359,7 @@ export default function DeathBenefitAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        受け取った金額
+                                        受け取った金額退職金
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -446,7 +446,7 @@ export default function DeathBenefitAdd() {
                                 ありがとう！
                             </Typography>
                             <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                                家庭用財産 詳細は正常に保存されました...
+                                死亡保険金等 詳細は正常に保存されました...
                             </Typography>
                             </Box>                           
                             </>

@@ -1,11 +1,17 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../components/back-btn";
-import FullLayout from '../../components/layouts/full/FullLayout';
 import SubmitButton from "../../components/submit-btn";
+import HeirListBox from "../../components/heir-list-box/heir-list-box";
+import IncorrectError from "../../components/heir-list-box/incorrect-error";
+import FullLayout from '../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../components/inputbox-icon/textbox-postcode-icon";
+import StepForm from "./stepper";
+import BackdropLoader from '../../components/loader/backdrop-loader';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -36,7 +42,7 @@ export default function Decendent() {
     let [InheritanceDivisionCompletionDate, setInheritanceDivisionCompletionDate] = useState("");
     let [DateofDeath, setDateofDeath] = useState("");
     let [Profession, setProfession] = useState("");
-    let [TaxOffice, setTaxOffice] = useState("");
+    let [WheretoSubmitReturn, setWheretoSubmitReturn] = useState("");
     let [isErrorVisible, setErrorVisible] = useState(false);    
 
     //Error state and button disabled
@@ -48,6 +54,79 @@ export default function Decendent() {
     let [DateofDeathError, setDateofDeathError] = useState(false);
     let [InheritanceDivisionCompletionDateError, setInheritanceDivisionCompletionDateError] = useState(false);    
     let [isClearable, setIsClearable] = useState(true);     
+
+    // Proceed to next step
+    let [ShowLoader, setShowLoader] = useState(false);
+    let [InputFocus, setInputFocus] = useState(false);
+    let [activeStep, setActiveStep] = useState(0);
+    let [StepOne, setStepOne] = useState(true);
+    let [StepTwo, setStepTwo] = useState(false);
+    let [StepThree, setStepThree] = useState(false);
+    let [PrevButton, setPrevButton] = useState(true);
+    let [submitTitle, setsubmitTitle] = useState("Next");
+    let [PageValidation, setPageValidation] = useState(false);  
+
+
+    //Stepper "Next" function
+    let handleNext = () => {
+       setActiveStep((prev) => prev + 1);
+       if(activeStep === 0){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 2;
+           setStepOne(false);
+           setStepTwo(false);
+           setStepThree(true);
+           setPrevButton(false);
+           setsubmitTitle("保存");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);   
+           setPageValidation(true);  
+           PageValidation = true;
+           SubmitFinalFunction(PageValidation); 
+       }
+    }
+    //Stepper "Back" function
+    let handleBack = () => {                
+       setActiveStep((prev) => prev - 1);
+       if(activeStep === 0 || activeStep < 0){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(true);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else if(activeStep === 2){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);            
+       }
+    } 
 
     //Disabled deduction radio button
     const handleDisabledRadio = (event) => {
@@ -119,17 +198,30 @@ export default function Decendent() {
         else if (inputId === "InheritanceDivisionCompletionDate") {
             setInheritanceDivisionCompletionDate(inputValue);
             setInheritanceDivisionCompletionDateError(false);
-        }        
+        }
+        else if (inputId === "Profession") {
+            setProfession(inputValue);
+        }  
+        else if (inputId === "WheretoSubmitReturn") {
+            setWheretoSubmitReturn(inputValue);
+        }      
         else {
             setAddress(inputValue);
         }
         setisSumbitDisabled(false);
     }
+    
+  
+    const goToPreviousPage = () => {
+        router.back(); // This navigates to the previous page
+    };
+
 
     //Submit API function 
     let router = useRouter();
+    let defaultValues = {};
     const onSubmit = () => {
-        let defaultValues = {
+        defaultValues = {
             Name: Name,
             Furigana: Furigana,
             DateofBirth: DateofBirth,
@@ -137,8 +229,7 @@ export default function Decendent() {
             Address: Address,            
             Profession: Profession,            
             DateofDeath: DateofDeath,    
-            InheritanceDivisionCompletionDate: InheritanceDivisionCompletionDate,   
-            TaxOffice: TaxOffice,                 
+            WheretoSubmitReturn: WheretoSubmitReturn,                 
         }
 
         //input Validation
@@ -157,17 +248,11 @@ export default function Decendent() {
         if (defaultValues.DateOfDeath === "") {
             setDateofDeathError(true);
             isSumbitDisabled = true;
-        }     
-        if (defaultValues.InheritanceDivisionCompletionDate === "") {
-            setInheritanceDivisionCompletionDateError(true);
-            isSumbitDisabled = true;
-        }               
-
+        }    
+        
         //Api setup
         if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('Decendent', JSON.stringify(defaultValues));
-            router.push(`/`);
+            handleNext();              
         }
         else {
             console.log("API not allowed");
@@ -175,30 +260,26 @@ export default function Decendent() {
         }
     };
 
- const colourOptions = [
-        { value: 'blue', label: 'blue',},
-        { value: 'purple', label: 'purple',},
-        { value: 'Black', label: 'Black', },        
-      ];
-
-      const onChangeTaxOffice = (TaxOffice) => {
-        if(TaxOffice === null){
-            console.log("TaxOffice");
-            setTaxOffice("");
-        }
-        else{
-            console.log(TaxOffice.value);
-            setTaxOffice(TaxOffice.value);            
+    const SubmitFinalFunction = (PageValidation) => {
+        if(PageValidation === true){
+            console.log("API allowed");
+            sessionStorage.setItem('Decendent', JSON.stringify(defaultValues));
+            router.push(`/basic-information`);
         }    
-      }
-  
-    const goToPreviousPage = () => {
-        router.back(); // This navigates to the previous page
-    };
-
-
+        else{
+            setPageValidation(false);
+        }      
+    }
     return (
         <>
+        <>
+        {ShowLoader && (
+            <BackdropLoader ShowLoader={ShowLoader} />
+        )}
+        </>
+            <div className="top-stepper-sec max-w-screen-md mx-auto pt-0 py-10">
+                <StepForm handleBack={handleBack} activeStep={activeStep} handleNext={handleNext} />
+            </div>
             <div className="basic-information-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -214,7 +295,9 @@ export default function Decendent() {
                 </div>
                 <div className="user-forms">
                 <form action="#" method="POST">                
-                        <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                        {StepOne && (
+                            <>
+                            <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
@@ -228,7 +311,6 @@ export default function Decendent() {
                                             id="Name"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             onChange={inputHandlingFunction}
-                                            value={Name}
                                         />
                                         {NameError && (
                                             <p className="text-red-500" role="alert">この項目は必須です</p>
@@ -250,7 +332,6 @@ export default function Decendent() {
                                             id="Furigana"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             onChange={inputHandlingFunction}
-                                            value={Furigana}
                                         />
                                         {FuriganaError && (
                                             <p className="text-red-500" role="alert">この項目は必須です</p>
@@ -273,7 +354,6 @@ export default function Decendent() {
                                         id="DateofBirth"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"
                                         onChange={inputHandlingFunction}
-                                        value={DateofBirth}
                                     />
                                     {DateofBirthError && (
                                         <p className="text-red-500" role="alert">この項目は必須です</p>
@@ -296,7 +376,6 @@ export default function Decendent() {
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
                                         onKeyPress={handleKeyPress}
                                         onChange={postalcodeDigit}
-                                        value={PostCode}
                                     />
                                     <PostcodeIcon />
                                 </div>
@@ -320,7 +399,6 @@ export default function Decendent() {
                                         id="Address"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         onChange={inputHandlingFunction}
-                                        value={Address}
                                     />                                    
                                 </div>
                             </div>
@@ -337,7 +415,8 @@ export default function Decendent() {
                                 <input
                                         type="text"
                                         id="Profession"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                        
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"   
+                                        onChange={inputHandlingFunction}    
                                     />                                                                         
                                 </div>
                             </div>
@@ -359,37 +438,13 @@ export default function Decendent() {
                                             id="DateofDeath"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"
                                             onChange={inputHandlingFunction}
-                                            value={DateofDeath}
                                         />
                                         {DateofDeathError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
+                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        )}
                                     </div>
                                 </div>
-                            </div>                            
-
-
-                            <div className="w-full hidden lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
-                                <div className="user-details">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="InheritanceDivisionCompletionDate" className="form-label">
-                                            遺産分割完了日
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="date"
-                                            id="InheritanceDivisionCompletionDate"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"  
-                                            onChange={inputHandlingFunction}
-                                            value={InheritanceDivisionCompletionDate}                                          
-                                        />  
-                                        {InheritanceDivisionCompletionDateError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}                                      
-                                    </div>
-                                </div>
-                            </div>
+                            </div>                       
                         </div>
 
                         <div className="w-full inline-block mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
@@ -403,32 +458,158 @@ export default function Decendent() {
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                 <input
-                                            type="text"
-                                            id="Where"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"                                                                                 
-                                        />                               
+                                    type="text"
+                                    id="WheretoSubmitReturn"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"  
+                                    onChange={inputHandlingFunction}                                                                               
+                                    />                               
                                     </div>                                
                                 </div>
                             </div>                        
                         </div>
+                            </>
+                        )}
 
                         
 
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center mt-20">                            
-                            <div className="back-btn text-center">
-                <button
-                    type='button'
-                    onClick={goToPreviousPage}
-                    className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                >
-                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                    保存せず戻る
-                    </span>
-                </button>
-            </div>
-                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                        {StepTwo && (
+                            <>
+                            <Fragment>
+                                <List disablePadding>
+                                    <ListItem>
+                                    <ListItemText primary="お名前" secondary={Name ? Name : "提供されていない"} />
+                                    {Name ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"Name"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="フリガナ" secondary={Furigana ? Furigana : "提供されていない"} />
+                                    {Furigana ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"Furigana"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="生年月日" secondary={DateofBirth ? DateofBirth : "提供されていない"} />
+                                    {DateofBirth ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"DateofBirth"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />                                    
+
+                                    <ListItem>
+                                    <ListItemText primary="住所" secondary={Address ? Address : "提供されていない"} />
+                                    {Address ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"Address"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />   
+
+                                    <ListItem>
+                                    <ListItemText primary="郵便番号" secondary={PostCode ? PostCode : "提供されていない"} />
+                                    {PostCode ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"PostCode"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />   
+
+                                    <ListItem>
+                                    <ListItemText primary="職業" secondary={Profession ? Profession : "提供されていない"} />
+                                    {Profession ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"Profession"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />   
+
+                                    <ListItem>
+                                    <ListItemText primary="お亡くなりになった日" secondary={DateofDeath ? DateofDeath : "提供されていない"} />
+                                    {DateofDeath ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"DateofDeath"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />       
+
+                                    <ListItem>
+                                    <ListItemText primary="申告書の提出先" secondary={WheretoSubmitReturn ? WheretoSubmitReturn : "提供されていない"} />
+                                    {WheretoSubmitReturn ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"WheretoSubmitReturn"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />                                    
+                                </List>      
+                            </Fragment>
+                            </>
+                        )}
+
+                        {StepThree && (
+                            <>
+                            <Box className="py-7">
+                            <Typography variant="h4" className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" align="center">
+                                ありがとう！
+                            </Typography>
+                            <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                                被相続人 詳細は正常に保存されました...
+                            </Typography>
+                            </Box>                           
+                            </>
+                        )}
+
+                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                            {StepThree ? <></> : 
+                            <>
+                            {PrevButton ? <BackButton /> : 
+                            <>
+                            <button
+                                type='button'
+                                onClick={handleBack}
+                                className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                            >
+                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                戻る
+                                </span>
+                            </button>
+                            </>
+                            }
+                            </>
+                            }                            
+                            <SubmitButton title={submitTitle} onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                         </div>
-                    </form>
+
+                        {StepThree || StepTwo ? <></> : 
+                        <div className="heading text-center pt-8">
+                            <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
+                        </div>
+                        }                        
+                        </div>   
+                   </form>
                 </div>
             </div>
         </>
