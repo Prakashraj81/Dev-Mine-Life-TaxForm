@@ -113,7 +113,7 @@ export default function GiftTaxAdd() {
     let [GiftTaxReturnType, setGiftTaxReturnType] = useState("");
     let [Location, setLocation] = useState("");
     let [Breadth, setBreadth] = useState("0");
-
+    let [HeirListType, setHeirListType] = useState("");
 
     let [PropertyOptionsData, setPropertyOptionsData] = useState([]);
     let [SelectedPropertList, setSelectedPropertList] = useState('');
@@ -136,6 +136,7 @@ export default function GiftTaxAdd() {
     let [GiftAmountError, setGiftAmountERror] = useState(false);
     let [AmountofGiftTaxError, setAmountofGiftTaxError] = useState(false);
     let [GiftRecipientError, setGiftRecipientError] = useState(false);
+    let [HeirListTypeError, setHeirListTypeError] = useState(false);
 
 
     // Proceed to next step
@@ -312,6 +313,15 @@ export default function GiftTaxAdd() {
         }
     };
 
+    const handleChangeHeir = () => {
+        let selectedOption = event.target.options[event.target.selectedIndex];
+        let selectedId = Number(selectedOption.value);
+        setisSumbitDisabled(false);
+        setShowIncorrectError(false);
+        setHeirListType(selectedOption.text);
+        setHeirListTypeError(false);
+    }
+
     function onchangeQuantity(e) {
         let quantity = parseFloat(e.target.value);
         setQuantity(quantity);
@@ -362,6 +372,7 @@ export default function GiftTaxAdd() {
             GiftTaxReturnType: GiftTaxReturnType,
             Location: Location,
             Breadth: Breadth,
+            HeirListType: HeirListType,
         };
 
         //input Validation
@@ -391,6 +402,10 @@ export default function GiftTaxAdd() {
         }
         if (defaultValues.GiftTaxReturnType === "") {
             setGiftRecipientError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.HeirListType === "") {
+            setHeirListTypeError(true);
             isSumbitDisabled = true;
         }
 
@@ -589,7 +604,7 @@ export default function GiftTaxAdd() {
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
-                                <select id="GiftTaxReturnType" className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
+                                <select id="HeirListType" onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
                                     <option value='' id="0"></option>
                                     {HeirList.map((option) => (
                                         <option key={option.id} value={option.id}>
@@ -597,7 +612,7 @@ export default function GiftTaxAdd() {
                                         </option>
                                     ))}
                                 </select>
-                                {GiftRecipientError && (
+                                {HeirListTypeError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
                                 )}
                             </div>

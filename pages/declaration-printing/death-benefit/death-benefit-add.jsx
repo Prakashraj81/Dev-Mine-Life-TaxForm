@@ -1,30 +1,254 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
 import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
-import FloorIcon from "../../../components/inputbox-icon/textbox-floor-icon";
-import AreaIcon from "../../../components/inputbox-icon/textbox-area-icon";
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+import StepForm from "./stepper";
+import BackdropLoader from '../../../components/loader/backdrop-loader';
 
 export default function DeathBenefitAdd() {
+
+    let [NameofLifeInsurance, setNameofLifeInsurance] = useState("");
+    let [PostCode, setPostCode] = useState("");
+    let [Address, setAddress] = useState("");
+    let [DateofReceipt, setDateofReceipt] = useState("");
+    let [Valuation, setValuation] = useState("0");
+
+    let [UndecidedHeir, setUndecidedHeir] = useState("0");
+    let [TotalPrice, setTotalPrice] = useState("0");
+    let [boxValues, setBoxValues] = useState([]);
+
+    //Error state and button disabled
+    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+    let [NameofLifeInsuranceError, setNameofLifeInsuranceError] = useState(false);
+    let [AddressError, setAddressError] = useState(false);
+    let [DateofReceiptError, setDateofReceiptError] = useState(false);
+
+    // Proceed to next step
+    let [ShowLoader, setShowLoader] = useState(false);
+    let [InputFocus, setInputFocus] = useState(false);
+    let [activeStep, setActiveStep] = useState(0);
+    let [StepOne, setStepOne] = useState(true);
+    let [StepTwo, setStepTwo] = useState(false);
+    let [StepThree, setStepThree] = useState(false);
+    let [PrevButton, setPrevButton] = useState(true);
+    let [submitTitle, setsubmitTitle] = useState("Next");
+    let [PageValidation, setPageValidation] = useState(false);  
+
+
+    //Stepper "Next" function
+    let handleNext = () => {
+       setActiveStep((prev) => prev + 1);
+       if(activeStep === 0){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 2;
+           setStepOne(false);
+           setStepTwo(false);
+           setStepThree(true);
+           setPrevButton(false);
+           setsubmitTitle("保存");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);   
+           setPageValidation(true);  
+           PageValidation = true;
+           SubmitFinalFunction(PageValidation); 
+       }
+    }
+    //Stepper "Back" function
+    let handleBack = () => {                
+       setActiveStep((prev) => prev - 1);
+       if(activeStep === 0 || activeStep < 0){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(false);
+           setShowLoader(false);
+       }
+       else if(activeStep === 1){
+           activeStep = 0;
+           setStepOne(true);
+           setStepTwo(false);
+           setStepThree(false);
+           setPrevButton(true);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else if(activeStep === 2){
+           activeStep = 1;
+           setStepOne(false);
+           setStepTwo(true);
+           setStepThree(false);
+           setPrevButton(false);
+           setsubmitTitle("Next");
+           setShowLoader(false);
+       }
+       else {
+           setShowLoader(false);            
+       }
+    } 
+
+    const ValuationKeyPress = (e) => {
+        let amount_of_money = e.target.value;
+        amount_of_money = amount_of_money.replace(/,/g, '').replace('.', '');
+        amount_of_money = parseFloat(amount_of_money);
+        amount_of_money = amount_of_money.toLocaleString();
+        if (amount_of_money === "NaN") {
+            setValuation(0);
+        }
+        else {
+            setValuation(amount_of_money);
+        }
+    }
+
+    const handleKeyPress = (e) => {
+        const keyCode = e.keyCode || e.which;
+        const keyValue = String.fromCharCode(keyCode);
+        const numericRegex = /^[0-9\b]+$/;
+        if (!numericRegex.test(keyValue)) {
+            e.preventDefault();
+        }
+    };
+
+    //Postal code 7 digit limit function
+    const [isValid, setIsValid] = useState(true);
+    const postalcodeDigit = (e) => {
+        let digit_value = e.target.value;
+        let isValidInput = /^\d{7}$/.test(digit_value);
+        if (digit_value.length == 8 || digit_value.length == 9 || digit_value.length == 10) {
+            digit_value = digit_value.slice(0, 7)
+            setPostCode(digit_value);
+        }
+        setPostCode(digit_value);
+        setIsValid(isValidInput);
+    }
+
+    //All input validation check and handling function
+    const inputHandlingFunction = (event) => {
+        setShowIncorrectError(false);
+        let inputId = event.currentTarget.id;
+        let inputValue = event.target.value;
+        if (inputId === "NameofLifeInsurance") {
+            setNameofLifeInsurance(inputValue);
+            setNameofLifeInsuranceError(false);
+        }
+        else if (inputId === "DateofReceipt") {
+            setDateofReceipt(inputValue);
+            setDateofReceiptError(false);
+        }
+        else {
+            setAddress(inputValue);
+            setAddressError(false);
+        }
+        setisSumbitDisabled(false);
+    }
+
+    //Footer box values and calculation
+    let handleBoxValueChange = (e, index) => {
+        let newValue = parseFloat(e.target.value);
+        if (isNaN(newValue)) {
+            newValue = 0;
+        }
+        const updatedBoxValues = [...boxValues];
+        updatedBoxValues[index] = newValue;
+        setBoxValues(updatedBoxValues);
+
+        //Amount of money convert
+        if (Valuation == 0) {
+            Valuation = 0;
+        }
+        else {            
+            Valuation = parseFloat(Valuation.replace(/,/g, '').replace('.', ''));            
+        }
+        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
+        if (isNaN(totalBoxValues)) {
+            totalBoxValues = 0;
+        }
+        let heirValue = Valuation - totalBoxValues;
+        if (heirValue < 0) {
+            setUndecidedHeir(heirValue.toLocaleString());
+            setShowIncorrectError(true);
+        }
+        else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(heirValue.toLocaleString());
+        }
+    };
+
+    //Submit API function 
+    const router = useRouter();
+    let defaultValues = {};
+    const onSubmit = () => {
+        defaultValues = {
+            NameofLifeInsurance: NameofLifeInsurance,
+            PostCode: PostCode,
+            Address: Address,
+            Valuation: Valuation,
+            UndecidedHeir: UndecidedHeir,
+            TotalPrice: Valuation,
+        };
+
+        //input Validation
+        if (defaultValues.NameofLifeInsurance === "") {
+            setNameofLifeInsuranceError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.Address === "") {
+            setAddressError(true);
+            isSumbitDisabled = true;
+        }
+        //Api setup
+        if (isSumbitDisabled !== true) {
+            handleNext();              
+        }
+        else {
+            console.log("API not allowed");
+            setisSumbitDisabled(true);
+        }
+    };
+
+    const SubmitFinalFunction = (PageValidation) => {
+        if(PageValidation === true){
+            console.log("API allowed");
+            sessionStorage.setItem('DeathBenefit', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/death-benefit`);
+        }    
+        else{
+            setPageValidation(false);
+        }      
+    }
     return (
         <>
-            <div className="house-wrapper">
+        <>
+        {ShowLoader && (
+            <BackdropLoader ShowLoader={ShowLoader} />
+        )}
+        </>
+            <div className="top-stepper-sec max-w-screen-md mx-auto pt-0 py-10">
+                <StepForm handleBack={handleBack} activeStep={activeStep} handleNext={handleNext} />
+            </div>
+            <div className="cash-savings-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
                         <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                        死亡保険金等1
+                            死亡保険金等1
                         </p>
                     </div>
                 </div>
@@ -33,13 +257,235 @@ export default function DeathBenefitAdd() {
                         以下の内容を入力して[保存]ボタンを押して下さい。
                     </p>
                 </div>
-               
+                <div className="w-full inline-block">
+                    <form action="#" method="POST">
+                        {StepOne && (
+                            <>
+                            <div className="w-full inline-block items-center justify-between mb-7">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <div className="label w-full inline-block">
+                                    <label htmlFor="NameofLifeInsurance" className="form-label">
+                                        生命保険会社の名称<i className="text-red-500">*</i>
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        id="NameofLifeInsurance"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                        
+                                        onChange={inputHandlingFunction}
+                                        value={NameofLifeInsurance}
+                                    />
+                                    {NameofLifeInsuranceError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
 
-               
+                        <div className="w-full inline-block items-center justify-between mb-7">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <div className="label w-full inline-block">
+                                    <label htmlFor="Location" className="form-label">
+                                        生命保険会社の所在地（郵便番号）
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2 relative">
+                                    <input
+                                        type="text"
+                                        id="PostCode"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
+                                        onKeyPress={handleKeyPress}
+                                        onChange={postalcodeDigit}
+                                        value={PostCode}
+                                    />
+                                    <PostcodeIcon />
+                                </div>
+                                <div className="mt-3">
+                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
+                                </div>
+                                {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
+                            </div>
+                        </div>
+
+                        <div className="w-full block items-center justify-between mb-7">
+                            <div className="user-details">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                        生命保険会社の所在地（住所）<i className="text-red-500">*</i>
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        id="Address"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        onKeyPress={handleKeyPress}
+                                        onChange={inputHandlingFunction}
+                                        value={Address}
+                                    />
+                                    {AddressError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className="w-full block items-center justify-between mb-7">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                        受取年月日<i className="text-red-500">*</i>
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="date"
+                                        id="DateofReceipt"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        onKeyPress={handleKeyPress}
+                                        onChange={inputHandlingFunction}
+                                    />
+                                    {DateofReceiptError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className="w-full inline-block items-center justify-between mb-7">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                        受け取った金額退職金
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        id="Valuation"
+                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        onChange={ValuationKeyPress}
+                                        onKeyPress={handleKeyPress}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                            </>
+                        )}
+
+                        {StepTwo && (
+                            <>
+                            <Fragment>
+                                <List disablePadding>
+                                    <ListItem>
+                                    <ListItemText primary="生命保険会社の名称" secondary={NameofLifeInsurance ? NameofLifeInsurance : "提供されていない"} />
+                                    {NameofLifeInsurance ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"NameofLifeInsurance"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}                                    
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="生命保険会社の所在地（郵便番号）" secondary={PostCode ? PostCode : "提供されていない"} />
+                                    {PostCode ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"PostCode"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="生命保険会社の所在地（住所）" secondary={Address ? Address : "提供されていない"} />
+                                    {Address ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"Address"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />
+
+                                    <ListItem>
+                                    <ListItemText primary="受取年月日" secondary={DateofReceipt ? DateofReceipt : "提供されていない"} />
+                                    {DateofReceipt ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"DateofReceipt"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider /> 
+
+                                    <ListItem>
+                                    <ListItemText primary="受け取った金額退職金" secondary={Valuation ? Valuation : "提供されていない"} />
+                                    {Valuation ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"Valuation"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider />                                    
+                                </List>      
+                            </Fragment>
+                            </>
+                        )}
+
+                        {StepThree && (
+                            <>
+                            <Box className="py-7">
+                            <Typography variant="h4" className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" align="center">
+                                ありがとう！
+                            </Typography>
+                            <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                                家庭用財産 詳細は正常に保存されました...
+                            </Typography>
+                            </Box>                           
+                            </>
+                        )}
+
+                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                            {StepThree ? <></> : 
+                            <>
+                            {PrevButton ? <BackButton /> : 
+                            <>
+                            <button
+                                type='button'
+                                onClick={handleBack}
+                                className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                            >
+                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                戻る
+                                </span>
+                            </button>
+                            </>
+                            }
+                            </>
+                            }                            
+                            <SubmitButton title={submitTitle} onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                        </div>
+                        {StepThree || StepTwo ? <></> : 
+                        <div className="heading text-center pt-8">
+                            <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
+                        </div>
+                        }                        
+                        </div>   
+                   </form>
+                </div>
             </div>
         </>
     )
 }
+
 
 DeathBenefitAdd.getLayout = function getLayout(page) {
     return <FullLayout>{page}</FullLayout>;

@@ -254,7 +254,7 @@ export default function HouseholdPropertyAdd() {
             <BackdropLoader ShowLoader={ShowLoader} />
         )}
         </>
-            <div className="top-stepper-sec max-w-screen-md mx-auto py-10">
+            <div className="top-stepper-sec max-w-screen-md mx-auto pt-0 py-10">
                 <StepForm handleBack={handleBack} activeStep={activeStep} handleNext={handleNext} />
             </div>
             <div className="cash-savings-wrapper">
