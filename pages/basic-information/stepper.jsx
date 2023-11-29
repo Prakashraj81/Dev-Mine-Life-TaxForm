@@ -10,7 +10,6 @@ const StepForm = ({handleNext, activeStep, handleBack}) => {
   // Handle form change
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     // Set values
     setFormValues((prev) => ({
       ...prev,
@@ -43,7 +42,7 @@ const StepForm = ({handleNext, activeStep, handleBack}) => {
   return (
     <>
       {activeStep === labels.length ? (
-        // Last Component
+        // Success message Component
         // <Success values={formValues} />
         <></>
       ) : (
