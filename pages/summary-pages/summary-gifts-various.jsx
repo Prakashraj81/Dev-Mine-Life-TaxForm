@@ -8,13 +8,13 @@ import { list } from "postcss";
 import StepForm from "./stepper-gifts-various";
 
 const tableList = [
-    {
-        id: 1,
-        heading: "小規模宅地等の特例",
-        amount: 5000,
-        icon: <ModeEditIcon className="text-white" />,
-        path: "/gift-various/exceptions-residential-land",
-    },
+    // {
+    //     id: 1,
+    //     heading: "小規模宅地等の特例",
+    //     amount: 5000,
+    //     icon: <ModeEditIcon className="text-white" />,
+    //     path: "/gift-various/exceptions-residential-land",
+    // },
     {
         id: 2,
         heading: "生前贈与",

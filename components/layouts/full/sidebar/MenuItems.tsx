@@ -177,18 +177,18 @@ const Menuitems = [
     iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
-        title: "まとめ  (4)",
+        title: "まとめ  (3)",
         icon: <SummarizeOutlinedIcon/>,
         href: "/summary-pages/summary-gifts-various", 
         translateHeading: "summary-gifts-various",
         text: "summary-gifts-various",   
       },
-      {
-        title: "小規模宅地等の特例",
-        icon: <ScaleOutlinedIcon/>,
-        translateHeading: "Exceptions for small-scale residential land, etc.",
-        href: "/gift-various/exceptions-residential-land",
-      },
+      // {
+      //   title: "小規模宅地等の特例",
+      //   icon: <ScaleOutlinedIcon/>,
+      //   translateHeading: "Exceptions for small-scale residential land, etc.",
+      //   href: "/gift-various/exceptions-residential-land",
+      // },
       // {        
       //   title: "生前贈与",
       //   icon: <CardGiftcardOutlinedIcon/>,
