@@ -606,6 +606,23 @@ export default function SecuritiesAdd() {
                     
                         <div className="w-full flex items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <div className="label w-full inline-block">
+                                    <label htmlFor="Quantity" className="form-label">
+                                    数量
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        id="Quantity"                                       
+                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        value={Quantity}
+                                        onChange={QuantityKeyPress}
+                                        onKeyPress={handleKeyPress}
+                                    />
+                                </div>
+                            </div>
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
                                         <label className="form-label flex items-center">
@@ -625,24 +642,6 @@ export default function SecuritiesAdd() {
                                             <p className="text-red-500" role="alert">この項目は必須です</p>
                                         )}
                                     </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="Quantity" className="form-label">
-                                    数量
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="Quantity"                                       
-                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        value={Quantity}
-                                        onChange={QuantityKeyPress}
-                                        onKeyPress={handleKeyPress}
-                                    />
                                 </div>
                             </div>
                         </div>
