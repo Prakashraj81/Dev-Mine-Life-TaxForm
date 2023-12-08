@@ -161,7 +161,7 @@ const Menuitems = [
   //Third  
   {
     id:3,
-    title: "分割情報の入力",    
+    title: "分割情報、小規模宅地等の特例の入力",    
     translateHeading: "Entering division information",
     href: "/division-information",
     icon: <PostAddIcon />,
