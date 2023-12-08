@@ -152,7 +152,7 @@ export default function BasicInformation() {
                     </div>
                     <div className="page-description">                        
                         <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                            無料de相続は相続人6人までの申告書作成ができます。法定相続人がいない場合や。
+                            無料de相続は相続人6人までの申告書作成ができます。法定相続人がいない場合や相続人が7人以上いる場合は税理士にご相談ください。
                         </p>
                     </div>
                     {showEndButton && (

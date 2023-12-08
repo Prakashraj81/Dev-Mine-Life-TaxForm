@@ -42,6 +42,7 @@ export default function LandAdd() {
     let [QuestionTwo, setQuestionTwo] = useState("");
     let [QuestionTwoImageYes, setQuestionTwoImageYes] = useState(false);
     let [QuestionTwoImageNo, setQuestionTwoImageNo] = useState(false);
+    let [QuestionTwoImageBoth, setQuestionTwoImageBoth] = useState(true);
 
     let [QuestionThree, setQuestionThree] = useState("");
     let [ShowYesOption3, setShowYesOption3] = useState(false);
@@ -196,10 +197,12 @@ export default function LandAdd() {
         if (radioValue === "Yes") {
             setQuestionTwoImageYes(true);
             setQuestionTwoImageNo(false);
+            setQuestionTwoImageBoth(false);
         }
         else {
             setQuestionTwoImageNo(true);
             setQuestionTwoImageYes(false);
+            setQuestionTwoImageBoth(false);
         }
     }
 
@@ -390,9 +393,7 @@ export default function LandAdd() {
                             <img src="/screenshots/land-no.png" className="w-full" alt="image" height={500} width={200} />
                         )}
                     </div>
-                    <div className="w-full inline-block py-3">
-                        <label>【登記簿謄本の情報の入力（建物の登記簿謄本をご用意ください）】</label>
-                    </div>
+                    
                     {ShowQuestionYes && (
                         <>
                             <div className="w-full flex items-center justify-between mb-7">
@@ -544,6 +545,18 @@ export default function LandAdd() {
                         </FormControl>
                     </div>
                     <div className="w-full inline-block mb-7">
+                    {QuestionTwoImageBoth && (
+                            <>
+                                <div className="mt-5">
+                                    <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>     
+
+                               <div className="mt-5">
+                                    <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>                               
+                                                             
+                            </>
+                        )}
                         {QuestionTwoImageYes && (
                             <>
                                 <div className="mt-5">
@@ -551,9 +564,11 @@ export default function LandAdd() {
                                 </div>     
 
                                <div className="mt-5">
-                                    <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />
+                                    <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
                                 </div>                               
-                                                             
+                                <div className="mt-5">
+                                    <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>                     
                             </>
                         )}
                         {QuestionTwoImageNo && (

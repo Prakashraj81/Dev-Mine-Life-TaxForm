@@ -5,6 +5,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FullLayout from '../../components/layouts/full/FullLayout';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { list } from "postcss";
+import StepForm from "./stepper-gifts-various";
 
 const tableList = [
     {
@@ -47,6 +48,7 @@ const tableList = [
 export default function SummaryGiftVarious() {    
     return (
         <>
+        <StepForm/>
             <div className="summary-property-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">

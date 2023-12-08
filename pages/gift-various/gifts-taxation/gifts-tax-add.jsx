@@ -103,12 +103,12 @@ export default function GiftTaxAdd() {
     let [GiftType, setGiftType] = useState("");
     let [AmountDonated, setAmountDonated] = useState("");
     let [GiftTaxAmount, setGiftTaxAmount] = useState("");
+    let [GiftTaxReturnType, setGiftTaxReturnType] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
     let [Quantity, setQuantity] = useState("0");
     let [GiftAmount, setGiftAmount] = useState("0");
     let [AmountofGiftTax, setAmountofGiftTax] = useState("0");
-    let [GiftTaxReturnType, setGiftTaxReturnType] = useState("");    
     let [Location, setLocation] = useState("");
     let [Breadth, setBreadth] = useState("0");
     let [HeirListType, setHeirListType] = useState("");
@@ -346,6 +346,9 @@ export default function GiftTaxAdd() {
         else if (inputId === "GiftTaxAmount"){
             setGiftTaxAmount(inputValue);
         }
+        else if (inputId === "GiftTaxReturnType"){
+            setGiftTaxReturnType(inputValue);
+        }
         else if (inputId === "Address") {
             setAddress(inputValue);
             setAddressError(false);
@@ -370,6 +373,7 @@ export default function GiftTaxAdd() {
             Quantity: Quantity,
             AmountDonated: AmountDonated,
             GiftTaxAmount: GiftTaxAmount,
+            GiftTaxReturnType: GiftTaxReturnType,
             GiftTaxReturnType: GiftTaxReturnType,            
             HeirListType: HeirListType,
         };
@@ -484,7 +488,7 @@ export default function GiftTaxAdd() {
                         <div className="user-details w-full block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                所在場所等<i className="text-red-500">*</i>
+                                所在場所・財産の種類（例：現金、不動産の場合所在地）<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
@@ -518,7 +522,6 @@ export default function GiftTaxAdd() {
                                     onKeyPress={handleKeyPress}
                                     value={Quantity}
                                 />
-                                <AreaIcon />
                             </div>
                         </div>
                     </div>
@@ -575,10 +578,14 @@ export default function GiftTaxAdd() {
                                 贈与税申告書の提出先  
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2 relative">
-                                <select id="GiftTaxReturnType" className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleGiftTaxReturnType}>
-                                    <option value='' id="0"></option>
-                                </select>
+                            <div className="w-full inline-block mt-2 relative">                               
+                                <input
+                                    type="text"
+                                    id="GiftTaxReturnType"
+                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    onChange={inputHandlingFunction}
+                                    value={GiftTaxReturnType}
+                                />
                             </div>
                         </div>
                     </div>
@@ -624,7 +631,7 @@ export default function GiftTaxAdd() {
                                     <Divider />
 
                                     <ListItem>
-                                    <ListItemText primary="所在場所等" secondary={Location ? Location : "提供されていない"} />
+                                    <ListItemText primary="所在場所・財産の種類（例：現金、不動産の場合所在地）" secondary={Location ? Location : "提供されていない"} />
                                     {Location ?
                                     <ListItemIcon className="text-custom-black">
                                     <EditIcon id={"Location"} onClick={handleBack}/>

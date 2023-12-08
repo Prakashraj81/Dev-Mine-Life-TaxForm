@@ -36,7 +36,12 @@ export default function SecuritiesAdd() {
         { id: 10, value: '外貨建てMMF', label: '外貨建てMMF' },
         { id: 11, value: '一般的な投資信託', label: '一般的な投資信託' },
         { id: 12, value: '上場投資信託', label: '上場投資信託' },
+    ];
 
+    let UnitsList = [
+        { id: 1, value: '株', label: '株' },
+        { id: 2, value: '口', label: '口' },
+        { id: 3, value: 'その他’フリー入力', label: 'その他’フリー入力' },
     ];
 
     let HeirList = [
@@ -181,6 +186,13 @@ export default function SecuritiesAdd() {
             setSecuritiesTypeError(true);
         }
     };
+
+    const UnitsDropdownChange = (event) => {
+        let selectedValue = event.target.value;
+        let selectedOptions = UnitsList.find(option => option.value === selectedValue);
+        selectId = Number(selectedOptions.id);    
+        setUnitPrice(selectedValue);    
+    }
 
     const UnitDetailsDropdownChange = (event) => {
         let selectedValue = event.target.value;
@@ -601,16 +613,14 @@ export default function SecuritiesAdd() {
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
-                                        <input
-                                            type="text"   
-                                            id="UnitPrice"                                         
-                                            autocomplete="off"
-                                            className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                            value={UnitPrice}
-                                            onChange={UnitPriceKeyPress}
-                                            onKeyPress={handleKeyPress}
-                                        />
-                                        <UnitPriceIcon />
+                                        <select id="UnitsType" className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={UnitsDropdownChange}>
+                                            <option value='' id="0"></option>
+                                            {UnitsList.map((option) => (
+                                                <option key={option.value} id={option.id} value={option.value}>
+                                                    {option.label}
+                                                </option>
+                                            ))}
+                                        </select>
                                         {UnitPriceError && (
                                             <p className="text-red-500" role="alert">この項目は必須です</p>
                                         )}

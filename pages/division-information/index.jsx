@@ -15,7 +15,7 @@ export default function DivisionInformation() {
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
                         <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                        分割情報の入力
+                             分割情報、小規模宅地等の特例の入力
                         </p>
                     </div>
                 </div>                          

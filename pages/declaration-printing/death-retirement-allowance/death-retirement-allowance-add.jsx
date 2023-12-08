@@ -15,11 +15,18 @@ import BackdropLoader from '../../../components/loader/backdrop-loader';
 
 export default function DeathRetirementAllowanceAdd() {
 
+    let HeirList = [
+        { id: 1, value: 'Shree', label: 'Shree' },
+        { id: 2, value: 'Prakashraj', label: 'Prakashraj' },
+        { id: 3, value: 'Gowtham', label: 'Gowtham' },
+    ];
+
     let [NameoftheCompany, setNameoftheCompany] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
     let [DateofReceipt, setDateofReceipt] = useState("");
     let [AmountReceived, setAmountReceived] = useState("0");
+    let [HeirListType, setHeirListType] = useState("");
 
     let [UndecidedHeir, setUndecidedHeir] = useState("0");
     let [TotalPrice, setTotalPrice] = useState("0");
@@ -31,6 +38,7 @@ export default function DeathRetirementAllowanceAdd() {
     let [NameoftheCompanyError, setNameoftheCompanyError] = useState(false);
     let [AddressError, setAddressError] = useState(false);
     let [DateofReceiptError, setDateofReceiptError] = useState(false);
+    let [HeirListTypeError, setHeirListTypeError] = useState(false);
 
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
@@ -104,6 +112,19 @@ export default function DeathRetirementAllowanceAdd() {
            setShowLoader(false);            
        }
     } 
+
+
+
+    const handleChangeHeir = () => {
+        let selectedOption = event.target.options[event.target.selectedIndex];
+        let selectedId = Number(selectedOption.value);
+        setisSumbitDisabled(false);
+        setShowIncorrectError(false);
+        setHeirListType(selectedOption.text);
+        setHeirListTypeError(false);
+    }
+
+
 
     const AmountReceivedKeyPress = (e) => {
         let amount_of_money = e.target.value;
@@ -201,6 +222,7 @@ export default function DeathRetirementAllowanceAdd() {
             PostCode: PostCode,
             Address: Address,
             AmountReceived: AmountReceived,
+            HeirListType: HeirListType,
             UndecidedHeir: UndecidedHeir,
             TotalPrice: AmountReceived,
         };
@@ -212,6 +234,10 @@ export default function DeathRetirementAllowanceAdd() {
         }
         if (defaultValues.Address === "") {
             setAddressError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.HeirListType === "") {
+            setHeirListTypeError(true);
             isSumbitDisabled = true;
         }
         //Api setup
@@ -287,7 +313,7 @@ export default function DeathRetirementAllowanceAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="Location" className="form-label">
-                                        生命保険会社の所在地（郵便番号）
+                                        勤務先会社の所在地（郵便番号）
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2 relative">
@@ -312,7 +338,7 @@ export default function DeathRetirementAllowanceAdd() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        生命保険会社の所在地（住所）<i className="text-red-500">*</i>
+                                    勤務先会社の所在地（住所）<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -355,6 +381,33 @@ export default function DeathRetirementAllowanceAdd() {
                         </div>
 
 
+
+                        <div className="w-full block items-center justify-between mb-7">
+                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                            <div className="label w-full inline-block">
+                                <label className="form-label">
+                                    被相続人<i className="text-red-500">*</i>
+                                </label>
+                            </div>
+                            <div className="w-full inline-block mt-2">
+                                <select id="HeirListType" onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
+                                    <option value='' id="0"></option>
+                                    {HeirList.map((option) => (
+                                        <option key={option.id} value={option.id}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                {HeirListTypeError && (
+                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                         <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
@@ -392,7 +445,7 @@ export default function DeathRetirementAllowanceAdd() {
                                     <Divider />
 
                                     <ListItem>
-                                    <ListItemText primary="生命保険会社の所在地（郵便番号）" secondary={PostCode ? PostCode : "提供されていない"} />
+                                    <ListItemText primary="勤務先会社の所在地（郵便番号）" secondary={PostCode ? PostCode : "提供されていない"} />
                                     {PostCode ?
                                     <ListItemIcon className="text-custom-black">
                                     <EditIcon id={"PostCode"}  onClick={handleBack}/>
@@ -403,7 +456,7 @@ export default function DeathRetirementAllowanceAdd() {
                                     <Divider />
 
                                     <ListItem>
-                                    <ListItemText primary="生命保険会社の所在地（住所）" secondary={Address ? Address : "提供されていない"} />
+                                    <ListItemText primary="勤務先会社の所在地（住所）" secondary={Address ? Address : "提供されていない"} />
                                     {Address ?
                                     <ListItemIcon className="text-custom-black">
                                     <EditIcon id={"Address"}  onClick={handleBack}/>
@@ -418,6 +471,17 @@ export default function DeathRetirementAllowanceAdd() {
                                     {DateofReceipt ?
                                     <ListItemIcon className="text-custom-black">
                                     <EditIcon id={"DateofReceipt"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider /> 
+
+                                    <ListItem>
+                                    <ListItemText primary="被相続人" secondary={HeirListType ? HeirListType : "提供されていない"} />
+                                    {HeirListType ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"HeirListType"}  onClick={handleBack}/>
                                     </ListItemIcon>
                                     :<></>}
                                     </ListItem>

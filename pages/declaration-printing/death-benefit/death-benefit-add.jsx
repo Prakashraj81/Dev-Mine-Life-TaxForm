@@ -15,11 +15,18 @@ import BackdropLoader from '../../../components/loader/backdrop-loader';
 
 export default function DeathBenefitAdd() {
 
+    let HeirList = [
+        { id: 1, value: 'Shree', label: 'Shree' },
+        { id: 2, value: 'Prakashraj', label: 'Prakashraj' },
+        { id: 3, value: 'Gowtham', label: 'Gowtham' },
+    ];
+
     let [NameofLifeInsurance, setNameofLifeInsurance] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
     let [DateofReceipt, setDateofReceipt] = useState("");
     let [Valuation, setValuation] = useState("0");
+    let [HeirListType, setHeirListType] = useState("");
 
     let [UndecidedHeir, setUndecidedHeir] = useState("0");
     let [TotalPrice, setTotalPrice] = useState("0");
@@ -31,6 +38,7 @@ export default function DeathBenefitAdd() {
     let [NameofLifeInsuranceError, setNameofLifeInsuranceError] = useState(false);
     let [AddressError, setAddressError] = useState(false);
     let [DateofReceiptError, setDateofReceiptError] = useState(false);
+    let [HeirListTypeError, setHeirListTypeError] = useState(false);
 
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
@@ -104,6 +112,19 @@ export default function DeathBenefitAdd() {
            setShowLoader(false);            
        }
     } 
+
+
+
+    const handleChangeHeir = () => {
+        let selectedOption = event.target.options[event.target.selectedIndex];
+        let selectedId = Number(selectedOption.value);
+        setisSumbitDisabled(false);
+        setShowIncorrectError(false);
+        setHeirListType(selectedOption.text);
+        setHeirListTypeError(false);
+    }
+
+
 
     const ValuationKeyPress = (e) => {
         let amount_of_money = e.target.value;
@@ -201,6 +222,7 @@ export default function DeathBenefitAdd() {
             PostCode: PostCode,
             Address: Address,
             Valuation: Valuation,
+            HeirListType: HeirListType,
             UndecidedHeir: UndecidedHeir,
             TotalPrice: Valuation,
         };
@@ -212,6 +234,10 @@ export default function DeathBenefitAdd() {
         }
         if (defaultValues.Address === "") {
             setAddressError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.HeirListType === "") {
+            setHeirListTypeError(true);
             isSumbitDisabled = true;
         }
         //Api setup
@@ -355,11 +381,35 @@ export default function DeathBenefitAdd() {
                         </div>
 
 
+                        <div className="w-full block items-center justify-between mb-7">
+                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                            <div className="label w-full inline-block">
+                                <label className="form-label">
+                                    被相続人<i className="text-red-500">*</i>
+                                </label>
+                            </div>
+                            <div className="w-full inline-block mt-2">
+                                <select id="HeirListType" onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
+                                    <option value='' id="0"></option>
+                                    {HeirList.map((option) => (
+                                        <option key={option.id} value={option.id}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                {HeirListTypeError && (
+                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+
                         <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        受け取った金額退職金
+                                        受け取った金額
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -425,7 +475,18 @@ export default function DeathBenefitAdd() {
                                     <Divider /> 
 
                                     <ListItem>
-                                    <ListItemText primary="受け取った金額退職金" secondary={Valuation ? Valuation : "提供されていない"} />
+                                    <ListItemText primary="被相続人" secondary={HeirListType ? HeirListType : "提供されていない"} />
+                                    {HeirListType ?
+                                    <ListItemIcon className="text-custom-black">
+                                    <EditIcon id={"HeirListType"}  onClick={handleBack}/>
+                                    </ListItemIcon>
+                                    :<></>}
+                                    </ListItem>
+
+                                    <Divider /> 
+
+                                    <ListItem>
+                                    <ListItemText primary="受け取った金額" secondary={Valuation ? Valuation : "提供されていない"} />
                                     {Valuation ?
                                     <ListItemIcon className="text-custom-black">
                                     <EditIcon id={"Valuation"}  onClick={handleBack}/>
