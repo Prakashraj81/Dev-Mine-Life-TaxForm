@@ -14,6 +14,9 @@ import StepForm from "./stepper";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
 import InfoIcon from '@mui/icons-material/Info';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import PrintIcon from '@mui/icons-material/Print';
+import { list } from "postcss";
 
 
 export default function SecuritiesAdd() {
@@ -41,7 +44,7 @@ export default function SecuritiesAdd() {
     let UnitsList = [
         { id: 1, value: '株', label: '株' },
         { id: 2, value: '口', label: '口' },
-        { id: 3, value: 'その他’フリー入力', label: 'その他’フリー入力' },
+        { id: 3, value: 'その他', label: 'その他（フリー入力）' },
     ];
 
     let HeirList = [
@@ -79,6 +82,7 @@ export default function SecuritiesAdd() {
     let [showUnitDetails, setshowUnitDetails] = useState(false);
     let [showMoneyOrderQuantity, setshowMoneyOrderQuantity] = useState(false);
     let [showReducationAmount, setshowReducationAmount] = useState(false);
+    let [ShowOtherFreeInput, setShowOtherFreeInput] = useState(false);
 
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
@@ -192,6 +196,12 @@ export default function SecuritiesAdd() {
         let selectedOptions = UnitsList.find(option => option.value === selectedValue);
         selectId = Number(selectedOptions.id);    
         setUnitPrice(selectedValue);    
+        if(selectId === 3){
+            setShowOtherFreeInput(true);
+        }
+        else{
+            setShowOtherFreeInput(false);
+        }
     }
 
     const UnitDetailsDropdownChange = (event) => {
@@ -509,6 +519,17 @@ export default function SecuritiesAdd() {
         }      
     }
 
+    const tableList = [        
+        {
+            id: 1,
+            class:"",
+            heading: "現金・預貯金",
+            secondheading: "",
+            icon: <PrintIcon className="text-white" />,
+            path: "",
+        },        
+    ]
+
     return (
         <>
         <>
@@ -647,11 +668,11 @@ export default function SecuritiesAdd() {
                         </div>
 
 
-                        <div className="w-full inline-block items-center justify-between mb-7">
+                        <div className="w-full flex items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
-                                    <label className="form-label">
-                                    金額<i className="text-red-500">*</i>
+                                    <label htmlFor="Quantity" className="form-label">
+                                    数量
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -668,7 +689,31 @@ export default function SecuritiesAdd() {
                                     )}
                                 </div>
                             </div>
+                            {ShowOtherFreeInput && (
+                            <>
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <div className="user-details">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label flex items-center">
+                                        その他を選択した場合、単位を記載
+                                        </label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2 relative">
+                                        <input
+                                            type="text"
+                                            id="OthersInput"                                            
+                                            className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            </>
+                        )}
                         </div>
+
+                        
+                       
                         </>
                     )}                   
 
@@ -751,12 +796,25 @@ export default function SecuritiesAdd() {
                         {StepThree && (
                             <>
                             <Box className="py-7">
-                            <Typography variant="h4" className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" align="center">
-                                ありがとう！
-                            </Typography>
-                            <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                                有価証券 詳細は正常に保存されました...
-                            </Typography>
+                                <div className="summary-tables-wrapper max-w-screen-md mx-auto">                    
+                                    <table className="text-left table">
+                                        <tbody>
+                                            {tableList.map((list, index) => (
+                                                <tr className="border-t w-full" id={list.id}>
+                                                    <td className={list.class ? "line-through w-50 py-5" : "w-50 py-5"}>{list.heading}</td>
+                                                    <td className={list.class ? "line-through w-50 py-5" : "w-50 py-5"}>{list.secondheading}</td>
+                                                    <td className="pl-10">
+                                                        <a>
+                                                            <button id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                                                                {list.icon}
+                                                            </button>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </Box>                           
                             </>
                         )}

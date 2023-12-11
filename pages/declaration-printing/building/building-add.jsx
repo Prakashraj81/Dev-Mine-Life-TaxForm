@@ -515,6 +515,21 @@ export default function HouseAdd() {
                                     <label className="form-label flex items-center"><div className="circle-no">13</div>敷地権の割合</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
+                                            <div className="flex justify-between items-center">
+                                                <div><input
+                                                    type="text"
+                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                /></div>
+                                                <div>
+                                                    <span className="text-3xl text-gray-500">/</span>
+                                                </div>
+                                                <div><input
+                                                    type="text"
+                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                /></div>
+                                            </div>
+                                        </div>
+                                    <div className="w-full hidden mt-2">
                                         <input
                                             type="text"                                            
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"

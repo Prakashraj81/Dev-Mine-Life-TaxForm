@@ -410,7 +410,7 @@ export default function CashSavingsAdd() {
 
     const tableList = [        
         {
-            id: 3,
+            id: 1,
             class:"",
             heading: "現金・預貯金",
             secondheading: "",

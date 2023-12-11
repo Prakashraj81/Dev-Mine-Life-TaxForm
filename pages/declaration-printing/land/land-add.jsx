@@ -576,16 +576,97 @@ export default function LandAdd() {
                                 <div className="mt-5">
                                     <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
                                 </div>     
-
+                                <div className="mt-5">
+                                    <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
+                                </div>
                                 <div className="mt-5">
                                     <img src="/screenshots/land-second-no-2.png" className="w-full" alt="image" height={500} width={200} />
+                                </div> 
+                                <div className="mt-5">
+                                    <img src="/screenshots/land-question-2.png" className="w-full" alt="image" height={500} width={200} />
                                 </div>                                  
                             </>
                         )}
+                    </div>              
+
+
+                    {QuestionTwoImageYes && (
+                        <>
+                        <div className="bg-custom-light mt-10 py-3 px-5 w-full inline-block">
+                        <label className="form-label" id="demo-row-radio-buttons-group-label">土地の詳細の入力</label>
+                    </div>
+                    <div className="w-full flex items-center justify-between mt-3 mb-7">
+                        <div className="w-full lg:w-65 xl:w-65 2xl:w-65 block float-left">
+                            <div className="w-full inline-block mt-2 relative">
+                                <FormControl>
+                                    <RadioGroup
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                        value={DisabledRadioValue}>
+                                        <FormControlLabel value="1" className="mt-3" control={<Radio />} onChange={handleDisabledRadio} label="パターン1(1つの道路 (正面)のみに接している場 合)" sx={{
+                                            '& .MuiSvgIcon-root': {
+                                                fontSize: 16,
+                                            },
+                                        }} />
+                                        <FormControlLabel value="2" className="mt-3" control={<Radio />} onChange={handleDisabledRadio} label="パターン2(2つの道路 (正面と裏面) に接している場 合)" sx={{
+                                            '& .MuiSvgIcon-root': {
+                                                fontSize: 16,
+                                            },
+                                        }} />
+                                        <FormControlLabel value="3" className="mt-3" control={<Radio />} onChange={handleDisabledRadio} label="パターン３（２つの道路（正面と側方）に接している場合）" sx={{
+                                            '& .MuiSvgIcon-root': {
+                                                fontSize: 16,
+                                            },
+                                        }} />
+                                        <FormControlLabel value="4" className="mt-3" control={<Radio />} onChange={handleDisabledRadio} label="パターン４（３つの道路に接している場合）" sx={{
+                                            '& .MuiSvgIcon-root': {
+                                                fontSize: 16,
+                                            },
+                                        }} />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>
+                        </div>
+
+                        <div className="w-full lg:w-35 xl:w-35 2xl:w-35 inline-block float-left">
+                            <div className="w-full inline-block mt-2">
+                                {ShowImageOne && (
+                                    <Image className="mx-auto w-full" src="/land_item01.png" alt="image-one" height={100} width={200} priority />
+                                )}
+                                {ShowImageTwo && (
+                                    <Image className="mx-auto w-full" src="/land_item02.png" alt="image-one" height={100} width={200} priority />
+                                )}
+                                {ShowImageThree && (
+                                    <Image className="mx-auto w-full" src="/land_item03.png" alt="image-one" height={100} width={200} priority />
+                                )}
+                                {ShowImageFour && (
+                                    <Image className="mx-auto w-full" src="/land_item04.png" alt="image-one" height={100} width={200} priority />
+                                )}
+                            </div>
+                        </div>
                     </div>
 
+                    <div className="w-full inline-block py-5">
+                        <div classsName="table-columns">
+                            {ShowTableOne && (
+                                <TableOne />
+                            )}
+                            {ShowTableTwo && (
+                                <TableTwo />
+                            )}
+                            {ShowTableThree && (
+                                <TableThree />
+                            )}
+                            {ShowTableFour && (
+                                <TableFour />
+                            )}
+                        </div>
+                    </div>
+                        </>
+                    )}
 
-                    <div className="mb-7">
+
+                    <div className="mb-7 pt-10">
                         <FormControl>
                             <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">3. 所有されていた物件に共有者はいましたか。</label>
                             <RadioGroup
@@ -636,72 +717,30 @@ export default function LandAdd() {
                             <></>
                         )}
                     </div>
-
-
-                   
-
-
-                    <div className="bg-custom-light mt-10 py-3 px-5 w-full inline-block">
-                        <label className="form-label" id="demo-row-radio-buttons-group-label">土地の詳細の入力</label>
-                    </div>
-                    <div className="w-full flex items-center justify-between mt-3 mb-7">
-                        <div className="w-full lg:w-65 xl:w-65 2xl:w-65 block float-left">
-                            <div className="w-full inline-block mt-2 relative">
-                                <FormControl>
-                                    <RadioGroup
-                                        aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="row-radio-buttons-group"
-                                        value={DisabledRadioValue}>
-                                        
-                                        <FormControlLabel value="3" className="mt-3" control={<Radio />} onChange={handleDisabledRadio} label="パターン３（２つの道路（正面と側方）に接している場合）" sx={{
-                                            '& .MuiSvgIcon-root': {
-                                                fontSize: 16,
-                                            },
-                                        }} />
-                                        <FormControlLabel value="4" className="mt-3" control={<Radio />} onChange={handleDisabledRadio} label="パターン４（３つの道路に接している場合）" sx={{
-                                            '& .MuiSvgIcon-root': {
-                                                fontSize: 16,
-                                            },
-                                        }} />
-                                    </RadioGroup>
-                                </FormControl>
+                    {QuestionTwoImageYes && (
+                        <>
+                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-16">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label text-lg" htmlFor="Valuation">
+                                       4. 評価額
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        id="Valuation"
+                                        // value={Valuation}
+                                        // onChange={ValuationKeyPress}
+                                        // onKeyPress={handleKeyPress}
+                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    />
+                                    {/* {ValuationError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )} */}
+                                </div>
                             </div>
-                        </div>
-
-                        <div className="w-full lg:w-35 xl:w-35 2xl:w-35 inline-block float-left">
-                            <div className="w-full inline-block mt-2">
-                                {ShowImageOne && (
-                                    <Image className="mx-auto w-full" src="/land_item01.png" alt="image-one" height={100} width={200} priority />
-                                )}
-                                {ShowImageTwo && (
-                                    <Image className="mx-auto w-full" src="/land_item02.png" alt="image-one" height={100} width={200} priority />
-                                )}
-                                {ShowImageThree && (
-                                    <Image className="mx-auto w-full" src="/land_item03.png" alt="image-one" height={100} width={200} priority />
-                                )}
-                                {ShowImageFour && (
-                                    <Image className="mx-auto w-full" src="/land_item04.png" alt="image-one" height={100} width={200} priority />
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="w-full inline-block py-5">
-                        <div classsName="table-columns">
-                            {ShowTableOne && (
-                                <TableOne />
-                            )}
-                            {ShowTableTwo && (
-                                <TableTwo />
-                            )}
-                            {ShowTableThree && (
-                                <TableThree />
-                            )}
-                            {ShowTableFour && (
-                                <TableFour />
-                            )}
-                        </div>
-                    </div>
+                        </>
+                    )}                    
                         </>
                     )}
                     {StepTwo && (
