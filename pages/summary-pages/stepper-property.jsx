@@ -36,7 +36,6 @@ const StepForm = ({handleNext, activeStep, handleBack}) => {
     } else {
       ActiveStepper = 3;
     }
-    console.log("Stepper-active:" + ActiveStepper);
   };  
 
   return (

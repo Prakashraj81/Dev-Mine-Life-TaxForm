@@ -3,6 +3,7 @@ import { Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@
 
 // Step titles
 const labels = ['入力', '確認', '出力'];
+//const labels = ['返品の検証', '返品概要を確認する', '確認して送信する'];
 const StepForm = ({handleNext, activeStep, handleBack}) => {  
   const [formValues, setFormValues] = useState();
   const [formErrors, setFormErrors] = useState({});  

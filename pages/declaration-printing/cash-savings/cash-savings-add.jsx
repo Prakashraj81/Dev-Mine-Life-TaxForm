@@ -12,7 +12,9 @@ import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import StepForm from "./stepper";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
-
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import PrintIcon from '@mui/icons-material/Print';
+import { list } from "postcss";
 
 export default function CashSavingsAdd() {
     let DepositList = [
@@ -405,6 +407,17 @@ export default function CashSavingsAdd() {
         }      
     }
 
+
+    const tableList = [        
+        {
+            id: 3,
+            class:"",
+            heading: "現金・預貯金",
+            secondheading: "",
+            icon: <PrintIcon className="text-white" />,
+            path: "",
+        },        
+    ]
    
     return (        
         <>
@@ -627,12 +640,25 @@ export default function CashSavingsAdd() {
                         {StepThree && (
                             <>
                             <Box className="py-7">
-                            <Typography variant="h4" className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" align="center">
-                                ありがとう！
-                            </Typography>
-                            <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                                現金・預貯金 詳細は正常に保存されました...
-                            </Typography>
+                                <div className="summary-tables-wrapper max-w-screen-md mx-auto">                    
+                                    <table className="text-left table">
+                                        <tbody>
+                                            {tableList.map((list, index) => (
+                                                <tr className="border-t w-full" id={list.id}>
+                                                    <td className={list.class ? "line-through w-50 py-5" : "w-50 py-5"}>{list.heading}</td>
+                                                    <td className={list.class ? "line-through w-50 py-5" : "w-50 py-5"}>{list.secondheading}</td>
+                                                    <td className="pl-10">
+                                                        <a>
+                                                            <button id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                                                                {list.icon}
+                                                            </button>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </Box>                           
                             </>
                         )}
@@ -658,7 +684,7 @@ export default function CashSavingsAdd() {
                             }                            
                             <SubmitButton title={submitTitle} onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
                         </div>
-                        {StepThree || StepTwo ? <></> : 
+                        {StepTwo || StepThree ? <></> : 
                         <div className="heading text-center pt-8">
                             <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
                         </div>

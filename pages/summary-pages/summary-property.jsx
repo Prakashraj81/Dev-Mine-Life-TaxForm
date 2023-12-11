@@ -93,7 +93,7 @@ export default function SummaryProperty() {
     let amt = "";
     return (
         <>
-        <StepForm/>
+        {/* <StepForm/> */}
             <div className="summary-property-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
