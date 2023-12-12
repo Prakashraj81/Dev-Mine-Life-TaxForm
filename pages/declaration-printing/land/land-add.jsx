@@ -582,9 +582,38 @@ export default function LandAdd() {
                                 <div className="mt-5">
                                     <img src="/screenshots/land-second-no-2.png" className="w-full" alt="image" height={500} width={200} />
                                 </div> 
+
+                                <div className="w-full flex items-center justify-between pt-7 mb-7">
+                                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                        <div className="label w-full inline-block">
+                                        <label className="form-label flex items-center">倍率</label>
+                                        </div>
+                                        <div className="w-full inline-block mt-2">
+                                            <input
+                                                type="text"
+                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            />
+                                        </div>
+                                    </div>                                
+                                </div>
+
                                 <div className="mt-5">
                                     <img src="/screenshots/land-question-2.png" className="w-full" alt="image" height={500} width={200} />
-                                </div>                                  
+                                </div>      
+
+                                <div className="w-full flex items-center justify-between pt-7 mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                    <label className="form-label flex items-center">上図の赤枠部分を入力してください。</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
+                                    </div>
+                                </div>                                
+                            </div>                            
                             </>
                         )}
                     </div>              
