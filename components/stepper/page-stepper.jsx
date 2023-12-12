@@ -3,7 +3,7 @@ import { Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@
 
 // Step titles
 const labels = ['基礎情報の入力', '財産の入力', '分割情報、小規模宅地等の特例の入力', '贈与・各種控除', '申告書の印刷'];
-const PageStepper = ({handleNext, activeStep, handleBack}) => {  
+const PageStepper = ({activeStep}) => {  
   const [formValues, setFormValues] = useState();
   const [formErrors, setFormErrors] = useState({});  
 
