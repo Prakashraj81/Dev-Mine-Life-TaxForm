@@ -271,7 +271,35 @@ export default function DivisionInformation() {
                                         </>
                                     })}                                        
                                                                  
-                                </table>                            
+                                </table>    
+                                <table className="w-full flex text-center">                                    
+                                        <div className="w-50 inline-table border border-light-gray">
+                                        <tr><th className="p-5 w-full block text-center">現金預金</th></tr>
+                                        <tr>
+                                            <td className="py-2 px-2 border-r border border-light-gray w-25">預金の種類</td>
+                                            <td className="py-2 px-2 border-r border border-light-gray w-25">金融機関名</td>
+                                            <td className="py-2 px-2 border-r border border-light-gray w-25">金額</td>
+                                        </tr>
+                                        <tr>
+                                        <td className="py-2 px-2 border-r border border-light-gray w-25"></td>
+                                        <td className="py-2 px-2 border-r border border-light-gray w-25"></td>
+                                        <td className="border-r border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
+                                        </tr>
+                                        </div>
+                                        <div className="w-50 inline-table border border-light-gray">                                    
+                                            <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                            <tr>
+                                            <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
+                                            <td className="border-r border border-light-gray w-25">Prakashraj</td>
+                                            <td className="border-r border border-light-gray w-25">Gowtham</td>                                    
+                                            </tr>
+                                            <tr>                                    
+                                            <td className="border-r border-l-0 border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
+                                            <td className="border-r border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
+                                            <td className="border-r border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
+                                            </tr>
+                                            </div> 
+                                </table>                          
                             </div>
                             
                             </>

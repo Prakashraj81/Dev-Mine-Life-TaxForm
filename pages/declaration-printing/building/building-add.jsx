@@ -731,6 +731,26 @@ export default function HouseAdd() {
                         <></>
                     )}
                 </div>
+                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-16">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label text-lg" htmlFor="Valuation">
+                                       4. 評価額
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        id="Valuation"
+                                        // value={Valuation}
+                                        // onChange={ValuationKeyPress}
+                                        // onKeyPress={handleKeyPress}
+                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    />
+                                    {/* {ValuationError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )} */}
+                                </div>
+                            </div>
                         </>
                     )}
                 
@@ -739,7 +759,6 @@ export default function HouseAdd() {
                             <>
                             <Fragment>
                                 <List disablePadding>
-
                                     <ListItemText>
                                     <label className="form-label text-lg">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
                                     </ListItemText>

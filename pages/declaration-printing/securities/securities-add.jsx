@@ -671,8 +671,8 @@ export default function SecuritiesAdd() {
                         <div className="w-full flex items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
-                                    <label htmlFor="Quantity" className="form-label">
-                                    数量
+                                    <label htmlFor="AmountofMoney" className="form-label">
+                                        金額
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">

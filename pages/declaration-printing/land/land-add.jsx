@@ -652,7 +652,7 @@ export default function LandAdd() {
                                 <TableOne />
                             )}
                             {ShowTableTwo && (
-                                <TableTwo />
+                                <TableOne />
                             )}
                             {ShowTableThree && (
                                 <TableThree />
@@ -717,9 +717,7 @@ export default function LandAdd() {
                             <></>
                         )}
                     </div>
-                    {QuestionTwoImageYes && (
-                        <>
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-16">
+                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-16">
                                 <div className="label w-full inline-block">
                                     <label className="form-label text-lg" htmlFor="Valuation">
                                        4. 評価額
@@ -738,9 +736,7 @@ export default function LandAdd() {
                                         <p className="text-red-500" role="alert">この項目は必須です</p>
                                     )} */}
                                 </div>
-                            </div>
-                        </>
-                    )}                    
+                            </div>              
                         </>
                     )}
                     {StepTwo && (
