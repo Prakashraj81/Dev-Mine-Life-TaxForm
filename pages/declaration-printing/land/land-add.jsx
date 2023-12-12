@@ -580,7 +580,7 @@ export default function LandAdd() {
                                     <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
                                 </div>
                                 <div className="mt-5">
-                                    <img src="/screenshots/land-second-no-2.png" className="w-full" alt="image" height={500} width={200} />
+                                    <img src="/screenshots/land-second-no-2.png" className="w-full bg-white" alt="image" height={500} width={200} />
                                 </div> 
 
                                 <div className="w-full flex items-center justify-between pt-7 mb-7">
