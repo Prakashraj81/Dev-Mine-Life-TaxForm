@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import { styled, Container, Box } from "@mui/material";
 import Header from "./header/Header";
 import Footer from './../../footer';
@@ -25,11 +26,50 @@ interface Props {
   children: React.ReactNode;
 }
 
+
 const FullLayout: React.FC<Props> = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  let [activeStep, setactiveStep] = useState(0);
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
+  //Stepper get path function 
+  const router = useRouter();
+    const fullPath = router.pathname;    
+  useEffect (() => {       
+    const pathSegments = fullPath.split('/');
+    const desiredPath = pathSegments[1] || ''; 
+    const desiredPath2 = pathSegments[2] || ''; 
+    if(desiredPath === "basic-information"){
+      setactiveStep(0);
+      activeStep = 0;
+    }
+    else if(desiredPath2 === "summary-property"){
+      setactiveStep(1);
+      activeStep = 1;
+    }
+    else if(desiredPath === "declaration-printing"){
+      setactiveStep(1);
+      activeStep = 1;
+    }
+    else if(desiredPath === "division-information"){
+      setactiveStep(2);
+      activeStep = 2;
+    }
+    else if(desiredPath2 === "summary-gifts-various"){
+      setactiveStep(3);
+      activeStep = 3;
+    }
+    else if(desiredPath === "gift-various"){
+      setactiveStep(3);
+      activeStep = 3;
+    }
+    else {
+      setactiveStep(4);
+      activeStep = 4;
+    }
+    console.log("activeStep:" + activeStep);
+  }, [activeStep, fullPath]);  
   return (
     <MainWrapper className="mainwrapper">      
       <Sidebar
@@ -47,7 +87,7 @@ const FullLayout: React.FC<Props> = ({ children }) => {
               <div className="w-full inline-block">
                 <div className="w-full lg:w-80 xl:w-80 2xl:w-80 inline-block float-left px-0 lg:px-10 xl:px-10 2xl:px-10 py-0 lg:py-10 xl:py-10 2xl:py-10">
                   <div className="top-stepper-sec max-w-screen-md mx-auto">
-                    {/* <TopStepper/> */}
+                    <TopStepper activeStep={activeStep}/>                    
                   </div>
                   <div className="page-wrapper">
                     {children}

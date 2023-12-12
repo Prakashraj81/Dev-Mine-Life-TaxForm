@@ -1,105 +1,69 @@
-import * as React from 'react';
-import { Box, Stepper, Step, StepButton, Button, Typography } from '@mui/material';
+import React, { useState } from "react";
+import { Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 
-export default function TopStepper() {
-  const steps = ['入力', '確認', '出力'];
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [completed, setCompleted] = React.useState({});
+// Step titles
+const labels = ['基礎情報の入力', '財産の入力', '分割情報、小規模宅地等の特例の入力', '贈与・各種控除', '申告書の印刷'];
+const PageStepper = ({handleNext, activeStep, handleBack}) => {  
+  const [formValues, setFormValues] = useState();
+  const [formErrors, setFormErrors] = useState({});  
 
-  const totalSteps = () => {
-    return steps.length;
+  // Handle form change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Set values
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+
+    // set errors
+    const error = formValidation(name, value, fieldsValidation) || "";
+
+    setFormErrors({
+      [name]: error
+    });
   };
 
-  const completedSteps = () => {
-    return Object.keys(completed).length;
-  };
-
-  const isLastStep = () => {
-    return activeStep === totalSteps() - 1;
-  };
-
-  const allStepsCompleted = () => {
-    return completedSteps() === totalSteps();
-  };
-
-  const handleNext = () => {
-    const newActiveStep =
-      isLastStep() && !allStepsCompleted()
-        ? 
-          steps.findIndex((step, i) => !(i in completed))
-        : activeStep + 1;
-    setActiveStep(newActiveStep);    
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStep = (step) => () => {
-    setActiveStep(step);
-  };
-
-  const handleComplete = () => {
-    const newCompleted = completed;
-    newCompleted[activeStep] = true;
-    setCompleted(newCompleted);
-    handleNext();
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
-  };
+  let ActiveStepper = 0;
+  const handleSteps = (activeStep) => {
+    let step = activeStep;
+    if (step === 0) {
+      ActiveStepper = 1;
+    } else if (step === 1) {
+      ActiveStepper = 2;
+    } else if (step === 2) {
+      ActiveStepper = 3;
+    } else if (step === 4) {
+      ActiveStepper = 5;
+    } else {
+      ActiveStepper = 5;
+    }
+  };  
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Stepper nonLinear activeStep={activeStep}>
-        {steps.map((label, index) => (
-          <Step key={label} completed={completed[index]}>
-            <StepButton className='w-full inline-block text-center' color="inherit" onClick={handleStep(index)}>
-              <div>{label}</div>
-            </StepButton>
-          </Step>
-        ))}
-      </Stepper>
-      <div>
-        {allStepsCompleted() ? (
-          <React.Fragment>
-           
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button>
-              <Box sx={{ flex: '1 1 auto' }} />              
-              {activeStep !== steps.length &&
-                (completed[activeStep] ? (
-                  <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                    Step {activeStep + 1} already completed
-                  </Typography>
-                ) : (
-                  <Button onClick={handleComplete}>
-                    {completedSteps() === totalSteps() - 1
-                      ? 'Finish'
-                      : 'Next'}
-                  </Button>
-                ))}
-            </Box>
-          </React.Fragment>
-        )}
-      </div>
-    </Box>
+    <>
+      {activeStep === labels.length ? (
+        // Last Component
+        // <Success values={formValues} />
+        <></>
+      ) : (
+        <>         
+          <Stepper
+            activeStep={activeStep}
+            alternativeLabel
+          >
+            {labels.map((label, index) => (
+            <Step key={label}>
+              <StepLabel key={index + 1} className="bg-custom-light-">{label}</StepLabel>
+            </Step>              
+            ))}
+          </Stepper>
+          {handleSteps(activeStep)}          
+        </>
+      )}
+    </>
   );
-}
+};
+
+export default PageStepper;
