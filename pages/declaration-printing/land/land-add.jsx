@@ -591,6 +591,7 @@ export default function LandAdd() {
                                         <div className="w-full inline-block mt-2">
                                             <input
                                                 type="text"
+                                                id="倍率"
                                                 className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             />
                                         </div>
@@ -609,6 +610,7 @@ export default function LandAdd() {
                                     <div className="w-full inline-block mt-2">
                                         <input
                                             type="text"
+                                            id="上図の赤枠部分を入力してください。"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         />
                                     </div>
