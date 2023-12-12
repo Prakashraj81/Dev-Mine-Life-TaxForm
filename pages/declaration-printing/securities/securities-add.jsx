@@ -10,7 +10,6 @@ import HeirListBox from "../../../components/heir-list-box/heir-list-box";
 import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
-import StepForm from "./stepper";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
 import InfoIcon from '@mui/icons-material/Info';
@@ -96,77 +95,7 @@ export default function SecuritiesAdd() {
     
     
     // Proceed to next step
-    let [ShowLoader, setShowLoader] = useState(false);
-    let [InputFocus, setInputFocus] = useState(false);
-    let [activeStep, setActiveStep] = useState(0);
-    let [StepOne, setStepOne] = useState(true);
-    let [StepTwo, setStepTwo] = useState(false);
-    let [StepThree, setStepThree] = useState(false);
-    let [PrevButton, setPrevButton] = useState(true);
-    let [submitTitle, setsubmitTitle] = useState("Next");
-    let [PageValidation, setPageValidation] = useState(false);  
-
-
-    //Stepper "Next" function
-    let handleNext = () => {
-       setActiveStep((prev) => prev + 1);
-       if(activeStep === 0){
-           activeStep = 1;
-           setStepOne(false);
-           setStepTwo(true);
-           setStepThree(false);
-           setPrevButton(false);
-           setShowLoader(false);
-       }
-       else if(activeStep === 1){
-           activeStep = 2;
-           setStepOne(false);
-           setStepTwo(false);
-           setStepThree(true);
-           setPrevButton(false);
-           setsubmitTitle("保存");
-           setShowLoader(false);
-       }
-       else {
-           setShowLoader(false);   
-           setPageValidation(true);  
-           PageValidation = true;
-           SubmitFinalFunction(PageValidation); 
-       }
-    }
-    //Stepper "Back" function
-    let handleBack = () => {                
-       setActiveStep((prev) => prev - 1);
-       if(activeStep === 0 || activeStep < 0){
-           activeStep = 0;
-           setStepOne(true);
-           setStepTwo(false);
-           setStepThree(false);
-           setPrevButton(false);
-           setShowLoader(false);
-       }
-       else if(activeStep === 1){
-           activeStep = 0;
-           setStepOne(true);
-           setStepTwo(false);
-           setStepThree(false);
-           setPrevButton(true);
-           setsubmitTitle("Next");
-           setShowLoader(false);
-       }
-       else if(activeStep === 2){
-           activeStep = 1;
-           setStepOne(false);
-           setStepTwo(true);
-           setStepThree(false);
-           setPrevButton(false);
-           setsubmitTitle("Next");
-           setShowLoader(false);
-       }
-       else {
-           setShowLoader(false);            
-       }
-    } 
+    let [ShowLoader, setShowLoader] = useState(false);    
 
 
     //Securities dropdown
@@ -500,7 +429,9 @@ export default function SecuritiesAdd() {
 
         //Api setup
         if (isSumbitDisabled !== true) {
-            handleNext();              
+            console.log("API allowed");
+            sessionStorage.setItem('securities', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/securities`);           
         }
         else {
             console.log("API not allowed");
@@ -508,28 +439,7 @@ export default function SecuritiesAdd() {
         }
     };
 
-    const SubmitFinalFunction = (PageValidation) => {
-        if(PageValidation === true){
-            console.log("API allowed");
-            sessionStorage.setItem('securities', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/securities`);
-        }    
-        else{
-            setPageValidation(false);
-        }      
-    }
-
-    const tableList = [        
-        {
-            id: 1,
-            class:"",
-            heading: "現金・預貯金",
-            secondheading: "",
-            icon: <PrintIcon className="text-white" />,
-            path: "",
-        },        
-    ]
-
+    
     return (
         <>
         <>
@@ -537,9 +447,7 @@ export default function SecuritiesAdd() {
             <BackdropLoader ShowLoader={ShowLoader} />
         )}
         </>
-            <div className="top-stepper-sec max-w-screen-md mx-auto pt-0 py-10">
-                <StepForm handleBack={handleBack} activeStep={activeStep} handleNext={handleNext} />
-            </div>
+            
             <div className="securities-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -555,9 +463,7 @@ export default function SecuritiesAdd() {
                 </div>
             </div>
             <div className="w-full inline-block">
-                <form action="#" method="POST">
-                    {StepOne && (
-                        <>
+                <form action="#" method="POST">                   
                         <div className="w-full flex items-center  mb-12">
                             <div className="label w-25 inline-block">
                                 <label htmlFor="SecuritiesType" className="form-label">
@@ -714,137 +620,11 @@ export default function SecuritiesAdd() {
 
                         
                        
-                        </>
-                    )}                   
-
-                    
-                    
-                        {StepTwo && (
-                            <>
-                            <Fragment>
-                                <List disablePadding>
-                                    <ListItem>
-                                    <ListItemText className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" primary="有価証券の種類" secondary={SecuritiesType ? SecuritiesType : "提供されていない"} />
-                                    {SecuritiesType ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"SecuritiesType"} onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}
-                                    </ListItem>
-
-                                    <Divider />
-
-                                    <ListItem>
-                                    <ListItemText className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" primary="有価証券の名称・銘柄" secondary={NameofSecurities ? NameofSecurities : "提供されていない"} />
-                                    {NameofSecurities ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"NameofSecurities"} onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}
-                                    </ListItem>
-
-                                    <Divider />
-
-                                    <ListItem>
-                                    <ListItemText primary="金融機関名" secondary={FinancialInstitutionName ? FinancialInstitutionName : "提供されていない"} />
-                                    {FinancialInstitutionName ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"FinancialInstitutionName"}  onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}                                    
-                                    </ListItem>
-
-                                    <Divider />
-
-                                    <ListItem>
-                                    <ListItemText primary="単位" secondary={UnitPrice ? UnitPrice : "提供されていない"} />
-                                    {UnitPrice ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"UnitPrice"}  onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}
-                                    </ListItem>
-
-                                    <Divider />
-
-                                    <ListItem>
-                                    <ListItemText primary="数量" secondary={Quantity ? Quantity : "提供されていない"} />
-                                    {Quantity ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"Quantity"}  onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}
-                                    </ListItem>
-
-                                    <Divider />
-
-                                    <ListItem>
-                                    <ListItemText primary="金額" secondary={AmountofMoney ? AmountofMoney : "提供されていない"} />
-                                    {AmountofMoney ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"AmountofMoney"}  onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}
-                                    </ListItem>
-
-                                    <Divider />                                    
-                                </List>      
-                            </Fragment>
-                            </>
-                        )}
-
-                        {StepThree && (
-                            <>
-                            <Box className="py-7">
-                                <div className="summary-tables-wrapper max-w-screen-md mx-auto">                    
-                                    <table className="text-left table">
-                                        <tbody>
-                                            {tableList.map((list, index) => (
-                                                <tr className="border-t w-full" id={list.id}>
-                                                    <td className={list.class ? "line-through w-50 py-5" : "w-50 py-5"}>{list.heading}</td>
-                                                    <td className={list.class ? "line-through w-50 py-5" : "w-50 py-5"}>{list.secondheading}</td>
-                                                    <td className="pl-10">
-                                                        <a>
-                                                            <button id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
-                                                                {list.icon}
-                                                            </button>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </Box>                           
-                            </>
-                        )}
-
                         <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            {StepThree ? <></> : 
-                            <>
-                            {PrevButton ? <BackButton /> : 
-                            <>
-                            <button
-                                type='button'
-                                onClick={handleBack}
-                                className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                            >
-                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                戻る
-                                </span>
-                            </button>
-                            </>
-                            }
-                            </>
-                            }                            
-                            <SubmitButton title={submitTitle} onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>
-                        {StepThree || StepTwo ? <></> : 
-                        <div className="heading text-center pt-8">
-                            <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
-                        </div>
-                        }                        
+                            <BackButton/>              
+                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                        </div>                                           
                         </div>   
                 </form>
             </div>

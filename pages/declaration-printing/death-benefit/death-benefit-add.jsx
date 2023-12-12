@@ -10,7 +10,6 @@ import HeirListBox from "../../../components/heir-list-box/heir-list-box";
 import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
-import StepForm from "./stepper";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 
 export default function DeathBenefitAdd() {
@@ -41,79 +40,7 @@ export default function DeathBenefitAdd() {
     let [HeirListTypeError, setHeirListTypeError] = useState(false);
 
     // Proceed to next step
-    let [ShowLoader, setShowLoader] = useState(false);
-    let [InputFocus, setInputFocus] = useState(false);
-    let [activeStep, setActiveStep] = useState(0);
-    let [StepOne, setStepOne] = useState(true);
-    let [StepTwo, setStepTwo] = useState(false);
-    let [StepThree, setStepThree] = useState(false);
-    let [PrevButton, setPrevButton] = useState(true);
-    let [submitTitle, setsubmitTitle] = useState("Next");
-    let [PageValidation, setPageValidation] = useState(false);  
-
-
-    //Stepper "Next" function
-    let handleNext = () => {
-       setActiveStep((prev) => prev + 1);
-       if(activeStep === 0){
-           activeStep = 1;
-           setStepOne(false);
-           setStepTwo(true);
-           setStepThree(false);
-           setPrevButton(false);
-           setShowLoader(false);
-       }
-       else if(activeStep === 1){
-           activeStep = 2;
-           setStepOne(false);
-           setStepTwo(false);
-           setStepThree(true);
-           setPrevButton(false);
-           setsubmitTitle("保存");
-           setShowLoader(false);
-       }
-       else {
-           setShowLoader(false);   
-           setPageValidation(true);  
-           PageValidation = true;
-           SubmitFinalFunction(PageValidation); 
-       }
-    }
-    //Stepper "Back" function
-    let handleBack = () => {                
-       setActiveStep((prev) => prev - 1);
-       if(activeStep === 0 || activeStep < 0){
-           activeStep = 0;
-           setStepOne(true);
-           setStepTwo(false);
-           setStepThree(false);
-           setPrevButton(false);
-           setShowLoader(false);
-       }
-       else if(activeStep === 1){
-           activeStep = 0;
-           setStepOne(true);
-           setStepTwo(false);
-           setStepThree(false);
-           setPrevButton(true);
-           setsubmitTitle("Next");
-           setShowLoader(false);
-       }
-       else if(activeStep === 2){
-           activeStep = 1;
-           setStepOne(false);
-           setStepTwo(true);
-           setStepThree(false);
-           setPrevButton(false);
-           setsubmitTitle("Next");
-           setShowLoader(false);
-       }
-       else {
-           setShowLoader(false);            
-       }
-    } 
-
-
+    let [ShowLoader, setShowLoader] = useState(false);   
 
     const handleChangeHeir = () => {
         let selectedOption = event.target.options[event.target.selectedIndex];
@@ -242,7 +169,9 @@ export default function DeathBenefitAdd() {
         }
         //Api setup
         if (isSumbitDisabled !== true) {
-            handleNext();              
+            console.log("API allowed");
+            sessionStorage.setItem('DeathBenefit', JSON.stringify(defaultValues));
+            router.push(`/declaration-printing/death-benefit`);          
         }
         else {
             console.log("API not allowed");
@@ -250,16 +179,7 @@ export default function DeathBenefitAdd() {
         }
     };
 
-    const SubmitFinalFunction = (PageValidation) => {
-        if(PageValidation === true){
-            console.log("API allowed");
-            sessionStorage.setItem('DeathBenefit', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/death-benefit`);
-        }    
-        else{
-            setPageValidation(false);
-        }      
-    }
+    
     return (
         <>
         <>
@@ -267,9 +187,7 @@ export default function DeathBenefitAdd() {
             <BackdropLoader ShowLoader={ShowLoader} />
         )}
         </>
-            <div className="top-stepper-sec max-w-screen-md mx-auto pt-0 py-10">
-                <StepForm handleBack={handleBack} activeStep={activeStep} handleNext={handleNext} />
-            </div>
+            
             <div className="cash-savings-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -285,8 +203,7 @@ export default function DeathBenefitAdd() {
                 </div>
                 <div className="w-full inline-block">
                     <form action="#" method="POST">
-                        {StepOne && (
-                            <>
+                        
                             <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
@@ -423,123 +340,12 @@ export default function DeathBenefitAdd() {
                                 </div>
                             </div>
                         </div>
-                            </>
-                        )}
-
-                        {StepTwo && (
-                            <>
-                            <Fragment>
-                                <List disablePadding>
-                                    <ListItem>
-                                    <ListItemText primary="生命保険会社の名称" secondary={NameofLifeInsurance ? NameofLifeInsurance : "提供されていない"} />
-                                    {NameofLifeInsurance ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"NameofLifeInsurance"}  onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}                                    
-                                    </ListItem>
-
-                                    <Divider />
-
-                                    <ListItem>
-                                    <ListItemText primary="生命保険会社の所在地（郵便番号）" secondary={PostCode ? PostCode : "提供されていない"} />
-                                    {PostCode ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"PostCode"}  onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}
-                                    </ListItem>
-
-                                    <Divider />
-
-                                    <ListItem>
-                                    <ListItemText primary="生命保険会社の所在地（住所）" secondary={Address ? Address : "提供されていない"} />
-                                    {Address ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"Address"}  onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}
-                                    </ListItem>
-
-                                    <Divider />
-
-                                    <ListItem>
-                                    <ListItemText primary="受取年月日" secondary={DateofReceipt ? DateofReceipt : "提供されていない"} />
-                                    {DateofReceipt ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"DateofReceipt"}  onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}
-                                    </ListItem>
-
-                                    <Divider /> 
-
-                                    <ListItem>
-                                    <ListItemText primary="被相続人" secondary={HeirListType ? HeirListType : "提供されていない"} />
-                                    {HeirListType ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"HeirListType"}  onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}
-                                    </ListItem>
-
-                                    <Divider /> 
-
-                                    <ListItem>
-                                    <ListItemText primary="受け取った金額" secondary={Valuation ? Valuation : "提供されていない"} />
-                                    {Valuation ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"Valuation"}  onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}
-                                    </ListItem>
-
-                                    <Divider />                                    
-                                </List>      
-                            </Fragment>
-                            </>
-                        )}
-
-                        {StepThree && (
-                            <>
-                            <Box className="py-7">
-                            <Typography variant="h4" className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" align="center">
-                                ありがとう！
-                            </Typography>
-                            <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                                死亡保険金等 詳細は正常に保存されました...
-                            </Typography>
-                            </Box>                           
-                            </>
-                        )}
-
                         <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            {StepThree ? <></> : 
-                            <>
-                            {PrevButton ? <BackButton /> : 
-                            <>
-                            <button
-                                type='button'
-                                onClick={handleBack}
-                                className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                            >
-                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                戻る
-                                </span>
-                            </button>
-                            </>
-                            }
-                            </>
-                            }                            
-                            <SubmitButton title={submitTitle} onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>
-                        {StepThree || StepTwo ? <></> : 
-                        <div className="heading text-center pt-8">
-                            <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
-                        </div>
-                        }                        
-                        </div>   
+                            <BackButton/>              
+                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                        </div>                                           
+                        </div>     
                    </form>
                 </div>
             </div>
