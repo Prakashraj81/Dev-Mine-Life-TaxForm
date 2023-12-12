@@ -52,7 +52,7 @@ const FullLayout: React.FC<Props> = ({ children }) => {
       setactiveStep(1);
       activeStep = 1;
     }
-    else if(desiredPath === "division-information"){
+    else if(desiredPath === "division-information" || desiredPath === "division-info"){
       setactiveStep(2);
       activeStep = 2;
     }

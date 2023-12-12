@@ -25,14 +25,7 @@ export default function DivisionInformation() {
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
-    let [InputFocus, setInputFocus] = useState(false);
-    let [activeStep, setActiveStep] = useState(0);
-    let [StepOne, setStepOne] = useState(true);
-    let [StepTwo, setStepTwo] = useState(false);
-    let [StepThree, setStepThree] = useState(false);
-    let [PrevButton, setPrevButton] = useState(true);
-    let [submitTitle, setsubmitTitle] = useState("Next");
-    let [PageValidation, setPageValidation] = useState(false);  
+     
 
     //Table show hide state
     let [CashDepositTable, setCashDepositTable] = useState(true); 
@@ -69,7 +62,7 @@ export default function DivisionInformation() {
         else{
             setcashSavingsList([]);
         }        
-    }, [cashSavingsList]);
+    }, []);
 
 
 
@@ -87,7 +80,9 @@ export default function DivisionInformation() {
         }       
         //Api setup
         if (isSumbitDisabled !== true) {
-            handleNext();              
+            console.log("API allowed");
+            //sessionStorage.setItem('ExceptionsResidentialLand', JSON.stringify(defaultValues));
+            //router.push(`/gift-various/exceptions-residential-land`);      
         }
         else {
             console.log("API not allowed");
@@ -95,16 +90,7 @@ export default function DivisionInformation() {
         }
     };
 
-    const SubmitFinalFunction = (PageValidation) => {
-        if(PageValidation === true){
-            console.log("API allowed");
-            //sessionStorage.setItem('ExceptionsResidentialLand', JSON.stringify(defaultValues));
-            //router.push(`/gift-various/exceptions-residential-land`);
-        }    
-        else{
-            setPageValidation(false);
-        }      
-    } 
+    
     return (
         <>
         <>
@@ -129,9 +115,7 @@ export default function DivisionInformation() {
                     </p>
                 </div>
                 <div className="w-full inline-block">
-                    <form action="#" method="POST">
-                        {StepOne && (
-                            <>
+                    <form action="#" method="POST">                        
                             <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full inline-block float-left">
                                 <div className="label w-full inline-block">
@@ -171,44 +155,10 @@ export default function DivisionInformation() {
                         {CashDepositTable && (
                             <>
                             <div className="Table-list pt-10 py-3">                                
-                                <table className="w-full flex text-center">                                    
-                                    {cashSavingsList.map((list, index) => {   
-                                        // Calculate TotalPrice correctly
-                                        let AmountofMoney = parseFloat(list.AmountofMoney.replace(/,/g, '').replace('.', ''));
-                                        totalValuation += AmountofMoney;                                      
-                                        <>
-                                        <div className="w-50 inline-table border border-light-gray">
-                                        <tr><th className="p-5 w-full block text-center">現金預金</th></tr>
-                                        <tr>
-                                            <td className="py-2 px-2 border-r border border-light-gray w-25">預金の種類</td>
-                                            <td className="py-2 px-2 border-r border border-light-gray w-25">金融機関名</td>
-                                            <td className="py-2 px-2 border-r border border-light-gray w-25">金額</td>
-                                        </tr>
-                                        <tr>
-                                        <td className="py-2 px-2 border-r border border-light-gray w-25">{list.DepositType}</td>
-                                        <td className="py-2 px-2 border-r border border-light-gray w-25">{list.FinancialInstitutionName}</td>
-                                        <td className="border-r border border-light-gray w-25"><span>{list.AmountofMoney.toLocaleString()}</span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
-                                        </tr>
-                                        </div>
-                                        <div className="w-50 inline-table border border-light-gray">                                    
-                                            <tr><th className="p-5 w-full block text-center">相続人</th></tr>
-                                            <tr>
-                                            <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
-                                            <td className="border-r border border-light-gray w-25">Prakashraj</td>
-                                            <td className="border-r border border-light-gray w-25">Gowtham</td>                                    
-                                            </tr>
-                                            <tr>                                    
-                                            <td className="border-r border-l-0 border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
-                                            <td className="border-r border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
-                                            <td className="border-r border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
-                                            </tr>
-                                            </div> 
-                                        </>
-                                    })}                                        
-                                                                 
-                                </table>    
-                                <table className="w-full flex text-center">                                    
-                                        <div className="w-50 inline-table border border-light-gray">
+                                <table className="w-full flex text-center">  
+                                {cashSavingsList.length === 0 ? (
+                                    <>
+                                    <div className="w-50 inline-table border border-light-gray">
                                         <tr><th className="p-5 w-full block text-center">現金預金</th></tr>
                                         <tr>
                                             <td className="py-2 px-2 border-r border border-light-gray w-25">預金の種類</td>
@@ -233,8 +183,50 @@ export default function DivisionInformation() {
                                             <td className="border-r border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
                                             <td className="border-r border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
                                             </tr>
-                                            </div> 
-                                </table>                          
+                                            </div>
+                                    </>
+                                ) : (
+                                    <>
+                                    {cashSavingsList.map((list, index) => {   
+                                            // Calculate TotalPrice correctly
+                                            let AmountofMoney = parseFloat(list.AmountofMoney.replace(/,/g, '').replace('.', ''));
+                                            totalValuation += AmountofMoney; 
+                                            return (
+    <>
+                                            <div className="w-50 inline-table border border-light-gray">
+                                            <tr><th className="p-5 w-full block text-center">現金預金</th></tr>
+                                            <tr>
+                                                <td className="py-2 px-2 border-r border border-light-gray w-25">預金の種類</td>
+                                                <td className="py-2 px-2 border-r border border-light-gray w-25">金融機関名</td>
+                                                <td className="py-2 px-2 border-r border border-light-gray w-25">金額</td>
+                                            </tr>
+                                            <tr>
+                                            <td className="py-2 px-2 border-r border border-light-gray w-25">{list.DepositType}</td>
+                                            <td className="py-2 px-2 border-r border border-light-gray w-25">{list.FinancialInstitutionName}</td>
+                                            <td className="border-r border border-light-gray w-25"><span>{list.AmountofMoney.toLocaleString()}</span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
+                                            </tr>
+                                            </div>
+                                            <div className="w-50 inline-table border border-light-gray">                                    
+                                                <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                                <tr>
+                                                <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
+                                                <td className="border-r border border-light-gray w-25">Prakashraj</td>
+                                                <td className="border-r border border-light-gray w-25">Gowtham</td>                                    
+                                                </tr>
+                                                <tr>                                    
+                                                <td className="border-r border-l-0 border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
+                                                <td className="border-r border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
+                                                <td className="border-r border border-light-gray w-25"><span></span><span className="inline-block float-right border-l text-right border-light-gray py-2 px-2">円</span></td>
+                                                </tr>
+                                                </div> 
+                                            </>
+                                            );                                 
+                                        })}  
+                                    </>                                    
+                                )}                                                  
+                                                                    
+                                                                 
+                                </table>                                                      
                             </div>
                             
                             </>
@@ -558,70 +550,11 @@ export default function DivisionInformation() {
                         </div>
                             </>
                         )}
-                        
-                        
-                        </>
-                        )}
-
-                        
-                        {StepTwo && (
-                            <>
-                            <Fragment>
-                                <List disablePadding>
-                                    <ListItem>
-                                    <ListItemText primary="小規模宅地の特例を適用する土地" secondary={ResidentialLandType ? ResidentialLandType : "提供されていない"} />
-                                    {ResidentialLandType ?
-                                    <ListItemIcon className="text-custom-black">
-                                    <EditIcon id={"ResidentialLandType"}  onClick={handleBack}/>
-                                    </ListItemIcon>
-                                    :<></>}                                    
-                                    </ListItem>
-
-                                    <Divider />                                                                        
-                                </List>      
-                            </Fragment>
-                            </>
-                        )}
-
-                        {StepThree && (
-                            <>
-                            <Box className="py-7">
-                            <Typography variant="h4" className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium" align="center">
-                                ありがとう！
-                            </Typography>
-                            <Typography component="p" align="center" className="pt-7 text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                                小規模宅地の特例 詳細は正常に保存されました...
-                            </Typography>
-                            </Box>                           
-                            </>
-                        )}
-
-                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                         <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            {StepThree ? <></> : 
-                            <>
-                            {PrevButton ? <BackButton /> : 
-                            <>
-                            <button
-                                type='button'
-                                onClick={handleBack}
-                                className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                            >
-                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                戻る
-                                </span>
-                            </button>
-                            </>
-                            }
-                            </>
-                            }                            
-                            <SubmitButton title={submitTitle} onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>
-                        {StepThree || StepTwo ? <></> : 
-                        <div className="heading text-center pt-8">
-                            <h5 className="text-sm text-black tracking-2 font-medium">必須入力項目があります。</h5>
-                        </div>
-                        }                        
+                            <BackButton/>              
+                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                        </div>                                           
                         </div>   
                    </form>
                 </div>
