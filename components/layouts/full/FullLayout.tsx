@@ -64,9 +64,13 @@ const FullLayout: React.FC<Props> = ({ children }) => {
       setactiveStep(3);
       activeStep = 3;
     }
-    else {
+    else if(desiredPath === "property"){
       setactiveStep(4);
       activeStep = 4;
+    }
+    else {
+      setactiveStep(0);
+      activeStep = 0;
     }
     console.log("activeStep:" + activeStep);
   }, [activeStep, fullPath]);  
