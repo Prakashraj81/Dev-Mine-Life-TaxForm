@@ -8,10 +8,21 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 export default function TableFour() {
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue_1, setInputValue_1] = useState('');
+    const [inputValue_2, setInputValue_2] = useState('');
+    const [inputValue_3, setInputValue_3] = useState('');
 
     const handleInputChange = (event) => {
-        setInputValue(event.target.value);
+        let inputId = event.currentTarget.id;        
+        if(inputId === "inputId_1"){
+            setInputValue_1(event.target.value);
+        }
+        else if(inputId === "inputId_2"){
+            setInputValue_2(event.target.value);
+        }
+        else{
+            setInputValue_3(event.target.value);
+        }
     };
     return (
         <>
@@ -30,8 +41,8 @@ export default function TableFour() {
                             <TableRow>
                                 <TableCell>01</TableCell>
                                 <TableCell className="w-3/12 inline-block">
-                                    <input type="text" id="inputId" className="w-70 h-8 border text-right focus:outline-none"
-                                        value={inputValue} onChange={handleInputChange} />
+                                    <input type="text" id="inputId_1" className="w-70 h-8 border text-right focus:outline-none"
+                                        value={inputValue_1} onChange={handleInputChange} />
                                     <label>円</label>
                                 </TableCell>
                                 <TableCell className="w-3/12 inline-block">
@@ -58,8 +69,8 @@ export default function TableFour() {
                             <TableRow>
                                 <TableCell>02</TableCell>
                                 <TableCell className="w-3/12 inline-block">
-                                    <input type="text" id="inputId" className="w-70 h-8 border text-right focus:outline-none"
-                                        value={inputValue} onChange={handleInputChange} />
+                                    <input type="text" id="inputId_2" className="w-70 h-8 border text-right focus:outline-none"
+                                        value={inputValue_2} onChange={handleInputChange} />
                                     <label>円</label>
                                 </TableCell>
                                 <TableCell className="w-3/12 inline-block">
@@ -86,8 +97,8 @@ export default function TableFour() {
                             <TableRow>
                                 <TableCell>03</TableCell>
                                 <TableCell className="w-3/12 inline-block">
-                                    <input type="text" id="inputId" className="w-70 h-8 border text-right focus:outline-none"
-                                        value={inputValue} onChange={handleInputChange} />
+                                    <input type="text" id="inputId_3" className="w-70 h-8 border text-right focus:outline-none"
+                                        value={inputValue_3} onChange={handleInputChange} />
                                     <label>円</label>
                                 </TableCell>
                                 <TableCell className="w-3/12 inline-block">

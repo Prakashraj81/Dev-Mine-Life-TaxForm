@@ -240,9 +240,7 @@ export default function HouseAdd() {
                     )}                     
                 </div>
 
-                    <div className="w-full inline-block py-3">
-                        <label>登記簿謄本の情報の入力</label>
-                    </div>
+                    
                     {ShowYes && (
                         <>
                             <div className="w-full flex items-center justify-between mb-7">
@@ -539,8 +537,12 @@ export default function HouseAdd() {
                             </div>
                         </>
                     )}
+                    
 
-                <div className="mb-7">
+                <div className="mb-7 hidden">
+                    <div className="w-full inline-block py-3">
+                        <label>登記簿謄本の情報の入力</label>
+                    </div>
                     <label className="form-label text-lg mb-7">2. 固定資産税課税明細（固定資産税評価証明書）の情報の入力</label>
                     <div className="w-full inline-block mt-5 mb-7">
                         <img src="/screenshots/building-second.png" className="w-full" alt="image" height={500} width={50} />                    
@@ -600,7 +602,7 @@ export default function HouseAdd() {
 
                 <div className="mb-7">
                     <FormControl>
-                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">3. 所有されていた物件に共有者はいましたか。</label>
+                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">2. 所有されていた物件に共有者はいましたか。</label>
                         <RadioGroup
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
@@ -652,7 +654,7 @@ export default function HouseAdd() {
                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-16">
                                 <div className="label w-full inline-block">
                                     <label className="form-label text-lg" htmlFor="Valuation">
-                                       4. 評価額
+                                       3. 評価額
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">

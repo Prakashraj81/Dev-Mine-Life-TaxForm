@@ -428,7 +428,7 @@ export default function GiftTaxAdd() {
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                数量/㎡
+                                    数量（㎡、株数等）
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">

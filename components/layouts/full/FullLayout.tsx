@@ -72,7 +72,6 @@ const FullLayout: React.FC<Props> = ({ children }) => {
       setactiveStep(0);
       activeStep = 0;
     }
-    console.log("activeStep:" + activeStep);
   }, [activeStep, fullPath]);  
   return (
     <MainWrapper className="mainwrapper">      

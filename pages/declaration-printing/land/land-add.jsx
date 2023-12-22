@@ -601,7 +601,7 @@ export default function LandAdd() {
                                 <TableOne />
                             )}
                             {ShowTableTwo && (
-                                <TableOne />
+                                <TableTwo />
                             )}
                             {ShowTableThree && (
                                 <TableThree />

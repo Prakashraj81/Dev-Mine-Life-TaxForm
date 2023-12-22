@@ -111,7 +111,7 @@ export default function DivisionInformation() {
             <div className="cash-savings-wrapper">                
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    当システムでは「特定居住用（被相続人の居住のように供していた宅地）」のみ小規模宅地等の特例の適用が可能です。※適用要件を満たしているかの確認等ご不明な点は税理士への有料相談でご確認ください。
+                        当システムでは「特定居住用（被相続人の居住のように供していた宅地）」のみ小規模宅地等の特例の適用が可能です。※適用要件を満たしているかの確認等ご不明な点は税理士への有料相談でご確認ください。
                     </p>
                 </div>
                 <div className="w-full inline-block">
@@ -172,7 +172,7 @@ export default function DivisionInformation() {
                                         </tr>
                                         </div>
                                         <div className="w-50 inline-table border border-light-gray">                                    
-                                            <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                            <tr><th className="p-5 w-full block text-center">分割情報の入力</th></tr>
                                             <tr>
                                             <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
                                             <td className="border-r border border-light-gray w-25">Prakashraj</td>
@@ -207,7 +207,7 @@ export default function DivisionInformation() {
                                             </tr>
                                             </div>
                                             <div className="w-50 inline-table border border-light-gray">                                    
-                                                <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                                <tr><th className="p-5 w-full block text-center">分割情報の入力</th></tr>
                                                 <tr>
                                                 <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
                                                 <td className="border-r border border-light-gray w-25">Prakashraj</td>
@@ -241,7 +241,7 @@ export default function DivisionInformation() {
                                                                 <tr><th className="p-5 w-full block text-center">有価証券</th></tr>
                                                                 <tr>
                                                                     <td className="py-2 px-2 border-r border border-light-gray w-25">有価証券の名称・銘柄</td>
-                                                                    <td className="py-2 px-2 border-r border border-light-gray w-25">金融機関名</td>
+                                                                    <td className="py-2 px-2 border-r border border-light-gray w-25">数量</td>
                                                                     <td className="py-2 px-2 border-r border border-light-gray w-25">金額</td>
                                                                 </tr>
                                                                 <tr>
@@ -251,7 +251,7 @@ export default function DivisionInformation() {
                                                                 </tr>
                                                                 </div>
                                                                 <div className="w-50 inline-table border border-light-gray">                                    
-                                                                    <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                                                    <tr><th className="p-5 w-full block text-center">分割情報の入力</th></tr>
                                                                     <tr>
                                                                     <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
                                                                     <td className="border-r border border-light-gray w-25">Prakashraj</td>
@@ -288,7 +288,7 @@ export default function DivisionInformation() {
                                                                 </tr>
                                                                 </div>
                                                                 <div className="w-50 inline-table border border-light-gray">                                    
-                                                                    <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                                                    <tr><th className="p-5 w-full block text-center">分割情報の入力</th></tr>
                                                                     <tr>
                                                                     <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
                                                                     <td className="border-r border border-light-gray w-25">Prakashraj</td>
@@ -323,7 +323,7 @@ export default function DivisionInformation() {
                                 </tr>
                                 </div>
                                 <div className="w-50 inline-table border border-light-gray">                                    
-                                    <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                    <tr><th className="p-5 w-full block text-center">分割情報の入力</th></tr>
                                     <tr>
                                     <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
                                     <td className="border-r border border-light-gray w-25">Prakashraj</td>
@@ -357,7 +357,7 @@ export default function DivisionInformation() {
                                 </tr>
                                 </div>
                                 <div className="w-50 inline-table border border-light-gray">                                    
-                                    <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                    <tr><th className="p-5 w-full block text-center">分割情報の入力</th></tr>
                                     <tr>
                                     <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
                                     <td className="border-r border border-light-gray w-25">Prakashraj</td>
@@ -393,7 +393,7 @@ export default function DivisionInformation() {
                                 </tr>
                                 </div>
                                 <div className="w-50 inline-table border border-light-gray">                                    
-                                    <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                    <tr><th className="p-5 w-full block text-center">分割情報の入力</th></tr>
                                     <tr>
                                     <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
                                     <td className="border-r border border-light-gray w-25">Prakashraj</td>
@@ -429,7 +429,7 @@ export default function DivisionInformation() {
                                 </tr>
                                 </div>
                                 <div className="w-50 inline-table border border-light-gray">                                    
-                                    <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                    <tr><th className="p-5 w-full block text-center">分割情報の入力</th></tr>
                                     <tr>
                                     <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
                                     <td className="border-r border border-light-gray w-25">Prakashraj</td>
@@ -465,7 +465,7 @@ export default function DivisionInformation() {
                                 </tr>
                                 </div>
                                 <div className="w-50 inline-table border border-light-gray">                                    
-                                    <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                    <tr><th className="p-5 w-full block text-center">分割情報の入力</th></tr>
                                     <tr>
                                     <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
                                     <td className="border-r border border-light-gray w-25">Prakashraj</td>
@@ -500,7 +500,7 @@ export default function DivisionInformation() {
                                 </tr>
                                 </div>
                                 <div className="w-50 inline-table border border-light-gray">                                    
-                                    <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                    <tr><th className="p-5 w-full block text-center">分割情報の入力</th></tr>
                                     <tr>
                                     <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
                                     <td className="border-r border border-light-gray w-25">Prakashraj</td>
@@ -534,7 +534,7 @@ export default function DivisionInformation() {
                                 </tr>
                                 </div>
                                 <div className="w-50 inline-table border border-light-gray">                                    
-                                    <tr><th className="p-5 w-full block text-center">相続人</th></tr>
+                                    <tr><th className="p-5 w-full block text-center">分割情報の入力</th></tr>
                                     <tr>
                                     <td className="py-2 px-2 border-r border-l-0 border border-light-gray w-25">Shree</td>
                                     <td className="border-r border border-light-gray w-25">Prakashraj</td>

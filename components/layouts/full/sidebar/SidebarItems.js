@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NextLink from "next/link";
 import PropTypes from "prop-types";
 import {
@@ -49,6 +49,11 @@ if (paths.length >= 4) {
 
   const [Id, setId] = useState(0);
   const [visible, setvisible] = useState(false);
+  //Accordion function
+  const [expanded, setExpanded] = useState(false);
+  const handleChange = (panel) => (event, isExpanded) => {
+      setExpanded(isExpanded ? panel : false);
+  };
 
   const SubMenuOpen = (id) => {
     setShowLoader(true);
@@ -60,11 +65,43 @@ if (paths.length >= 4) {
     } else {
       setIsClassRemoved(true);
       setActiveDivIndex(menu_id === activeDivIndex ? null : menu_id); 
+      sessionStorage.setItem("menu_id", menu_id);
+      sessionStorage.setItem("activeDivIndex", activeDivIndex);
       setvisible(true);
       setId(menu_id);
-    }
+    }    
     setShowLoader(true);
-  };
+  };  
+
+  // useEffect(() => {
+  //   let sessionMenuId = Number(sessionStorage.getItem("menu_id"));
+  //   if(sessionMenuId !== 0){
+  //     setIsClassRemoved(true);
+  //     setActiveDivIndex(sessionMenuId === activeDivIndex ? null : sessionMenuId); 
+  //     setvisible(true);
+  //     setId(sessionMenuId);
+  //     let menu_items;
+  //     if(sessionMenuId === 1){
+  //       menu_items = Menuitems[0].child;
+  //     }
+  //     else if(sessionMenuId === 2){
+  //       menu_items = Menuitems[1].child;
+  //     }
+  //     else if(sessionMenuId === 3){
+  //       menu_items = Menuitems[2].child;
+  //     }
+  //     else if(sessionMenuId === 4){
+  //       menu_items = Menuitems[3].child;
+  //     }
+  //     else {
+  //       menu_items = Menuitems[4].child;
+  //     }
+  //     sessionStorage.setItem("menu_items", JSON.stringify(menu_items));
+  //     let Menuitems_two = menu_items;
+  //     setExpanded(true);
+  //     SubMenuOpen(sessionMenuId);
+  //   }
+  // },[]);
 
   const DropdownLink = styled(motion.a)`
     background: none;
@@ -88,17 +125,11 @@ if (paths.length >= 4) {
     }
   `;
 
-  const [isMenuOpen, setMenuOpen] = useState(false);
+  // const [isMenuOpen, setMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
-
-  //Accordion function
-  const [expanded, setExpanded] = useState(false);
-  const handleChange = (panel) => (event, isExpanded) => {
-      setExpanded(isExpanded ? panel : false);
-  };
+  // const toggleMenu = () => {
+  //   setMenuOpen(!isMenuOpen);
+  // };  
 
   return ( 
     <Box sx={{ px: 0 }}>     
@@ -112,7 +143,7 @@ if (paths.length >= 4) {
           disablePadding
           id={item.id}
           key={item.title}
-          onClick={() => handleClick(index)}                     
+          // onClick={() => handleClick(index)}                     
         >
           <NextLink className="accordion-link" href={item.href}>
         <ListItem
@@ -121,7 +152,7 @@ if (paths.length >= 4) {
               button
               selected={location === item.href}
               key={index}
-              className={`div-item accordion-div-item inline-block w-full p-0 ${activeDivIndex === item.id ? 'border-l-4 active-0' : ''}`}              
+              className={`Main_Menu_${item.id} div-item accordion-div-item inline-block w-full p-0 ${activeDivIndex === item.id ? 'border-l-4 active-0' : ''}`}              
             >
             <ListItemIcon className={`${ location === item.href ? "text-black" : "text-primary-color" }`}>
                 {item.icon}
@@ -192,7 +223,8 @@ if (paths.length >= 4) {
               ))}
             </AccordionDetails>
           ) : (
-            <></>
+            <>
+            </>
           )}        
       </Accordion>
       ))}

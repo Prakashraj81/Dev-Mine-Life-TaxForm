@@ -302,7 +302,7 @@ export default function DeathBenefitAdd() {
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    被相続人<i className="text-red-500">*</i>
+                                    受け取った相続人<i className="text-red-500">*</i>
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
