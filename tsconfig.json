@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/layouts/full/sidebar/SidebarItems.jsx", "pages/auth/login.jsx", "components/layouts/full/header/Profile.jsx", "components/navbar/navbar.jsx", "components/Navbar/index.jsx", "components/header.jsx"],
+  "exclude": ["node_modules"]
+}
