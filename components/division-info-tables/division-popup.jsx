@@ -77,10 +77,25 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
     let [AmountShow, setAmountShow] = useState(true);
     let [FractionShow, setFractionShow] = useState(false);
 
+    let [AmountofMoney, setAmountofMoney] = useState("2,000");
+    let [UndecidedHeir, setUndecidedHeir] = useState(AmountofMoney);
+    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
+    let [BoxValues, setBoxValues] = useState([0]);
+    let [HeirListArray, setHeirListArray] = useState([]);
+    let [updatedHeirList, setupdatedHeirList] = useState([]);
+
+    let [FractionHeir1, setFractionHeir1] = useState(0);
+    let [FractionHeir2, setFractionHeir2] = useState(0);
+    let [UserAmount, setUserAmount] = useState(0);
+
     let HeirList = [
-        { id: 2, name: "Shree", name1: "Shree" },
-        { id: 3, name: "Prakashraj", name1: "Prakashraj" },
-        { id: 4, name: "Gowtham", name1: "Gowtham" },
+        { id: 1, name: "Shree", name1: "Shree" },
+        { id: 2, name: "Prakashraj", name1: "Prakashraj" },
+        { id: 3, name: "Gowtham", name1: "Gowtham" },
+        { id: 4, name: "Dhinesh", name1: "Dhinesh" },
+        { id: 5, name: "Nisar", name1: "Nisar" },
+        // { id: 6, name: "Muthu", name1: "Muthu" },
+        // { id: 7, name: "Yogesh", name1: "Yogesh" },
     ];
 
     let TotalPrice = "10,000";
@@ -94,18 +109,39 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
         if(val === "Amount"){
             setAmountShow(true);
             setFractionShow(false);
+            setUndecidedHeir(AmountofMoney);
+            setBoxValues([0]);
+            setFractionHeir1(0);
+            setFractionHeir2(0);
+            setUserAmount(0);
         }
         else{
             setAmountShow(false);
             setFractionShow(true);
+            setUndecidedHeir(AmountofMoney);
+            setBoxValues([0]);
+            setFractionHeir1(0);
+            setFractionHeir2(0);
+            setUserAmount(0);
         }
     }
 
-    //Handle box value change
-    const handleBoxValueChange = (e, index) => {
+    //Division input keypree function
+    const divisionInputKeyPress = (e) => {
+        const keyCode = e.keyCode || e.which;
+        const keyValue = String.fromCharCode(keyCode);
+        const numericRegex = /^[0-9\b]+$/;
+        if (!numericRegex.test(keyValue)) {
+            e.preventDefault();
+        }
+    }
+
+    //Division box calculation function
+    const divisionBoxCalculation = (e, index) => {        
+        let newValue = e.target.value.replace(/,/g, '');        
+        newValue = parseFloat(newValue);
         setBoxValues([0]);
-        let newValue = parseFloat(e.target.value);
-        let updatedBoxValues = [...boxValues];
+        let updatedBoxValues = [...BoxValues];
         updatedBoxValues[index] = isNaN(newValue) ? 0 : newValue;
         updatedBoxValues = updatedBoxValues.map((value) => (value === undefined ? 0 : value));
         setBoxValues(updatedBoxValues);
@@ -130,6 +166,111 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
             setUndecidedHeir(heirValue.toLocaleString());
         }
     };
+
+
+    //Fraction box calculation function-1
+    const fractionBoxCalculation_1_ = (e, index) => {
+        FractionHeir1 = parseFloat(e.target.value);
+        setFractionHeir1(FractionHeir1);
+        if (FractionHeir2 > 0 && Number(AmountofMoney) > 0) {
+            var value = FractionHeir1 * AmountofMoney;
+            value = value / FractionHeir2;
+            UndecidedHeir = AmountofMoney - value;
+        }
+        setUserAmount(value);
+        setUndecidedHeir(UndecidedHeir);
+    }
+
+    //Fraction box calculation function-2
+    const fractionBoxCalculation_2_ = (e, index) => {
+        FractionHeir2 = parseFloat(e.target.value);
+        if (!isNaN(FractionHeir2)) {
+            setFractionHeir2(FractionHeir2);
+        }
+        else {
+            FractionHeir2 = 0;
+            setFractionHeir2(0);
+        }
+        UndecidedHeir = UndecidedHeir.replace(/,/g, '').replace('.', '');
+        UndecidedHeir = parseFloat(UndecidedHeir);
+        AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+        AmountofMoney = parseFloat(AmountofMoney);
+        if (FractionHeir1 > 0 && FractionHeir2 > 0 && UndecidedHeir > 0) {
+            var value = FractionHeir1 * UndecidedHeir;
+            if (FractionHeir2 > 0 && value > 0) {
+                value = value / FractionHeir2;
+                UndecidedHeir = UndecidedHeir - value;
+                UndecidedHeir = UndecidedHeir.toFixed(0);
+            }            
+            setUndecidedHeir(UndecidedHeir.toLocaleString());
+            setUserAmount(UndecidedHeir.toLocaleString());
+        }
+        else {
+            setUserAmount(0);
+            if(UndecidedHeir !== 0){
+                setUndecidedHeir(UndecidedHeir.toLocaleString());
+            }
+            else{
+                setUndecidedHeir(AmountofMoney.toLocaleString());
+            }
+        }
+    }
+
+
+
+
+
+    const fractionBoxCalculation_1 = (e, index) => {
+        const newValue = parseFloat(e.target.value) || 0;          
+        if(HeirListArray.length !== 0){
+            HeirListArray = [...HeirListArray];
+        }
+        else{
+            HeirListArray = [...HeirList];
+        }
+        HeirListArray[index].fractionBoxValue1 = newValue;
+        setHeirListArray(HeirListArray);    
+    };
+    
+    const fractionBoxCalculation_2 = (e, index) => {
+        const newValue = parseFloat(e.target.value) || 0;
+        HeirListArray = [...HeirListArray];
+        HeirListArray[index].fractionBoxValue2 = newValue;
+        setHeirListArray(HeirListArray);
+        recalculateTotalAmount(HeirListArray);
+    };
+    
+    const recalculateTotalAmount = (HeirListArray) => {
+        let totalAmount = 0;
+        let undecidedHeirCount = 0;
+        UndecidedHeir = UndecidedHeir.replace(/,/g, '').replace('.', '');
+        UndecidedHeir = parseFloat(UndecidedHeir);
+        AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+        AmountofMoney = parseFloat(AmountofMoney);
+
+        for (let i = 0; i < HeirListArray.length; i++) {
+            const heir = HeirListArray[i];
+            if (heir.fractionBoxValue1 !== undefined && heir.fractionBoxValue2 !== undefined) {
+                var TotalValue = heir.fractionBoxValue1 * AmountofMoney;
+                if (heir.fractionBoxValue2 > 0 && TotalValue > 0) {
+                    TotalValue = TotalValue / heir.fractionBoxValue2;
+                    UndecidedHeir = UndecidedHeir - TotalValue;
+                    UndecidedHeir = UndecidedHeir.toFixed(0);
+                }   
+                setUndecidedHeir(UndecidedHeir.toLocaleString());
+                setUserAmount(UndecidedHeir.toLocaleString());               
+            } else {
+                setUserAmount(0);
+                if(UndecidedHeir !== 0){
+                    setUndecidedHeir(UndecidedHeir.toLocaleString());
+                }
+                else{
+                    setUndecidedHeir(AmountofMoney.toLocaleString());
+                }
+            }    
+        }        
+    };
+
     return(
         <>
             <div>      
@@ -178,18 +319,19 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
                             <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                 <span>{heirlist.name}</span>
                                 <div className="text-right"><input id={heirlist.id} type="text" autoComplete="off" className="border-2 h-10 text-right form-control w-50 outline-none"
-                                    //onChange={(e) => FunhandleBoxValueChange(e, index)}
-                                    // onKeyPress={FunHandleKeyPress}
+                                    onChange={(e) => divisionBoxCalculation(e, index)}
+                                    value={BoxValues[index] ? BoxValues[index].toLocaleString() : ''}
+                                    onKeyPress={divisionInputKeyPress}
                                 /></div>
                             </li>
                         ))}                
                         <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                             <span>相続人未決定</span>
-                            <span>0</span>
+                            <span>{UndecidedHeir.toLocaleString()}</span>
                         </li>    
                         <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                             <span>合計</span>
-                            <span>1500</span>
+                            <span>{AmountofMoney.toLocaleString()}</span>
                         </li>            
                     </ul> 
                         </>
@@ -208,6 +350,8 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
                                         <div><input
                                             type="text"
                                             className="text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
+                                            onChange={(e) => fractionBoxCalculation_1(e, index)}
+                                            onKeyPress={divisionInputKeyPress}
                                         /></div>
                                         <div>
                                             <span className="text-3xl text-gray-400">/</span>
@@ -215,6 +359,8 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
                                         <div><input
                                             type="text"
                                             className="text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
+                                            onChange={(e) => fractionBoxCalculation_2(e, index)}
+                                            onKeyPress={divisionInputKeyPress}
                                         /></div>
                                     </div>
                                 </div>
@@ -223,11 +369,11 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
                         ))}  
                         <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                             <span>相続人未決定</span>
-                            <span>0</span>
+                            <span>{UndecidedHeir.toLocaleString()}</span>
                         </li> 
                         <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                             <span>合計</span>
-                            <span>1500</span>
+                            <span>{AmountofMoney.toLocaleString()}</span>
                         </li>             
                     </ul>   
                     </>

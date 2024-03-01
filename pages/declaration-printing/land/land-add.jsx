@@ -641,7 +641,7 @@ export default function LandAdd() {
                                 <div className="w-full block items-center justify-between mb-7">
                                     <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                         <div className="label w-full inline-block">
-                                            <label className="form-label">賃貸割合の入力</label>
+                                            <label className="form-label">共有割合の入力</label>
                                         </div>
                                         <div className="w-full inline-block mt-2">
                                             <div className="flex justify-between items-center">

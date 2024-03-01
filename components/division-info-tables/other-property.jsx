@@ -85,7 +85,7 @@ export default function CashSavingsTable() {
       <Table aria-label="collapsible table">
           <TableHead className="table-head">
               <TableRow>
-                  <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">建物</span></TableCell>
+                  <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">その他財産</span></TableCell>
                   <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
                   <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
                   <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
@@ -101,16 +101,16 @@ export default function CashSavingsTable() {
                       <Table>
                         <TableHead className="table-head-2">
                           <TableRow>
-                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">所在</span></TableCell>
-                            <TableCell className="border border-light-gray border-l"><span className="font-semibold">床面積</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">金額</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">財産の名称</span></TableCell>
+                            <TableCell className="border border-light-gray border-l"><span className="font-semibold">相手先</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">評価額</span></TableCell>
                             <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
                             <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableRow>      
-                          <TableCell className="border border-light-gray border-l">Building</TableCell>   
-                            <TableCell className="border border-light-gray border-l">Building amount</TableCell>   
+                          <TableCell className="border border-light-gray border-l">Other property</TableCell>   
+                            <TableCell className="border border-light-gray border-l">Other amount</TableCell>   
                             <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell> 
                             <TableCell className="border border-light-gray border-l" align="center">
                               <IconButton

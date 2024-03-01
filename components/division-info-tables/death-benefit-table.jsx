@@ -34,20 +34,26 @@ const style = {
 };
 
 
-export default function DeathBenefitTable() {
+export default function CashSavingsTable() {
     let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
+    let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
     let [OpenModalPopup, setOpenModalPopup] = React.useState(false);   
 
     let HeirList = [
-        { id: 2, name: "Shree", value: "Cash savings_1", value_1: "Cash_1", total: 1500 },
-        { id: 3, name: "Prakashraj", value: "Cash savings_2", value_1: "Cash_2", total: 500  },
-        { id: 4, name: "Gowtham", value: "", value_1: "Cash_3", total: 3000  },
-    ];
-    let HeirLists = [
-        { id: 2, amount: 300 },
-        { id: 3, amount: 150 },
-        { id: 4, amount: 1000 },
-    ];
+      { id: 1, name: "Shree", value: "Cash savings_1", value_1: "Cash_1", total: 1500 },
+      { id: 2, name: "Prakashraj", value: "Cash savings_2", value_1: "Cash_2", total: 500  },
+      { id: 3, name: "Gowtham", value: "", value_1: "Cash_3", total: 3000  },    
+      { id: 4, name: "Dhinesh", value: "", value_1: "Cash_3", total: 700  }, 
+      { id: 5, name: "Nisar", value: "", value_1: "Cash_3", total: 1800  },      
+  ];
+  let HeirLists = [
+      { id: 1, amount: 300 },
+      { id: 2, amount: 150 },
+      { id: 3, amount: 1000 },      
+      { id: 4, amount: 1800 }, 
+      { id: 5, amount: 1800 },      
+  ];
+
 
     let TotalPrice = "10,000";
     let totalValuation = 0;
@@ -64,81 +70,99 @@ export default function DeathBenefitTable() {
     //Table row expand function
     const handleExpandFun =()=>{
         setTableExpandOpen(!TableExpandOpen);    
+        setTableExpandOpen2(false);
     }
+
+    //Table row expand function-2
+    const handleExpandFun2 =()=>{
+      setTableExpandOpen2(!TableExpandOpen2);    
+  }
    
   return (
     <>
-      <DivisionPopup OpenModalPopup={OpenModalPopup} handleModalClose={handleModalClose}/>
-      <div className="py-5">
+    <DivisionPopup OpenModalPopup={OpenModalPopup} handleModalClose={handleModalClose}/>
+    <div className="py-5">
       <Table aria-label="collapsible table">
-        <TableHead>
-            <TableRow>
-                <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={5}><span className="font-semibold">死亡保険金等</span></TableCell>
-            </TableRow>   
-          <TableRow>            
-            <TableCell className="border border-light-gray border-l bg-table-gray">生命保険会社の名称</TableCell>
-            <TableCell className="border border-light-gray border-l bg-table-gray">受取年月日</TableCell>
-            <TableCell className="border border-light-gray border-l bg-table-gray" align="right">受け取った金額</TableCell>
-            <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-        <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>      
-        <TableCell className="border border-light-gray border-l"></TableCell>   
-        <TableCell className="border border-light-gray border-l"></TableCell>   
-        <TableCell className="border border-light-gray border-l" align="right"><span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell> 
-        <TableCell className="border border-light-gray border-l" align="center">
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={handleExpandFun}
-          >
-            {TableExpandOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-      <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-        <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
-          <Box sx={{margin: 1}}>          
-          <Table>
-            <TableHead>
-            <TableRow>
-                <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={5}><span className="font-semibold">分割情報の入力</span></TableCell>
-            </TableRow>          
-            <TableRow>      
-                {HeirList.map((heir)=>(
-                <>
-                    <TableCell id={heir.id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
-                 </>
-                ))}                  
-                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-            </TableRow>
-            
+          <TableHead className="table-head">
+              <TableRow>
+                  <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">死亡保険金等</span></TableCell>
+                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+                  <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+                  <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold">入力</span></TableCell>
+              </TableRow>
             </TableHead>
             <TableBody>
-                <TableRow>  
-                {HeirLists.map((heir_lists)=>(
-                <>
-                    <TableCell id={heir_lists.id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
-                 </>
-                ))}                   
-                <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
-                </TableRow>       
-            </TableBody>
-            </Table>  
-          </Box>
-        </Collapse>
-        </TableCell>
-      </TableRow>
-        </TableBody>
-      </Table>
-      </div>    
+                     
+            <TableRow>
+              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                  <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
+                    <Box className="my-2"> 
+                      <Table>
+                        <TableHead className="table-head-2">
+                          <TableRow>
+                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">生命保険会社の名称</span></TableCell>
+                            <TableCell className="border border-light-gray border-l"><span className="font-semibold">受取年月日</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">受け取った金額</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
+                            <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableRow>      
+                          <TableCell className="border border-light-gray border-l">Death benifit</TableCell>   
+                            <TableCell className="border border-light-gray border-l">Death amount</TableCell>   
+                            <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell> 
+                            <TableCell className="border border-light-gray border-l" align="center">
+                              <IconButton
+                                aria-label="expand row"
+                                size="small"
+                                onClick={handleExpandFun2}
+                              >
+                                {TableExpandOpen2 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                              </IconButton>
+                            </TableCell>
+                            <TableCell className="border border-light-gray border-l" align="center"></TableCell>
+                        </TableRow>  
+                      </Table>                       
+                    </Box>
+                  </Collapse>
+
+                  <Collapse in={TableExpandOpen2} timeout="auto" unmountOnExit>
+                    <Box>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                                <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
+                            </TableRow>          
+                            <TableRow>      
+                                {HeirList.map((heir)=>(
+                                <>
+                                  <TableCell id={heir.id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
+                                </>
+                                ))}                  
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
+                                <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                            </TableRow>                    
+                          </TableHead>
+                              <TableBody>
+                                <TableRow>  
+                                  {HeirLists.map((heir_lists)=>(
+                                  <>
+                                      <TableCell id={heir_lists.id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
+                                  </>
+                                  ))}                   
+                                  <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
+                                  <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                </TableRow>       
+                            </TableBody>
+                        </Table> 
+                      </Box>
+                  </Collapse>
+              </TableCell>
+            </TableRow>
+          </TableBody> 
+        </Table>
+    </div>    
     </>
   );
 }
-
-
-
-
-

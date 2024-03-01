@@ -496,7 +496,7 @@ export default function Heir() {
                                     </FormControl>
 
                                     <div className="legal-inheritance">
-                                        <label className="form-label">legal inheritance</label>
+                                        <label className="form-label">法定相続分</label>
                                         <div className="w-full inline-block">
                                             <span className="text-2xl font-medium pt-5 text-black tracking-2">{1}/{2}_ _</span>
                                         </div>

@@ -47,12 +47,15 @@ export default function HouseAdd() {
     let [FloorAreaNo, setFloorAreaNo] = useState(0); 
 
     //Question Two
+    let [InfoPropertyTaxYesNo, setInfoPropertyTaxYesNo] = useState(false);
+
+    //Question Three
     let [LocationoftheHouse, setLocationoftheHouse] = useState('');
     let [HouseNumberTwo, setHouseNumberTwo] = useState(''); 
     let [TypeApplication, setTypeApplication] = useState(''); 
     let [Price, setPrice] = useState(0); 
 
-    //Question Three
+    //Question Four
     let [SharePercentage, setSharePercentage] = useState(''); 
 
     let [BuildingYesImage, setBuildingYesImage] = useState(false);
@@ -99,6 +102,11 @@ export default function HouseAdd() {
             setShowNo(true);
         }
     };
+
+    //Question two
+    const handleRadioInfoProperty = (event) => {
+        setInfoPropertyTaxYesNo(true);
+    }
 
     //Question three
     const handleQuestionThree = (event) => {
@@ -212,7 +220,7 @@ export default function HouseAdd() {
                 <form action="#" method="POST">
                     
                         <FormControl>
-                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
+                            <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
                         <RadioGroup
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
@@ -232,13 +240,13 @@ export default function HouseAdd() {
                         </RadioGroup>
                     </FormControl>
                     <div className="w-full inline-block mb-7">
-                    {BuildingYesImage && (
-                        <img src="/screenshots/building-yes.png" className="w-full" alt="image" height={500} width={200} />
-                    )}  
-                    {BuildingNoImage && (
-                        <img src="/screenshots/building-no.png" className="w-full" alt="image" height={500} width={200} />
-                    )}                     
-                </div>
+                        {BuildingYesImage && (
+                            <img src="/screenshots/building-yes.png" className="w-full" alt="image" height={500} width={200} />
+                        )}  
+                        {BuildingNoImage && (
+                            <img src="/screenshots/building-no.png" className="w-full" alt="image" height={500} width={200} />
+                        )}                     
+                    </div>
 
                     
                     {ShowYes && (
@@ -454,7 +462,7 @@ export default function HouseAdd() {
                                         />
                                     </div>
                                 </div>                                
-                            </div>
+                            </div>                            
                         </>
                     )}
                     {ShowNo && (
@@ -534,9 +542,100 @@ export default function HouseAdd() {
                                         <AreaIcon/>
                                     </div>
                                 </div>                                
-                            </div>
+                            </div>                           
                         </>
                     )}
+
+                    
+                    <FormControl>
+                            <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">2．固定資産税課税明細（固定資産税評価証明書）の情報の入力</label>
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"                            
+                        >
+                            <FormControlLabel value="Yes" control={<Radio />} onChange={handleRadioInfoProperty} label="はい" sx={{
+                                '& .MuiSvgIcon-root': {
+                                    fontSize: 16,
+                                },
+                            }} />
+                            <FormControlLabel value="No" control={<Radio />} onChange={handleRadioInfoProperty} label="いいえ" sx={{
+                                '& .MuiSvgIcon-root': {
+                                    fontSize: 16,
+                                },
+                            }} />
+                        </RadioGroup>
+                    </FormControl>
+                            <div className="w-full inline-block mb-7">
+                                {InfoPropertyTaxYesNo && (
+                                    <img src="/screenshots/building-screenshot.png" className="w-full" alt="image" height={500} width={200} />
+                                )}                                          
+                            </div>
+                           
+                            {InfoPropertyTaxYesNo &&(
+                                <>
+                                <div className="w-full flex items-center justify-between mb-7">
+                                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                        <div className="label w-full inline-block">
+                                        <label className="form-label flex items-center"><div className="circle-no">1</div>家屋の所在</label>
+                                        </div>
+                                        <div className="w-full inline-block mt-2">
+                                            <input
+                                                type="text"
+                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                id="LocationHouse"
+                                                onChange={inputHandlingFunction}
+                                            />
+                                        </div>
+                                    </div>
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                    <label className="form-label flex items-center"><div className="circle-no">2</div>家屋番号</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            id="HouseNumber"
+                                            onChange={inputHandlingFunction}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                    <label className="form-label flex items-center"><div className="circle-no">3</div>種類・用途</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            id="TypeApplication"
+                                            onChange={inputHandlingFunction}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                    <label className="form-label flex items-center"><div className="circle-no">4</div>価格</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            id="Price"
+                                            onChange={inputHandlingFunction}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                                </>
+                            )}
+                            
                     
 
                 <div className="mb-7 hidden">
@@ -602,7 +701,7 @@ export default function HouseAdd() {
 
                 <div className="mb-7">
                     <FormControl>
-                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">2. 所有されていた物件に共有者はいましたか。</label>
+                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">3. 所有されていた物件に共有者はいましたか。</label>
                         <RadioGroup
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
@@ -654,7 +753,7 @@ export default function HouseAdd() {
                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-16">
                                 <div className="label w-full inline-block">
                                     <label className="form-label text-lg" htmlFor="Valuation">
-                                       3. 評価額
+                                       4. 評価額
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">

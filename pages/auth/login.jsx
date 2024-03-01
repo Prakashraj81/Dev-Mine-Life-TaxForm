@@ -156,18 +156,18 @@ export default function Login(props) {
                 <div className="w-full inline-block mt-2">
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"  
-                    id="Password"  
+                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                    id="Password"
                     onChange={inputHandlingFunction}
-                    value={Password}                
+                    value={Password}
                   />
                   <div className="py-2 mt-2">
-                  <InputAdornment>
-                          <IconButton id="Icon" onClick={handleTogglePassword} >
-                            {showPassword ? <Visibility style={{ width: '18px', height: '18px' }} /> : <VisibilityOff style={{ width: '18px', height: '18px' }} />}                            
-                          </IconButton>
-                          <label className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</label>
-                        </InputAdornment>
+                    <InputAdornment>
+                      <IconButton id="Icon" onClick={handleTogglePassword} >
+                        {showPassword ? <Visibility style={{ width: '18px', height: '18px' }} /> : <VisibilityOff style={{ width: '18px', height: '18px' }} />}
+                      </IconButton>
+                      <label className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</label>
+                    </InputAdornment>
                   </div>
                   {PasswordError && (
                     <p className="text-red-500" role="alert">この項目は必須です</p>

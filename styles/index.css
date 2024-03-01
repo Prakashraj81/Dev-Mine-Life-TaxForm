@@ -180,3 +180,9 @@ input {
     font-size: 14px;
     margin-right: 7px;
   }
+  .table-head > tr > th:first-child {
+    width: 20%;
+  }
+  .table-head-2 > tr > th:first-child{
+    width: 25%;
+  }
