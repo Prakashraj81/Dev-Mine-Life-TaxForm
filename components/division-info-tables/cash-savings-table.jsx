@@ -82,18 +82,17 @@ export default function CashSavingsTable() {
     <>
     <DivisionPopup OpenModalPopup={OpenModalPopup} handleModalClose={handleModalClose}/>
     <div className="py-5">
-      <Table aria-label="collapsible table">
+        <Table aria-label="collapsible table">
           <TableHead className="table-head">
-              <TableRow>
-                  <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">現金預金</span></TableCell>
-                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-                  <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-                  <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold">入力</span></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-                     
+            <TableRow>
+                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">現金預金</span></TableCell>
+                <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+                <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+                <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+                <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold">入力</span></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>                     
             <TableRow>
               <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
                   <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>

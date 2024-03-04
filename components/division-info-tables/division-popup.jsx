@@ -167,59 +167,6 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
         }
     };
 
-
-    //Fraction box calculation function-1
-    const fractionBoxCalculation_1_ = (e, index) => {
-        FractionHeir1 = parseFloat(e.target.value);
-        setFractionHeir1(FractionHeir1);
-        if (FractionHeir2 > 0 && Number(AmountofMoney) > 0) {
-            var value = FractionHeir1 * AmountofMoney;
-            value = value / FractionHeir2;
-            UndecidedHeir = AmountofMoney - value;
-        }
-        setUserAmount(value);
-        setUndecidedHeir(UndecidedHeir);
-    }
-
-    //Fraction box calculation function-2
-    const fractionBoxCalculation_2_ = (e, index) => {
-        FractionHeir2 = parseFloat(e.target.value);
-        if (!isNaN(FractionHeir2)) {
-            setFractionHeir2(FractionHeir2);
-        }
-        else {
-            FractionHeir2 = 0;
-            setFractionHeir2(0);
-        }
-        UndecidedHeir = UndecidedHeir.replace(/,/g, '').replace('.', '');
-        UndecidedHeir = parseFloat(UndecidedHeir);
-        AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
-        AmountofMoney = parseFloat(AmountofMoney);
-        if (FractionHeir1 > 0 && FractionHeir2 > 0 && UndecidedHeir > 0) {
-            var value = FractionHeir1 * UndecidedHeir;
-            if (FractionHeir2 > 0 && value > 0) {
-                value = value / FractionHeir2;
-                UndecidedHeir = UndecidedHeir - value;
-                UndecidedHeir = UndecidedHeir.toFixed(0);
-            }            
-            setUndecidedHeir(UndecidedHeir.toLocaleString());
-            setUserAmount(UndecidedHeir.toLocaleString());
-        }
-        else {
-            setUserAmount(0);
-            if(UndecidedHeir !== 0){
-                setUndecidedHeir(UndecidedHeir.toLocaleString());
-            }
-            else{
-                setUndecidedHeir(AmountofMoney.toLocaleString());
-            }
-        }
-    }
-
-
-
-
-
     const fractionBoxCalculation_1 = (e, index) => {
         const newValue = parseFloat(e.target.value) || 0;          
         if(HeirListArray.length !== 0){
@@ -230,6 +177,7 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
         }
         HeirListArray[index].fractionBoxValue1 = newValue;
         setHeirListArray(HeirListArray);    
+        recalculateTotalAmount(HeirListArray, index);
     };
     
     const fractionBoxCalculation_2 = (e, index) => {
@@ -237,12 +185,14 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
         HeirListArray = [...HeirListArray];
         HeirListArray[index].fractionBoxValue2 = newValue;
         setHeirListArray(HeirListArray);
-        recalculateTotalAmount(HeirListArray);
+        recalculateTotalAmount(HeirListArray, index);
     };
     
-    const recalculateTotalAmount = (HeirListArray) => {
+    
+    const recalculateTotalAmount = (HeirListArray, index) => {
         let totalAmount = 0;
         let undecidedHeirCount = 0;
+        let dividedAmount = 0;
         UndecidedHeir = UndecidedHeir.replace(/,/g, '').replace('.', '');
         UndecidedHeir = parseFloat(UndecidedHeir);
         AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
@@ -250,24 +200,36 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
 
         for (let i = 0; i < HeirListArray.length; i++) {
             const heir = HeirListArray[i];
-            if (heir.fractionBoxValue1 !== undefined && heir.fractionBoxValue2 !== undefined) {
-                var TotalValue = heir.fractionBoxValue1 * AmountofMoney;
-                if (heir.fractionBoxValue2 > 0 && TotalValue > 0) {
-                    TotalValue = TotalValue / heir.fractionBoxValue2;
-                    UndecidedHeir = UndecidedHeir - TotalValue;
-                    UndecidedHeir = UndecidedHeir.toFixed(0);
-                }   
-                setUndecidedHeir(UndecidedHeir.toLocaleString());
-                setUserAmount(UndecidedHeir.toLocaleString());               
-            } else {
-                setUserAmount(0);
-                if(UndecidedHeir !== 0){
+            if(i === index){
+                if (heir.fractionBoxValue1 !== undefined && heir.fractionBoxValue2 !== undefined) {
+                    var TotalValue = heir.fractionBoxValue1 * AmountofMoney;
+                    if (heir.fractionBoxValue2 > 0 && TotalValue > 0) {
+                        TotalValue = TotalValue / heir.fractionBoxValue2;
+                        UndecidedHeir = UndecidedHeir - TotalValue;
+                    }   
+                    else{
+                        for (let j = 0; j < HeirListArray.length; j++) {
+                            const heirloop = HeirListArray[j];
+                            var TotalValue = heirloop.fractionBoxValue1 * AmountofMoney;
+                            TotalValue = TotalValue / heirloop.fractionBoxValue2;                        
+                            if (!isNaN(TotalValue) && isFinite(TotalValue)) {
+                                dividedAmount = dividedAmount + TotalValue;
+                            }
+                        }                        
+                        UndecidedHeir = AmountofMoney - dividedAmount;
+                    }                                  
                     setUndecidedHeir(UndecidedHeir.toLocaleString());
-                }
-                else{
-                    setUndecidedHeir(AmountofMoney.toLocaleString());
-                }
-            }    
+                    setUserAmount(UndecidedHeir.toLocaleString());               
+                } else {
+                    setUserAmount(0);
+                    if(UndecidedHeir !== 0){
+                        setUndecidedHeir(UndecidedHeir.toLocaleString());
+                    }
+                    else{
+                        setUndecidedHeir(AmountofMoney.toLocaleString());
+                    }
+                }  
+            }              
         }        
     };
 

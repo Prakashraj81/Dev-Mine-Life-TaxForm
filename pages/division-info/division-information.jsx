@@ -31,31 +31,26 @@ import HouseholdPropertyTable from "../../components/division-info-tables/househ
 import DeathBenefitTable from "../../components/division-info-tables/death-benefit-table";
 import DeathRetirementAllowanceTable from "../../components/division-info-tables/death-retirement-allowance-table";
 import DebtTable from "../../components/division-info-tables/debt-table";
+import OthersPropertyTable from "../../components/division-info-tables/other-property-table";
 import FuneralExpensesTable from "../../components/division-info-tables/funeral-expenses-table";
 import GiftduringLifeTable from "../../components/division-info-tables/giftduring-life-table";
 import Test from "../../components/division-info-tables/test";
 
+import CalculatedTaxAmountEachPersons from "../../components/division-info-tables/calculated-tax-amount-each-persons";
+import AdditionInheritanceTaxAmount from "../../components/division-info-tables/addition-inheritance-tax-amount";
+import SpouseTaxReduction from "../../components/division-info-tables/spouse-tax-reduction";
+import ConfirmationDeductionMinors from "../../components/division-info-tables/confirmation-deduction-minors";
+import ConfirmationDeductionPersons from "../../components/division-info-tables/confirmation-deduction-persons";
+import ConfirmationSuccessiveInheritance from "../../components/division-info-tables/confirmation-successive-inheritance";
+import DeclaredTaxAmount from "../../components/division-info-tables/declared-tax-amount";
 
 export default function DivisionInformation() {   
-    let DepositList = [
-        
-    ];
+    let DepositList = [];
     const [ResidentialLandType, setResidentialLandType] = useState("");
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
-    // Proceed to next step
-    let [ShowLoader, setShowLoader] = useState(false);
-     
+    let [ShowLoader, setShowLoader] = useState(false);     
 
-    //Table show hide state
-    // let [CashDepositTable, setCashDepositTable] = useState(true); 
-    // let [SecuritiesTables, setSecuritiesTables] = useState(true);
-    // let [BuildingTable, setBuildingTable] = useState(true);
-    // let [LandTable, setLandTable] = useState(true);
-    // let [FamilyPropertyTable, setFamilyPropertyTable] = useState(true);
-    // let [DeathBenefitTable, setDeathBenefitTable] = useState(true);
-    // let [DeathGratuityTable, setDeathGratuityTable] = useState(true);
-    // let [DebtTable, setDebtTable] = useState(true);
-    //let [FuneralExpensesTable, setFuneralExpensesTable] = useState(true);
+    //Table show hide state    
     let [GiftDuringLifeTable, setGiftDuringLifeTable] = useState(true);
     let [ShowSuccessiveInheritance, setShowSuccessiveInheritance] = useState(false);
 
@@ -67,7 +62,6 @@ export default function DivisionInformation() {
     const inputHandlingFunction = (event) => {
 
     }
-
 
     // Table values
     let [cashSavingsList, setcashSavingsList] = useState([]);
@@ -146,9 +140,6 @@ export default function DivisionInformation() {
                         当システムでは「特定居住用（被相続人の居住のように供していた宅地）」のみ小規模宅地等の特例の適用が可能です。※適用要件を満たしているかの確認等ご不明な点は税理士への有料相談でご確認ください。
                     </p>
                 </div>    
-
-
-
                 <Box className="mb-7">
                     <FormControl>
                             <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">小規模宅地等の特例の適用を受ける</label>
@@ -278,7 +269,42 @@ export default function DivisionInformation() {
                                         />
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>    
+
+                                <div className="w-full inline-block items-center justify-between mb-7">
+                                    <div className="w-full inline-block float-left">
+                                        <div className="label w-full inline-block">
+                                            <label htmlFor="Deposit" className="form-label">
+                                                小規模宅地の特例を適用する土地
+                                            </label>
+                                        </div>
+                                        <div className="w-full inline-block mt-2">
+                                            <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleResidentialLandType}>
+                                                <option value='' id='0'></option>
+                                                {DepositList.map((option) => (
+                                                    <option key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left pt-7">
+                                            <div className="label w-full inline-block">
+                                                <label className="form-label flex items-center">適用面積</label>
+                                            </div>
+                                            <div className="w-full inline-block mt-2 relative">
+                                                <input
+                                                    type="text"
+                                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                    id="FloorAreaOneYes"
+                                                    onChange={inputHandlingFunction}
+                                                />
+                                                <AreaIcon/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                        
                            </form>
                         </Box>
                     </>
@@ -286,66 +312,33 @@ export default function DivisionInformation() {
 
 
                 <div className="w-full inline-block">
-                    <form className="hidden1" action="#" method="POST">                        
-                        <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="Deposit" className="form-label">
-                                        小規模宅地の特例を適用する土地
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleResidentialLandType}>
-                                        <option value='' id='0'></option>
-                                        {DepositList.map((option) => (
-                                            <option key={option.value} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left pt-7">
-                                    <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center">適用面積</label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2 relative">
-                                        <input
-                                            type="text"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            id="FloorAreaOneYes"
-                                            onChange={inputHandlingFunction}
-                                        />
-                                        <AreaIcon/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-
-                <div className="material-tables">
-                    <CashSavingsTable/>
-                    <SecuritiesTable/>
-                    <BuildingsTable/>
-                    <LandTable/>
-                    <HouseholdPropertyTable/>
-                    <DeathBenefitTable/>
-                    <DeathRetirementAllowanceTable/>
-                    <DebtTable/>
-                    <FuneralExpensesTable/>
-                    <GiftduringLifeTable/>
-                </div>         
-
-
-                        
-                         <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton/>              
-                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>                                           
+                    <form className="hidden1" action="#" method="POST">     
+                        <div className="material-tables">
+                            <CashSavingsTable/>
+                            <SecuritiesTable/>
+                            <BuildingsTable/>
+                            <LandTable/>
+                            <HouseholdPropertyTable/>
+                            <DeathBenefitTable/>
+                            <DeathRetirementAllowanceTable/>
+                            <DebtTable/>
+                            <OthersPropertyTable/>
+                            <FuneralExpensesTable/>
+                            <GiftduringLifeTable/>
+                            
+                            <CalculatedTaxAmountEachPersons/>
+                            <AdditionInheritanceTaxAmount/>
+                            <SpouseTaxReduction/>
+                            <ConfirmationDeductionMinors/>
+                            <ConfirmationDeductionPersons/>
+                            <ConfirmationSuccessiveInheritance/>
+                            <DeclaredTaxAmount/>
+                        </div>                                
+                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                            <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                                <BackButton/>              
+                                <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                            </div>                                           
                         </div>   
                    </form>
                 </div>

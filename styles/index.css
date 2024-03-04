@@ -186,3 +186,11 @@ input {
   .table-head-2 > tr > th:first-child{
     width: 25%;
   }
+
+  .table-head-50 > tr > th:first-child{
+    width: 75%;
+  }
+
+  .table-head-50 > tr > th:last-child{
+    width: 15%;
+  }
