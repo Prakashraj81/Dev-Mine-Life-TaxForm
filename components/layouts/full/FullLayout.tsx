@@ -56,17 +56,17 @@ const FullLayout: React.FC<Props> = ({ children }) => {
       setactiveStep(2);
       activeStep = 2;
     }
-    else if(desiredPath2 === "summary-gifts-various"){
-      setactiveStep(3);
-      activeStep = 3;
-    }
-    else if(desiredPath === "gift-various"){
-      setactiveStep(3);
-      activeStep = 3;
-    }
+    // else if(desiredPath2 === "summary-gifts-various"){
+    //   setactiveStep(3);
+    //   activeStep = 3;
+    // }
+    // else if(desiredPath === "gift-various"){
+    //   setactiveStep(3);
+    //   activeStep = 3;
+    // }
     else if(desiredPath === "property"){
-      setactiveStep(4);
-      activeStep = 4;
+      setactiveStep(3);
+      activeStep = 3;
     }
     else {
       setactiveStep(0);

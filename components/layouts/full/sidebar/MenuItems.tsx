@@ -163,7 +163,7 @@ const Menuitems = [
     id:3,
     title: "分割情報、小規模宅地等の特例の入力",    
     translateHeading: "Entering division information",
-    href: "/division-info",
+    href: "/division-info/division-information",
     icon: <PostAddIcon />,
     iconClosed: <KeyboardArrowRightIcon />,
     iconOpened: <KeyboardArrowDownIcon />,
@@ -217,7 +217,7 @@ const Menuitems = [
   //   ],
   // },  
   {
-    id:5,
+    id:4,
     title: "申告書の印刷",    
     translateHeading: "funeral",
     href: "/property/declaration-printing",

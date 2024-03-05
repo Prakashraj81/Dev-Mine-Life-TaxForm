@@ -15,6 +15,7 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AreaIcon from "../../components/inputbox-icon/textbox-area-icon";
 import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -53,6 +54,7 @@ export default function DivisionInformation() {
     //Table show hide state    
     let [GiftDuringLifeTable, setGiftDuringLifeTable] = useState(true);
     let [ShowSuccessiveInheritance, setShowSuccessiveInheritance] = useState(false);
+    let [ShowSuccessiveInput, setShowSuccessiveInput] = useState(false);
 
     const handleResidentialLandType = (event) => {
         setResidentialLandType(event.target.value);
@@ -89,6 +91,11 @@ export default function DivisionInformation() {
             setShowSuccessiveInheritance(false);
         }
     };
+
+    //AddSuccessiveInput
+    const AddSuccessiveInput = () => {
+        setShowSuccessiveInput(!ShowSuccessiveInput);
+    }
 
 
 
@@ -163,6 +170,55 @@ export default function DivisionInformation() {
                 </Box>
 
                 {ShowSuccessiveInheritance &&(
+                    <>
+                        <Box>
+                            <div className="w-full inline-block items-center justify-between mb-7">
+                                <div className="w-full inline-block float-left">
+                                    <div className="label w-full inline-block">
+                                        <label htmlFor="Deposit" className="form-label">
+                                            小規模宅地の特例を適用する土地
+                                        </label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleResidentialLandType}>
+                                            <option value='' id='0'></option>
+                                            {DepositList.map((option) => (
+                                                <option key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left pt-7">
+                                        <div className="label w-full inline-block">
+                                            <label className="form-label flex items-center">適用面積</label>
+                                        </div>
+                                        <div className="w-full inline-block mt-2 relative">
+                                            <input
+                                                type="text"
+                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                id="FloorAreaOneYes"
+                                                onChange={inputHandlingFunction}
+                                            />
+                                            <AreaIcon/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+
+                            <div className="w-full inline-block text-left mb-7">
+                                <p className="float-left pr-7 text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">相似相続控除</p>
+                                <button onClick={AddSuccessiveInput} className="float-left text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2">
+                                    {ShowSuccessiveInput ? <RemoveIcon className="text-white" /> : <AddIcon className="text-white" />}
+                                    {ShowSuccessiveInput ? "隠れる" : "追加する"}
+                                </button>
+                            </div>
+                        </Box>                        
+                    </>
+                )}
+
+                 {ShowSuccessiveInput &&(
                     <>
                         <Box className="py-3">
                             <form action="#" method="POST">                            
@@ -269,47 +325,11 @@ export default function DivisionInformation() {
                                         />
                                     </div>
                                 </div>
-                            </div>    
-
-                                <div className="w-full inline-block items-center justify-between mb-7">
-                                    <div className="w-full inline-block float-left">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="Deposit" className="form-label">
-                                                小規模宅地の特例を適用する土地
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleResidentialLandType}>
-                                                <option value='' id='0'></option>
-                                                {DepositList.map((option) => (
-                                                    <option key={option.value} value={option.value}>
-                                                        {option.label}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-
-                                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left pt-7">
-                                            <div className="label w-full inline-block">
-                                                <label className="form-label flex items-center">適用面積</label>
-                                            </div>
-                                            <div className="w-full inline-block mt-2 relative">
-                                                <input
-                                                    type="text"
-                                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                    id="FloorAreaOneYes"
-                                                    onChange={inputHandlingFunction}
-                                                />
-                                                <AreaIcon/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>                        
+                            </div>                                                        
                            </form>
                         </Box>
                     </>
-                )}
-
+                 )}       
 
                 <div className="w-full inline-block">
                     <form className="hidden1" action="#" method="POST">     
