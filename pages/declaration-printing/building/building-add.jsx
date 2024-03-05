@@ -105,7 +105,7 @@ export default function HouseAdd() {
 
     //Question two
     const handleRadioInfoProperty = (event) => {
-        setInfoPropertyTaxYesNo(true);
+        setInfoPropertyTaxYesNo(!InfoPropertyTaxYesNo);
     }
 
     //Question three
@@ -567,12 +567,12 @@ export default function HouseAdd() {
                         </RadioGroup>
                     </FormControl>
                             <div className="w-full inline-block mb-7">
-                                {InfoPropertyTaxYesNo && (
+                                {InfoPropertyTaxYesNo ||(
                                     <img src="/screenshots/building-screenshot.png" className="w-full" alt="image" height={500} width={200} />
                                 )}                                          
                             </div>
                            
-                            {InfoPropertyTaxYesNo &&(
+                            {InfoPropertyTaxYesNo ||(
                                 <>
                                 <div className="w-full flex items-center justify-between mb-7">
                                     <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">

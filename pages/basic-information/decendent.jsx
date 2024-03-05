@@ -248,7 +248,7 @@ export default function Decendent() {
                         
                             <>
 
-                            <div>
+                            <div className="hidden">
       <label htmlFor="calendarInput">選択してください：</label>
       <DatePicker
         id="calendarInput"
