@@ -1,11 +1,13 @@
 "use client";
+import React, { useState, useEffect, useRef, Fragment, Controller } from "react";
 import Link from "next/link";
-import { useState, Fragment, Controller } from "react";
 import { useForm } from "react-hook-form";
+import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import BackButton from "../../components/back-btn";
 import FullLayout from '../../components/layouts/full/FullLayout';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { list } from "postcss";
+import axios from 'axios';
 
 const tableList = [
     {
@@ -50,7 +52,22 @@ const tableList = [
     },    
 ]
 
-export default function DeclarationPrinting() {    
+export default function DeclarationPrinting() {   
+    
+    // Function to convert Excel to PDF
+    const excelFilePath = "C:/Users/praka/Downloads/PJ_JNC_Output/様式3_累積確認書_6010001137545230223_5H2W02_20240219102742.xlsx";
+    const convertExcelToPdf = async (excelFilePath) => {
+        try {
+        const response = await axios.post('/api/excelToPdfConverter', { excelFilePath });
+        const { pdfPath } = response.data;
+        console.log(`PDF file created: ${pdfPath}`);
+        // You can handle the PDF file as needed (e.g., display a download link)
+        } catch (error) {
+        console.error('Error converting Excel to PDF:', error);
+        }
+    };
+    
+    
     return (
         <>
             <div className="summary-property-wrapper">
@@ -89,6 +106,8 @@ export default function DeclarationPrinting() {
                         </tbody>
                     </table>
                 </div>
+
+                <Button onClick={() => convertExcelToPdf(excelFilePath)}><Typography>Excel to PDF</Typography></Button>
                 
                 <div className="w-full flex justify-evenly items-center py-10">
                             <BackButton />

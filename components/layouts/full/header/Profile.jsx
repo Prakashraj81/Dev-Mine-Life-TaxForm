@@ -37,21 +37,29 @@ const Profile = () => {
     <>
       <Box>
         <ul className="flex items-baseline space-x-24 nav-menu">
-          <li className="hidden lg:block xl:block 2xl:block">
+          {/* <li className="hidden lg:block xl:block 2xl:block">
             <a
               className="text-black font-medium text-sm md:text-base lg:text-base xl:text-base 2xl:text-base"
               href="/"
             >
               診断(調整中)
             </a>
-          </li>
-          <li className="hidden lg:block xl:block 2xl:block">
+          </li> */}
+          {/* <li className="hidden lg:block xl:block 2xl:block">
             <a
               className="text-black font-medium text-sm md:text-base lg:text-base xl:text-base 2xl:text-base"
               href="/"
             >
               申告書の作成が難しい方へ
             </a>
+          </li> */}
+          <li className="hidden lg:block xl:block 2xl:block">
+            <Link
+              href="/pages/contact"
+              className="text-black font-medium text-sm md:text-base lg:text-base xl:text-base 2xl:text-base"
+            >
+              ご相談・お問い合わせ
+            </Link>
           </li>
           <li>
             <Button

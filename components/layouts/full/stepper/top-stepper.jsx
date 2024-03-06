@@ -35,7 +35,7 @@ const PageStepper = ({activeStep}) => {
     } else if (step === 2) {
       ActiveStepper = 3;
     } else {
-      ActiveStepper = 0;
+      ActiveStepper = 5;
     }
   };  
 
