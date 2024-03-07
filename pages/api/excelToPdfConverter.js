@@ -25,14 +25,28 @@ export default async (req, res) => {
     workbook.eachSheet((sheet) => {
       pdfDoc.addPage();
       const columns = [];
-      sheet.eachRow({ includeEmpty: true }, (row) => {        
-        row.eachCell({ includeEmpty: true }, (cell) => {
+      sheet.eachRow({ includeEmpty: true }, (row) => {     
+
+      row.eachCell({ includeEmpty: true }, (cell) => {
           const cellValue = cell && cell.text ? cell.text : '';
           columns.push(cellValue);
         });
         pdfDoc.text(columns.join(' '), 50, pdfDoc.y);
         columns.length = 0;
-      });
+
+        row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+          const cellValue = cell && cell.text ? cell.text : '';
+          const columnWidth = sheet.getColumn(colNumber).width;
+          pdfDoc.text(columns.join(' '), 50, pdfDoc.y, { width: columnWidth });
+        });
+  
+        row.eachCell({ includeEmpty: true }, (cell) => {
+          const cellValue = cell && cell.text ? cell.text.replace(/\n/g, ' ') : '';
+          columns.push(cellValue);
+        });
+        pdfDoc.text(columns.join(' '), 50, pdfDoc.y, { continued: true });
+        
+      });      
     });
 
     // Finalize the PDF document
