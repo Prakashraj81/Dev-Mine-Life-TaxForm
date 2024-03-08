@@ -194,3 +194,12 @@ input {
   .table-head-50 > tr > th:last-child{
     width: 15%;
   }
+
+
+  .excel-pdf, .excel-pdf:hover {
+    background:#5D87FF;
+    color: #FFF;
+    padding: 7px;
+    border-radius: 3px;
+  }
+  

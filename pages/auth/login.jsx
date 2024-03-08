@@ -96,21 +96,6 @@ export default function Login(props) {
   };
 
 
-  // Function to convert Excel to PDF
-  //const excelFilePath = "C:/Users/praka/Downloads/PJ_JNC_Format/【出力フォーマット】様式3_累積確認書.xlsx";
-  //const excelFilePath = "C:/Users/praka/Downloads/Application_form_Exce.xlsx";
-  //const excelFilePath = "C:/Users/praka/Downloads/excelToPDF/Book1.xlsx";
-  const excelFilePath = "C:/Users/praka/Downloads/excelToPDF/Excel_To_PDF.xlsx";
-  const convertExcelToPdf = async (excelFilePath) => {
-      try {
-      const response = await axios.post('/api/excelToPdfConverter', { excelFilePath });
-      const { pdfPath } = response.data;
-      console.log(`PDF file created: ${pdfPath}`);
-      // You can handle the PDF file as needed (e.g., display a download link)
-      } catch (error) {
-      console.error('Error converting Excel to PDF:', error);
-      }
-  };
 
 
 
@@ -120,13 +105,6 @@ export default function Login(props) {
     <>
       <Header />
       <div className="login-form-wrapper py-14">
-
-
-
-      {/* <Button onClick={() => convertExcelToPdf(excelFilePath)}><Typography>Excel to PDF</Typography></Button> */}
-
-
-
         <div className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
           <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
             <div className="page-heading">

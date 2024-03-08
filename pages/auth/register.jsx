@@ -9,25 +9,6 @@ import Header from "../../components/header";
 import Footer from "../../components/footer";
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
 import BackdropLoader from "../../components/loader/backdrop-loader";
-import { notifySuccess } from "../../components/toast/notify-success";
-import { notifyError } from "../../components/toast/notify-error";
-import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-// export const notifySuccess = (message) =>
-//   toast(<p style={{ fontSize: 16 }}>{message}</p>, {
-//     position: "top-right",
-//     autoClose: 5000,
-//     hideProgressBar: false,
-//     newestOnTop: false,
-//     closeOnClick: true,
-//     rtl: false,
-//     pauseOnFocusLoss: true,
-//     draggable: true,
-//     pauseOnHover: true,
-//     type: "success"
-//   });
 
 export default function Register(props) {
   let [Name, setName] = useState("");

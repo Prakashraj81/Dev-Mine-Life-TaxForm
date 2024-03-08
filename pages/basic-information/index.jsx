@@ -144,7 +144,7 @@ export default function BasicInformation() {
 
                     <div className="w-full inline-block text-right py-10">
                         <div className="add-btn">
-                            <button onClick={handleHeirPage} id="decedent_edit" className="text-sm text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                            <button onClick={handleHeirPage} id="decedent_edit" className="text-sm text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2">
                                 <AddIcon className="text-white" />
                                 追加する
                             </button>

@@ -16,9 +16,6 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import Select from 'react-select';
-import DatePicker from 'react-datepicker';
-import ja from 'date-fns/locale/ja';
 
 export default function Decendent() {
 
@@ -217,11 +214,6 @@ export default function Decendent() {
         }
     };
 
-    const [selectedDate, setSelectedDate] = useState(null);
-
-  const handleChange = (date) => {
-    setSelectedDate(date);
-  };
     
     return (
         <>
@@ -246,19 +238,7 @@ export default function Decendent() {
                 <div className="user-forms">
                 <form action="#" method="POST">                
                         
-                            <>
-
-                            <div className="hidden">
-      <label htmlFor="calendarInput">選択してください：</label>
-      <DatePicker
-        id="calendarInput"
-        selected={selectedDate}
-        onChange={handleChange}
-        locale={ja}
-        dateFormat="yyyy年MM月dd日"
-        placeholderText="日付を選択"
-      />
-    </div>
+                            <>                           
                             <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">

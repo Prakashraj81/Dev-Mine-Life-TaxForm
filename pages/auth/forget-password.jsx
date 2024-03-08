@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useState, Fragment } from "react";
-import { useForm } from "react-hook-form";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
@@ -10,23 +9,11 @@ export default function ForgetPassword() {
 
   const [ForgetPasswordEmail, setForgetPasswordEmail] = useState("");
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm({
-    defaultValues: {
-      ForgetPasswordEmail: "",
-    }
-  });
-
   const onSubmit = async (defaultValues) => {
     var value = JSON.stringify(defaultValues);
     console.log(value);
     if (value.ForgetPasswordEmail != "") {
-      var Apiurl = "/";
-      const urlresponse = await fetch(Apiurl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(defaultValues),
-        mode: "no-cors",
-      });
+      var Apiurl = "/";      
     }
     else {
 
@@ -53,7 +40,7 @@ export default function ForgetPassword() {
             </p>
           </div>
           <div className="login-forms">
-            <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+            <form action="#" method="POST">
               <div className="username-details mb-7">
                 <div className="label w-full inline-block">
                   <label htmlFor="ForgetPasswordEmail" className="form-label">
@@ -64,17 +51,14 @@ export default function ForgetPassword() {
                   <input
                     type="email"
                     id="ForgetPasswordEmail"
-                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                    {...register("ForgetPasswordEmail", { required: "Email is required" })}
-                    aria-invalid={errors.ForgetPasswordEmail ? "true" : "false"}
+                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                    
                   />
-                  {errors.ForgetPasswordEmail && <p className="text-red-500" role="alert">{errors.ForgetPasswordEmail?.message}</p>}
                 </div>
               </div>
 
               <div className="login-btn pt-10 text-center">
                 <button
-                  type="submit"
+                  type="button"
                   className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
                 >
                   <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">

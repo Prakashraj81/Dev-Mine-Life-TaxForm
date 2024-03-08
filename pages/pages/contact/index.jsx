@@ -22,13 +22,8 @@ export default function ContactUs() {
         )} */}
         </>            
         <div className="contact-wrapper">
-                <div className="px-4 lg:px-0 xl:px-0 2xl:px-0 max-w-5xl mx-auto">
-                    <Box>
-                        <FormGroup>
-                            <FormControlLabel required control={<Checkbox />} label="Required" />
-                        </FormGroup>
-                    </Box>
-                    <div className="bg-white shadow-normal rounded-md py-12 pb-20 px-10 mt-10">
+                <div className="px-4 lg:px-0 xl:px-0 2xl:px-0 max-w-5xl mx-auto">                    
+                    <div className="rounded-md py-12 pb-20 px-10">
                         <div className="checkbox-list pb-7">
                             <label className="text-base font-medium block">お問い合わせ・ご相談の種類<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></label>
                             <div className="checkbox-form-list block mt-5 rounded border border-border">
