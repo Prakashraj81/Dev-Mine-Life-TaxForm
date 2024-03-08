@@ -7,58 +7,16 @@ import TableRow from '@mui/material/TableRow';
 import PropTypes from 'prop-types';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
+import Fade from '@mui/material/Fade';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useSpring, animated } from '@react-spring/web';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-
-
-const Fade = React.forwardRef(function Fade(props, ref) {
-    const {
-      children,
-      in: open,
-      onClick,
-      onEnter,
-      onExited,
-      ownerState,
-      ...other
-    } = props;
-    const style = useSpring({
-      from: { opacity: 0 },
-      to: { opacity: open ? 1 : 0 },
-      onStart: () => {
-        if (open && onEnter) {
-          onEnter(null, true);
-        }
-      },
-      onRest: () => {
-        if (!open && onExited) {
-          onExited(null, true);
-        }
-      },
-    });
-  
-    return (
-      <animated.div ref={ref} style={style} {...other}>
-        {React.cloneElement(children, { onClick })}
-      </animated.div>
-    );
-  });
-  
-  Fade.propTypes = {
-    children: PropTypes.element.isRequired,
-    in: PropTypes.bool,
-    onClick: PropTypes.any,
-    onEnter: PropTypes.func,
-    onExited: PropTypes.func,
-    ownerState: PropTypes.any,
-  };
   
   const style = {
     position: 'absolute',
