@@ -182,8 +182,11 @@ export default function Heir() {
 
 
     //Load heir details list
-    const GetHeirList = async() => {
-        HeirId = 0;
+    const GetHeirList = async() => {        
+        let url = router.asPath;
+        let searchParams = new URLSearchParams(url.split('?')[1]);
+        let editId = searchParams.get("editId");
+        HeirId = Number(atob(editId));
         let auth_key = atob(sessionStorage.getItem("auth_key"));
         const params = { auth_key: auth_key };
         if(auth_key !== null){
@@ -192,18 +195,27 @@ export default function Heir() {
                 if(response.status === 200){
                     setHeirCount(response.data.heir_list.length);
                     for(let i = 0; i < response.data.heir_list.length; i ++){
-                        if(response.data.heir_list[0].heir_id === HeirId){
-                            setHeirId(response.data.heir_list[0].heir_id);
-                            setName(response.data.heir_list[0].name);
-                            setFurigana(response.data.heir_list[0].furigana);
-                            setDateofBirth(response.data.heir_list[0].date_of_birth);
-                            setPostCode(response.data.heir_list[0].postal_code);
-                            setTelephoneNumber(response.data.heir_list[0].postal_code);
-                            setAddress(response.data.heir_list[0].address);
-                            setProfession(response.data.heir_list[0].profession);
-                            setRelationshipWithDecedent(response.data.heir_list[0].relationship_with_decedent);
-                            setDisabledRadioValue(response.data.heir_list[0].disabled_deduction);
-                            setis_legal_heir(response.data.heir_list[0].is_legal_heir);
+                        if(response.data.heir_list[i].heir_id === HeirId){
+                            setHeirId(response.data.heir_list[i].heir_id);
+                            setName(response.data.heir_list[i].name);
+                            setFurigana(response.data.heir_list[i].furigana);
+                            setDateofBirth(response.data.heir_list[i].date_of_birth);
+                            setPostCode(response.data.heir_list[i].postal_code);
+                            setTelephoneNumber(response.data.heir_list[i].phone);
+                            setAddress(response.data.heir_list[i].address);
+                            setProfession(response.data.heir_list[i].profession);
+                            setRelationshipWithDecedent(response.data.heir_list[i].relationship_with_decedent);
+                            setDisabledRadioValue(response.data.heir_list[i].disabled_deduction);
+                            if(response.data.heir_list[i].is_legal === "Yes"){
+                                setLegalHeirRadioValue(response.data.heir_list[i].is_legal);
+                                setis_legal_heir(1);
+                                setShowLegalHeir(true);
+                            }     
+                            else{
+                                setLegalHeirRadioValue(response.data.heir_list[i].is_legal);
+                                setis_legal_heir(0);
+                                setShowLegalHeir(false);
+                            }                       
                         }        
                     }                                               
                 }
@@ -496,7 +508,7 @@ export default function Heir() {
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <select id="RelationshipWithDecedent" onChange={handleRelationshipWithDecedent} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
+                                    <select id="RelationshipWithDecedent" value={RelationshipWithDecedent} onChange={handleRelationshipWithDecedent} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
                                         <option value='' id=""></option>
                                         <option id="Disabled_deduction" value="夫"> 夫 </option>
                                         <option id="Disabled_deduction" value="妻"> 妻 </option>

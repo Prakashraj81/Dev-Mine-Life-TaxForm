@@ -98,7 +98,7 @@ export default function BasicInformation() {
 
     const router = useRouter();
     const handleEdit = (Edit_Id) => {
-        router.push(`/basic-information/heir?editId=${Edit_Id}`);
+        router.push(`/basic-information/heir?editId=${btoa(Edit_Id)}`);
     };
 
     const handleHeirPage = () => {
