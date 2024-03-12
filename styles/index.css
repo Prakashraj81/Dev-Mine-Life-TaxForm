@@ -203,3 +203,8 @@ input {
     border-radius: 3px;
   }
   
+
+  /* Material input reset password page */
+  .mui-style-1bsfmng-MuiInputBase-root-MuiInput-root::before, .mui-style-1bsfmng-MuiInputBase-root-MuiInput-root::after{
+    border: none !important;
+  }

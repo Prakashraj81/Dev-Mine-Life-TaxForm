@@ -13,16 +13,16 @@ export default function Index({ preview }) {
   let sessionValue = 0;
   let value;
   useEffect(() => {
-    let Loginvalue = sessionStorage.getItem('Login');
-    value = atob(Loginvalue);    
-    if(value === "true"){
-      sessionValue = 1
-    }
+    let Loginvalue = sessionStorage.getItem('user_login');
+    let auth_key = sessionStorage.getItem('auth_key');
+    if(Loginvalue !== null && auth_key !== null){
+      value = atob(Loginvalue);   
+      setAuthkey(1);
+    }   
     else{
-      sessionValue = 0;
-    }
-    setAuthkey(sessionValue);
-  });
+      setAuthkey(0);
+    } 
+  }, [Authkey]);
   return (
     <>
       {Authkey ?

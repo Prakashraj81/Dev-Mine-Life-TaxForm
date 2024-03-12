@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import {
@@ -26,11 +27,27 @@ const Profile = () => {
   };
 
   const router = useRouter();  
-  const FunctionLogOut = () => {   
-    let bool = false;
-    let Logoutboolean = btoa(bool);     
-    sessionStorage.setItem('Login', Logoutboolean);
-    router.push(`/`);
+  const FunctionLogOut = async () => {   
+    try{
+      let auth_key = atob(sessionStorage.getItem("auth_key"));
+      let formData = new FormData();
+      formData.append('auth_key', auth_key);
+      if(auth_key !== null){
+        const response = await axios.post('https://minelife-api.azurewebsites.net/user_logout', formData);
+        if(response.status === 200){
+          sessionStorage.clear();
+          router.push(`/auth/login`);
+        }
+        else{
+          console.log("Please contact vendor");
+        }  
+      }
+      else{
+        console.log("Invalid auth key");
+      }     
+    } catch (error){      
+      console.error('Error:', error);
+    }   
   }
 
   return (

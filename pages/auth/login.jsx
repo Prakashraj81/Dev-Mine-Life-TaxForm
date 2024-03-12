@@ -42,6 +42,7 @@ export default function Login(props) {
       setPasswordError(false);
     }
     setisSumbitDisabled(false);
+    setLoginError(false);
   }
 
   //Submit API function 
@@ -68,21 +69,26 @@ export default function Login(props) {
 
     //Api setup
     if (isSumbitDisabled !== true) {
-      axios.post("https://minelife-api.azurewebsites.net/user_login", formData)
-        .then(response => {
+      try{
+        const response = await axios.post('https://minelife-api.azurewebsites.net/user_login', formData);
+        if(response.status === 200){
           let encode_auth_key = btoa(response.data.auth_key);
           let encode_login = btoa(response.data.is_authenticated);
           sessionStorage.setItem('auth_key', encode_auth_key);
-          sessionStorage.setItem('Login', encode_login);
+          sessionStorage.setItem('user_login', encode_login);
           setLoginError(false);
           setShowLoader(false);
           router.push(`/basic-information`);
-        })
-        .catch(error => {
+        }
+        else{
           setLoginError(true);
           setShowLoader(false);
-          console.error('Error:', error);
-        });
+        }        
+      } catch (error){
+        setLoginError(true);
+        setShowLoader(false);
+        console.error('Error:', error);
+      }     
     }
     else {
       setisSumbitDisabled(true);

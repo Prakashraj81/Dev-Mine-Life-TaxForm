@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import axios from "axios";
 import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../components/back-btn";
@@ -32,6 +33,7 @@ export default function Decendent() {
         { value: 'なし', label: 'なし' },
     ];
 
+    let [Id, setId] = useState(0);
     let [Name, setName] = useState("");
     let [Furigana, setFurigana] = useState("");
     let [DateofBirth, setDateofBirth] = useState("");
@@ -42,6 +44,7 @@ export default function Decendent() {
     let [Profession, setProfession] = useState("");
     let [WheretoSubmitReturn, setWheretoSubmitReturn] = useState("");
     let [isErrorVisible, setErrorVisible] = useState(false);    
+    let [DecendentList, setDecendentList] = useState([]);  
 
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
@@ -172,8 +175,11 @@ export default function Decendent() {
     //Submit API function 
     let router = useRouter();
     let defaultValues = {};
-    const onSubmit = () => {
+    const onSubmit = async() => {
+        //Id = Number(router.query.Id);
+        Id = Number(atob(router.query.Id));
         defaultValues = {
+            Id: Id,
             Name: Name,
             Furigana: Furigana,
             DateofBirth: DateofBirth,
@@ -197,22 +203,95 @@ export default function Decendent() {
             setDateofBirthError(true);
             isSumbitDisabled = true;
         }          
-        if (defaultValues.DateOfDeath === "") {
+        if (defaultValues.DateofDeath === "") {
             setDateofDeathError(true);
             isSumbitDisabled = true;
         }    
         
         //Api setup
         if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('Decendent', JSON.stringify(defaultValues));
-            router.push(`/basic-information`); 
+            let auth_key = atob(sessionStorage.getItem("auth_key"));
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("decedent_id", Id);
+            formData.append("name", Name);
+            formData.append("furigana", Furigana);
+            formData.append("date_of_birth", DateofBirth);
+            formData.append("postal_code", PostCode);
+            formData.append("address", Address);
+            formData.append("profession", Profession);
+            formData.append("date_of_death", DateofDeath);
+            //formData.append("completion_date", "completion_date");
+            formData.append("declaration_location", WheretoSubmitReturn);
+            if(formData !== null && auth_key !== null){
+                try{
+                    setShowLoader(true);
+                    let resoponse = "";
+                    if(Id !== 0){
+                        resoponse = await axios.post('https://minelife-api.azurewebsites.net/edit_decedent', formData);
+                    }
+                    else{
+                        resoponse = await axios.post('https://minelife-api.azurewebsites.net/add_decedent', formData);
+                    }                    
+                    if(response.status === 200){
+                        setShowLoader(false);
+                        router.push(`/basic-information`); 
+                    }
+                }catch (error){
+                    setShowLoader(false);
+                    console.error('Error:', error);
+                }
+            } 
+            else{
+                console.log("API not allowed");
+                setisSumbitDisabled(true);
+            }         
         }
         else {
             console.log("API not allowed");
             setisSumbitDisabled(true);
         }
     };
+
+
+
+    useEffect(() => {        
+        GetDecendentList();
+    }, []);
+
+
+    //Load decendent details list
+    const GetDecendentList = async() => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key };
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/decedent_detail', {params});
+                if(response.status === 200){
+                    setDecendentList(response.data);
+                    //setId(response.data.decedent_id);
+                    setName(response.data.name);
+                    setFurigana(response.data.furigana);
+                    setDateofBirth(response.data.date_of_birth);
+                    setPostCode(response.data.postal_code);
+                    setAddress(response.data.address);
+                    setProfession(response.data.profession);
+                    setDateofDeath(response.data.date_of_death);
+                    setWheretoSubmitReturn(response.data.declaration_location);
+                }
+                else{
+                    setDecendentList([]);
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
+    
+
 
     
     return (
@@ -236,8 +315,7 @@ export default function Decendent() {
                     </p>
                 </div>
                 <div className="user-forms">
-                <form action="#" method="POST">                
-                        
+                <form action="#" method="POST">                   
                             <>                           
                             <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
@@ -252,6 +330,7 @@ export default function Decendent() {
                                             type="text"
                                             id="Name"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            value={Name}
                                             onChange={inputHandlingFunction}
                                         />
                                         {NameError && (
@@ -272,6 +351,7 @@ export default function Decendent() {
                                         <input
                                             type="text"
                                             id="Furigana"
+                                            value={Furigana}
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             onChange={inputHandlingFunction}
                                         />
@@ -294,6 +374,7 @@ export default function Decendent() {
                                     <input
                                         type="date"
                                         id="DateofBirth"
+                                        value={DateofBirth}
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"
                                         onChange={inputHandlingFunction}
                                     />
@@ -315,6 +396,7 @@ export default function Decendent() {
                                     <input
                                         type="text"
                                         id="PostCode"
+                                        value={PostCode}
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
                                         onKeyPress={handleKeyPress}
                                         onChange={postalcodeDigit}
@@ -339,6 +421,7 @@ export default function Decendent() {
                                     <input
                                         type="text"
                                         id="Address"
+                                        value={Address}
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         onChange={inputHandlingFunction}
                                     />                                    
@@ -357,6 +440,7 @@ export default function Decendent() {
                                 <input
                                         type="text"
                                         id="Profession"
+                                        value={Profession}
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"   
                                         onChange={inputHandlingFunction}    
                                     />                                                                         
@@ -378,6 +462,7 @@ export default function Decendent() {
                                         <input
                                             type="date"
                                             id="DateofDeath"
+                                            value={DateofDeath}
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"
                                             onChange={inputHandlingFunction}
                                         />
@@ -402,6 +487,7 @@ export default function Decendent() {
                                 <input
                                     type="text"
                                     id="WheretoSubmitReturn"
+                                    value={WheretoSubmitReturn}
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"  
                                     onChange={inputHandlingFunction}                                                                               
                                     />                               

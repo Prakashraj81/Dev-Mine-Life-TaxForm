@@ -94,53 +94,55 @@ export default function Register(props) {
     };
 
     //User email check Api
-    if (isSumbitDisabled !== true) {   
-      axios.get("https://minelife-api.azurewebsites.net/check_user_email", { params })
-        .then(response => {
-          if(response.data.message === "User Not Exist"){
-            register_user(formData);
-          }    
-          else{
-            notifyError("User Already Exist");   
-            setRegisterError(true);
-            setRegisterError(true);
-            setShowLoader(false);
-          }      
-        })
-        .catch(error => {
-          notifyError("User not created.");          
+    if (isSumbitDisabled !== true) { 
+      try{
+        const params = { email: Email };
+        const response = await axios.get('https://minelife-api.azurewebsites.net/check_user_email', {params});
+        if(response.status === 200){
+          await register_user(formData);
+        }    
+        else{
+          console.log("User Already Exist");   
           setRegisterError(true);
           setShowLoader(false);
-          console.error('Error:', error);
-        });
+        }     
+      } catch (error){
+        console.log("User not created.");          
+        setRegisterError(true);
+        setShowLoader(false);
+        console.error('Error:', error);
+      }           
     }
     else {
-      notifyError("User not created.");  
+      console.log("User not created.");  
       setisSumbitDisabled(true);
       setShowLoader(false);
     }
   };  
 
   //User register Api
-  const register_user = async(formData) => {    
+  const register_user = async(formData) => {   
     if(formData !== null){
-      axios.post("https://minelife-api.azurewebsites.net/register_user", formData)
-      .then(response => {
-        notifySuccess("User create successful.");
-        console.log(response.data.message);
-        setRegisterError(false);
-        setShowLoader(false);
-        router.push(`/auth/login`);
-      })
-      .catch(error => {
-        notifyError("User not created.");          
+      try{
+        const response = await axios.post('https://minelife-api.azurewebsites.net/register_user', formData);
+        if(response.status === 200){          
+          setRegisterError(false);
+          setShowLoader(false);
+          router.push(`/auth/register-complete`);
+          //router.push(`/auth/login`);
+        }
+        else{
+          setLoginError(true);
+          setShowLoader(false);
+        }        
+      } catch (error){
         setRegisterError(true);
         setShowLoader(false);
         console.error('Error:', error);
-      });
+      }    
     }    
     else{
-      notifyError("formData is empty.");  
+      console.log("formData is empty.");  
       setisSumbitDisabled(true);
       setShowLoader(false);
     }

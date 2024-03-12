@@ -1,25 +1,81 @@
-"use client";
+import React, { useState, useEffect, Fragment } from "react";
 import Link from "next/link";
-import { useState, Fragment } from "react";
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import Backdrop from '@mui/material/Backdrop';
+import { Box, Button, Typography } from '@mui/material';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
+import BackdropLoader from '../../components/loader/backdrop-loader';
 
-export default function ForgetPassword() {
+export default function ForgetPassword() {  
+  let [ForgetPasswordEmail, setForgetPasswordEmail] = useState("");
+  let [Otp, setOtp] = useState("");
+  let [isValidEmail, setisValidEmail] = useState(true);
+  let [ShowLoader, setShowLoader] = useState(false);
+  let [ForgetPasswordEmailError, setForgetPasswordEmailError] = useState(false);
+  let [EmailCheckError, setEmailCheckError] = useState(false);
 
-  const [ForgetPasswordEmail, setForgetPasswordEmail] = useState("");
+  const handleForgetPwdInput = (event) =>{
+    setForgetPasswordEmailError(false);
+    let inputVal = event.target.value;
+    setForgetPasswordEmail(inputVal);
+  }
 
-  const onSubmit = async (defaultValues) => {
-    var value = JSON.stringify(defaultValues);
-    console.log(value);
-    if (value.ForgetPasswordEmail != "") {
-      var Apiurl = "/";      
+  const handleOtpInput = (event) =>{
+    let inputVal = event.target.value;
+    setOtp(inputVal);
+  }
+
+  const onSubmit = async () => {    
+    if (ForgetPasswordEmail !== "") {
+      try{
+        setShowLoader(true);
+        const params = { email: ForgetPasswordEmail };
+        const response = await axios.get('https://minelife-api.azurewebsites.net/check_user_email', {params});
+        if(response.status !== 200){          
+          setForgetPasswordEmailError(false);          
+          await forgetpwd_user();
+        }
+        else{
+          setShowLoader(false);
+          setEmailCheckError(true);
+        }     
+      } catch (error){
+        console.log("User not created.");   
+        setShowLoader(false);
+        setEmailCheckError(true);
+        console.error('Error:', error);
+      }         
     }
     else {
-
+      setShowLoader(false);
+      setForgetPasswordEmailError(true);
     }
-    //res.status(200).end()
   };
+
+  const router = useRouter();
+  const forgetpwd_user = async() => {
+    try{      
+      const params = { email: ForgetPasswordEmail };
+      const response = await axios.get('https://minelife-api.azurewebsites.net/forgot_password', {params});
+      if(response.status === 200){
+        router.push(`/auth/reset-password?email=${btoa(ForgetPasswordEmail)}`);
+      }
+      else{
+        setShowLoader(false);
+        setEmailCheckError(true);
+      }     
+    } catch (error){
+      console.log("User not created.");   
+      setShowLoader(false);
+      setEmailCheckError(true);
+      console.error('Error:', error);
+    }            
+  }
 
 
   return (
@@ -41,6 +97,20 @@ export default function ForgetPassword() {
           </div>
           <div className="login-forms">
             <form action="#" method="POST">
+            <>
+                {EmailCheckError && (
+                  <Stack className="pb-5" sx={{ width: '100%' }} spacing={2}>
+                    <Alert severity="error">User Not Exist</Alert>
+                  </Stack>
+                )}
+              </>
+              <>
+                {ShowLoader && (
+                  <BackdropLoader ShowLoader={ShowLoader} />
+                )}
+              </>
+
+
               <div className="username-details mb-7">
                 <div className="label w-full inline-block">
                   <label htmlFor="ForgetPasswordEmail" className="form-label">
@@ -51,22 +121,28 @@ export default function ForgetPassword() {
                   <input
                     type="email"
                     id="ForgetPasswordEmail"
+                    onChange={handleForgetPwdInput}
                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                    
-                  />
+                    value={ForgetPasswordEmail}
+                    />
+                    {ForgetPasswordEmailError && (
+                      <p className="text-red-500" role="alert">この項目は必須です</p>
+                    )}
+                    {isValidEmail ? null : <p className="text-red-500 mt-2" role="alert">形式が違います</p>}
                 </div>
-              </div>
+              </div>             
 
               <div className="login-btn pt-10 text-center">
                 <button
                   type="button"
+                  onClick={onSubmit}
                   className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
                 >
                   <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                    送信
+                    パスワードのリセットメールを送信する
                   </span>
                 </button>
               </div>
-
             </form>
           </div>
         </div>

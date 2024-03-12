@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import axios from "axios";
 import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -10,48 +11,100 @@ import FullLayout from '../../components/layouts/full/FullLayout';
 
 export default function BasicInformation() {
     let [HeirList, setHeirList] = useState([]);
-    let [heir_list, setheir_list] = useState([]);
+    let [HeirListLenth, setHeirListLenth] = useState(0);
+    let [DecendentList, setDecendentList] = useState([]);
     let [showEndButton, setshowEndButton] = useState(false);
-    heir_list = [
-        { id: 1, Name: "Gowtham", RelationshipWithDecedent: "Child", heir: "No" },
-        // { id: 2, Name: "Prakashraj", RelationshipWithDecedent: "Child", heir: "No" },
-        // { id: 3, Name: "Shree", RelationshipWithDecedent: "Younger brother", heir: "Yes" },
-    ];
+
     useEffect(() => {
-        let sessionValue = sessionStorage.getItem('Heir');
-        var tempArray = [];
-        tempArray[0] = JSON.parse(sessionValue);
-        if (tempArray[0] !== null) {
-            setHeirList(tempArray);
-        }
-        else {
-            setHeirList([]);
-        }
-        //Heir list length (API)        
-        if(heir_list.length !== 0){
-            setshowEndButton(true);
-        }
-        else{
-            setshowEndButton(false);
-        }
+        GetDecendentList();
+        GetHeirList();
     }, []);
 
-    const handleDelete = (index) => {
-        let updatedList = [...heir_list];
-        updatedList.splice(index, 1);
-        setheir_list(updatedList);
+    //Load decendent details list
+    const GetDecendentList = async() => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key };
+        try{
+            const response = await axios.get('https://minelife-api.azurewebsites.net/decedent_detail', {params});
+            if(response.status === 200){
+                setDecendentList(response.data);                
+            }
+            else{
+                setDecendentList([]);
+            }
+        }catch (error){
+            console.error('Error:', error);
+        }
+    }; 
+
+
+    //Load heir details list
+    const GetHeirList = async() => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key };
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
+                if(response.status === 200){
+                    setHeirListLenth(response.data.heir_list.length || 0);
+                    setHeirList(response.data.heir_list || []);
+                }
+                else{
+                    setHeirList([]);
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
+
+    
+    //Edit Decendent function
+    const EditDecendent = async(event) => {
+        let ValueId =  event.currentTarget.id;
+        if(ValueId !== ""){
+            router.push(`/basic-information/decendent?Id=${btoa(ValueId)}`);            
+        }
+        else{
+            router.push("/auth/login");
+        }
+    }
+
+
+    const handleDelete = async(DeleteId) => {
+        DeleteId = Number(DeleteId);
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key, id: DeleteId };
+        if(DeleteId !== 0 && auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_heir', {params});
+                if(response.status === 200){
+                    GetHeirList();
+                }
+                else{
+                    
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
     };
 
     const router = useRouter();
     const handleEdit = (Edit_Id) => {
-        Edit_Id = btoa(Edit_Id);
-        router.push(`/basic-information/heir?Id=${Edit_Id}`);
+        router.push(`/basic-information/heir?editId=${Edit_Id}`);
     };
 
     const handleHeirPage = () => {
         router.push({
             pathname: '/basic-information/heir',
-            query: { heirNo: '2' },
+            query: { heirNo: HeirListLenth + 1 },
         });
     }
 
@@ -81,7 +134,7 @@ export default function BasicInformation() {
                                         <label>氏名</label>
                                     </div>
                                     <div className="w-full inline-block heading pt-4">
-                                        <label>名前</label>
+                                        <label>{DecendentList.name}</label>
                                     </div>
                                 </div>
                                 <div className="w-full block lg:w-32">
@@ -89,22 +142,22 @@ export default function BasicInformation() {
                                         <label>お亡くなりになった日</label>
                                     </div>
                                     <div className="w-full inline-block heading pt-4">
-                                        <label>01-01-01</label>
+                                        <label>{DecendentList.date_of_death}</label>
                                     </div>
                                 </div>
                                 <div className="w-full block float-right text-right lg:w-32">
-                                    <Link href="/basic-information/decendent">
-                                        <button value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                            <ModeEditIcon className="text-white" />
-                                        </button>
-                                    </Link>
+                                    <button onClick={EditDecendent} 
+                                    id={DecendentList.decedent_id || "0"} 
+                                    value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <ModeEditIcon className="text-white" />
+                                    </button>
                                 </div>
                             </div>
                         </div>
                         <div className="heir-list py-10">
                             <div className="heir-heading py-3"><span>相続人</span></div>
                             <table className="w-full">
-                                {heir_list.map((list, index) => {
+                                {HeirList.map((list, index) => {
                                     return (
                                         <>
                                             <React.Fragment key={index}>
@@ -112,24 +165,24 @@ export default function BasicInformation() {
                                                     <td className="text-left pt-3">氏名</td>
                                                     <td className="text-left pt-3">続柄</td>
                                                     <td className="text-left pt-3">
-                                                        {list.heir === "Yes" ? "法定相続人" : ""}
+                                                        {list.is_legal === "Yes" ? "法定相続人" : ""}
                                                     </td>
                                                     <td className="text-left pt-3">
-                                                        {list.heir === "Yes" ? "1/2_ _" : ""}
+                                                        {list.is_legal === "Yes" ? "1/2_ _" : ""}
                                                     </td>
                                                     <td className="text-right pt-3">
-                                                        <button onClick={() => handleEdit(list.id)} id={list.id} value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                                        <button onClick={() => handleEdit(list.heir_id)} id={list.heir_id} value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                                             <ModeEditIcon className="text-white" />
                                                         </button>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td className="text-left pt-3">{list.Name}</td>
-                                                    <td className="text-left pt-3">{list.RelationshipWithDecedent}</td>
+                                                    <td className="text-left pt-3">{list.name}</td>
+                                                    <td className="text-left pt-3">{list.relationship_with_decedent}</td>
                                                     <td className="text-left pt-3"></td>
                                                     <td className="text-left pt-3"></td>
                                                     <td className="text-right pt-3">
-                                                        <button onClick={() => handleDelete(index)} id={list.id} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                                        <button onClick={() => handleDelete(list.heir_id)} id={list.heir_id} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                                             <DeleteOutlinedIcon className="text-white" />
                                                         </button>
                                                     </td>

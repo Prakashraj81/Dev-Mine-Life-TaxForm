@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import axios from "axios";
 import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../components/back-btn";
@@ -18,8 +19,8 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
 export default function Heir() {
-    const router = useRouter();
-    const propName = router.query.heirNo;
+    let router = useRouter();
+    let propName = router.query.heirNo;
 
     let ProfessionList = [
         { id: 1, value: '公務員', label: '公務員' },
@@ -34,12 +35,7 @@ export default function Heir() {
         { id: 10, value: 'なし', label: 'なし' },
     ];
 
-    let RelationshipWithDecedentList = [
-        { value: 'option1', label: 'Option 1' },
-        { value: 'option2', label: 'Option 2' },
-        { value: 'option3', label: 'Option 3' },
-    ];
-
+    let [HeirId, setHeirId] = useState(0);
     let [Name, setName] = useState("");
     let [Furigana, setFurigana] = useState("");
     let [DateofBirth, setDateofBirth] = useState("");
@@ -50,6 +46,7 @@ export default function Heir() {
     let [RelationshipWithDecedent, setRelationshipWithDecedent] = useState("");
     let [Address, setAddress] = useState("");
     let [TelephoneNumber, setTelephoneNumber] = useState("");
+    let [HeirCount, setHeirCount] = useState(0);
 
     //Input hide and show states
     let [ShowName, setShowName] = useState(false);
@@ -72,10 +69,11 @@ export default function Heir() {
 
     let [DisabledRadioValue, setDisabledRadioValue] = useState('none');
     let [LegalHeirRadioValue, setLegalHeirRadioValue] = useState('no');
+    let [is_legal_heir, setis_legal_heir] = useState(0);
 
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
-    
+
     //Disabled deduction radio button
     const handleDisabledRadio = (event) => {
         setDisabledRadioValue(event.target.value);
@@ -87,21 +85,14 @@ export default function Heir() {
         setLegalHeirRadioValue(radioValue);
         if (radioValue === "Yes") {
             setShowDisabledDeduction(true);
+            setis_legal_heir(1);
         }
         else {
             setShowDisabledDeduction(false);
+            setis_legal_heir(0);
         }
     };
 
-
-    const handleProfessionType = (event) => {
-        let selectedValue = event.target.value;
-        let selectedOptions = ProfessionList.find(option => option.value === selectedValue);
-        let selectedId = Number(selectedOptions.id);
-        setProfession(selectedValue);
-        setisSumbitDisabled(false);
-        setProfessionError(false);
-    };
 
     const handleRelationshipWithDecedent = (event) => {
         let selectedValue = event.target.value;
@@ -113,14 +104,22 @@ export default function Heir() {
         if (selectedId === "Disabled_deduction") {
             setShowDisabledDeduction(true);
             setShowLegalHeir(false);
+            setis_legal_heir(0);
         }
         else if (selectedId === "Legal_heir") {
             setShowDisabledDeduction(false);
             setShowLegalHeir(true);
+            setis_legal_heir(1);
+        }
+        else if (selectedId === "Legal_heir_adopt") {
+            setShowDisabledDeduction(false);
+            setShowLegalHeir(true);
+            setis_legal_heir(0);
         }
         else {
             setShowDisabledDeduction(false);
             setShowLegalHeir(false);
+            setis_legal_heir(0);
         }
     }
 
@@ -167,16 +166,67 @@ export default function Heir() {
             setTelephoneNumber(inputValue);
             setTelephoneNumberError(false);
         }
+        else if (inputId === "Profession") {
+            setProfession(inputValue);
+        }
         else {
             setAddress(inputValue);
         }
         setisSumbitDisabled(false);
-    }
+    };
+
+
+    useEffect(() => {        
+        GetHeirList();
+    }, []);
+
+
+    //Load heir details list
+    const GetHeirList = async() => {
+        HeirId = 0;
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key };
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
+                if(response.status === 200){
+                    setHeirCount(response.data.heir_list.length);
+                    for(let i = 0; i < response.data.heir_list.length; i ++){
+                        if(response.data.heir_list[0].heir_id === HeirId){
+                            setHeirId(response.data.heir_list[0].heir_id);
+                            setName(response.data.heir_list[0].name);
+                            setFurigana(response.data.heir_list[0].furigana);
+                            setDateofBirth(response.data.heir_list[0].date_of_birth);
+                            setPostCode(response.data.heir_list[0].postal_code);
+                            setTelephoneNumber(response.data.heir_list[0].postal_code);
+                            setAddress(response.data.heir_list[0].address);
+                            setProfession(response.data.heir_list[0].profession);
+                            setRelationshipWithDecedent(response.data.heir_list[0].relationship_with_decedent);
+                            setDisabledRadioValue(response.data.heir_list[0].disabled_deduction);
+                            setis_legal_heir(response.data.heir_list[0].is_legal_heir);
+                        }        
+                    }                                               
+                }
+                else{
+                    setHeirCount(0);
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
+
+
 
     //Submit API function     
     let defaultValues = {};
-    const onSubmit = () => {
+    const onSubmit = async() => {
+        //Id = Number(atob(router.query.Id));
         defaultValues = {
+            HeirId : HeirId,
             Name: Name,
             Furigana: Furigana,
             DateofBirth: DateofBirth,
@@ -202,11 +252,11 @@ export default function Heir() {
         if (defaultValues.DateofBirth === "") {
             setDateofBirthError(true);
             isSumbitDisabled = true;
-        }        
+        }
         if (defaultValues.TelephoneNumber === "") {
             setTelephoneNumberError(true);
             isSumbitDisabled = true;
-        }        
+        }
         if (defaultValues.RelationshipWithDecedent === "") {
             setRelationshipWithDecedentError(true);
             isSumbitDisabled = true;
@@ -214,24 +264,57 @@ export default function Heir() {
 
         //Api setup
         if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('Decendent', JSON.stringify(defaultValues));
-            router.push(`/basic-information`);          
+            let auth_key = atob(sessionStorage.getItem("auth_key"));
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("id", HeirId);
+            formData.append("name", Name);
+            formData.append("furigana", Furigana);
+            formData.append("date_of_birth", DateofBirth);
+            formData.append("postal_code", PostCode);
+            formData.append("address", Address);
+            formData.append("phone", TelephoneNumber);
+            formData.append("profession", Profession);
+            formData.append("relationship_with_decedent", RelationshipWithDecedent);
+            formData.append("disabled_deduction", DisabledRadioValue);
+            formData.append("is_legal_heir", is_legal_heir);
+            if (formData !== null && auth_key !== null) {
+                try {
+                    setShowLoader(true);
+                    let response = "";
+                    if (HeirId === 0) {
+                        response = await axios.post('https://minelife-api.azurewebsites.net/add_heir', formData);
+                    } else {
+                        response = await axios.post('https://minelife-api.azurewebsites.net/edit_heir', formData);
+                    }
+                    if (response.status === 200) {                        
+                        router.push(`/basic-information`);
+                    }
+                    setShowLoader(false);
+                } catch (error) {
+                    setShowLoader(false);
+                    console.error('Error:', error);
+                }
+            } else {
+                console.log("API not allowed");
+                setisSumbitDisabled(true);
+            }
         }
         else {
             console.log("API not allowed");
             setisSumbitDisabled(true);
         }
     };
-   
+    
+
 
     return (
         <>
-        <>
-        {ShowLoader && (
-            <BackdropLoader ShowLoader={ShowLoader} />
-        )}
-        </>            
+            <>
+                {ShowLoader && (
+                    <BackdropLoader ShowLoader={ShowLoader} />
+                )}
+            </>
             <div className="basic-information-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -246,8 +329,8 @@ export default function Heir() {
                     </p>
                 </div>
                 <div className="login-forms">
-                    <form action="#" method="POST">                        
-                            <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                    <form action="#" method="POST">
+                        <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="user-details">
                                     <div className="label w-full inline-block">
@@ -354,7 +437,7 @@ export default function Heir() {
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         onChange={inputHandlingFunction}
                                         value={Address}
-                                    />                                    
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -395,11 +478,13 @@ export default function Heir() {
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="Profession"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                        
-                                    />                                        
+                                        <input
+                                            type="text"
+                                            id="Profession"
+                                            onChange={inputHandlingFunction}
+                                            value={Profession}
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -416,11 +501,11 @@ export default function Heir() {
                                         <option id="Disabled_deduction" value="夫"> 夫 </option>
                                         <option id="Disabled_deduction" value="妻"> 妻 </option>
                                         <optgroup label="息子">
-                                            <option id="Disabled_deduction" value="長男">長男</option>
-                                            <option id="Disabled_deduction" value="二男">二男</option>
-                                            <option id="Disabled_deduction" value="三男">三男</option>
-                                            <option id="Disabled_deduction" value="四男">四男</option>
-                                            <option id="Disabled_deduction" value="五男">五男</option>
+                                            <option id="Legal_heir" value="長男">長男</option>
+                                            <option id="Legal_heir" value="二男">二男</option>
+                                            <option id="Legal_heir" value="三男">三男</option>
+                                            <option id="Legal_heir" value="四男">四男</option>
+                                            <option id="Legal_heir" value="五男">五男</option>
                                         </optgroup>
                                         <optgroup label="娘">
                                             <option id="Disabled_deduction" value="長女">長女</option>
@@ -430,8 +515,8 @@ export default function Heir() {
                                             <option id="Disabled_deduction" value="五女">五女</option>
                                         </optgroup>
                                         <optgroup label="養子">
-                                            <option id="Legal_heir" value="養子">養子</option>
-                                            <option id="Legal_heir" value="孫養子">孫養子</option>
+                                            <option id="Legal_heir_adopt" value="養子">養子</option>
+                                            <option id="Legal_heir_adopt" value="孫養子">孫養子</option>
                                         </optgroup>
                                         <optgroup label="父母">
                                             <option id="" value="父">父</option>
@@ -449,15 +534,15 @@ export default function Heir() {
                                             <option id="" value="妹">妹</option>
                                         </optgroup>
                                         <optgroup label="その他">
-                                            <option id="" value="甥">甥</option>
-                                            <option id="" value="姪">姪</option>
+                                            <option id="Legal_heir" value="甥">甥</option>
+                                            <option id="Legal_heir" value="姪">姪</option>
                                             <option id="Legal_heir" value="孫">孫</option>
-                                            <option id="" value="配偶者">配偶者</option>
-                                            <option id="" value="孫">孫</option>
-                                            <option id="" value="兄弟姉妹">兄弟姉妹</option>
-                                            <option id="" value="父母">父母</option>
-                                            <option id="" value="おい・めい">おい・めい</option>
-                                            <option id="" value="その他">その他</option>
+                                            <option id="Legal_heir" value="配偶者">配偶者</option>
+                                            <option id="Legal_heir" value="孫">孫</option>
+                                            <option id="Legal_heir" value="兄弟姉妹">兄弟姉妹</option>
+                                            <option id="Legal_heir" value="父母">父母</option>
+                                            <option id="Legal_heir" value="おい・めい">おい・めい</option>
+                                            <option id="Legal_heir" value="その他">その他</option>
                                         </optgroup>
                                     </select>
                                     {RelationshipWithDecedentError && (
@@ -498,7 +583,7 @@ export default function Heir() {
                                     <div className="legal-inheritance">
                                         <label className="form-label">法定相続分</label>
                                         <div className="w-full inline-block">
-                                            <span className="text-2xl font-medium pt-5 text-black tracking-2">{1}/{2}_ _</span>
+                                            <span className="text-2xl font-medium pt-5 text-black tracking-2">{1}/{HeirCount ? HeirCount : "_ _"}</span>
                                         </div>
                                     </div>
                                 </>
@@ -528,12 +613,12 @@ export default function Heir() {
                         )}
 
                         <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton/>              
-                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>                                           
-                        </div>     
-                   </form>
+                            <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                                <BackButton />
+                                <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </>

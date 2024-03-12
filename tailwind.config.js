@@ -6,6 +6,7 @@ module.exports = {
   ],
   theme: {
     extend: {
+      ring: ['hover', 'focus'],
       colors: {
         'custom-light-1':'#e8918830',
         'custom-light':'#e8918857',
