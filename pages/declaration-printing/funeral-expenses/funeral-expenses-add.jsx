@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import axios from "axios";
 import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
@@ -32,9 +33,46 @@ export default function FuneralExpensesAdd() {
     let [DatePaidError, setDatePaidError] = useState(false);
     let [AmountPaidError, setAmountPaidError] = useState(false);
 
-
      // Proceed to next step
      let [ShowLoader, setShowLoader] = useState(false);
+
+     useEffect(() => {
+        let funeralExpensesId = 0;
+        let url = router.asPath;
+        let searchParams = new URLSearchParams(url.split('?')[1]);
+        searchParams = searchParams.get("edit");
+        if(searchParams !== null){
+            funeralExpensesId = Number(atob(searchParams));
+            GetFuneralExpensesList(funeralExpensesId);
+        }
+    }, []);
+
+    
+    //Load cash savings details    
+    const GetFuneralExpensesList = async(funeralExpensesId) => {       
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = {auth_key: auth_key, id: funeralExpensesId };
+        if(auth_key !== null && funeralExpensesId !== 0){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_funeral_expenses_details', {params});
+                if(response.status === 200){                    
+                    setFeePayeeName(response.data.funeral_expenses_details.payee_name); 
+                    setPostCode(response.data.funeral_expenses_details.postal_code);
+                    setAddress(response.data.funeral_expenses_details.address);  
+                    setDatePaid(response.data.funeral_expenses_details.date_of_paid);   
+                    setAmountPaid(response.data.funeral_expenses_details.amount.toLocaleString());                                                      
+                }
+                else{
+
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
      
 
     const handleKeyPress = (e) => {
@@ -135,7 +173,7 @@ export default function FuneralExpensesAdd() {
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = () => {
+    const onSubmit = async() => {
         defaultValues = {            
             FeePayeeName: FeePayeeName,
             PostCode: PostCode,
@@ -180,15 +218,44 @@ export default function FuneralExpensesAdd() {
         }
 
         //Api setup
-        if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('FuneralExpenses', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/funeral-expenses`);           
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        if (isSumbitDisabled !== true && auth_key !== null) {     
+            let response = "";
+            let funeralExpensesId = 0;
+            let url = router.asPath;
+            let searchParams = new URLSearchParams(url.split('?')[1]);
+            searchParams = searchParams.get("edit");
+            if(searchParams !== null){
+                funeralExpensesId = Number(atob(searchParams));
+            }              
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("id", funeralExpensesId);
+            formData.append("payee_name", FeePayeeName);      
+            formData.append("address", Address);            
+            formData.append("postal_code", PostCode);
+            formData.append("date_of_paid", DatePaid);
+            AmountPaid = AmountPaid.replace(/,/g, '').replace('.', '');
+            formData.append("paid_amount", parseFloat(AmountPaid));
+            try{
+                if(funeralExpensesId === 0){
+                    response = await axios.post('https://minelife-api.azurewebsites.net/add_funeral_expenses', formData);
+                }
+                else{
+                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_funeral_expenses', formData);
+                }               
+                if(response.status === 200){
+                    router.push(`/declaration-printing/funeral-expenses`); 
+                }                
+            }catch(error){
+                console.log('Error:', error);
+            }
         }
         else {
-            console.log("API not allowed");
             setisSumbitDisabled(true);
-        }
+            setShowLoader(false);
+            //Logout();
+        }         
     };
 
    
@@ -328,6 +395,7 @@ export default function FuneralExpensesAdd() {
                                     type="text"
                                     id="AmountPaid"
                                     className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    value={AmountPaid}
                                     onChange={AmountPaidKeyPress}
                                     onKeyPress={handleKeyPress}                                 
                                 />

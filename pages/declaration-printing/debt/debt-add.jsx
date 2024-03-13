@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import axios from "axios";
 import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
@@ -51,9 +52,49 @@ export default function DebtAdd() {
     let [ObligationDateError, setObligationDateError] = useState(false);
     let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
 
-
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
+
+
+    useEffect(() => {
+        let debtId = 0;
+        let url = router.asPath;
+        let searchParams = new URLSearchParams(url.split('?')[1]);
+        searchParams = searchParams.get("edit");
+        if(searchParams !== null){
+            debtId = Number(atob(searchParams));
+            GetDebtDetails(debtId);
+        }
+    }, []);
+
+    
+    //Load cash savings details    
+    const GetDebtDetails = async(debtId) => {       
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = {auth_key: auth_key, id: debtId };
+        if(auth_key !== null && debtId !== 0){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_debt_details', {params});
+                if(response.status === 200){                    
+                    setNameofDebt(response.data.debt_details.name); 
+                    setOtherParty(response.data.debt_details.other_party);
+                    setPostCode(response.data.debt_details.postal_code);
+                    setAddress(response.data.debt_details.address);  
+                    setObligationDate(response.data.debt_details.obligation_date);   
+                    setDebtPaymentDeadline(response.data.debt_details.payment_deadline);                
+                    setAmountofMoney(response.data.debt_details.amount.toLocaleString());                                                      
+                }
+                else{
+
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
     
 
     const handleKeyPress = (e) => {
@@ -231,7 +272,7 @@ let handleBoxValueChange = (e, index) => {
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = () => {
+    const onSubmit = async() => {
         defaultValues = {
             DebtType: DebtType,
             NameofDebt: NameofDebt,
@@ -265,15 +306,46 @@ let handleBoxValueChange = (e, index) => {
             }
         }
         //Api setup
-        if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('Debt', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/debt`);          
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        if (isSumbitDisabled !== true && auth_key !== null) {     
+            let response = "";
+            let debtId = 0;
+            let url = router.asPath;
+            let searchParams = new URLSearchParams(url.split('?')[1]);
+            searchParams = searchParams.get("edit");
+            if(searchParams !== null){
+                debtId = Number(atob(searchParams));
+            }              
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("id", debtId);
+            formData.append("name", NameofDebt);      
+            formData.append("other_party", OtherParty);      
+            formData.append("address", Address);            
+            formData.append("postal_code", PostCode);
+            formData.append("obligation_date", ObligationDate);
+            formData.append("payment_deadline", DebtPaymentDeadline);
+            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+            formData.append("amount", parseFloat(AmountofMoney));
+            try{
+                if(debtId === 0){
+                    response = await axios.post('https://minelife-api.azurewebsites.net/add_debt', formData);
+                }
+                else{
+                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_debt', formData);
+                }               
+                if(response.status === 200){
+                    router.push(`/declaration-printing/debt`); 
+                }                
+            }catch(error){
+                console.log('Error:', error);
+            }
         }
         else {
-            console.log("API not allowed");
             setisSumbitDisabled(true);
-        }
+            setShowLoader(false);
+            //Logout();
+        }            
     };
 
     

@@ -3,27 +3,99 @@ import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import BackButtonIndex from "../../../components/back-btn-index";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
+import axios from "axios";
+import { useRouter } from 'next/router';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export default function FuneralExpenses() {
     let [FuneralExpensesList, setFuneralExpensesList] = useState([]);
-    let [TotalPrice, setTotalPrice] = useState("0");
-    let totalValuation = 0;
-    useEffect(() => {
-        let sessionValue = sessionStorage.getItem('FuneralExpenses');
-        var tempArray = [];
-        tempArray[0] = JSON.parse(sessionValue);
-        if (tempArray[0] !== null) {
-            setFuneralExpensesList(tempArray);
-        }
-        else {
-            setFuneralExpensesList([]);
-        }
+    let [SnackbarOpen, setSnackbarOpen] = useState(false);
+    let [SnackbarMsg, setSnackbarMsg] = useState("success");
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }    
+        setSnackbarOpen(false);
+    };
+
+    useEffect(() => {        
+        GetFuneralExpensesList();
     }, []);
-    return (
+
+
+    //Load cash savings list
+    const GetFuneralExpensesList = async()=>{
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key };
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/list_funeral_expenses', {params});
+                if(response.status === 200){
+                    setFuneralExpensesList(response.data.funeral_expenses_details);
+                }
+                else{
+                    setFuneralExpensesList([]);
+                }
+            }catch(error){
+                console.log("Errro", error);
+            }
+        }        
+    }
+
+
+    
+    //Edit and Delete cash savings list    
+    let router = useRouter();
+    const handleEdit_DeleteButtonClick = async(event) => {
+        let response = "";
+        let auth_key = atob(sessionStorage.getItem("auth_key"));        
+        const customerId = Number(event.currentTarget.id);
+        const funeralExpensesId = Number(event.currentTarget.name); 
+        const buttonValue = event.currentTarget.value;  
+        const params = { auth_key: auth_key, id: funeralExpensesId };
+        if(customerId !== 0 && funeralExpensesId !== 0 && buttonValue === "Delete"){
+            try{
+                response = await axios.get('https://minelife-api.azurewebsites.net/delete_funeral_expenses', {params});
+                if(response.status === 200){
+                    setSnackbarOpen(true);
+                    setSnackbarMsg("success");
+                    GetFuneralExpensesList();               
+                }
+                else{
+                    setSnackbarOpen(true);
+                    setSnackbarMsg("error");
+                }                      
+            }catch(error){
+                setSnackbarOpen(true);
+                setSnackbarMsg("error");
+                console.log("Error", error);
+            }
+        }
+        else{
+            router.push(`/declaration-printing/funeral-expenses/funeral-expenses-add?edit=${btoa(funeralExpensesId)}`);
+        }  
+    };
+
+    return (         
         <>
+            <>
+                <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                    <Alert
+                    onClose={handleSnackbarClose}
+                    severity={SnackbarMsg}
+                    variant="filled"
+                    sx={{ width: '100%', color: "#FFF" }}
+                    >
+                    This is a {SnackbarMsg} Alert!
+                    </Alert>
+                </Snackbar>
+            </>   
             <div className="other-property-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -39,22 +111,19 @@ export default function FuneralExpenses() {
                 </div>
                 <div className="cash-list py-3">
                     <table className="w-full border border-light-gray">
-                        {FuneralExpensesList.map((list, index) => {
-                            // Calculate TotalPrice correctly
-                            let AmountPaid = parseFloat(list.AmountPaid.replace(/,/g, '').replace('.', ''));
-                            totalValuation += AmountPaid; 
+                        {FuneralExpensesList.map((list, index) => {                            
                             return (
                                 <tr key={index}>
-                                    <td className="py-2 px-2 border-r border border-light-gray">{list.FeePayeeName}</td>
-                                    <td className="py-2 px-2 hidden border-r border border-light-gray">{list.Address}</td>
-                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.AmountPaid.toLocaleString()}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.payee_name}</td>
+                                    <td className="py-2 px-2 hidden border-r border border-light-gray">{list.date_of_paid}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.amount.toLocaleString()}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <ModeEditIcon className="text-white" />
                                         </button>
                                     </td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button id="cash_Delete" value="Delete" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <DeleteOutlinedIcon className="text-white" />
                                         </button>
                                     </td>

@@ -142,12 +142,12 @@ const Menuitems = [
         translateHeading: "funeral expenses",
         text: "funeral expenses",
       },  
-      {        
-        title: "生前贈与",
-        icon: <CardGiftcardOutlinedIcon/>,
-        translateHeading: "gift during life",
-        href: "/gift-various/gifts-taxation",    
-      },        
+      // {        
+      //   title: "生前贈与",
+      //   icon: <CardGiftcardOutlinedIcon/>,
+      //   translateHeading: "gift during life",
+      //   href: "/gift-various/gifts-taxation",    
+      // },        
     ],
   },
   //Third  

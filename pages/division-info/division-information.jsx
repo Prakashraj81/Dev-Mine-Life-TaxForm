@@ -35,7 +35,7 @@ import DebtTable from "../../components/division-info-tables/debt-table";
 import OthersPropertyTable from "../../components/division-info-tables/other-property-table";
 import FuneralExpensesTable from "../../components/division-info-tables/funeral-expenses-table";
 import GiftduringLifeTable from "../../components/division-info-tables/giftduring-life-table";
-import Test from "../../components/division-info-tables/test";
+import CollapsibleTable from "../../components/division-info-tables/test";
 
 import CalculatedTaxAmountEachPersons from "../../components/division-info-tables/calculated-tax-amount-each-persons";
 import AdditionInheritanceTaxAmount from "../../components/division-info-tables/addition-inheritance-tax-amount";
@@ -334,6 +334,7 @@ export default function DivisionInformation() {
                 <div className="w-full inline-block">
                     <form className="hidden1" action="#" method="POST">     
                         <div className="material-tables">
+                            {/* <CollapsibleTable/> */}
                             <CashSavingsTable/>
                             <SecuritiesTable/>
                             <BuildingsTable/>

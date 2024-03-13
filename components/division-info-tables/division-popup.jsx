@@ -17,6 +17,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import axios from "axios";
   
   const style = {
     position: 'absolute',
@@ -30,12 +31,12 @@ import FormLabel from '@mui/material/FormLabel';
   };
   
 
-export default function DivisionPopup({OpenModalPopup, handleModalClose}){
+export default function DivisionPopup({OpenModalPopup, ListTotalAmount, PropertyId, ApiCallRoute, handleModalClose}){
     let [selectedValue, setSelectedValue] = useState('Amount');
     let [AmountShow, setAmountShow] = useState(true);
     let [FractionShow, setFractionShow] = useState(false);
 
-    let [AmountofMoney, setAmountofMoney] = useState("2,000");
+    let [AmountofMoney, setAmountofMoney] = useState(0);
     let [UndecidedHeir, setUndecidedHeir] = useState(AmountofMoney);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
     let [BoxValues, setBoxValues] = useState([0]);
@@ -46,20 +47,43 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
     let [FractionHeir2, setFractionHeir2] = useState(0);
     let [UserAmount, setUserAmount] = useState(0);
 
-    let HeirList = [
-        { id: 1, name: "Shree", name1: "Shree" },
-        { id: 2, name: "Prakashraj", name1: "Prakashraj" },
-        { id: 3, name: "Gowtham", name1: "Gowtham" },
-        { id: 4, name: "Dhinesh", name1: "Dhinesh" },
-        { id: 5, name: "Nisar", name1: "Nisar" },
-        // { id: 6, name: "Muthu", name1: "Muthu" },
-        // { id: 7, name: "Yogesh", name1: "Yogesh" },
-    ];
+    let [HeirList, setHeirList] = useState([]);
+    let [HeirDetailsList, setHeirDetailsList] = useState([]);
+    let [heir_sharing, setheir_sharing] = useState([]);
+    let [HeirId, setHeirId] = useState(0);
+    let [TotalAmount, setTotalAmount] = useState(0);  
 
-    let TotalPrice = "10,000";
-    let totalValuation = 0;
-    let total = 0;  
-    
+  useEffect(() => { 
+    if(OpenModalPopup === true){
+        GetHeirList(); 
+        setAmountofMoney(ListTotalAmount);
+    }    
+  }, [OpenModalPopup]);
+
+  
+  //Load heir details list
+  const GetHeirList = async() => {
+      let auth_key = atob(sessionStorage.getItem("auth_key"));
+      const params = { auth_key: auth_key };
+      if(auth_key !== null){
+          try{
+              const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
+              if(response.status === 200){
+                    console.log("count");
+                  setHeirList(response.data.heir_list || []);                  
+              }
+              else{
+                  setHeirList([]);
+              }
+          }catch (error){
+              console.error('Error:', error);
+          }
+      }  
+      else{
+          //Logout();
+      }      
+  };
+
 
     //Amount and fraction open
     const handleOpenRadio =(event)=> {
@@ -72,6 +96,7 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
             setFractionHeir1(0);
             setFractionHeir2(0);
             setUserAmount(0);
+            setheir_sharing([]);
         }
         else{
             setAmountShow(false);
@@ -81,6 +106,7 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
             setFractionHeir1(0);
             setFractionHeir2(0);
             setUserAmount(0);
+            setheir_sharing([]);
         }
     }
 
@@ -95,7 +121,8 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
     }
 
     //Division box calculation function
-    const divisionBoxCalculation = (e, index) => {        
+    const divisionBoxCalculation = (e, index) => {   
+        let id = e.currentTarget.id;     
         let newValue = e.target.value.replace(/,/g, '');        
         newValue = parseFloat(newValue);
         setBoxValues([0]);
@@ -123,28 +150,63 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
             setShowIncorrectError(false);
             setUndecidedHeir(heirValue.toLocaleString());
         }
+
+        //JSON array add and update              
+        const existingIndex = heir_sharing.findIndex(item => item.index === index);
+        if (existingIndex !== -1) {
+            heir_sharing[existingIndex] = {"index": index, "id": id.toString(), "amount": newValue.toString(), "numerator": "", "denominator": ""};
+        } else {
+            heir_sharing.push({"index": index, "id": id.toString(), "amount": newValue.toString(), "numerator": "", "denominator": ""});
+        }              
+        setheir_sharing([...heir_sharing]);
     };
 
     const fractionBoxCalculation_1 = (e, index) => {
-        const newValue = parseFloat(e.target.value) || 0;          
+        let id = e.currentTarget.id;
+        let numerator = parseFloat(e.target.value) || 0;          
         if(HeirListArray.length !== 0){
             HeirListArray = [...HeirListArray];
         }
         else{
             HeirListArray = [...HeirList];
         }
-        HeirListArray[index].fractionBoxValue1 = newValue;
-        setHeirListArray(HeirListArray);    
+        HeirListArray[index].fractionBoxValue1 = numerator;
+        setHeirListArray(HeirListArray);   
+
+        //JSON array add and update  
+        let denominator = 0;
+        const existingIndex = heir_sharing.findIndex(item => item.index === index);
+        if (existingIndex !== -1) {   
+            let denominator1 = heir_sharing[existingIndex].denominator;        
+            heir_sharing[existingIndex] = {"index": index, "id": id.toString(), "amount": "", "numerator": numerator.toString(), "denominator": denominator1.toString()};          
+        } else {
+            heir_sharing.push({"index": index, "id": id.toString(), "amount": "", "numerator": numerator.toString(), "denominator": denominator.toString()});
+        }              
+        setheir_sharing([...heir_sharing]);
+        
         recalculateTotalAmount(HeirListArray, index);
     };
     
     const fractionBoxCalculation_2 = (e, index) => {
-        const newValue = parseFloat(e.target.value) || 0;
+        let id = e.currentTarget.id;
+        let denominator = parseFloat(e.target.value) || 0;
         HeirListArray = [...HeirListArray];
-        HeirListArray[index].fractionBoxValue2 = newValue;
+        HeirListArray[index].fractionBoxValue2 = denominator;
         setHeirListArray(HeirListArray);
+        
+        //JSON array add and update  
+        let numerator = 0;
+        const existingIndex = heir_sharing.findIndex(item => item.index === index);
+        if (existingIndex !== -1) {   
+            let numerator1 = heir_sharing[existingIndex].numerator;        
+            heir_sharing[existingIndex] = {"index": index, "id": id.toString(), "amount": "", "numerator": numerator1.toString(), "denominator": denominator.toString()};          
+        } else {
+            heir_sharing.push({"index": index, "id": id.toString(), "amount": "", "numerator": numerator.toString(), "denominator": denominator.toString()});
+        }              
+        setheir_sharing([...heir_sharing]);
+
         recalculateTotalAmount(HeirListArray, index);
-    };
+    };   
     
     
     const recalculateTotalAmount = (HeirListArray, index) => {
@@ -188,8 +250,33 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
                     }
                 }  
             }              
-        }        
+        }     
     };
+
+    //Split heir 
+    const onSubmit = async()=> {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        if(auth_key !== null && PropertyId !== 0){
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("id", Number(PropertyId));
+            formData.append("heir_sharing", JSON.stringify(heir_sharing));
+            if(formData !== null){
+                try{
+                    const response = await axios.post(`https://minelife-api.azurewebsites.net/split_${ApiCallRoute}_by_heirs`, formData);
+                    if(response.status === 200){
+                        handleModalClose();
+                    }
+                    else{
+
+                    }
+                }catch(error){
+                    console.log("Error", error);
+                }
+            }
+        }
+    }
+
 
     return(
         <>
@@ -238,7 +325,7 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
                         {HeirList.map((heirlist, index) => (
                             <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                 <span>{heirlist.name}</span>
-                                <div className="text-right"><input id={heirlist.id} type="text" autoComplete="off" className="border-2 h-10 text-right form-control w-50 outline-none"
+                                <div className="text-right"><input id={heirlist.heir_id} type="text" autoComplete="off" className="border-2 h-10 text-right form-control w-50 outline-none"
                                     onChange={(e) => divisionBoxCalculation(e, index)}
                                     value={BoxValues[index] ? BoxValues[index].toLocaleString() : ''}
                                     onKeyPress={divisionInputKeyPress}
@@ -270,6 +357,7 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
                                         <div><input
                                             type="text"
                                             className="text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
+                                            id={heirlist.heir_id}
                                             onChange={(e) => fractionBoxCalculation_1(e, index)}
                                             onKeyPress={divisionInputKeyPress}
                                         /></div>
@@ -279,6 +367,7 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
                                         <div><input
                                             type="text"
                                             className="text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
+                                            id={heirlist.heir_id}
                                             onChange={(e) => fractionBoxCalculation_2(e, index)}
                                             onKeyPress={divisionInputKeyPress}
                                         /></div>
@@ -310,7 +399,8 @@ export default function DivisionPopup({OpenModalPopup, handleModalClose}){
                             </span>
                         </button>       
                         <button
-                            type="button"                    
+                            type="button"   
+                            onClick={onSubmit}                 
                             className="cursor-pointer bg-primary-color rounded px-8 py-2 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
                         >                   
                             <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">

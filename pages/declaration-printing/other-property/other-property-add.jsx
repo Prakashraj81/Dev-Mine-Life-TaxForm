@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import axios from "axios";
 import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
@@ -58,7 +59,42 @@ export default function OtherPropertyAdd() {
 
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
+
+    useEffect(() => {
+        let OtherPropertyId = 0;
+        let url = router.asPath;
+        let searchParams = new URLSearchParams(url.split('?')[1]);
+        searchParams = searchParams.get("edit");
+        if(searchParams !== null){
+            OtherPropertyId = Number(atob(searchParams));
+            GetHouseHoldDetails(OtherPropertyId);
+        }
+    }, []);
+
     
+    //Load cash savings details    
+    const GetHouseHoldDetails = async(OtherPropertyId) => {       
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = {auth_key: auth_key, id: OtherPropertyId };
+        if(auth_key !== null && OtherPropertyId !== 0){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_other_assets_details', {params});
+                if(response.status === 200){                    
+                    setPropertyName(response.data.other_assets_details.property_name); 
+                    setOtherParty(response.data.other_assets_details.other_party);
+                    setValuation(response.data.other_assets_details.valuation.toLocaleString());                                                      
+                }
+                else{
+
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };    
 
     //Postal code 7 digit limit function
     const [isValid, setIsValid] = useState(true);
@@ -266,7 +302,7 @@ export default function OtherPropertyAdd() {
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = () => {
+    const onSubmit = async() => {
         defaultValues = {
             Property: Property,
             PropertyName: PropertyName,
@@ -312,15 +348,42 @@ export default function OtherPropertyAdd() {
             }
         }
         //Api setup
-        if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('OtherProperty', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/other-property`);         
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        if (isSumbitDisabled !== true && auth_key !== null) {     
+            let response = "";
+            let OtherPropertyId = 0;
+            let url = router.asPath;
+            let searchParams = new URLSearchParams(url.split('?')[1]);
+            searchParams = searchParams.get("edit");
+            if(searchParams !== null){
+                OtherPropertyId = Number(atob(searchParams));
+            }              
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("id", OtherPropertyId);
+            formData.append("property_name", PropertyName);            
+            formData.append("other_party", OtherParty);
+            Valuation = Valuation.replace(/,/g, '').replace('.', '');
+            formData.append("valuation", parseFloat(Valuation));
+            try{
+                if(OtherPropertyId === 0){
+                    response = await axios.post('https://minelife-api.azurewebsites.net/add_other_assets', formData);
+                }
+                else{
+                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_other_assets', formData);
+                }               
+                if(response.status === 200){
+                    router.push(`/declaration-printing/other-property`); 
+                }                
+            }catch(error){
+                console.log('Error:', error);
+            }
         }
         else {
-            console.log("API not allowed");
             setisSumbitDisabled(true);
-        }
+            setShowLoader(false);
+            //Logout();
+        }        
     };
 
     

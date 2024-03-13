@@ -1,31 +1,101 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import FullLayout from '../../../components/layouts/full/FullLayout';
-import HeirList from "../../../components/heir-list-box/heir-list";
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
+import FullLayout from '../../../components/layouts/full/FullLayout';
+import axios from "axios";
+import { useRouter } from 'next/router';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export default function Debt() {
     let [DebtList, setDebtList] = useState([]);
-    let [TotalPrice, setTotalPrice] = useState("0");
-    let totalValuation = 0;
-    var tempArray = [];
-    // useEffect(() => {
-    //     let sessionValue = sessionStorage.getItem('Debt');
-    //     tempArray = [];
-    //     tempArray[0] = JSON.parse(sessionValue);
-    //     if (tempArray[0] !== null) {
-    //         setDebtList(tempArray);
-    //     }
-    //     else {
-    //         setDebtList([]);
-    //     }
-    // }, []);    
-    return (
+    let [SnackbarOpen, setSnackbarOpen] = useState(false);
+    let [SnackbarMsg, setSnackbarMsg] = useState("success");
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }    
+        setSnackbarOpen(false);
+    };
+
+    useEffect(() => {        
+        GetDebtList();
+    }, []);
+
+
+    //Load cash savings list
+    const GetDebtList = async()=>{
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key };
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/list_debts', {params});
+                if(response.status === 200){
+                    setDebtList(response.data.debts_details);
+                }
+                else{
+                    setDebtList([]);
+                }
+            }catch(error){
+                console.log("Errro", error);
+            }
+        }        
+    }
+
+
+    
+    //Edit and Delete cash savings list    
+    let router = useRouter();
+    const handleEdit_DeleteButtonClick = async(event) => {
+        let response = "";
+        let auth_key = atob(sessionStorage.getItem("auth_key"));        
+        const customerId = Number(event.currentTarget.id);
+        const debtId = Number(event.currentTarget.name); 
+        const buttonValue = event.currentTarget.value;  
+        const params = { auth_key: auth_key, id: debtId };
+        if(customerId !== 0 && debtId !== 0 && buttonValue === "Delete"){
+            try{
+                response = await axios.get('https://minelife-api.azurewebsites.net/delete_debt', {params});
+                if(response.status === 200){
+                    setSnackbarOpen(true);
+                    setSnackbarMsg("success");
+                    GetDebtList();               
+                }
+                else{
+                    setSnackbarOpen(true);
+                    setSnackbarMsg("error");
+                }                      
+            }catch(error){
+                setSnackbarOpen(true);
+                setSnackbarMsg("error");
+                console.log("Error", error);
+            }
+        }
+        else{
+            router.push(`/declaration-printing/debt/debt-add?edit=${btoa(debtId)}`);
+        }  
+    };
+
+    return (         
         <>
+            <>
+                <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                    <Alert
+                    onClose={handleSnackbarClose}
+                    severity={SnackbarMsg}
+                    variant="filled"
+                    sx={{ width: '100%', color: "#FFF" }}
+                    >
+                    This is a {SnackbarMsg} Alert!
+                    </Alert>
+                </Snackbar>
+            </>   
             <div className="life-insurance-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -41,23 +111,19 @@ export default function Debt() {
                 </div>
                 <div className="cash-list py-3">
                     <table className="w-full border border-light-gray">
-                        {DebtList.map((list, index) => {
-                            // Calculate TotalPrice correctly
-                            let AmountofMoney = parseFloat(list.AmountofMoney.replace(/,/g, '').replace('.', ''));
-                            totalValuation += AmountofMoney;
-                            setTotalPrice(list.AmountofMoney);
+                        {DebtList.map((list, index) => {                            
                             return (
-                                <tr key={index}>                       
-                                    <td className="py-2 px-2 border-r border border-light-gray">{list.NameofDebt}</td>             
-                                    <td className="py-2 px-2 border-r border border-light-gray">{list.OtherParty}</td>
-                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.AmountofMoney.toLocaleString()}</td>
+                                <tr key={index}>
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.name}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.other_party}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.amount.toLocaleString()}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button id="cash_Edit" value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <ModeEditIcon className="text-white" />
                                         </button>
                                     </td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button id="cash_Delete" value="Delete" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <DeleteOutlinedIcon className="text-white" />
                                         </button>
                                     </td>

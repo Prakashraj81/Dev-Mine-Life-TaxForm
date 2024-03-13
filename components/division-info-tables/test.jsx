@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
@@ -13,125 +13,123 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import DivisionPopup from './division-popup';
 
-  
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 600,
-    bgcolor: 'background.paper',  
-    boxShadow: 24,
-    p: 4,
-};
+function createData(name, calories, fat, carbs, protein, price) {
+  return {
+    name,
+    calories,
+    fat,
+    carbs,
+    protein,
+    price,
+    history: [
+      {
+        date: '2020-01-05',
+        customerId: '11091700',
+        amount: 3,
+      },
+      {
+        date: '2020-01-02',
+        customerId: 'Anonymous',
+        amount: 1,
+      },
+    ],
+  };
+}
 
+function Row(props) {
+  const { row } = props;
+  const [open, setOpen] = React.useState(false);
 
-export default function Test() {
-    let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
-    let [OpenModalPopup, setOpenModalPopup] = React.useState(false);   
-
-    let HeirList = [
-        { id: 2, name: "Shree", value: "Cash savings_1", value_1: "Cash_1", total: 1500 },
-        { id: 3, name: "Prakashraj", value: "Cash savings_2", value_1: "Cash_2", total: 500  },
-        { id: 4, name: "Gowtham", value: "", value_1: "Cash_3", total: 3000  },
-    ];
-    let HeirLists = [
-        { id: 2, amount: 300 },
-        { id: 3, amount: 150 },
-        { id: 4, amount: 1000 },
-    ];
-
-    let TotalPrice = "10,000";
-    let totalValuation = 0;
-    let total = 0; 
-
-    //Modal popup open and close function
-    const handleModalOpen =(event)=>{ 
-        setOpenModalPopup(true);    
-    }    
-    const handleModalClose =()=>{ 
-        setOpenModalPopup(false);    
-    }    
-
-    //Table row expand function
-    const handleExpandFun =()=>{
-        setTableExpandOpen(!TableExpandOpen);    
-    }
-   
   return (
-    <>
-    <DivisionPopup OpenModalPopup={OpenModalPopup} handleModalClose={handleModalClose}/>
-    <Table aria-label="collapsible table">
-        <TableHead>
-            <TableRow>
-                <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={5}><span className="font-semibold">現金預金</span></TableCell>
-            </TableRow>   
-          <TableRow>            
-            <TableCell className="border border-light-gray border-l bg-table-gray">預金の種類</TableCell>
-            <TableCell className="border border-light-gray border-l bg-table-gray">金融機関名</TableCell>
-            <TableCell className="border border-light-gray border-l bg-table-gray" align="right">金額</TableCell>
-            <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-        <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>      
-        <TableCell className="border border-light-gray border-l">Cash savings</TableCell>   
-        <TableCell className="border border-light-gray border-l">Cash</TableCell>   
-        <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell> 
-        <TableCell className="border border-light-gray border-l" align="center">
+    <React.Fragment>
+      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>        
+        <TableCell component="th" scope="row">
+          {row.name}
+        </TableCell>
+        <TableCell align="right">{row.calories}</TableCell>
+        <TableCell align="right">{row.fat}</TableCell>
+        <TableCell align="right">{row.carbs}</TableCell>
+        <TableCell align="right">{row.protein}</TableCell>
+        <TableCell>
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={handleExpandFun}
+            onClick={() => setOpen(!open)}
           >
-            {TableExpandOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
       </TableRow>
       <TableRow>
-      <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-        <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
-          <Box sx={{margin: 1}}>          
-          <Table>
-            <TableHead>
-            <TableRow>
-                <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={5}><span className="font-semibold">分割情報の入力</span></TableCell>
-            </TableRow>          
-            <TableRow>      
-                {HeirList.map((heir)=>(
-                <>
-                    <TableCell id={heir.id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
-                 </>
-                ))}                  
-                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-            </TableRow>
-            
-            </TableHead>
-            <TableBody>
-                <TableRow>  
-                {HeirLists.map((heir_lists)=>(
-                <>
-                    <TableCell id={heir_lists.id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
-                 </>
-                ))}                   
-                <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
-                </TableRow>       
-            </TableBody>
-            </Table>  
-          </Box>
-        </Collapse>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                History
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Customer</TableCell>
+                    <TableCell align="right">Amount</TableCell>
+                    <TableCell align="right">Total price ($)</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {row.history.map((historyRow) => (
+                    <TableRow key={historyRow.date}>
+                      <TableCell component="th" scope="row">
+                        {historyRow.date}
+                      </TableCell>
+                      <TableCell>{historyRow.customerId}</TableCell>
+                      <TableCell align="right">{historyRow.amount}</TableCell>
+                      <TableCell align="right">
+                        {Math.round(historyRow.amount * row.price * 100) / 100}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
         </TableCell>
       </TableRow>
+    </React.Fragment>
+  );
+}
+
+
+
+const rows = [
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
+  createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
+  createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
+  createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
+];
+
+export default function CollapsibleTable() {
+  return (
+    <TableContainer component={Paper}>
+      <Table aria-label="collapsible table">
+        <TableHead>
+          <TableRow>            
+            <TableCell>Dessert (100g serving)</TableCell>
+            <TableCell align="right">Calories</TableCell>
+            <TableCell align="right">Fat&nbsp;(g)</TableCell>
+            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
+            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <Row key={row.name} row={row} />
+          ))}
         </TableBody>
       </Table>
-      </>
+    </TableContainer>
   );
 }

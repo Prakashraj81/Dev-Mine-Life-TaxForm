@@ -194,7 +194,9 @@ input {
   .table-head-50 > tr > th:last-child{
     width: 15%;
   }
-
+  tr > th {
+    font-size: 13px !important;
+  }
 
   .excel-pdf, .excel-pdf:hover {
     background:#5D87FF;

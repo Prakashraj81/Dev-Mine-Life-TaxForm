@@ -35,9 +35,9 @@ export default function OtherProperty() {
         const params = { auth_key: auth_key };
         if(auth_key !== null){
             try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_debts', {params});
+                const response = await axios.get('https://minelife-api.azurewebsites.net/list_other_assets', {params});
                 if(response.status === 200){
-                    setOtherPropertyList(response.data.debts_details);
+                    setOtherPropertyList(response.data.other_assets_details);
                 }
                 else{
                     setOtherPropertyList([]);
@@ -61,7 +61,7 @@ export default function OtherProperty() {
         const params = { auth_key: auth_key, id: OtherPropertyId };
         if(customerId !== 0 && OtherPropertyId !== 0 && buttonValue === "Delete"){
             try{
-                response = await axios.get('https://minelife-api.azurewebsites.net/delete_debt', {params});
+                response = await axios.get('https://minelife-api.azurewebsites.net/delete_other_assets', {params});
                 if(response.status === 200){
                     setSnackbarOpen(true);
                     setSnackbarMsg("success");
@@ -79,7 +79,7 @@ export default function OtherProperty() {
             }
         }
         else{
-            router.push(`/declaration-printing/cash-savings/cash-savings-add?edit=${btoa(depositId)}`);
+            router.push(`/declaration-printing/other-property/other-property-add?edit=${btoa(OtherPropertyId)}`);
         }  
     };
 
@@ -116,9 +116,9 @@ export default function OtherProperty() {
                         {OtherPropertyList.map((list, index) => {                            
                             return (
                                 <tr key={index}>                                    
-                                    <td className="py-2 px-2 border-r border border-light-gray">{list.name}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.property_name}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray">{list.other_party}</td>
-                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.amount.toLocaleString()}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.valuation.toLocaleString()}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
                                         <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <ModeEditIcon className="text-white" />
