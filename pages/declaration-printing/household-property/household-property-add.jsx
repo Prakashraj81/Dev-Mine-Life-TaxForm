@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import axios from "axios";
 import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
@@ -31,6 +32,44 @@ export default function HouseholdPropertyAdd() {
 
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
+
+
+    useEffect(() => {
+        let houseHoldId = 0;
+        let url = router.asPath;
+        let searchParams = new URLSearchParams(url.split('?')[1]);
+        searchParams = searchParams.get("edit");
+        if(searchParams !== null){
+            houseHoldId = Number(atob(searchParams));
+            GetHouseHoldDetails(houseHoldId);
+        }
+    }, []);
+
+    
+    //Load cash savings details    
+    const GetHouseHoldDetails = async(houseHoldId) => {       
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = {auth_key: auth_key, id: houseHoldId };
+        if(auth_key !== null && houseHoldId !== 0){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_household_details', {params});
+                if(response.status === 200){                    
+                    setPropertyContent(response.data.household_details.property_details); 
+                    setPostCode(response.data.household_details.postal_code);
+                    setAddress(response.data.household_details.address);                            
+                    setValuation(response.data.household_details.valuation.toLocaleString());                                                      
+                }
+                else{
+
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
     
 
     // const ValuationKeyPress = (e) => {
@@ -59,7 +98,7 @@ export default function HouseholdPropertyAdd() {
             setValuation(0);
         }
         else {
-            setValuation(amount_of_money);
+            setValuation(amount_of_money.toLocaleString());
         }
     }
 
@@ -136,7 +175,7 @@ export default function HouseholdPropertyAdd() {
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = () => {
+    const onSubmit = async() => {
         defaultValues = {
             PropertyContent: PropertyContent,
             PostCode: PostCode,
@@ -156,15 +195,43 @@ export default function HouseholdPropertyAdd() {
             isSumbitDisabled = true;
         }
         //Api setup
-        if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('HouseholdProperty', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/household-property`);          
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        if (isSumbitDisabled !== true && auth_key !== null) {     
+            let response = "";
+            let houseHoldId = 0;
+            let url = router.asPath;
+            let searchParams = new URLSearchParams(url.split('?')[1]);
+            searchParams = searchParams.get("edit");
+            if(searchParams !== null){
+                houseHoldId = Number(atob(searchParams));
+            }              
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("id", houseHoldId);
+            formData.append("property_details", PropertyContent);            
+            formData.append("address", Address);
+            formData.append("postal_code", PostCode);
+            Valuation = Valuation.replace(/,/g, '').replace('.', '');
+            formData.append("valuation", parseFloat(Valuation));
+            try{
+                if(houseHoldId === 0){
+                    response = await axios.post('https://minelife-api.azurewebsites.net/add_household', formData);
+                }
+                else{
+                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_household', formData);
+                }               
+                if(response.status === 200){
+                    router.push(`/declaration-printing/household-property`); 
+                }                
+            }catch(error){
+                console.log('Error:', error);
+            }
         }
         else {
-            console.log("API not allowed");
             setisSumbitDisabled(true);
-        }
+            setShowLoader(false);
+            //Logout();
+        }        
     };
 
     
@@ -275,6 +342,7 @@ export default function HouseholdPropertyAdd() {
                                         type="text"
                                         id="Valuation"
                                         className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        value={Valuation}
                                         onChange={ValuationKeyPress}
                                         onKeyPress={handleKeyPress}
                                     />

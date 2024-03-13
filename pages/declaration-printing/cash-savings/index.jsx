@@ -7,24 +7,97 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import CashSavingsAdd from "./cash-savings-add";
+import axios from "axios";
+import { useRouter } from 'next/router';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export default function CashSavings() {
     let [cashSavingsList, setcashSavingsList] = useState([]);
-    let totalValuation = 0;
-    useEffect(() => {
-        let sessionValue = sessionStorage.getItem('cashSavings');
-        var tempArray =[];
-        tempArray[0] = JSON.parse(sessionValue);     
-        if (tempArray[0] !== null) {                   
-            setcashSavingsList(tempArray);
-        }
-        else{
-            setcashSavingsList([]);
-        }        
+    let [SnackbarOpen, setSnackbarOpen] = useState(false);
+    let [SnackbarMsg, setSnackbarMsg] = useState("success");
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }    
+        setSnackbarOpen(false);
+    };
+
+    useEffect(() => {        
+        GetCashSavingsList();
     }, []);
 
-    return (
+
+    //Load cash savings list
+    const GetCashSavingsList = async()=>{
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key };
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/list_cash_deposit', {params});
+                if(response.status === 200){
+                    setcashSavingsList(response.data.cash_deposit_details);
+                }
+                else{
+                    setcashSavingsList([]);
+                }
+            }catch(error){
+                console.log("Errro", error);
+            }
+        }        
+    }
+
+
+    
+    //Edit and Delete cash savings list    
+    let router = useRouter();
+    const handleEdit_DeleteButtonClick = async(event) => {
+        let response = "";
+        let auth_key = atob(sessionStorage.getItem("auth_key"));        
+        const customerId = Number(event.currentTarget.id);
+        const depositId = Number(event.currentTarget.name); 
+        const buttonValue = event.currentTarget.value;  
+        const params = { auth_key: auth_key, id: depositId };
+        if(customerId !== 0 && depositId !== 0 && buttonValue === "Delete"){
+            try{
+                response = await axios.get('https://minelife-api.azurewebsites.net/delete_cash_deposit', {params});
+                if(response.status === 200){
+                    setSnackbarOpen(true);
+                    setSnackbarMsg("success");
+                    GetCashSavingsList();               
+                }
+                else{
+                    setSnackbarOpen(true);
+                    setSnackbarMsg("error");
+                    GetCashSavingsList([]);
+                }                      
+            }catch(error){
+                setSnackbarOpen(true);
+                setSnackbarMsg("error");
+                console.log("Error", error);
+            }
+        }
+        else{
+            router.push(`/declaration-printing/cash-savings/cash-savings-add?edit=${btoa(depositId)}`);
+        }  
+    };
+
+    return (         
         <>
+            <>
+                <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                    <Alert
+                    onClose={handleSnackbarClose}
+                    severity={SnackbarMsg}
+                    variant="filled"
+                    sx={{ width: '100%', color: "#FFF" }}
+                    >
+                    This is a {SnackbarMsg} Alert!
+                    </Alert>
+                </Snackbar>
+            </>      
             <div className="cash-savings-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -40,33 +113,29 @@ export default function CashSavings() {
                 </div>
                 <div className="cash-list py-3">
                     <table className="w-full border border-light-gray">
-                        {cashSavingsList.map((list, index) => {
-                            // Calculate TotalPrice correctly
-                            let AmountofMoney = parseFloat(list.AmountofMoney.replace(/,/g, '').replace('.', ''));
-                            totalValuation += AmountofMoney;
+                        {cashSavingsList.map((list, index) => {                            
                             return (
                                 <tr key={index}>
-                                    {list.Address ?
-                                        <td className="py-2 px-2 border-r border border-light-gray">{list.Address}</td>
+                                    {list.address ?
+                                        <td className="py-2 px-2 border-r border border-light-gray">{list.address}</td>
                                         :
-                                        <td className="py-2 px-2 border-r border border-light-gray">{list.FinancialInstitutionName}</td>
+                                        <td className="py-2 px-2 border-r border border-light-gray">{list.financial_institution_name}</td>
                                     }
-                                    <td className="py-2 px-2 border-r border border-light-gray">{list.DepositType}</td>
-                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.AmountofMoney.toLocaleString()}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.deposit_type}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.amount.toLocaleString()}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button id="cash_Edit" value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <ModeEditIcon className="text-white" />
                                         </button>
                                     </td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button id="cash_Delete" value="Delete" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <DeleteOutlinedIcon className="text-white" />
                                         </button>
                                     </td>
                                 </tr>
                             );
                         })}
-
                     </table>
                 </div>
                 <div className="w-full inline-block text-left">

@@ -6,26 +6,96 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
+import axios from "axios";
+import { useRouter } from 'next/router';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export default function HouseholdProperty() {
     let [houseHoldPropertyList, sethouseHoldPropertyList] = useState([]);
-    let [TotalPrice, setTotalPrice] = useState("0");
-    let totalValuation = 0;
-    useEffect(() => {
-        let sessionValue = sessionStorage.getItem('HouseholdProperty');
-        var tempArray = [];
-        tempArray[0] = JSON.parse(sessionValue);
-        if (tempArray[0] !== null) {
-            sethouseHoldPropertyList(tempArray);
-        }
-        else {
-            sethouseHoldPropertyList([]);
-        }
+    let [SnackbarOpen, setSnackbarOpen] = useState(false);
+    let [SnackbarMsg, setSnackbarMsg] = useState("success");
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }    
+        setSnackbarOpen(false);
+    };
+
+    useEffect(() => {        
+        GetHouseHoldPropertyList();
     }, []);
 
+
+    //Load cash savings list
+    const GetHouseHoldPropertyList = async()=>{
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key };
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/list_household', {params});
+                if(response.status === 200){
+                    sethouseHoldPropertyList(response.data.household_details);
+                }
+                else{
+                    sethouseHoldPropertyList([]);
+                }
+            }catch(error){
+                console.log("Errro", error);
+            }
+        }        
+    }
+
+
     
-    return (
+    //Edit and Delete cash savings list    
+    let router = useRouter();
+    const handleEdit_DeleteButtonClick = async(event) => {
+        let response = "";
+        let auth_key = atob(sessionStorage.getItem("auth_key"));        
+        const customerId = Number(event.currentTarget.id);
+        const houseHoldId = Number(event.currentTarget.name); 
+        const buttonValue = event.currentTarget.value;  
+        const params = { auth_key: auth_key, id: houseHoldId };
+        if(customerId !== 0 && houseHoldId !== 0 && buttonValue === "Delete"){
+            try{
+                response = await axios.get('https://minelife-api.azurewebsites.net/delete_household', {params});
+                if(response.status === 200){
+                    setSnackbarOpen(true);
+                    setSnackbarMsg("success");
+                    GetHouseHoldPropertyList();               
+                }
+                else{
+                    setSnackbarOpen(true);
+                    setSnackbarMsg("error");
+                }                      
+            }catch(error){
+                setSnackbarOpen(true);
+                setSnackbarMsg("error");
+                console.log("Error", error);
+            }
+        }
+        else{
+            router.push(`/declaration-printing/household-property/household-property-add?edit=${btoa(houseHoldId)}`);
+        }  
+    };
+
+    return (         
         <>
+            <>
+                <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                    <Alert
+                    onClose={handleSnackbarClose}
+                    severity={SnackbarMsg}
+                    variant="filled"
+                    sx={{ width: '100%', color: "#FFF" }}
+                    >
+                    This is a {SnackbarMsg} Alert!
+                    </Alert>
+                </Snackbar>
+            </>  
             <div className="household-property-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -41,22 +111,19 @@ export default function HouseholdProperty() {
                 </div>
                 <div className="cash-list py-3">
                     <table className="w-full border border-light-gray">
-                        {houseHoldPropertyList.map((list, index) => {
-                            // Calculate TotalPrice correctly
-                            let Valuation = parseFloat(list.Valuation.replace(/,/g, '').replace('.', ''));
-                            totalValuation += Valuation; 
+                        {houseHoldPropertyList.map((list, index) => {                            
                             return (
                                 <tr key={index}>
-                                    <td className="py-2 px-2 border-r border border-light-gray">{list.PropertyContent}</td>
-                                    <td className="py-2 px-2 border-r border border-light-gray">{list.Address}</td>
-                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.Valuation.toLocaleString()}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.property_details}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.address}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.valuation.toLocaleString()}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <ModeEditIcon className="text-white" />
                                         </button>
                                     </td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button id="cash_Delete" value="Delete" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <DeleteOutlinedIcon className="text-white" />
                                         </button>
                                     </td>

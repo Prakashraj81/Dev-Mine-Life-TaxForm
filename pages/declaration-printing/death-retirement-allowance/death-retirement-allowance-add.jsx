@@ -1,7 +1,7 @@
-"use client";
 import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import axios from "axios";
 import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
@@ -12,14 +12,9 @@ import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 
-export default function DeathRetirementAllowanceAdd() {
-
-    let HeirList = [
-        { id: 1, value: 'Shree', label: 'Shree' },
-        { id: 2, value: 'Prakashraj', label: 'Prakashraj' },
-        { id: 3, value: 'Gowtham', label: 'Gowtham' },
-    ];
-
+export default function DeathRetirementAllowanceAdd() {  
+    let [HeirList, setHeirList] = useState([]);
+    let [HeirId, setHeirId] = useState(0);  
     let [NameoftheCompany, setNameoftheCompany] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
@@ -42,16 +37,76 @@ export default function DeathRetirementAllowanceAdd() {
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
     
+    useEffect(() => {
+        let deathRetirementId = 0;
+        let url = router.asPath;
+        let searchParams = new URLSearchParams(url.split('?')[1]);
+        searchParams = searchParams.get("edit");
+        if(searchParams !== null){
+            deathRetirementId = Number(atob(searchParams));
+            GetDeathRetirementList(deathRetirementId);
+        }
+
+        GetHeirList();
+    }, []);
+
+    //Load heir details list
+    const GetHeirList = async() => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key };
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
+                if(response.status === 200){
+                    setHeirList(response.data.heir_list || []);
+                }
+                else{
+                    setHeirList([]);
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
+    
+    //Load cash savings details    
+    const GetDeathRetirementList = async(deathRetirementId) => {       
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = {auth_key: auth_key, id: deathRetirementId };
+        if(auth_key !== null && deathRetirementId !== 0){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_death_retirement_details', {params});
+                if(response.status === 200){                    
+                    setNameoftheCompany(response.data.death_retirements_details.name_of_work_company); 
+                    setPostCode(response.data.death_retirements_details.postal_code);
+                    setAddress(response.data.death_retirements_details.address);  
+                    setDateofReceipt(response.data.death_retirements_details.receipt_date);   
+                    setHeirId(response.data.death_retirements_details.person_being_photographed);                
+                    setAmountReceived(response.data.death_retirements_details.amount.toLocaleString());                                                      
+                }
+                else{
+
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
+
     const handleChangeHeir = () => {
         let selectedOption = event.target.options[event.target.selectedIndex];
         let selectedId = Number(selectedOption.value);
         setisSumbitDisabled(false);
-        setShowIncorrectError(false);
-        setHeirListType(selectedOption.text);
+        setShowIncorrectError(false);            
         setHeirListTypeError(false);
+        setHeirId(selectedId);    
     }
-
-
 
     const AmountReceivedKeyPress = (e) => {
         let amount_of_money = e.target.value;
@@ -143,13 +198,15 @@ export default function DeathRetirementAllowanceAdd() {
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = () => {
+    const onSubmit = async() => {
         defaultValues = {
             NameoftheCompany: NameoftheCompany,
             PostCode: PostCode,
             Address: Address,
+            DateofReceipt: DateofReceipt,
             AmountReceived: AmountReceived,
             HeirListType: HeirListType,
+            HeirId: HeirId,
             UndecidedHeir: UndecidedHeir,
             TotalPrice: AmountReceived,
         };
@@ -163,20 +220,51 @@ export default function DeathRetirementAllowanceAdd() {
             setAddressError(true);
             isSumbitDisabled = true;
         }
-        if (defaultValues.HeirListType === "") {
+        if (defaultValues.HeirId === 0) {
             setHeirListTypeError(true);
             isSumbitDisabled = true;
         }
+
         //Api setup
-        if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('DeathBenefit', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/death-benefit`);        
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        if (isSumbitDisabled !== true && auth_key !== null) {     
+            let response = "";
+            let deathRetirementId = 0;
+            let url = router.asPath;
+            let searchParams = new URLSearchParams(url.split('?')[1]);
+            searchParams = searchParams.get("edit");
+            if(searchParams !== null){
+                deathRetirementId = Number(atob(searchParams));
+            }              
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("id", deathRetirementId);
+            formData.append("name_of_work_company", NameoftheCompany);            
+            formData.append("address", Address);            
+            formData.append("postal_code", PostCode);
+            formData.append("receipt_date", DateofReceipt);
+            formData.append("heir_id", HeirId);
+            AmountReceived = AmountReceived.replace(/,/g, '').replace('.', '');
+            formData.append("amount_received", parseFloat(AmountReceived));
+            try{
+                if(deathRetirementId === 0){
+                    response = await axios.post('https://minelife-api.azurewebsites.net/add_death_retirement', formData);
+                }
+                else{
+                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_death_retirement', formData);
+                }               
+                if(response.status === 200){
+                    router.push(`/declaration-printing/death-retirement-allowance`); 
+                }                
+            }catch(error){
+                console.log('Error:', error);
+            }
         }
         else {
-            console.log("API not allowed");
             setisSumbitDisabled(true);
-        }
+            setShowLoader(false);
+            //Logout();
+        }         
     };
 
     
@@ -287,6 +375,7 @@ export default function DeathRetirementAllowanceAdd() {
                                         type="date"
                                         id="DateofReceipt"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        value={DateofReceipt}
                                         onKeyPress={handleKeyPress}
                                         onChange={inputHandlingFunction}
                                     />
@@ -307,11 +396,11 @@ export default function DeathRetirementAllowanceAdd() {
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
-                                <select id="HeirListType" onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
+                                <select id="HeirListType" value={HeirId} onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
                                     <option value='' id="0"></option>
                                     {HeirList.map((option) => (
-                                        <option key={option.id} value={option.id}>
-                                            {option.label}
+                                        <option key={option.heir_id} value={option.heir_id}>
+                                            {option.name}
                                         </option>
                                     ))}
                                 </select>
@@ -337,6 +426,7 @@ export default function DeathRetirementAllowanceAdd() {
                                         type="text"
                                         id="AmountReceived"
                                         className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        value={AmountReceived}
                                         onChange={AmountReceivedKeyPress}
                                         onKeyPress={handleKeyPress}
                                     />

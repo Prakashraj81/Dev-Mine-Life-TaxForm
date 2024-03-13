@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import axios from "axios";
 import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
@@ -14,12 +15,8 @@ import BackdropLoader from '../../../components/loader/backdrop-loader';
 
 export default function DeathBenefitAdd() {
 
-    let HeirList = [
-        { id: 1, value: 'Shree', label: 'Shree' },
-        { id: 2, value: 'Prakashraj', label: 'Prakashraj' },
-        { id: 3, value: 'Gowtham', label: 'Gowtham' },
-    ];
-
+    let [HeirList, setHeirList] = useState([]);
+    let [HeirId, setHeirId] = useState(0);
     let [NameofLifeInsurance, setNameofLifeInsurance] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
@@ -41,17 +38,77 @@ export default function DeathBenefitAdd() {
 
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);   
+    
+    useEffect(() => {
+        let deathBenifitId = 0;
+        let url = router.asPath;
+        let searchParams = new URLSearchParams(url.split('?')[1]);
+        searchParams = searchParams.get("edit");
+        if(searchParams !== null){
+            deathBenifitId = Number(atob(searchParams));
+            GetDeathBenifitDetails(deathBenifitId);
+        }
+
+        GetHeirList();
+    }, []);
+
+    //Load heir details list
+    const GetHeirList = async() => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key };
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
+                if(response.status === 200){
+                    setHeirList(response.data.heir_list || []);
+                }
+                else{
+                    setHeirList([]);
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
+    
+    //Load cash savings details    
+    const GetDeathBenifitDetails = async(deathBenifitId) => {       
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = {auth_key: auth_key, id: deathBenifitId };
+        if(auth_key !== null && deathBenifitId !== 0){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_death_benefit_details', {params});
+                if(response.status === 200){                    
+                    setNameofLifeInsurance(response.data.death_benefits_details.name_of_life_insurance); 
+                    setPostCode(response.data.death_benefits_details.postal_code);
+                    setAddress(response.data.death_benefits_details.address);  
+                    setDateofReceipt(response.data.death_benefits_details.receipt_date);   
+                    setHeirId(response.data.death_benefits_details.person_being_photographed);                
+                    setValuation(response.data.death_benefits_details.amount.toLocaleString());                                                      
+                }
+                else{
+
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
 
     const handleChangeHeir = () => {
         let selectedOption = event.target.options[event.target.selectedIndex];
         let selectedId = Number(selectedOption.value);
         setisSumbitDisabled(false);
-        setShowIncorrectError(false);
-        setHeirListType(selectedOption.text);
+        setShowIncorrectError(false);            
         setHeirListTypeError(false);
+        setHeirId(selectedId);    
     }
-
-
 
     const ValuationKeyPress = (e) => {
         let amount_of_money = e.target.value;
@@ -143,13 +200,15 @@ export default function DeathBenefitAdd() {
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = () => {
+    const onSubmit = async() => {
         defaultValues = {
             NameofLifeInsurance: NameofLifeInsurance,
             PostCode: PostCode,
             Address: Address,
+            DateofReceipt: DateofReceipt,
             Valuation: Valuation,
             HeirListType: HeirListType,
+            HeirId: HeirId,
             UndecidedHeir: UndecidedHeir,
             TotalPrice: Valuation,
         };
@@ -163,20 +222,50 @@ export default function DeathBenefitAdd() {
             setAddressError(true);
             isSumbitDisabled = true;
         }
-        if (defaultValues.HeirListType === "") {
+        if (defaultValues.HeirId === 0) {
             setHeirListTypeError(true);
             isSumbitDisabled = true;
         }
         //Api setup
-        if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('DeathBenefit', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/death-benefit`);          
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        if (isSumbitDisabled !== true && auth_key !== null) {     
+            let response = "";
+            let deathBenifitId = 0;
+            let url = router.asPath;
+            let searchParams = new URLSearchParams(url.split('?')[1]);
+            searchParams = searchParams.get("edit");
+            if(searchParams !== null){
+                deathBenifitId = Number(atob(searchParams));
+            }              
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("id", deathBenifitId);
+            formData.append("name_of_life_insurance", NameofLifeInsurance);            
+            formData.append("address", Address);            
+            formData.append("postal_code", PostCode);
+            formData.append("receipt_date", DateofReceipt);
+            formData.append("heir_id", HeirId);
+            Valuation = Valuation.replace(/,/g, '').replace('.', '');
+            formData.append("amount_received", parseFloat(Valuation));
+            try{
+                if(deathBenifitId === 0){
+                    response = await axios.post('https://minelife-api.azurewebsites.net/add_death_benefit', formData);
+                }
+                else{
+                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_death_benefit', formData);
+                }               
+                if(response.status === 200){
+                    router.push(`/declaration-printing/death-benefit`); 
+                }                
+            }catch(error){
+                console.log('Error:', error);
+            }
         }
         else {
-            console.log("API not allowed");
             setisSumbitDisabled(true);
-        }
+            setShowLoader(false);
+            //Logout();
+        }        
     };
 
     
@@ -287,6 +376,7 @@ export default function DeathBenefitAdd() {
                                         type="date"
                                         id="DateofReceipt"
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        value={DateofReceipt}
                                         onKeyPress={handleKeyPress}
                                         onChange={inputHandlingFunction}
                                     />
@@ -306,11 +396,11 @@ export default function DeathBenefitAdd() {
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2">
-                                <select id="HeirListType" onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
+                                <select id="HeirListType" value={HeirId} onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
                                     <option value='' id="0"></option>
                                     {HeirList.map((option) => (
-                                        <option key={option.id} value={option.id}>
-                                            {option.label}
+                                        <option key={option.heir_id} value={option.heir_id}>
+                                            {option.name}
                                         </option>
                                     ))}
                                 </select>
@@ -334,6 +424,7 @@ export default function DeathBenefitAdd() {
                                         type="text"
                                         id="Valuation"
                                         className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        value={Valuation}
                                         onChange={ValuationKeyPress}
                                         onKeyPress={handleKeyPress}
                                     />

@@ -16,7 +16,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import PrintIcon from '@mui/icons-material/Print';
 import { list } from "postcss";
-
+import axios from "axios";
 
 export default function SecuritiesAdd() {
     let SecuritiesList = [
@@ -65,6 +65,7 @@ export default function SecuritiesAdd() {
     let [FinancialInstitutionName, setFinancialInstitutionName] = useState("");
     let [UnitPrice, setUnitPrice] = useState(0);
     let [Quantity, setQuantity] = useState(0);
+    let [OthersUnitInput, setOthersUnitInput] = useState(0);
     let [AmountofMoney, setAmountofMoney] = useState(0);
     let [MoneyOrder, setMoneyOrder] = useState(0);
     let [ReductionAmount, setReductionAmount] = useState(0);
@@ -155,7 +156,44 @@ export default function SecuritiesAdd() {
         setshowQuantityPrice(true);
         setshowFinancialInstitutionName(true);
         setshowAmountMoney(false);
+
+        let securityId = 0;
+        let url = router.asPath;
+        let searchParams = new URLSearchParams(url.split('?')[1]);
+        searchParams = searchParams.get("edit");
+        if(searchParams !== null){
+            securityId = Number(atob(searchParams));
+            GetSecuritiesDetails(securityId);
+        }        
     }, []);
+    
+    //Load cash savings details    
+    const GetSecuritiesDetails = async(securityId) => {       
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = {auth_key: auth_key, id: securityId };
+        if(auth_key !== null && securityId !== 0){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_securities', {params});
+                if(response.status === 200){                    
+                    setSecuritiesType(response.data.securities_details.securities_type);  
+                    setNameofSecurities(response.data.securities_details.name_and_brand);                                     
+                    setFinancialInstitutionName(response.data.securities_details.financial_institution_name);
+                    setUnitDetails(response.data.securities_details.unit_details);     
+                    setUnitPrice(response.data.securities_details.unit_1_details);
+                    setQuantity(response.data.securities_details.quantity);
+                    setAmountofMoney(response.data.securities_details.amount.toLocaleString());                                                     
+                }
+                else{
+
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
 
     function inputClear() {
         setUnitDetails("");
@@ -330,7 +368,7 @@ export default function SecuritiesAdd() {
             setFinancialInstitutionNameError(false);
         }
         else {
-            
+            setOthersUnitInput(inputValue);
         }
         setisSumbitDisabled(false);
     }
@@ -381,10 +419,10 @@ export default function SecuritiesAdd() {
     }
     
 
-    //Submit API function 
+    //Submit insert and edit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = () => {
+    const onSubmit = async() => {
         defaultValues = {
             SecuritiesType: SecuritiesType,
             UnitDetails: UnitDetails,
@@ -392,6 +430,7 @@ export default function SecuritiesAdd() {
             FinancialInstitutionName: FinancialInstitutionName,
             UnitPrice: UnitPrice,
             Quantity: Quantity,
+            OthersUnitInput: OthersUnitInput,
             MoneyOrder: MoneyOrder,
             ReductionAmount: ReductionAmount,
             AmountofMoney: AmountofMoney,
@@ -428,15 +467,47 @@ export default function SecuritiesAdd() {
         }        
 
         //Api setup
-        if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('securities', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/securities`);           
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        if (isSumbitDisabled !== true && auth_key !== null) {     
+            let response = "";
+            let securityId = 0;
+            let url = router.asPath;
+            let searchParams = new URLSearchParams(url.split('?')[1]);
+            searchParams = searchParams.get("edit");
+            if(searchParams !== null){
+                securityId = Number(atob(searchParams));
+            }            
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("id", securityId);
+            formData.append("securities_type", SecuritiesType);            
+            formData.append("name_and_brand", NameofSecurities);
+            formData.append("quantity", Quantity);
+            formData.append("financial_institution_name", FinancialInstitutionName);
+            formData.append("unit_details", UnitDetails);
+            formData.append("unit_1_details",  OthersUnitInput);
+            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+            formData.append("amount", parseFloat(AmountofMoney));
+            try{
+                if(securityId === 0){
+                    response = await axios.post('https://minelife-api.azurewebsites.net/add_securities', formData);
+                }
+                else{
+                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_securities', formData);
+                }               
+                if(response.status === 200){
+                    router.push(`/declaration-printing/securities`); 
+                }                
+            }catch(error){
+                console.log('Error:', error);
+            }
         }
         else {
             console.log("API not allowed");
             setisSumbitDisabled(true);
-        }
+            setShowLoader(false);
+            //Logout();
+        }        
     };
 
     
@@ -471,7 +542,7 @@ export default function SecuritiesAdd() {
                                 </label>
                             </div>
                             <div className="w-50 inline-block mt-2">
-                                <select id="SecuritiesType" className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={SecuritiesDropdownChange}>
+                                <select id="SecuritiesType" value={SecuritiesType} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={SecuritiesDropdownChange}>
                                     <option value='0' id="0"></option>
                                     {SecuritiesList.map((option) => (
                                         <option key={option.value} id={option.id} value={option.value}>
@@ -607,7 +678,10 @@ export default function SecuritiesAdd() {
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
                                             type="text"
-                                            id="OthersInput"                                            
+                                            id="OthersUnitInput"  
+                                            value={OthersUnitInput} 
+                                            onChange={inputHandlingFunction}
+                                            onKeyPress={handleKeyPress}                              
                                             className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         />
                                         

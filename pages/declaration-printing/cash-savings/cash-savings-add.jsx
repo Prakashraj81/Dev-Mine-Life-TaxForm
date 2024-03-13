@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
+import axios from "axios";
 import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
@@ -62,18 +63,61 @@ export default function CashSavingsAdd() {
     useEffect(() => {
         setShowFinancialInstitutionName(true);
         setShowPostCode(false);
-        setShowAddress(false);
+        setShowAddress(false);        
+        
+        let depositId = 0;
+        let url = router.asPath;
+        let searchParams = new URLSearchParams(url.split('?')[1]);
+        searchParams = searchParams.get("edit");
+        if(searchParams !== null){
+            depositId = Number(atob(searchParams));
+            GetCashSavingsDetails(depositId);
+        }        
     }, []);
 
     //Clear function
     function clearFunction() {
-        setFinancialInstitutionName("");
-        setPostCode("");
-        setAddress("");
-        setAmountofMoney(0);
-        setUndecidedHeir(0);
-        settotalPrice(0);
+        // setFinancialInstitutionName("");
+        // setPostCode("");
+        // setAddress("");
+        // setAmountofMoney(0);
+        // setUndecidedHeir(0);
+        // settotalPrice(0);
     }
+
+
+    //Load cash savings details    
+    const GetCashSavingsDetails = async(depositId) => {       
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = {auth_key: auth_key, id: depositId };
+        if(auth_key !== null && depositId !== 0){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_cash_deposit', {params});
+                if(response.status === 200){                    
+                    setDepositType(response.data.cash_deposit_details.deposit_type);                      
+                    setAmountofMoney(response.data.cash_deposit_details.amount.toLocaleString());   
+                    if(response.data.cash_deposit_details.financial_institution_name !== ""){
+                        setShowPostCode(false);
+                        setShowAddress(false);
+                        setFinancialInstitutionName(response.data.cash_deposit_details.financial_institution_name);
+                    }  
+                    else{
+                        setShowPostCode(response.data.cash_deposit_details.postal_code);
+                        setShowAddress(response.data.cash_deposit_details.address);
+                        setFinancialInstitutionName(false);
+                    }                                      
+                }
+                else{
+
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
 
     //Deposit type dropdown
     const handleDepositType = (event) => {
@@ -238,11 +282,10 @@ export default function CashSavingsAdd() {
     };
 
 
-    //Submit API function 
+    //Submit insert and edit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = () => {
-        setShowLoader(true);
+    const onSubmit = async() => {        
         defaultValues = {
             DepositType: DepositType,
             FinancialInstitutionName: FinancialInstitutionName,
@@ -283,16 +326,43 @@ export default function CashSavingsAdd() {
         }
 
         //Api setup
-        if (isSumbitDisabled !== true) {
-            setShowLoader(false);
-            console.log("API allowed");
-            sessionStorage.setItem('cashSavings', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/cash-savings`);          
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        if (isSumbitDisabled !== true && auth_key !== null) {     
+            let response = "";
+            let depositId = 0;
+            let url = router.asPath;
+            let searchParams = new URLSearchParams(url.split('?')[1]);
+            searchParams = searchParams.get("edit");
+            if(searchParams !== null){
+                depositId = Number(atob(searchParams));
+            }              
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("id", depositId);
+            formData.append("deposit_type", DepositType);            
+            formData.append("address", Address);
+            formData.append("financial_institution_name", FinancialInstitutionName);
+            formData.append("postal_code", PostCode);
+            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
+            formData.append("amount", parseFloat(AmountofMoney));
+            try{
+                if(depositId === 0){
+                    response = await axios.post('https://minelife-api.azurewebsites.net/add_cash_deposit', formData);
+                }
+                else{
+                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_cash_deposit', formData);
+                }               
+                if(response.status === 200){
+                    router.push(`/declaration-printing/cash-savings`); 
+                }                
+            }catch(error){
+                console.log('Error:', error);
+            }
         }
         else {
-            console.log("API not allowed");
             setisSumbitDisabled(true);
             setShowLoader(false);
+            //Logout();
         }
     };    
    
@@ -326,8 +396,8 @@ export default function CashSavingsAdd() {
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
-                                    <select id="DepositType" className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2" onChange={handleDepositType}>
-                                        <option value='' id="0"></option>
+                                    <select id="DepositType" value={DepositType} className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2" onChange={handleDepositType}>
+                                        <option value='' id="0"></option>                                        
                                         {DepositList.map((option) => (
                                             <option key={option.value} id={option.id} value={option.value}>
                                                 {option.label}
