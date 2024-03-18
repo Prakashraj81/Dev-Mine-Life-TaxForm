@@ -22,6 +22,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import axios from "axios";
 
 //Tables import
 import CashSavingsTable from "../../components/division-info-tables/cash-savings-table";
@@ -47,7 +48,7 @@ import DeclaredTaxAmount from "../../components/division-info-tables/declared-ta
 
 export default function DivisionInformation() {   
     let DepositList = [];
-    const [ResidentialLandType, setResidentialLandType] = useState("");
+    let [ResidentialLandType, setResidentialLandType] = useState("");
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowLoader, setShowLoader] = useState(false);     
 
@@ -55,11 +56,49 @@ export default function DivisionInformation() {
     let [GiftDuringLifeTable, setGiftDuringLifeTable] = useState(true);
     let [ShowSuccessiveInheritance, setShowSuccessiveInheritance] = useState(false);
     let [ShowSuccessiveInput, setShowSuccessiveInput] = useState(false);
+    let [heir_details_list, setheir_details_list] = useState([]);
+    let [Flag, setFlag] = useState(0);
+
+    
+    //Load heir details list
+    const GetHeirList = async() => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key };
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
+                if(response.status === 200){                    
+                    heir_details_list = response.data.heir_list;
+                    setheir_details_list(response.data.heir_list);
+                    console.log("heir_details_list_API: ", heir_details_list);
+                    if(heir_details_list.length !== 0){
+                        Flag = 1;
+                        setFlag(1);
+                    }
+                    else{
+                        Flag = 0;
+                        setFlag(0);
+                    }
+                }
+                else{
+                    setheir_details_list([]);
+                }
+            }catch (error){
+                console.error('Error:', error);
+            }
+        }  
+        else{
+            //Logout();
+        }      
+    };
+
+    useEffect(() => {
+        GetHeirList();
+    }, []);
 
     const handleResidentialLandType = (event) => {
         setResidentialLandType(event.target.value);
     };
-
 
     const inputHandlingFunction = (event) => {
 
@@ -334,26 +373,30 @@ export default function DivisionInformation() {
                 <div className="w-full inline-block">
                     <form className="hidden1" action="#" method="POST">     
                         <div className="material-tables">
-                            {/* <CollapsibleTable/> */}
-                            <CashSavingsTable/>
-                            <SecuritiesTable/>
-                            <BuildingsTable/>
-                            <LandTable/>
-                            <HouseholdPropertyTable/>
-                            <DeathBenefitTable/>
-                            <DeathRetirementAllowanceTable/>
-                            <DebtTable/>
-                            <OthersPropertyTable/>
-                            <FuneralExpensesTable/>
-                            <GiftduringLifeTable/>
-                            
-                            <CalculatedTaxAmountEachPersons/>
-                            <AdditionInheritanceTaxAmount/>
-                            <SpouseTaxReduction/>
-                            <ConfirmationDeductionMinors/>
-                            <ConfirmationDeductionPersons/>
-                            <ConfirmationSuccessiveInheritance/>
-                            <DeclaredTaxAmount/>
+                            <div>
+                                {Flag === 1 && heir_details_list.length !== 0 && (
+                                    <>
+                                        <CashSavingsTable heir_details_list={heir_details_list} />
+                                        <SecuritiesTable heir_details_list={heir_details_list} />
+                                        <BuildingsTable />
+                                        <LandTable />
+                                        <HouseholdPropertyTable heir_details_list={heir_details_list} />
+                                        <DeathBenefitTable heir_details_list={heir_details_list} />
+                                        <DeathRetirementAllowanceTable heir_details_list={heir_details_list} />
+                                        <DebtTable heir_details_list={heir_details_list} />
+                                        <OthersPropertyTable heir_details_list={heir_details_list} />
+                                        <FuneralExpensesTable heir_details_list={heir_details_list} />
+                                        <GiftduringLifeTable />
+                                        <CalculatedTaxAmountEachPersons />
+                                        <AdditionInheritanceTaxAmount />
+                                        <SpouseTaxReduction />
+                                        <ConfirmationDeductionMinors />
+                                        <ConfirmationDeductionPersons />
+                                        <ConfirmationSuccessiveInheritance />
+                                        <DeclaredTaxAmount />
+                                    </>
+                                )}
+                            </div>                   
                         </div>                                
                         <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                             <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">

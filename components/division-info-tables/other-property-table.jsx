@@ -20,7 +20,11 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DivisionPopup from './division-popup';
-
+import axios from "axios";
+import { useRouter } from 'next/router';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
   
 const style = {
     position: 'absolute',
@@ -34,63 +38,220 @@ const style = {
 };
 
 
-export default function OthersPropertyTable() {
-    let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
-    let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
-    let [OpenModalPopup, setOpenModalPopup] = React.useState(false);   
+export default function OthersPropertyTable({heir_details_list}) {
+  let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
+  //let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
+  let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});
+  let [OpenModalPopup, setOpenModalPopup] = React.useState(false); 
+    
+  let [ApiCallRoute, setApiCallRoute] = useState("other_assets");
+  let [HeirList, setHeirList] = useState([]);
+  let [HeirDetailsList, setHeirDetailsList] = useState([]);
+  let [HeirId, setHeirId] = useState(0);
+  let [PropertyId, setPropertyId] = useState(0);
+  let [TotalAmount, setTotalAmount] = useState(0); 
+  let [ListTotalAmount, setListTotalAmount] = useState(0); 
+  let [OthersPropertyList, setOthersPropertyList] = useState([]);
+  let [SnackbarOpen, setSnackbarOpen] = useState(false);
+  let [SnackbarMsg, setSnackbarMsg] = useState("Others property split details saved successfully.");    
 
-    let HeirList = [
-      { id: 1, name: "Shree", value: "Cash savings_1", value_1: "Cash_1", total: 1500 },
-      { id: 2, name: "Prakashraj", value: "Cash savings_2", value_1: "Cash_2", total: 500  },
-      { id: 3, name: "Gowtham", value: "", value_1: "Cash_3", total: 3000  },    
-      { id: 4, name: "Dhinesh", value: "", value_1: "Cash_3", total: 700  }, 
-      { id: 5, name: "Nisar", value: "", value_1: "Cash_3", total: 1800  },      
-  ];
-  let HeirLists = [
-      { id: 1, amount: 300 },
-      { id: 2, amount: 150 },
-      { id: 3, amount: 1000 },      
-      { id: 4, amount: 1800 }, 
-      { id: 5, amount: 1800 },      
-  ];
+  useEffect(() => {
+    GetOthersPropertyList();
+    setHeirList(heir_details_list);
+    setHeirDetailsList(heir_details_list);
+}, []);  
+
+//Load cash savings list
+const GetOthersPropertyList = async()=>{
+  let auth_key = atob(sessionStorage.getItem("auth_key"));
+  const params = { auth_key: auth_key };
+  if(auth_key !== null){
+      try{
+          const response = await axios.get('https://minelife-api.azurewebsites.net/list_other_assets', {params});
+          if(response.status === 200){
+              setOthersPropertyList(response.data.other_assets_details);
+              {response.data.other_assets_details.map((list) => {
+                if(list.valuation !== 0){
+                  TotalAmount = TotalAmount + list.valuation;
+                  setTotalAmount(TotalAmount);
+                }
+              })};
+          }
+          else{
+            setOthersPropertyList([]);
+          }
+      }catch(error){
+          console.log("Errro", error);
+      }
+  }        
+}
 
 
-    let TotalPrice = "10,000";
-    let totalValuation = 0;
-    let total = 0; 
+//Modal popup open and close function
+const handleSnackbarClose = (event, reason) => {
+  if (reason === 'clickaway') {
+    return;
+  }    
+  setSnackbarOpen(false);
+};
 
-    //Modal popup open and close function
-    const handleModalOpen =(event)=>{ 
-        setOpenModalPopup(true);    
-    }    
-    const handleModalClose =()=>{ 
-        setOpenModalPopup(false);    
-    }    
+const handleModalOpen =(event)=>{         
+  setOpenModalPopup(true);       
+}    
+const handleModalClose =()=>{ 
+  setOpenModalPopup(false);    
+}    
 
-    //Table row expand function
-    const handleExpandFun =()=>{
-        setTableExpandOpen(!TableExpandOpen);    
-        setTableExpandOpen2(false);
-    }
+//Table row expand function
+const handleExpandFun =()=>{
+  setTableExpandOpen(!TableExpandOpen);    
+  setTableExpandOpen2(false);       
+}
 
-    //Table row expand function-2
-    const handleExpandFun2 =()=>{
-      setTableExpandOpen2(!TableExpandOpen2);    
+//Table row expand function-2
+const handleExpandFun2 =(event)=>{
+  const iconClickId = Number(event.currentTarget.id);
+  const customerId = Number(event.currentTarget.name);
+  ListTotalAmount = event.currentTarget.value;
+  setListTotalAmount(ListTotalAmount);  
+  setPropertyId(iconClickId);
+
+  setTableExpandOpen2((prevExpandState) => ({
+    ...prevExpandState,
+    [iconClickId]: !prevExpandState[iconClickId],
+  }));
+
+  if (!TableExpandOpen2[iconClickId]) {
+    HeirList = heir_details_list;
   }
-   
-  return (
-    <>
-    <DivisionPopup OpenModalPopup={OpenModalPopup} handleModalClose={handleModalClose}/>
+}
+ 
+return (
+  <>
+  <DivisionPopup OpenModalPopup={OpenModalPopup} ListTotalAmount={ListTotalAmount} PropertyId={PropertyId} ApiCallRoute={ApiCallRoute} handleModalClose={handleModalClose}/>
+  <>
+    <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+        <Alert
+        onClose={handleSnackbarClose}
+        severity={SnackbarMsg}
+        variant="filled"
+        sx={{ width: '100%', color: "#FFF" }}
+        >
+        {SnackbarMsg}
+        </Alert>
+    </Snackbar>
+  </>
+  <div className="py-5">
+    <Table aria-label="collapsible table">
+        <TableHead className="table-head">
+          <TableRow>
+            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">その他財産</span></TableCell>
+            <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+            <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+            <TableCell className="border border-light-gray border-l" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+            <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold">入力</span></TableCell>
+          </TableRow>
+          </TableHead>
+          <TableBody>                     
+          <TableRow>
+            <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
+                  <Box className="my-2"> 
+                    <Table>
+                      <TableHead className="table-head-2">
+                          <TableRow>
+                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">財産の名称</span></TableCell>
+                            <TableCell className="border border-light-gray border-l"><span className="font-semibold">相手先</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">評価額</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
+                            <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
+                          </TableRow>                   
+                          {OthersPropertyList.map((list, index) => (
+                            <React.Fragment key={list.id}>
+                              <TableRow key={list.id} id={list.id} value={list.customer_id}>
+                                <TableCell className="border border-light-gray border-l">{list.property_name}</TableCell>
+                                <TableCell className="border border-light-gray border-l">{list.other_party}</TableCell>                           
+                                <TableCell className="border border-light-gray border-l w-20" align="right">
+                                  {list.valuation.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span>
+                                </TableCell>
+                                <TableCell className="border border-light-gray border-l w-15" align="center">
+                                  <IconButton
+                                    aria-label="expand row"
+                                    size="small"
+                                    id={list.id}
+                                    name={list.customer_id}
+                                    value={list.valuation.toLocaleString()}
+                                    onClick={handleExpandFun2}
+                                  >
+                                    {TableExpandOpen2[list.id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                  </IconButton>
+                                </TableCell>
+                                <TableCell className="border border-light-gray border-l" align="center"></TableCell>
+                              </TableRow>
+                              <TableRow className="w-full">
+                                <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                                    <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
+                                      <Box>
+                                          <Table>
+                                            <TableHead>
+                                              <TableRow>
+                                                  <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
+                                              </TableRow>          
+                                              <TableRow>      
+                                                  {HeirList.map((heir)=>(
+                                                  <>
+                                                    <TableCell id={heir.heir_id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
+                                                  </>
+                                                  ))}                  
+                                                  <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
+                                                  <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                              </TableRow>                    
+                                            </TableHead>
+                                                <TableBody>
+                                                  <TableRow>  
+                                                    {HeirDetailsList.map((heir_lists)=>(
+                                                    <>
+                                                        <TableCell id={heir_lists.heir_id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
+                                                    </>
+                                                    ))}                   
+                                                    <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
+                                                    <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                                  </TableRow>       
+                                              </TableBody>
+                                          </Table> 
+                                        </Box>
+                                    </Collapse>
+                                  </TableCell>
+                                </TableRow>
+                            </React.Fragment>
+                          ))}
+                      </TableHead>                        
+                    </Table>                       
+                  </Box>
+                </Collapse>                  
+            </TableCell>
+          </TableRow>
+        </TableBody>             
+      </Table>    
+    </div>  
+
+
+
+
+
+
+
+
+
+
+
+
     <div className="py-5">
       <Table aria-label="collapsible table">
           <TableHead className="table-head">
-              <TableRow>
-                  <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">その他財産</span></TableCell>
-                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-                  <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-                  <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold">入力</span></TableCell>
-              </TableRow>
+              
+
+
             </TableHead>
             <TableBody>
                      
@@ -100,13 +261,9 @@ export default function OthersPropertyTable() {
                     <Box className="my-2"> 
                       <Table>
                         <TableHead className="table-head-2">
-                          <TableRow>
-                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">財産の名称</span></TableCell>
-                            <TableCell className="border border-light-gray border-l"><span className="font-semibold">相手先</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">評価額</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
-                            <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
-                          </TableRow>
+                          
+
+                          
                         </TableHead>
                         <TableRow>      
                           <TableCell className="border border-light-gray border-l">Other property</TableCell>   
@@ -146,7 +303,7 @@ export default function OthersPropertyTable() {
                           </TableHead>
                               <TableBody>
                                 <TableRow>  
-                                  {HeirLists.map((heir_lists)=>(
+                                  {HeirList.map((heir_lists)=>(
                                   <>
                                       <TableCell id={heir_lists.id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
                                   </>

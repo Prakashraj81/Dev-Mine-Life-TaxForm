@@ -38,13 +38,13 @@ const style = {
 };
 
 
-export default function SecuritiesTable() {
+export default function SecuritiesTable({heir_details_list}) {
     let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
     //let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
     let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});
     let [OpenModalPopup, setOpenModalPopup] = React.useState(false); 
       
-    let [ApiCallRoute, setApiCallRoute] = useState("securities");
+    let [ApiCallRoute, setApiCallRoute] = useState("debts");
     let [HeirList, setHeirList] = useState([]);
     let [HeirDetailsList, setHeirDetailsList] = useState([]);
     let [HeirId, setHeirId] = useState(0);
@@ -57,33 +57,10 @@ export default function SecuritiesTable() {
 
     useEffect(() => {
       GetSecuritiesList();
-  }, []);
-  
-  //Load heir details list
-  const GetHeirList = async() => {
-      let auth_key = atob(sessionStorage.getItem("auth_key"));
-      const params = { auth_key: auth_key };
-      if(auth_key !== null){
-          try{
-              const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
-              if(response.status === 200){
-                  setHeirList(response.data.heir_list || []);
-                  setHeirDetailsList(response.data.heir_list || []);                  
-              }
-              else{
-                  setHeirList([]);
-                  setHeirDetailsList([]);
-              }
-          }catch (error){
-              console.error('Error:', error);
-          }
-      }  
-      else{
-          //Logout();
-      }      
-  };
-
-
+      setHeirList(heir_details_list);
+      setHeirDetailsList(heir_details_list);
+  }, []);  
+ 
   //Load cash savings list
   const GetSecuritiesList = async()=>{
     let auth_key = atob(sessionStorage.getItem("auth_key"));
@@ -145,7 +122,7 @@ export default function SecuritiesTable() {
     }));
 
     if (!TableExpandOpen2[iconClickId]) {
-      GetHeirList();
+      HeirList = heir_details_list;
     }
   }
    

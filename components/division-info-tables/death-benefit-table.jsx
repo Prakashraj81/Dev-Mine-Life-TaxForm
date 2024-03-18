@@ -38,7 +38,7 @@ const style = {
 };
 
 
-export default function DeathBenefitTable() {
+export default function DeathBenefitTable({heir_details_list}) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
   //let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
   let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});
@@ -57,32 +57,9 @@ export default function DeathBenefitTable() {
 
   useEffect(() => {
     GetDeathBenefitList();
+    setHeirList(heir_details_list);
+    setHeirDetailsList(heir_details_list);
 }, []);
-
-//Load heir details list
-const GetHeirList = async() => {
-    let auth_key = atob(sessionStorage.getItem("auth_key"));
-    const params = { auth_key: auth_key };
-    if(auth_key !== null){
-        try{
-            const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
-            if(response.status === 200){
-                setHeirList(response.data.heir_list || []);
-                setHeirDetailsList(response.data.heir_list || []);                  
-            }
-            else{
-                setHeirList([]);
-                setHeirDetailsList([]);
-            }
-        }catch (error){
-            console.error('Error:', error);
-        }
-    }  
-    else{
-        //Logout();
-    }      
-};
-
 
 //Load cash savings list
 const GetDeathBenefitList = async()=>{
@@ -145,7 +122,7 @@ const handleExpandFun2 =(event)=>{
   }));
 
   if (!TableExpandOpen2[iconClickId]) {
-    GetHeirList();
+    HeirList = heir_details_list;
   }
 }
  
