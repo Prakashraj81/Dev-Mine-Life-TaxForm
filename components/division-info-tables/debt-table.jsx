@@ -61,16 +61,16 @@ export default function DebtTable({heir_details_list}) {
     setHeirDetailsList(heir_details_list);
 }, []);  
 
-//Load cash savings list
+//Load debt list
 const GetDebtList = async()=>{
   let auth_key = atob(sessionStorage.getItem("auth_key"));
   const params = { auth_key: auth_key };
   if(auth_key !== null){
       try{
-          const response = await axios.get('https://minelife-api.azurewebsites.net/list_securities', {params});
+          const response = await axios.get('https://minelife-api.azurewebsites.net/list_debts', {params});
           if(response.status === 200){
-              setDebtList(response.data.securities_details);
-              {response.data.securities_details.map((list) => {
+              setDebtList(response.data.debts_details);
+              {response.data.debts_details.map((list) => {
                 if(list.amount !== 0){
                   TotalAmount = TotalAmount + list.amount;
                   setTotalAmount(TotalAmount);

@@ -59,7 +59,6 @@ export default function CashSavingsTable({heir_details_list}) {
       GetCashSavingsList();
       setHeirList(heir_details_list);
       setHeirDetailsList(heir_details_list);
-      console.log("heir_details_list_table: ", heir_details_list);
   }, []);
     
   //Load cash savings list

@@ -78,7 +78,7 @@ const GetFuneralExpensesList = async()=>{
               })};
           }
           else{
-            setOthersPropertyList([]);
+            setFuneralExpensesList([]);
           }
       }catch(error){
           console.log("Errro", error);
