@@ -12,11 +12,13 @@ import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import DeleteModal from "../../../components/modal/delete-modal";
 
 export default function CashSavings() {
     let [cashSavingsList, setcashSavingsList] = useState([]);
     let [SnackbarOpen, setSnackbarOpen] = useState(false);
     let [SnackbarMsg, setSnackbarMsg] = useState("success");
+    let [DeleteModalOpen, setDeleteModalOpen] = useState(false); 
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -49,7 +51,19 @@ export default function CashSavings() {
         }        
     }
 
-
+  //Delete admin user function
+  const handleDeleteUser = (event) => {
+    setDeleteModalOpen(!DeleteModalOpen);
+  }
+  const DeleteModalFunction = (event) => {
+    let value = event.currentTarget.id;
+    if (value === "Yes") {
+      setDeleteModalOpen(false);
+    }
+    else {
+      setDeleteModalOpen(false);
+    }
+  };
     
     //Edit and Delete cash savings list    
     let router = useRouter();
@@ -61,23 +75,30 @@ export default function CashSavings() {
         const buttonValue = event.currentTarget.value;  
         const params = { auth_key: auth_key, id: depositId };
         if(customerId !== 0 && depositId !== 0 && buttonValue === "Delete"){
-            try{
-                response = await axios.get('https://minelife-api.azurewebsites.net/delete_cash_deposit', {params});
-                if(response.status === 200){
-                    setSnackbarOpen(true);
-                    setSnackbarMsg("success");
-                    GetCashSavingsList();               
-                }
-                else{
+            setDeleteModalOpen(!DeleteModalOpen);
+            if (value === "Yes") {                
+                try{
+                    response = await axios.get('https://minelife-api.azurewebsites.net/delete_cash_deposit', {params});
+                    if(response.status === 200){
+                        setSnackbarOpen(true);
+                        setSnackbarMsg("success");
+                        GetCashSavingsList();               
+                    }
+                    else{
+                        setSnackbarOpen(true);
+                        setSnackbarMsg("error");
+                        GetCashSavingsList([]);
+                    }
+                    setDeleteModalOpen(false);                      
+                }catch(error){
                     setSnackbarOpen(true);
                     setSnackbarMsg("error");
-                    GetCashSavingsList([]);
-                }                      
-            }catch(error){
-                setSnackbarOpen(true);
-                setSnackbarMsg("error");
-                console.log("Error", error);
-            }
+                    console.log("Error", error);
+                }
+              }
+              else {
+                setDeleteModalOpen(false);
+            }            
         }
         else{
             router.push(`/declaration-printing/cash-savings/cash-savings-add?edit=${btoa(depositId)}`);
@@ -97,6 +118,10 @@ export default function CashSavings() {
                     This is a {SnackbarMsg} Alert!
                     </Alert>
                 </Snackbar>
+                
+                {DeleteModalOpen && (
+                    <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
+                )}
             </>      
             <div className="cash-savings-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
