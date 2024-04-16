@@ -34,6 +34,7 @@ import DeathBenefitTable from "../../components/division-info-tables/death-benef
 import DeathRetirementAllowanceTable from "../../components/division-info-tables/death-retirement-allowance-table";
 import DebtTable from "../../components/division-info-tables/debt-table";
 import OthersPropertyTable from "../../components/division-info-tables/other-property-table";
+import TotalPropertyAcquiredTable from "../../components/division-info-tables/total-property-acquired-table";
 import FuneralExpensesTable from "../../components/division-info-tables/funeral-expenses-table";
 import GiftduringLifeTable from "../../components/division-info-tables/giftduring-life-table";
 import CollapsibleTable from "../../components/division-info-tables/test";
@@ -282,7 +283,7 @@ export default function DivisionInformation() {
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
                                         <label htmlFor="RelationshipDecedent" className="form-label">
-                                            今回の被相続人と前回の被相続人の間柄
+                                            今回の被相続人と前回の被相続人の続柄
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
@@ -382,9 +383,10 @@ export default function DivisionInformation() {
                                         <LandTable />
                                         <HouseholdPropertyTable heir_details_list={heir_details_list} />
                                         <DeathBenefitTable heir_details_list={heir_details_list} />
-                                        <DeathRetirementAllowanceTable heir_details_list={heir_details_list} />
-                                        <DebtTable heir_details_list={heir_details_list} />
+                                        <DeathRetirementAllowanceTable heir_details_list={heir_details_list} />                                        
                                         <OthersPropertyTable heir_details_list={heir_details_list} />
+                                        <DebtTable heir_details_list={heir_details_list} />
+                                        <TotalPropertyAcquiredTable/>
                                         <FuneralExpensesTable heir_details_list={heir_details_list} />
                                         <GiftduringLifeTable />
                                         <CalculatedTaxAmountEachPersons />

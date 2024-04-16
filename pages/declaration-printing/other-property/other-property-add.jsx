@@ -67,13 +67,13 @@ export default function OtherPropertyAdd() {
         searchParams = searchParams.get("edit");
         if(searchParams !== null){
             OtherPropertyId = Number(atob(searchParams));
-            GetHouseHoldDetails(OtherPropertyId);
+            GetOtherPropertyDetails(OtherPropertyId);
         }
     }, []);
 
     
-    //Load cash savings details    
-    const GetHouseHoldDetails = async(OtherPropertyId) => {       
+    //Load other property details    
+    const GetOtherPropertyDetails = async(OtherPropertyId) => {       
         let auth_key = atob(sessionStorage.getItem("auth_key"));
         const params = {auth_key: auth_key, id: OtherPropertyId };
         if(auth_key !== null && OtherPropertyId !== 0){

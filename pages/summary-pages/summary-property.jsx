@@ -2,8 +2,7 @@ import Link from "next/link";
 import { useState, useEffect, Fragment, Controller } from "react";
 import BackButton from "../../components/back-btn";
 import FullLayout from '../../components/layouts/full/FullLayout';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import { list } from "postcss";
 import axios from "axios"; 
 
@@ -239,79 +238,79 @@ const GetFuneralExpensesList = async(auth_key, params)=>{
             id: 1,
             heading: "現金預金(外貨含む)",
             amount: CashTotalAmount,
-            icon: <ModeEditIcon className="text-white" />,
+            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/cash-savings",
         },
         {
             id: 2,
             heading: "有価証券",
             amount: SecuritiesTotalAmount,
-            icon: <ModeEditIcon className="text-white" />,
+            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/securities",
         },
         {
             id: 3,
             heading: "建物",
             amount: 0,
-            icon: <ModeEditIcon className="text-white" />,
+            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/building",
         },
         {
             id: 4,
             heading: "土地",
             amount: 0,
-            icon: <ModeEditIcon className="text-white" />,
+            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/land",
         },
         {
             id: 5,
             heading: "家庭用財産",
             amount: HouseHoldPropertyTotalAmount,
-            icon: <ModeEditIcon className="text-white" />,
+            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/household-property",
         },
         {
             id: 6,
             heading: "死亡保険金等",
             amount: DeathBenifitTotalAmount,
-            icon: <ModeEditIcon className="text-white" />,
+            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/death-benefit",
         },
         {
             id: 7,
             heading: "死亡退職金等",
             amount: DeathRetirementTotalAmount,
-            icon: <ModeEditIcon className="text-white" />,
+            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/death-retirement-allowance",
         }, 
         {
             id: 8,
             heading: "その他財産",
             amount: OthersPropertyTotalAmount,
-            icon: <ModeEditIcon className="text-white" />,
+            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/other-property",
         },
         {
             id: 9,
             heading: "債務",
             amount: DebtTotalAmount,
-            icon: <ModeEditIcon className="text-white" />,
+            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/debt",
         },
         {
             id: 10,
             heading: "葬式費用",
             amount: FuneralExpensesTotalAmount,
-            icon: <ModeEditIcon className="text-white" />,
+            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/funeral-expenses",
         },    
-        {
-            id: 11,
-            heading: "生前贈与",
-            amount: 0,
-            icon: <ModeEditIcon className="text-white" />,
-            path: "/gift-various/gifts-taxation",
-        },        
+        // {
+        //     id: 11,
+        //     heading: "生前贈与",
+        //     amount: 0,
+        //     icon: <EditNoteOutlinedIcon className="text-white" />,
+        //     path: "/gift-various/gifts-taxation",
+        // },        
     ];
 
 
@@ -328,7 +327,7 @@ const GetFuneralExpensesList = async(auth_key, params)=>{
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    入力したい項目の「<EditOutlinedIcon className="rotate-1 text-primary-gray"/>」ボタンをクリックして各財産情報を入力してください。 入力が完了しましたら「入力終了（次へ）」をクリックして贈与・控除の入力へ進んで下さい。
+                    入力したい項目の「<EditNoteOutlinedIcon className="text-primary-gray"/>」ボタンをクリックして各財産情報を入力してください。 入力が完了しましたら「入力終了（次へ）」をクリックして贈与・控除の入力へ進んで下さい。
                     </p>
                 </div>
                 <div className="summary-tables-wrapper max-w-screen-md mx-auto">
@@ -342,7 +341,7 @@ const GetFuneralExpensesList = async(auth_key, params)=>{
                                         <td className="text-right">{list.amount.toLocaleString()}</td>
                                         <td className="pl-10">
                                             <Link href={list.path}>
-                                                <button id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                                                <button id="decedent_edit" className="text-sm bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                                     {list.icon}
                                                 </button>
                                             </Link>

@@ -238,15 +238,15 @@ export default function DivisionPopup({OpenModalPopup, ListTotalAmount, Property
                         }                        
                         UndecidedHeir = AmountofMoney - dividedAmount;
                     }                                  
-                    setUndecidedHeir(UndecidedHeir.toLocaleString());
-                    setUserAmount(UndecidedHeir.toLocaleString());               
+                    setUndecidedHeir(UndecidedHeir);
+                    setUserAmount(UndecidedHeir);               
                 } else {
                     setUserAmount(0);
                     if(UndecidedHeir !== 0){
-                        setUndecidedHeir(UndecidedHeir.toLocaleString());
+                        setUndecidedHeir(UndecidedHeir);
                     }
                     else{
-                        setUndecidedHeir(AmountofMoney.toLocaleString());
+                        setUndecidedHeir(AmountofMoney);
                     }
                 }  
             }              
@@ -334,11 +334,11 @@ export default function DivisionPopup({OpenModalPopup, ListTotalAmount, Property
                         ))}                
                         <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                             <span>相続人未決定</span>
-                            <span>{UndecidedHeir.toLocaleString()}</span>
+                            <span>{UndecidedHeir}</span>
                         </li>    
                         <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                             <span>合計</span>
-                            <span>{AmountofMoney.toLocaleString()}</span>
+                            <span>{AmountofMoney}</span>
                         </li>            
                     </ul> 
                         </>
@@ -378,11 +378,11 @@ export default function DivisionPopup({OpenModalPopup, ListTotalAmount, Property
                         ))}  
                         <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                             <span>相続人未決定</span>
-                            <span>{UndecidedHeir.toLocaleString()}</span>
+                            <span>{UndecidedHeir}</span>
                         </li> 
                         <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                             <span>合計</span>
-                            <span>{AmountofMoney.toLocaleString()}</span>
+                            <span>{AmountofMoney}</span>
                         </li>             
                     </ul>   
                     </>

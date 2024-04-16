@@ -52,8 +52,6 @@ export default function Heir() {
     let [ShowName, setShowName] = useState(false);
     let [ShowPostCode, setShowPostCode] = useState(false);
     let [ShowAddress, setShowAddress] = useState(false);
-    let [ShowDisabledDeduction, setShowDisabledDeduction] = useState(false);
-    let [ShowLegalHeir, setShowLegalHeir] = useState(false);
     let [UndecidedHeir, setUndecidedHeir] = useState("0");
     let [totalPrice, settotalPrice] = useState("0");
     let [boxValues, setBoxValues] = useState([]);
@@ -67,8 +65,9 @@ export default function Heir() {
     let [TelephoneNumberError, setTelephoneNumberError] = useState(false);
     let [RelationshipWithDecedentError, setRelationshipWithDecedentError] = useState(false);
 
-    let [DisabledRadioValue, setDisabledRadioValue] = useState('none');
-    let [LegalHeirRadioValue, setLegalHeirRadioValue] = useState('no');
+    let [DisabledRadioValue, setDisabledRadioValue] = useState('None');
+    let [TaxAdditionAmount, setTaxAdditionAmount] = useState('No');
+    let [LegalHeirRadioValue, setLegalHeirRadioValue] = useState('No');
     let [is_legal_heir, setis_legal_heir] = useState(0);
 
     // Proceed to next step
@@ -79,20 +78,10 @@ export default function Heir() {
         setDisabledRadioValue(event.target.value);
     };
 
-    //Legal heir radio button
-    const handleLegalHeirRadio = (event) => {
-        let radioValue = event.target.value;
-        setLegalHeirRadioValue(radioValue);
-        if (radioValue === "Yes") {
-            setShowDisabledDeduction(true);
-            setis_legal_heir(1);
-        }
-        else {
-            setShowDisabledDeduction(false);
-            setis_legal_heir(0);
-        }
-    };
-
+    //20% inheritance tax amount addition
+    const handleTaxAdditionAmount = (event) =>{
+        setTaxAdditionAmount(event.target.value);
+    }    
 
     const handleRelationshipWithDecedent = (event) => {
         let selectedValue = event.target.value;
@@ -100,27 +89,7 @@ export default function Heir() {
         let selectedId = selectedOption.id;
         setRelationshipWithDecedent(selectedValue);
         setisSumbitDisabled(false);
-        setRelationshipWithDecedentError(false);
-        if (selectedId === "Disabled_deduction") {
-            setShowDisabledDeduction(true);
-            setShowLegalHeir(false);
-            setis_legal_heir(0);
-        }
-        else if (selectedId === "Legal_heir") {
-            setShowDisabledDeduction(false);
-            setShowLegalHeir(true);
-            setis_legal_heir(1);
-        }
-        else if (selectedId === "Legal_heir_adopt") {
-            setShowDisabledDeduction(false);
-            setShowLegalHeir(true);
-            setis_legal_heir(0);
-        }
-        else {
-            setShowDisabledDeduction(false);
-            setShowLegalHeir(false);
-            setis_legal_heir(0);
-        }
+        setRelationshipWithDecedentError(false);        
     }
 
     //Postal code 7 digit limit function
@@ -205,17 +174,7 @@ export default function Heir() {
                             setAddress(response.data.heir_list[i].address);
                             setProfession(response.data.heir_list[i].profession);
                             setRelationshipWithDecedent(response.data.heir_list[i].relationship_with_decedent);
-                            setDisabledRadioValue(response.data.heir_list[i].disabled_deduction);
-                            if(response.data.heir_list[i].is_legal === "Yes"){
-                                setLegalHeirRadioValue(response.data.heir_list[i].is_legal);
-                                setis_legal_heir(1);
-                                setShowLegalHeir(true);
-                            }     
-                            else{
-                                setLegalHeirRadioValue(response.data.heir_list[i].is_legal);
-                                setis_legal_heir(0);
-                                setShowLegalHeir(false);
-                            }                       
+                            setDisabledRadioValue(response.data.heir_list[i].disabled_deduction);                                                
                         }        
                     }                                               
                 }
@@ -249,6 +208,7 @@ export default function Heir() {
             RelationshipWithDecedent: RelationshipWithDecedent,
             InheritanceDivisionCompletionDate: InheritanceDivisionCompletionDate,
             DisabledRadioValue: DisabledRadioValue,
+            TaxAdditionAmount: TaxAdditionAmount,
             LegalHeirRadioValue: LegalHeirRadioValue,
         }
 
@@ -289,6 +249,7 @@ export default function Heir() {
             formData.append("profession", Profession);
             formData.append("relationship_with_decedent", RelationshipWithDecedent);
             formData.append("disabled_deduction", DisabledRadioValue);
+            //formData.append("TaxAdditionAmount", TaxAdditionAmount);
             formData.append("is_legal_heir", is_legal_heir);
             if (formData !== null && auth_key !== null) {
                 try {
@@ -504,7 +465,7 @@ export default function Heir() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        被相続人との間柄<i className="text-red-500">*</i>
+                                        被相続人との続柄<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -563,66 +524,65 @@ export default function Heir() {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            {ShowDisabledDeduction && (
-                                <>
-                                    <FormControl>
-                                        <label className="form-label" id="demo-row-radio-buttons-group-label">障害者控除</label>
-                                        <RadioGroup
-                                            row
-                                            aria-labelledby="demo-row-radio-buttons-group-label"
-                                            name="row-radio-buttons-group"
-                                            value={DisabledRadioValue}
-                                        >
-                                            <FormControlLabel value="None" control={<Radio />} onChange={handleDisabledRadio} label="なし" sx={{
-                                                '& .MuiSvgIcon-root': {
-                                                    fontSize: 16,
-                                                },
-                                            }} />
-                                            <FormControlLabel value="General disabled" control={<Radio />} onChange={handleDisabledRadio} label="一般障害者" sx={{
-                                                '& .MuiSvgIcon-root': {
-                                                    fontSize: 16,
-                                                },
-                                            }} />
-                                            <FormControlLabel value="Special handicapped" control={<Radio />} onChange={handleDisabledRadio} label="特別障害者" sx={{
-                                                '& .MuiSvgIcon-root': {
-                                                    fontSize: 16,
-                                                },
-                                            }} />
-                                        </RadioGroup>
-                                    </FormControl>
 
-                                    <div className="legal-inheritance">
-                                        <label className="form-label">法定相続分</label>
-                                        <div className="w-full inline-block">
-                                            <span className="text-2xl font-medium pt-5 text-black tracking-2">{1}/{HeirCount ? HeirCount : "_ _"}</span>
-                                        </div>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                        {ShowLegalHeir && (
+                        
+                        <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <FormControl>
-                                <label className="form-label" id="demo-row-radio-buttons-group-label">法定相続人ですか？</label>
+                                <label className="form-label" id="demo-row-radio-buttons-group-label">障害者控除</label>
                                 <RadioGroup
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
                                     name="row-radio-buttons-group"
-                                    value={LegalHeirRadioValue}
+                                    value={DisabledRadioValue}
                                 >
-                                    <FormControlLabel value="Yes" control={<Radio />} onChange={handleLegalHeirRadio} label="はい" sx={{
+                                    <FormControlLabel value="None" control={<Radio />} onChange={handleDisabledRadio} label="なし" sx={{
                                         '& .MuiSvgIcon-root': {
                                             fontSize: 16,
                                         },
                                     }} />
-                                    <FormControlLabel value="No" control={<Radio />} onChange={handleLegalHeirRadio} label="いいえ" sx={{
+                                    <FormControlLabel value="General disabled" control={<Radio />} onChange={handleDisabledRadio} label="一般障害者" sx={{
+                                        '& .MuiSvgIcon-root': {
+                                            fontSize: 16,
+                                        },
+                                    }} />
+                                    <FormControlLabel value="Special handicapped" control={<Radio />} onChange={handleDisabledRadio} label="特別障害者" sx={{
+                                        '& .MuiSvgIcon-root': {
+                                            fontSize: 16,
+                                        },
+                                    }} />
+                                </RadioGroup>
+                            </FormControl>                                    
+
+                            <div className="legal-inheritance">
+                                <label className="form-label">法定相続分</label>
+                                <div className="w-full inline-block">
+                                    <span className="text-2xl font-medium pt-5 text-black tracking-2">{1}/{"1" ? HeirCount+1 : "_ _"}</span>
+                                </div>
+                            </div>                            
+                        </div>
+                            
+                         <div className="w-full block mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <FormControl>
+                                <label className="form-label" id="demo-row-radio-buttons-group-label">相続税額の2割加算の対象ですか？</label>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    value={TaxAdditionAmount}
+                                >
+                                    <FormControlLabel value="Yes" control={<Radio />} onChange={handleTaxAdditionAmount} label="Yes" sx={{
+                                        '& .MuiSvgIcon-root': {
+                                            fontSize: 16,
+                                        },
+                                    }} />                                            
+                                    <FormControlLabel value="No" control={<Radio />} onChange={handleTaxAdditionAmount} label="No" sx={{
                                         '& .MuiSvgIcon-root': {
                                             fontSize: 16,
                                         },
                                     }} />
                                 </RadioGroup>
                             </FormControl>
-                        )}
+                         </div>
 
                         <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                             <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">

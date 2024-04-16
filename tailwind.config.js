@@ -14,6 +14,7 @@ module.exports = {
         'light-gray':'#dee2e6',
         'primary-color':'#E89188',
         'primary-gray':'#6B6868',
+        'btn-red':'#ce5521',
         'sidebar':'#e891881a',
         'list-text': '#4B4B4B',
         'return-bg':'#6B6868',

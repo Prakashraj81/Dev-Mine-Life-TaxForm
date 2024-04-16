@@ -243,12 +243,10 @@ export default function Decendent() {
                 }
             } 
             else{
-                console.log("API not allowed");
                 setisSumbitDisabled(true);
             }         
         }
         else {
-            console.log("API not allowed");
             setisSumbitDisabled(true);
         }
     };

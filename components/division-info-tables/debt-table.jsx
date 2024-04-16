@@ -141,7 +141,7 @@ return (
         </Alert>
     </Snackbar>
   </>
-  <div className="py-5">
+  <div className="py-2">
     <Table aria-label="collapsible table">
         <TableHead className="table-head">
           <TableRow>

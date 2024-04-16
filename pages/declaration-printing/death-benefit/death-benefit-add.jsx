@@ -297,7 +297,7 @@ export default function DeathBenefitAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="NameofLifeInsurance" className="form-label">
-                                        生命保険会社の名称<i className="text-red-500">*</i>
+                                    勤務先会社等の名称<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -319,7 +319,7 @@ export default function DeathBenefitAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="Location" className="form-label">
-                                        生命保険会社の所在地（郵便番号）
+                                        勤務先会社等の所在地（郵便番号）
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2 relative">
@@ -344,7 +344,7 @@ export default function DeathBenefitAdd() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                        生命保険会社の所在地（住所）<i className="text-red-500">*</i>
+                                        勤務先会社等の所在地（住所）<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">

@@ -21,8 +21,8 @@ import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import CardMembershipSharpIcon from '@mui/icons-material/CardMembershipSharp';
-//
-import CardGiftcardOutlinedIcon from '@mui/icons-material/CardGiftcardOutlined';
+
+import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivismOutlined';
 
 //pages
 import PostAddIcon from '@mui/icons-material/PostAdd';
@@ -66,7 +66,7 @@ const Menuitems = [
     iconOpened: <KeyboardArrowDownIcon />,
     child: [
       {        
-        title: "まとめ  (11)",
+        title: "まとめ",
         icon: <SummarizeOutlinedIcon/>,
         href: "/summary-pages/summary-property", 
         translateHeading: "summary-property",
@@ -142,18 +142,18 @@ const Menuitems = [
         translateHeading: "funeral expenses",
         text: "funeral expenses",
       },  
-      // {        
-      //   title: "生前贈与",
-      //   icon: <CardGiftcardOutlinedIcon/>,
-      //   translateHeading: "gift during life",
-      //   href: "/gift-various/gifts-taxation",    
-      // },        
+      {        
+        title: "Living donation",
+        icon: <VolunteerActivismOutlinedIcon/>,
+        translateHeading: "living donation",
+        href: "/declaration-printing/living-donation",    
+      },        
     ],
   },
   //Third  
   {
     id:3,
-    title: "分割情報、小規模宅地等の特例の入力",    
+    title: "分割情報、特例等の入力",    
     translateHeading: "Entering division information",
     href: "/division-info/division-information",
     icon: <PostAddIcon />,
@@ -163,7 +163,7 @@ const Menuitems = [
  //Fourth
   {
     id:4,
-    title: "申告書の印刷",    
+    title: "申告書、分割協議書の印刷",    
     translateHeading: "funeral",
     href: "/property/declaration-printing",
     icon: <CardGiftcardIcon />,

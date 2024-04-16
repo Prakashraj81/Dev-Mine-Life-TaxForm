@@ -3,10 +3,9 @@ import Link from "next/link";
 import axios from "axios";
 import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import FullLayout from '../../components/layouts/full/FullLayout';
 
 export default function BasicInformation() {
@@ -121,7 +120,7 @@ export default function BasicInformation() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        被相続人、相続を受ける方の情報を「<EditOutlinedIcon className="rotate-1" />」ボタン、「追加する」ボタンをクリックし、ご入力ください。入力が完了しましたら「入力終了（次へ）」をクリックし、財産情報の入力へ進んでくださ い。
+                        被相続人、相続を受ける方の情報を「<EditNoteOutlinedIcon />」ボタン、「追加する」ボタンをクリックし、ご入力ください。入力が完了しましたら「入力終了（次へ）」をクリックし、財産情報の入力へ進んでくださ い。
                     </p>
                 </div>
                 <div className="input-details">
@@ -147,9 +146,9 @@ export default function BasicInformation() {
                                 </div>
                                 <div className="w-full block float-right text-right lg:w-32">
                                     <button onClick={EditDecendent} 
-                                    id={DecendentList.decedent_id || "0"} 
-                                    value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                        <ModeEditIcon className="text-white" />
+                                    id={DecendentList.decedent_id} 
+                                    value="Edit" className="text-base bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                        <EditNoteOutlinedIcon className="text-white" />
                                     </button>
                                 </div>
                             </div>
@@ -165,14 +164,14 @@ export default function BasicInformation() {
                                                     <td className="text-left pt-3">氏名</td>
                                                     <td className="text-left pt-3">続柄</td>
                                                     <td className="text-left pt-3">
-                                                        {list.is_legal === "Yes" ? "法定相続人" : ""}
+                                                        
                                                     </td>
                                                     <td className="text-left pt-3">
-                                                        {list.is_legal === "Yes" ? "1/2_ _" : ""}
+                                                        {HeirListLenth ? "1/" + HeirListLenth : "1/1_"}
                                                     </td>
                                                     <td className="text-right pt-3">
-                                                        <button onClick={() => handleEdit(list.heir_id)} id={list.heir_id} value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                                            <ModeEditIcon className="text-white" />
+                                                        <button onClick={() => handleEdit(list.heir_id)} id={list.heir_id} value="Edit" className="text-base bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                                            <EditNoteOutlinedIcon className="text-white" />
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -183,7 +182,7 @@ export default function BasicInformation() {
                                                     <td className="text-left pt-3"></td>
                                                     <td className="text-right pt-3">
                                                         <button onClick={() => handleDelete(list.heir_id)} id={list.heir_id} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                                            <DeleteOutlinedIcon className="text-white" />
+                                                            <HighlightOffOutlinedIcon className="text-white" />
                                                         </button>
                                                     </td>
                                                 </tr>

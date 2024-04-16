@@ -3,21 +3,18 @@ import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
-import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import CashSavingsAdd from "./cash-savings-add";
+import BackButtonIndex from "../../../components/back-btn-index";
 import axios from "axios";
 import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import DeleteModal from "../../../components/modal/delete-modal";
 
-export default function CashSavings() {
-    let [cashSavingsList, setcashSavingsList] = useState([]);
+export default function LivingDonation() {
+    let [LivingDonationList, setLivingDonationList] = useState([]);
     let [SnackbarOpen, setSnackbarOpen] = useState(false);
     let [SnackbarMsg, setSnackbarMsg] = useState("success");
-    let [DeleteModalOpen, setDeleteModalOpen] = useState(false); 
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -27,22 +24,22 @@ export default function CashSavings() {
     };
 
     useEffect(() => {        
-        GetCashSavingsList();
+        //GetLivingDonationList();
     }, []);
 
 
     //Load cash savings list
-    const GetCashSavingsList = async()=>{
+    const GetLivingDonationList = async()=>{
         let auth_key = atob(sessionStorage.getItem("auth_key"));
         const params = { auth_key: auth_key };
         if(auth_key !== null){
             try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_cash_deposit', {params});
+                const response = await axios.get('https://minelife-api.azurewebsites.net/list_other_assets', {params});
                 if(response.status === 200){
-                    setcashSavingsList(response.data.cash_deposit_details);
+                    setLivingDonationList(response.data.other_assets_details);
                 }
                 else{
-                    setcashSavingsList([]);
+                    setLivingDonationList([]);
                 }
             }catch(error){
                 console.log("Errro", error);
@@ -50,19 +47,7 @@ export default function CashSavings() {
         }        
     }
 
-  //Delete admin user function
-  const handleDeleteUser = (event) => {
-    setDeleteModalOpen(!DeleteModalOpen);
-  }
-  const DeleteModalFunction = (event) => {
-    let value = event.currentTarget.id;
-    if (value === "Yes") {
-      setDeleteModalOpen(false);
-    }
-    else {
-      setDeleteModalOpen(false);
-    }
-  };
+
     
     //Edit and Delete cash savings list    
     let router = useRouter();
@@ -70,37 +55,30 @@ export default function CashSavings() {
         let response = "";
         let auth_key = atob(sessionStorage.getItem("auth_key"));        
         const customerId = Number(event.currentTarget.id);
-        const depositId = Number(event.currentTarget.name); 
+        const LivingDonationId = Number(event.currentTarget.name); 
         const buttonValue = event.currentTarget.value;  
-        const params = { auth_key: auth_key, id: depositId };
-        if(customerId !== 0 && depositId !== 0 && buttonValue === "Delete"){
-            setDeleteModalOpen(!DeleteModalOpen);
-            if (value === "Yes") {                
-                try{
-                    response = await axios.get('https://minelife-api.azurewebsites.net/delete_cash_deposit', {params});
-                    if(response.status === 200){
-                        setSnackbarOpen(true);
-                        setSnackbarMsg("success");
-                        GetCashSavingsList();               
-                    }
-                    else{
-                        setSnackbarOpen(true);
-                        setSnackbarMsg("error");
-                        GetCashSavingsList([]);
-                    }
-                    setDeleteModalOpen(false);                      
-                }catch(error){
+        const params = { auth_key: auth_key, id: LivingDonationId };
+        if(customerId !== 0 && LivingDonationId !== 0 && buttonValue === "Delete"){
+            try{
+                response = await axios.get('https://minelife-api.azurewebsites.net/delete_other_assets', {params});
+                if(response.status === 200){
+                    setSnackbarOpen(true);
+                    setSnackbarMsg("success");
+                    //GetLivingDonationList();               
+                }
+                else{
                     setSnackbarOpen(true);
                     setSnackbarMsg("error");
-                    console.log("Error", error);
-                }
-              }
-              else {
-                setDeleteModalOpen(false);
-            }            
+                    //GetLivingDonationList([]);
+                }                      
+            }catch(error){
+                setSnackbarOpen(true);
+                setSnackbarMsg("error");
+                console.log("Error", error);
+            }
         }
         else{
-            router.push(`/declaration-printing/cash-savings/cash-savings-add?edit=${btoa(depositId)}`);
+            router.push(`/declaration-printing/living-donation/living-donation-add?edit=${btoa(LivingDonationId)}`);
         }  
     };
 
@@ -117,36 +95,29 @@ export default function CashSavings() {
                     This is a {SnackbarMsg} Alert!
                     </Alert>
                 </Snackbar>
-                
-                {DeleteModalOpen && (
-                    <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
-                )}
-            </>      
-            <div className="cash-savings-wrapper">
+            </>   
+            <div className="other-property-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
                         <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                            現金・預貯金
+                            Living donation
                         </p>
                     </div>
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    現金・預貯金の情報を「<EditNoteOutlinedIcon className="text-primary-gray"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
+                    Living donation の情報を「<EditNoteOutlinedIcon className="text-primary-gray"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
                     </p>
                 </div>
+
                 <div className="cash-list py-3">
                     <table className="w-full border border-light-gray">
-                        {cashSavingsList.map((list, index) => {                            
+                        {LivingDonationList.map((list, index) => {                            
                             return (
-                                <tr key={index}>
-                                    {list.address ?
-                                        <td className="py-2 px-2 border-r border border-light-gray">{list.address}</td>
-                                        :
-                                        <td className="py-2 px-2 border-r border border-light-gray">{list.financial_institution_name}</td>
-                                    }
-                                    <td className="py-2 px-2 border-r border border-light-gray">{list.deposit_type}</td>
-                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.amount.toLocaleString()}</td>
+                                <tr key={index}>                                    
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.property_name}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.other_party}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.valuation.toLocaleString()}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
                                         <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                             <EditNoteOutlinedIcon className="text-white" />
@@ -154,7 +125,7 @@ export default function CashSavings() {
                                     </td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
                                         <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                            <HighlightOffOutlinedIcon className="text-white" />                                            
+                                            <HighlightOffOutlinedIcon className="text-white" />
                                         </button>
                                     </td>
                                 </tr>
@@ -162,23 +133,23 @@ export default function CashSavings() {
                         })}
                     </table>
                 </div>
+                
                 <div className="w-full inline-block text-left">
-                    <Link href="/declaration-printing/cash-savings/cash-savings-add">
-                        <button id="decedent_edit" className="text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2">
+                    <Link href="/declaration-printing/living-donation/living-donation-add">
+                        <button className="text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
                             <AddIcon className="text-white" />
                             追加する
                         </button>
                     </Link>
                 </div>
-                <div className="Total-property-section py-5 md:py-10 lg:py-20 xl:py-20 2xl:py-20 px-5 md:px-10 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
-                    
-                    <BackButtonIndex />
+                <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">                    
+                    <BackButtonIndex/>
                 </div>
             </div>
         </>
     )
 }
 
-CashSavings.getLayout = function getLayout(page) {
-    return <FullLayout>{page}</FullLayout>;
+LivingDonation.getLayout = function getLayout(page) {
+  return <FullLayout>{page}</FullLayout>;
 };

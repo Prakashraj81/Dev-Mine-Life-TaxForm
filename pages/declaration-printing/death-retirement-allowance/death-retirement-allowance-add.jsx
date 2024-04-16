@@ -18,6 +18,7 @@ export default function DeathRetirementAllowanceAdd() {
     let [NameoftheCompany, setNameoftheCompany] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
+    let [NameofRetirementAllowance, setNameofRetirementAllowance] = useState("");
     let [DateofReceipt, setDateofReceipt] = useState("");
     let [AmountReceived, setAmountReceived] = useState("0");
     let [HeirListType, setHeirListType] = useState("");
@@ -83,6 +84,7 @@ export default function DeathRetirementAllowanceAdd() {
                     setNameoftheCompany(response.data.death_retirements_details.name_of_work_company); 
                     setPostCode(response.data.death_retirements_details.postal_code);
                     setAddress(response.data.death_retirements_details.address);  
+                    //setNameofRetirementAllowance();
                     setDateofReceipt(response.data.death_retirements_details.receipt_date);   
                     setHeirId(response.data.death_retirements_details.person_being_photographed);                
                     setAmountReceived(response.data.death_retirements_details.amount.toLocaleString());                                                      
@@ -156,6 +158,9 @@ export default function DeathRetirementAllowanceAdd() {
             setDateofReceipt(inputValue);
             setDateofReceiptError(false);
         }
+        else if(inputId === "NameofRetirementAllowance"){
+            setNameofRetirementAllowance(inputValue);
+        }
         else {
             setAddress(inputValue);
             setAddressError(false);
@@ -203,6 +208,7 @@ export default function DeathRetirementAllowanceAdd() {
             NameoftheCompany: NameoftheCompany,
             PostCode: PostCode,
             Address: Address,
+            NameofRetirementAllowance: NameofRetirementAllowance,
             DateofReceipt: DateofReceipt,
             AmountReceived: AmountReceived,
             HeirListType: HeirListType,
@@ -240,7 +246,8 @@ export default function DeathRetirementAllowanceAdd() {
             formData.append("auth_key", auth_key);
             formData.append("id", deathRetirementId);
             formData.append("name_of_work_company", NameoftheCompany);            
-            formData.append("address", Address);            
+            formData.append("address", Address);    
+            //formData.append("NameofRetirementAllowance", NameofRetirementAllowance);        
             formData.append("postal_code", PostCode);
             formData.append("receipt_date", DateofReceipt);
             formData.append("heir_id", HeirId);
@@ -292,11 +299,11 @@ export default function DeathRetirementAllowanceAdd() {
                 <div className="w-full inline-block">
                     <form action="#" method="POST">
                         
-                            <div className="w-full inline-block items-center justify-between mb-7">
+                        <div className="w-full inline-block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="NameoftheCompany" className="form-label">
-                                        勤務先会社の名称<i className="text-red-500">*</i>
+                                        勤務先会社等の名称<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -318,7 +325,7 @@ export default function DeathRetirementAllowanceAdd() {
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
                                     <label htmlFor="Location" className="form-label">
-                                        勤務先会社の所在地（郵便番号）
+                                        勤務先会社等の所在地（郵便番号）
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2 relative">
@@ -343,7 +350,7 @@ export default function DeathRetirementAllowanceAdd() {
                             <div className="user-details">
                                 <div className="label w-full inline-block">
                                     <label className="form-label">
-                                    勤務先会社の所在地（住所）<i className="text-red-500">*</i>
+                                        勤務先会社等の所在地（住所）<i className="text-red-500">*</i>
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
@@ -362,6 +369,24 @@ export default function DeathRetirementAllowanceAdd() {
                             </div>
                         </div>
 
+                        <div className="w-full inline-block items-center justify-between mb-7">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <div className="label w-full inline-block">
+                                    <label htmlFor="NameoftheCompany" className="form-label">
+                                        退職手当金などの名称
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        id="NameofRetirementAllowance"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                        
+                                        onChange={inputHandlingFunction}
+                                        value={NameofRetirementAllowance}
+                                    />                                    
+                                </div>
+                            </div>
+                        </div>
 
                         <div className="w-full block items-center justify-between mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
@@ -388,7 +413,7 @@ export default function DeathRetirementAllowanceAdd() {
 
 
 
-                        <div className="w-full block items-center justify-between mb-7">
+                    <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
@@ -106,7 +106,7 @@ export default function Debt() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    債務の情報を「<EditOutlinedIcon className="rotate-1 text-primary-gray"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
+                    債務の情報を「<EditNoteOutlinedIcon className="text-primary-gray"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
                     </p>
                 </div>
                 <div className="cash-list py-3">
@@ -118,13 +118,13 @@ export default function Debt() {
                                     <td className="py-2 px-2 border-r border border-light-gray">{list.other_party}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">{list.amount.toLocaleString()}</td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-primary-color rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                            <ModeEditIcon className="text-white" />
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                            <EditNoteOutlinedIcon className="text-white" />
                                         </button>
                                     </td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-600 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                            <DeleteOutlinedIcon className="text-white" />
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                            <HighlightOffOutlinedIcon className="text-white" />
                                         </button>
                                     </td>
                                 </tr>
