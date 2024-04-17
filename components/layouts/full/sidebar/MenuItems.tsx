@@ -143,7 +143,7 @@ const Menuitems = [
         text: "funeral expenses",
       },  
       {        
-        title: "Living donation",
+        title: "生前贈与",
         icon: <VolunteerActivismOutlinedIcon/>,
         translateHeading: "living donation",
         href: "/declaration-printing/living-donation",    

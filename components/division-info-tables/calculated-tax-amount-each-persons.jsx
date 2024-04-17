@@ -35,7 +35,7 @@ const style = {
 
 
 export default function CalculatedTaxAmountEachPersons() {
-    let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
+    let [TableExpandOpen, setTableExpandOpen] = React.useState(true);
     let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
     let [OpenModalPopup, setOpenModalPopup] = React.useState(false);   
 
@@ -51,7 +51,7 @@ export default function CalculatedTaxAmountEachPersons() {
       { id: 2, amount: 150 },
       { id: 3, amount: 1000 },      
       { id: 4, amount: 1800 }, 
-      { id: 5, amount: 1800 },      
+      { id: 5, amount: 1800 }, 
   ];
 
 
@@ -85,8 +85,8 @@ export default function CalculatedTaxAmountEachPersons() {
         <Table aria-label="collapsible table">
           <TableHead className="table-head-50">
             <TableRow>
-                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">各人の算出税額</span></TableCell>
-                <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold text-red-500">確認・入力</span></TableCell>
+                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">各人の産出額</span></TableCell>
+                {/* <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold text-red-500">確認・入力</span></TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>                     

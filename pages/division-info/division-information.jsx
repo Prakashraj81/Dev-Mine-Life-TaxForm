@@ -385,12 +385,12 @@ export default function DivisionInformation() {
                                         <DeathBenefitTable heir_details_list={heir_details_list} />
                                         <DeathRetirementAllowanceTable heir_details_list={heir_details_list} />                                        
                                         <OthersPropertyTable heir_details_list={heir_details_list} />
-                                        <DebtTable heir_details_list={heir_details_list} />
-                                        <TotalPropertyAcquiredTable/>
+                                        <DebtTable heir_details_list={heir_details_list} />                                        
                                         <FuneralExpensesTable heir_details_list={heir_details_list} />
-                                        <GiftduringLifeTable />
+                                        <TotalPropertyAcquiredTable/>                                        
                                         <CalculatedTaxAmountEachPersons />
                                         <AdditionInheritanceTaxAmount />
+                                        <GiftduringLifeTable />
                                         <SpouseTaxReduction />
                                         <ConfirmationDeductionMinors />
                                         <ConfirmationDeductionPersons />
