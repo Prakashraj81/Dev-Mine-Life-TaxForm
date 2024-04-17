@@ -73,7 +73,7 @@ const GetFuneralExpensesList = async()=>{
               {response.data.funeral_expenses_details.map((list) => {
                 if(list.amount !== 0){
                   TotalAmount = TotalAmount + list.amount;
-                  setFuneralExpensesList(TotalAmount);
+                  setTotalAmount(TotalAmount);
                 }
               })};
           }
@@ -142,15 +142,15 @@ return (
     </Snackbar>
   </>
   <div className="py-2">
-      <Table aria-label="collapsible table">
+    <Table aria-label="collapsible table">
           <TableHead className="table-head">
             <TableRow>
-              <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">葬儀費用</span></TableCell>
-              <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-              <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-              <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-              <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold">入力</span></TableCell>
-            </TableRow>
+                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">債務</span></TableCell>
+                <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+                <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+                <TableCell className="border border-light-gray border-l" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+                <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold">入力</span></TableCell>
+              </TableRow>          
             </TableHead>
             <TableBody>                     
             <TableRow>
@@ -160,21 +160,79 @@ return (
                       <Table>
                         <TableHead className="table-head-2">
                             <TableRow>
-                              <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">費用支払先氏名</span></TableCell>
-                              {/* <TableCell className="border border-light-gray border-l"><span className="font-semibold">金融機関名</span></TableCell> */}
+                              <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">債務の名称</span></TableCell>
+                              <TableCell className="border border-light-gray border-l"><span className="font-semibold">相手先</span></TableCell>
                               <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">金額</span></TableCell>
                               <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
                               <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
-                            </TableRow>                    
-                            
+                            </TableRow>                                           
+                            {FuneralExpensesList.map((list, index) => (
+                              <React.Fragment key={list.id}>
+                                <TableRow key={list.id} id={list.id} value={list.customer_id}>
+                                  <TableCell className="border border-light-gray border-l">{list.payee_name}</TableCell>
+                                  <TableCell className="border border-light-gray border-l">{list.date_of_paid}</TableCell>                           
+                                  <TableCell className="border border-light-gray border-l w-20" align="right">
+                                    {list.amount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span>
+                                  </TableCell>
+                                  <TableCell className="border border-light-gray border-l w-15" align="center">
+                                    <IconButton
+                                      aria-label="expand row"
+                                      size="small"
+                                      id={list.id}
+                                      name={list.customer_id}
+                                      value={list.amount.toLocaleString()}
+                                      onClick={handleExpandFun2}
+                                    >
+                                      {TableExpandOpen2[list.id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                    </IconButton>
+                                  </TableCell>
+                                  <TableCell className="border border-light-gray border-l" align="center"></TableCell>
+                                </TableRow>
+                                <TableRow className="w-full">
+                                  <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                                      <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
+                                        <Box>
+                                            <Table>
+                                              <TableHead>
+                                                <TableRow>
+                                                    <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
+                                                </TableRow>          
+                                                <TableRow>      
+                                                    {HeirList.map((heir)=>(
+                                                    <>
+                                                      <TableCell id={heir.heir_id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
+                                                    </>
+                                                    ))}                  
+                                                    <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
+                                                    <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                                </TableRow>                    
+                                              </TableHead>
+                                                  <TableBody>
+                                                    <TableRow>  
+                                                      {HeirDetailsList.map((heir_lists)=>(
+                                                      <>
+                                                          <TableCell id={heir_lists.heir_id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
+                                                      </>
+                                                      ))}                   
+                                                      <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
+                                                      <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                                    </TableRow>       
+                                                </TableBody>
+                                            </Table> 
+                                          </Box>
+                                      </Collapse>
+                                    </TableCell>
+                                  </TableRow>
+                              </React.Fragment>
+                            ))}
                         </TableHead>                        
                       </Table>                       
                     </Box>
                   </Collapse>                  
               </TableCell>
             </TableRow>
-          </TableBody> 
-        </Table>
+          </TableBody>             
+        </Table>        
     </div>   
     </>
   );
