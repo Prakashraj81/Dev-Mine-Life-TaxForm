@@ -268,7 +268,7 @@ export default function DivisionPopup({OpenModalPopup, ListTotalAmount, Property
                         handleModalClose();
                     }
                     else{
-
+                        handleModalClose();
                     }
                 }catch(error){
                     console.log("Error", error);
