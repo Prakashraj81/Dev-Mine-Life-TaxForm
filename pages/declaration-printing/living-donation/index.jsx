@@ -10,11 +10,14 @@ import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import DeleteModal from "../../../components/modal/delete-modal";
 
 export default function LivingDonation() {
     let [LivingDonationList, setLivingDonationList] = useState([]);
     let [SnackbarOpen, setSnackbarOpen] = useState(false);
     let [SnackbarMsg, setSnackbarMsg] = useState("success");
+    let [DeleteModalOpen, setDeleteModalOpen] = useState(false); 
+    let [deleteTarget, setDeleteTarget] = useState(null);
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -47,20 +50,12 @@ export default function LivingDonation() {
         }        
     }
 
-
-    
-    //Edit and Delete cash savings list    
-    let router = useRouter();
-    const handleEdit_DeleteButtonClick = async(event) => {
-        let response = "";
-        let auth_key = atob(sessionStorage.getItem("auth_key"));        
-        const customerId = Number(event.currentTarget.id);
-        const LivingDonationId = Number(event.currentTarget.name); 
-        const buttonValue = event.currentTarget.value;  
-        const params = { auth_key: auth_key, id: LivingDonationId };
-        if(customerId !== 0 && LivingDonationId !== 0 && buttonValue === "Delete"){
+    const DeleteModalFunction = async(event) => {
+        let value = event.currentTarget.id;
+        const { auth_key, customerId, LivingDonationId, buttonValue, params } = deleteTarget;
+        if (value === "Yes") {
             try{
-                response = await axios.get('https://minelife-api.azurewebsites.net/delete_other_assets', {params});
+                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_living_donation', {params});
                 if(response.status === 200){
                     setSnackbarOpen(true);
                     setSnackbarMsg("success");
@@ -70,18 +65,37 @@ export default function LivingDonation() {
                     setSnackbarOpen(true);
                     setSnackbarMsg("error");
                     //GetLivingDonationList([]);
-                }                      
+                }
             }catch(error){
                 setSnackbarOpen(true);
                 setSnackbarMsg("error");
                 console.log("Error", error);
             }
+            setDeleteModalOpen(false);     
         }
-        else{
-            router.push(`/declaration-printing/living-donation/living-donation-add?edit=${btoa(LivingDonationId)}`);
-        }  
-    };
-
+        else {
+          setDeleteModalOpen(false);
+        }
+      };
+        
+        //Edit and Delete 
+        let router = useRouter();
+        const handleEdit_DeleteButtonClick = async(event) => {
+            let auth_key = atob(sessionStorage.getItem("auth_key"));        
+            let customerId = Number(event.currentTarget.id);
+            let LivingDonationId = Number(event.currentTarget.name); 
+            let buttonValue = event.currentTarget.value;  
+            let params = { auth_key: auth_key, id: LivingDonationId };        
+            if(customerId !== 0 && LivingDonationId !== 0 && buttonValue === "Delete"){
+                setDeleteTarget({ auth_key, customerId, LivingDonationId, buttonValue, params });
+                setDeleteModalOpen(true);                
+            }
+            else{
+                router.push(`/declaration-printing/living-donation/living-donation-add?edit=${btoa(LivingDonationId)}`);
+            }  
+        };
+    
+    
     return (         
         <>
             <>
@@ -95,6 +109,10 @@ export default function LivingDonation() {
                     This is a {SnackbarMsg} Alert!
                     </Alert>
                 </Snackbar>
+
+                {DeleteModalOpen && (
+                    <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
+                )}
             </>   
             <div className="other-property-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">

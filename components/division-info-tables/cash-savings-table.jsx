@@ -51,6 +51,7 @@ export default function CashSavingsTable({heir_details_list}) {
     let [TotalAmount, setTotalAmount] = useState(0); 
     let [ListTotalAmount, setListTotalAmount] = useState(0); 
     let [cashSavingsList, setcashSavingsList] = useState([]);
+    let [HeirSharingDetails, setHeirSharingDetails] = useState([]);
     let [SnackbarOpen, setSnackbarOpen] = useState(false);
     let [SnackbarMsg, setSnackbarMsg] = useState("Cash savings split details saved successfully.");
 
@@ -59,7 +60,27 @@ export default function CashSavingsTable({heir_details_list}) {
       GetCashSavingsList();
       setHeirList(heir_details_list);
       setHeirDetailsList(heir_details_list);
+      //GetHeirSharingDetails();
   }, []);
+
+  //Load Heir sharing details
+  const GetHeirSharingDetails = async(cashDepositId)=>{
+    let auth_key = atob(sessionStorage.getItem("auth_key"));
+    const params = { auth_key: auth_key, id: cashDepositId };
+    if(auth_key !== null && cashDepositId !== 0){
+        try{
+            const response = await axios.get('https://minelife-api.azurewebsites.net/get_cash_deposit', {params});
+            if(response.status === 200){
+                setHeirSharingDetails(response.data.heir_sharing_details);                
+            }
+            else{
+              setHeirSharingDetails([]);
+            }
+        }catch(error){
+            console.log("Error", error);
+        }
+    }        
+}
     
   //Load cash savings list
   const GetCashSavingsList = async()=>{
@@ -124,6 +145,7 @@ export default function CashSavingsTable({heir_details_list}) {
     if (!TableExpandOpen2[iconClickId]) {
       HeirList = heir_details_list;
     }
+    GetHeirSharingDetails(iconClickId);
   }
    
   return (
@@ -213,11 +235,30 @@ export default function CashSavingsTable({heir_details_list}) {
                                               </TableHead>
                                                   <TableBody>
                                                     <TableRow>  
-                                                      {HeirDetailsList.map((heir_lists)=>(
-                                                      <>
-                                                          <TableCell id={heir_lists.heir_id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
-                                                      </>
-                                                      ))}                   
+                                                    {HeirSharingDetails.map((heir_lists) => (
+                                                        <React.Fragment key={heir_lists.heir_id}>
+                                                          {heir_lists.numerator == 0 && heir_lists.denominator == 0 ? (
+                                                            <TableCell
+                                                              id={heir_lists.heir_id}
+                                                              className="border border-light-gray border-l"
+                                                              align="right"
+                                                            >
+                                                              {heir_lists.share_amount}
+                                                              <span className="inline-block float-right border-l text-right border-light-gray pl-1">
+                                                                円
+                                                              </span>
+                                                            </TableCell>
+                                                          ) : (
+                                                            <TableCell
+                                                              id={heir_lists.heir_id}
+                                                              className="border border-light-gray border-l"
+                                                              align="right"
+                                                            >
+                                                              {heir_lists.numerator}/{heir_lists.denominator}
+                                                            </TableCell>
+                                                          )}
+                                                        </React.Fragment>
+                                                      ))}          
                                                       <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
                                                       <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
                                                     </TableRow>       

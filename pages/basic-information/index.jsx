@@ -7,17 +7,31 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import FullLayout from '../../components/layouts/full/FullLayout';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import DeleteModal from "../../components/modal/delete-modal";
 
 export default function BasicInformation() {
     let [HeirList, setHeirList] = useState([]);
     let [HeirListLenth, setHeirListLenth] = useState(0);
     let [DecendentList, setDecendentList] = useState([]);
     let [showEndButton, setshowEndButton] = useState(false);
+    let [SnackbarOpen, setSnackbarOpen] = useState(false);
+    let [SnackbarMsg, setSnackbarMsg] = useState("success");
+    let [DeleteModalOpen, setDeleteModalOpen] = useState(false); 
+    let [deleteTarget, setDeleteTarget] = useState(null);
 
     useEffect(() => {
         GetDecendentList();
         GetHeirList();
     }, []);
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }    
+        setSnackbarOpen(false);
+    };
 
     //Load decendent details list
     const GetDecendentList = async() => {
@@ -62,43 +76,17 @@ export default function BasicInformation() {
 
     
     //Edit Decendent function
+    let router = useRouter();
     const EditDecendent = async(event) => {
-        let ValueId =  event.currentTarget.id;
-        if(ValueId !== ""){
+        let ValueId =  Number(event.currentTarget.id);
+        let ValueName =  Number(event.currentTarget.name);
+        if(ValueId !== 0){
             router.push(`/basic-information/decendent?Id=${btoa(ValueId)}`);            
         }
         else{
-            router.push("/auth/login");
+            //router.push("/auth/login");
         }
     }
-
-
-    const handleDelete = async(DeleteId) => {
-        DeleteId = Number(DeleteId);
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
-        const params = { auth_key: auth_key, id: DeleteId };
-        if(DeleteId !== 0 && auth_key !== null){
-            try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_heir', {params});
-                if(response.status === 200){
-                    GetHeirList();
-                }
-                else{
-                    
-                }
-            }catch (error){
-                console.error('Error:', error);
-            }
-        }  
-        else{
-            //Logout();
-        }      
-    };
-
-    const router = useRouter();
-    const handleEdit = (Edit_Id) => {
-        router.push(`/basic-information/heir?editId=${btoa(Edit_Id)}`);
-    };
 
     const handleHeirPage = () => {
         router.push({
@@ -107,9 +95,69 @@ export default function BasicInformation() {
         });
     }
 
+    const DeleteModalFunction = async(event) => {
+        let value = event.currentTarget.id;
+        const { auth_key, heirId, buttonValue, params } = deleteTarget;
+        if (value === "Yes") {
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_heir', {params});
+                if(response.status === 200){
+                    setSnackbarOpen(true);
+                    setSnackbarMsg("success");
+                    GetHeirList();               
+                }
+                else{
+                    setSnackbarOpen(true);
+                    setSnackbarMsg("error");
+                    //GetCashSavingsList([]);
+                }
+            }catch(error){
+                setSnackbarOpen(true);
+                setSnackbarMsg("error");
+                console.log("Error", error);
+            }
+            setDeleteModalOpen(false);     
+        }
+        else {
+          setDeleteModalOpen(false);
+        }
+      };
+        
+        //Edit and Delete         
+        const handleEdit_DeleteButtonClick = async(event) => {
+            let auth_key = atob(sessionStorage.getItem("auth_key"));        
+            let heirId = Number(event.currentTarget.id); 
+            let buttonValue = event.currentTarget.value;  
+            let params = { auth_key: auth_key, id: heirId };        
+            if(heirId !== 0 && buttonValue === "Delete"){
+                setDeleteTarget({ auth_key, heirId, buttonValue, params });
+                setDeleteModalOpen(true);                
+            }
+            else{
+                router.push(`/basic-information/heir?editId=${btoa(heirId)}`);
+            }  
+        };
+
 
     return (
         <>
+            <>
+                <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                    <Alert
+                    onClose={handleSnackbarClose}
+                    severity={SnackbarMsg}
+                    variant="filled"
+                    sx={{ width: '100%', color: "#FFF" }}
+                    >
+                    This is a {SnackbarMsg} Alert!
+                    </Alert>
+                </Snackbar>
+                
+                {DeleteModalOpen && (
+                    <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
+                )}
+            </>
+
             <div className="basic-information-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -147,6 +195,7 @@ export default function BasicInformation() {
                                 <div className="w-full block float-right text-right lg:w-32">
                                     <button onClick={EditDecendent} 
                                     id={DecendentList.decedent_id} 
+                                    name={DecendentList.name} 
                                     value="Edit" className="text-base bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                         <EditNoteOutlinedIcon className="text-white" />
                                     </button>
@@ -168,9 +217,9 @@ export default function BasicInformation() {
                                                     </td>
                                                     <td className="text-left pt-3">
                                                         {HeirListLenth ? "1/" + HeirListLenth : "1/1_"}
-                                                    </td>
+                                                    </td>                                                    
                                                     <td className="text-right pt-3">
-                                                        <button onClick={() => handleEdit(list.heir_id)} id={list.heir_id} value="Edit" className="text-base bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                                        <button id={list.heir_id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
                                                             <EditNoteOutlinedIcon className="text-white" />
                                                         </button>
                                                     </td>
@@ -179,10 +228,10 @@ export default function BasicInformation() {
                                                     <td className="text-left pt-3">{list.name}</td>
                                                     <td className="text-left pt-3">{list.relationship_with_decedent}</td>
                                                     <td className="text-left pt-3"></td>
-                                                    <td className="text-left pt-3"></td>
+                                                    <td className="text-left pt-3"></td>                                                    
                                                     <td className="text-right pt-3">
-                                                        <button onClick={() => handleDelete(list.heir_id)} id={list.heir_id} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                                            <HighlightOffOutlinedIcon className="text-white" />
+                                                        <button id={list.heir_id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                                            <HighlightOffOutlinedIcon className="text-white" />                                            
                                                         </button>
                                                     </td>
                                                 </tr>

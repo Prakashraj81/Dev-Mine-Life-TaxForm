@@ -18,6 +18,7 @@ export default function CashSavings() {
     let [SnackbarOpen, setSnackbarOpen] = useState(false);
     let [SnackbarMsg, setSnackbarMsg] = useState("success");
     let [DeleteModalOpen, setDeleteModalOpen] = useState(false); 
+    let [deleteTarget, setDeleteTarget] = useState(null);
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -54,50 +55,46 @@ export default function CashSavings() {
   const handleDeleteUser = (event) => {
     setDeleteModalOpen(!DeleteModalOpen);
   }
-  const DeleteModalFunction = (event) => {
+  
+  const DeleteModalFunction = async(event) => {
     let value = event.currentTarget.id;
+    const { auth_key, customerId, depositId, buttonValue, params } = deleteTarget;
     if (value === "Yes") {
-      setDeleteModalOpen(false);
+        try{
+            const response = await axios.get('https://minelife-api.azurewebsites.net/delete_cash_deposit', {params});
+            if(response.status === 200){
+                setSnackbarOpen(true);
+                setSnackbarMsg("success");
+                GetCashSavingsList();               
+            }
+            else{
+                setSnackbarOpen(true);
+                setSnackbarMsg("error");
+                GetCashSavingsList([]);
+            }
+        }catch(error){
+            setSnackbarOpen(true);
+            setSnackbarMsg("error");
+            console.log("Error", error);
+        }
+        setDeleteModalOpen(false);     
     }
     else {
       setDeleteModalOpen(false);
     }
   };
     
-    //Edit and Delete cash savings list    
+    //Edit and Delete 
     let router = useRouter();
     const handleEdit_DeleteButtonClick = async(event) => {
-        let response = "";
         let auth_key = atob(sessionStorage.getItem("auth_key"));        
-        const customerId = Number(event.currentTarget.id);
-        const depositId = Number(event.currentTarget.name); 
-        const buttonValue = event.currentTarget.value;  
-        const params = { auth_key: auth_key, id: depositId };
+        let customerId = Number(event.currentTarget.id);
+        let depositId = Number(event.currentTarget.name); 
+        let buttonValue = event.currentTarget.value;  
+        let params = { auth_key: auth_key, id: depositId };        
         if(customerId !== 0 && depositId !== 0 && buttonValue === "Delete"){
-            setDeleteModalOpen(!DeleteModalOpen);
-            if (value === "Yes") {                
-                try{
-                    response = await axios.get('https://minelife-api.azurewebsites.net/delete_cash_deposit', {params});
-                    if(response.status === 200){
-                        setSnackbarOpen(true);
-                        setSnackbarMsg("success");
-                        GetCashSavingsList();               
-                    }
-                    else{
-                        setSnackbarOpen(true);
-                        setSnackbarMsg("error");
-                        GetCashSavingsList([]);
-                    }
-                    setDeleteModalOpen(false);                      
-                }catch(error){
-                    setSnackbarOpen(true);
-                    setSnackbarMsg("error");
-                    console.log("Error", error);
-                }
-              }
-              else {
-                setDeleteModalOpen(false);
-            }            
+            setDeleteTarget({ auth_key, customerId, depositId, buttonValue, params });
+            setDeleteModalOpen(true);                
         }
         else{
             router.push(`/declaration-printing/cash-savings/cash-savings-add?edit=${btoa(depositId)}`);

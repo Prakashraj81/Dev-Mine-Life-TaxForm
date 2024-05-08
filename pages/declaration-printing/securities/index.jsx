@@ -10,11 +10,14 @@ import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import DeleteModal from "../../../components/modal/delete-modal";
 
 export default function Securities() {
     let [SecuritiesList, setSecuritiesList] = useState([]);
     let [SnackbarOpen, setSnackbarOpen] = useState(false);
     let [SnackbarMsg, setSnackbarMsg] = useState("success");
+    let [DeleteModalOpen, setDeleteModalOpen] = useState(false); 
+    let [deleteTarget, setDeleteTarget] = useState(null);
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -48,19 +51,12 @@ export default function Securities() {
     }
 
 
-    
-    //Edit and Delete cash savings list    
-    let router = useRouter();
-    const handleEdit_DeleteButtonClick = async(event) => {
-        let response = "";
-        let auth_key = atob(sessionStorage.getItem("auth_key"));        
-        const customerId = Number(event.currentTarget.id);
-        const securityId = Number(event.currentTarget.name); 
-        const buttonValue = event.currentTarget.value;  
-        const params = { auth_key: auth_key, id: securityId };
-        if(customerId !== 0 && securityId !== 0 && buttonValue === "Delete"){
+    const DeleteModalFunction = async(event) => {
+        let value = event.currentTarget.id;
+        const { auth_key, customerId, securityId, buttonValue, params } = deleteTarget;
+        if (value === "Yes") {
             try{
-                response = await axios.get('https://minelife-api.azurewebsites.net/delete_securities', {params});
+                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_securities', {params});
                 if(response.status === 200){
                     setSnackbarOpen(true);
                     setSnackbarMsg("success");
@@ -70,17 +66,37 @@ export default function Securities() {
                     setSnackbarOpen(true);
                     setSnackbarMsg("error");
                     GetSecuritiesList([]);
-                }                      
+                }                                       
             }catch(error){
                 setSnackbarOpen(true);
                 setSnackbarMsg("error");
                 console.log("Error", error);
             }
+            setDeleteModalOpen(false);     
+        }
+        else {
+          setDeleteModalOpen(false);
+        }
+      };
+
+
+      //Edit and Delete 
+    let router = useRouter();
+    const handleEdit_DeleteButtonClick = async(event) => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));        
+        let customerId = Number(event.currentTarget.id);
+        let securityId = Number(event.currentTarget.name); 
+        let buttonValue = event.currentTarget.value;  
+        let params = { auth_key: auth_key, id: securityId };        
+        if(customerId !== 0 && securityId !== 0 && buttonValue === "Delete"){
+            setDeleteTarget({ auth_key, customerId, securityId, buttonValue, params });
+            setDeleteModalOpen(true);                
         }
         else{
             router.push(`/declaration-printing/securities/securities-add?edit=${btoa(securityId)}`);
         }  
-    };
+    };   
+    
 
     return (         
         <>
@@ -95,6 +111,10 @@ export default function Securities() {
                     This is a {SnackbarMsg} Alert!
                     </Alert>
                 </Snackbar>
+
+                {DeleteModalOpen && (
+                    <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
+                )}
             </>   
             <div className="securities-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">

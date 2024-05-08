@@ -101,9 +101,9 @@ export default function CashSavingsTable() {
                       <Table>
                         <TableHead className="table-head-2">
                           <TableRow>
-                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">小規模宅地の特例を適用する土地</span></TableCell>
-                            <TableCell className="border border-light-gray border-l"><span className="font-semibold">適用面積</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">金額</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">所在</span></TableCell>
+                            <TableCell className="border border-light-gray border-l"><span className="font-semibold">地積</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">評価額</span></TableCell>
                             <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
                             <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
                           </TableRow>

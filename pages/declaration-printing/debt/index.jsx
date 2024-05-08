@@ -11,11 +11,14 @@ import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import DeleteModal from "../../../components/modal/delete-modal";
 
 export default function Debt() {
     let [DebtList, setDebtList] = useState([]);
     let [SnackbarOpen, setSnackbarOpen] = useState(false);
     let [SnackbarMsg, setSnackbarMsg] = useState("success");
+    let [DeleteModalOpen, setDeleteModalOpen] = useState(false); 
+    let [deleteTarget, setDeleteTarget] = useState(null);
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -48,20 +51,12 @@ export default function Debt() {
         }        
     }
 
-
-    
-    //Edit and Delete cash savings list    
-    let router = useRouter();
-    const handleEdit_DeleteButtonClick = async(event) => {
-        let response = "";
-        let auth_key = atob(sessionStorage.getItem("auth_key"));        
-        const customerId = Number(event.currentTarget.id);
-        const debtId = Number(event.currentTarget.name); 
-        const buttonValue = event.currentTarget.value;  
-        const params = { auth_key: auth_key, id: debtId };
-        if(customerId !== 0 && debtId !== 0 && buttonValue === "Delete"){
+    const DeleteModalFunction = async(event) => {
+        let value = event.currentTarget.id;
+        const { auth_key, customerId, debtId, buttonValue, params } = deleteTarget;
+        if (value === "Yes") {
             try{
-                response = await axios.get('https://minelife-api.azurewebsites.net/delete_debt', {params});
+                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_debt', {params});
                 if(response.status === 200){
                     setSnackbarOpen(true);
                     setSnackbarMsg("success");
@@ -70,18 +65,37 @@ export default function Debt() {
                 else{
                     setSnackbarOpen(true);
                     setSnackbarMsg("error");
-                }                      
+                }          
             }catch(error){
                 setSnackbarOpen(true);
                 setSnackbarMsg("error");
                 console.log("Error", error);
             }
+            setDeleteModalOpen(false);     
         }
-        else{
-            router.push(`/declaration-printing/debt/debt-add?edit=${btoa(debtId)}`);
-        }  
-    };
-
+        else {
+          setDeleteModalOpen(false);
+        }
+      };
+        
+        //Edit and Delete 
+        let router = useRouter();
+        const handleEdit_DeleteButtonClick = async(event) => {
+            let auth_key = atob(sessionStorage.getItem("auth_key"));        
+            let customerId = Number(event.currentTarget.id);
+            let debtId = Number(event.currentTarget.name); 
+            let buttonValue = event.currentTarget.value;  
+            let params = { auth_key: auth_key, id: debtId };        
+            if(customerId !== 0 && debtId !== 0 && buttonValue === "Delete"){
+                setDeleteTarget({ auth_key, customerId, debtId, buttonValue, params });
+                setDeleteModalOpen(true);                
+            }
+            else{
+                router.push(`/declaration-printing/debt/debt-add?edit=${btoa(debtId)}`);
+            }  
+        };
+    
+    
     return (         
         <>
             <>
@@ -95,6 +109,10 @@ export default function Debt() {
                     This is a {SnackbarMsg} Alert!
                     </Alert>
                 </Snackbar>
+
+                {DeleteModalOpen && (
+                    <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
+                )}
             </>   
             <div className="life-insurance-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
