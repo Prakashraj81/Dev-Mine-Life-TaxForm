@@ -36,6 +36,7 @@ const style = {
 
 export default function ConfirmationSuccessiveInheritance() {
     let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
+    let [TableExpandOpen1, setTableExpandOpen1] = React.useState(false);
     let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
     let [OpenModalPopup, setOpenModalPopup] = React.useState(false);   
 
@@ -69,7 +70,7 @@ export default function ConfirmationSuccessiveInheritance() {
 
     //Table row expand function
     const handleExpandFun =()=>{
-        setTableExpandOpen(!TableExpandOpen);    
+        setTableExpandOpen1(!TableExpandOpen1);    
         setTableExpandOpen2(false);
     }
 
@@ -85,38 +86,93 @@ export default function ConfirmationSuccessiveInheritance() {
         <Table aria-label="collapsible table">
           <TableHead className="table-head-50">
             <TableRow>
-                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">相次相続控除の確認</span></TableCell>
+                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">相似相続控除</span></TableCell>
                 <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold text-red-500">確認・入力</span></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>                     
             <TableRow>
               <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
-                  <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
-                    <Box className="my-2">
+                  
+                  <Collapse in={TableExpandOpen1} timeout="auto" unmountOnExit>
+                    <Box>
                         <Table>
-                          <TableHead>                                  
+                          
+                          <TableBody>
                             <TableRow>      
-                                {HeirList.map((heir)=>(
-                                <>
-                                  <TableCell id={heir.id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
-                                </>
-                                ))}                  
-                                {/* <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell> */}
-                                <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
-                            </TableRow>                    
-                          </TableHead>
-                              <TableBody>
-                                <TableRow>  
-                                  {HeirLists.map((heir_lists)=>(
-                                  <>
-                                      <TableCell id={heir_lists.id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
-                                  </>
-                                  ))}                   
-                                  {/* <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon className="cursor-pointer" onClick={handleModalOpen}/></TableCell> */}
-                                  <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
-                                </TableRow>       
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="left">前相続の被相続人氏名</TableCell>             
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="left">前の相続に係る被相続人と今回の相続に係る被相続人との続柄</TableCell>
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="left">前の相続に係る相続税の申告書の提出先</TableCell>
+                            </TableRow>    
+                              <TableRow>      
+                                <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>     
+                                <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>  
+                                <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>                                                                            
+                              </TableRow>  
+
+
+
+
+                            <TableRow>      
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="left">前相続の発生日</TableCell>             
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="left">今回の相続人が前相続において取得した財産額（相続時精算課税適用財産含む）</TableCell>
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="left">前相続で今回の被相続人が支払った相続税額</TableCell>
+                            </TableRow>    
+                            <TableRow>      
+                                <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>
+                                <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>   
+                                <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>                                              
+                                {/* <TableCell className="hidden border border-light-gray border-l w-15" align="center">
+                                    <IconButton
+                                      aria-label="expand row"
+                                      size="small"                                      
+                                      onClick={handleExpandFun2}
+                                    >
+                                      {TableExpandOpen2 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                    </IconButton>
+                                  </TableCell> */}
+                            </TableRow>       
+
+                            <TableRow className="w-full">
+                                  <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                                      <Collapse in={TableExpandOpen1} timeout="auto" unmountOnExit>
+                                        <Box>
+                                            <Table>
+                                              <TableHead>
+                                                <TableRow>
+                                                    <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
+                                                </TableRow>          
+                                                <TableRow>      
+                                                    {HeirList.map((heir)=>(
+                                                    <>
+                                                      <TableCell id={heir.heir_id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
+                                                    </>
+                                                    ))}                  
+                                                    <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
+                                                    <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                                </TableRow>                    
+                                              </TableHead>
+                                                  <TableBody>
+                                                    <TableRow>  
+                                                      {HeirList.map((heir_lists)=>(
+                                                      <>
+                                                          <TableCell id={heir_lists.heir_id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
+                                                      </>
+                                                      ))}                   
+                                                      <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
+                                                      <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                                    </TableRow>       
+                                                </TableBody>
+                                            </Table> 
+                                          </Box>
+                                      </Collapse>
+                                    </TableCell>
+                                  </TableRow>
+
                             </TableBody>
+
+                            
+                          
                         </Table> 
                       </Box>
                   </Collapse>

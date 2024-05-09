@@ -36,8 +36,10 @@ const style = {
 
 export default function CashSavingsTable() {
     let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
+    let [TableExpandOpen1, setTableExpandOpen1] = React.useState(false);
     let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
     let [OpenModalPopup, setOpenModalPopup] = React.useState(false);   
+    let [HeirDetailsList, setHeirDetailsList] = useState([]);
 
     let HeirList = [
       { id: 1, name: "Shree", value: "Cash savings_1", value_1: "Cash_1", total: 1500 },
@@ -69,7 +71,8 @@ export default function CashSavingsTable() {
 
     //Table row expand function
     const handleExpandFun =()=>{
-        setTableExpandOpen(!TableExpandOpen);    
+        setTableExpandOpen(!TableExpandOpen); 
+        setTableExpandOpen1(false);
         setTableExpandOpen2(false);
     }
 
@@ -77,6 +80,16 @@ export default function CashSavingsTable() {
     const handleExpandFun2 =()=>{
       setTableExpandOpen2(!TableExpandOpen2);    
   }
+
+  const handleRadioScale = (event) => {
+    let radioValue = event.target.value;
+    if (radioValue === "Yes") {
+        setTableExpandOpen1(true);
+    }
+    else {      
+      setTableExpandOpen1(false);
+    }
+};
    
   return (
     <>
@@ -98,63 +111,119 @@ export default function CashSavingsTable() {
               <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
                   <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                     <Box className="my-2"> 
-                      <Table>
-                        <TableHead className="table-head-2">
-                          <TableRow>
-                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">所在</span></TableCell>
-                            <TableCell className="border border-light-gray border-l"><span className="font-semibold">地積</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">評価額</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
-                            <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
-                          </TableRow>
-                        </TableHead>
+                      <Table>                        
                         <TableRow>      
-                          <TableCell className="border border-light-gray border-l">Land</TableCell>   
-                            <TableCell className="border border-light-gray border-l">Land amount</TableCell>   
-                            <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell> 
-                            <TableCell className="border border-light-gray border-l" align="center">
-                              <IconButton
-                                aria-label="expand row"
-                                size="small"
-                                onClick={handleExpandFun2}
-                              >
-                                {TableExpandOpen2 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                              </IconButton>
-                            </TableCell>
-                            <TableCell className="border border-light-gray border-l" align="center"></TableCell>
-                        </TableRow>  
+                          <TableCell className="border border-light-gray border-l">
+                              <div className="page-description">
+                                  <p className="text-sm tracking-2 text-black text-left font-medium">
+                                      当システムでは「特定居住用（被相続人の居住のように供していた宅地）」のみ小規模宅地等の特例の適用が可能です。※適用要件を満たしているかの確認等ご不明な点は税理士への有料相談でご確認ください。
+                                  </p>
+                              </div>
+                              <Box className="mt-3">
+                                <FormControl>
+                                    <label className="form-label text-sm" id="demo-row-radio-buttons-group-label">小規模宅地等の特例の適用を受ける</label>
+                                    <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                    >
+                                        <FormControlLabel value="Yes" control={<Radio />} onChange={handleRadioScale} label="はい" sx={{
+                                            '& .MuiSvgIcon-root': {
+                                                fontSize: 12,
+                                            },
+                                        }} />
+                                        <FormControlLabel value="No" control={<Radio />} onChange={handleRadioScale} label="いいえ" sx={{
+                                            '& .MuiSvgIcon-root': {
+                                                fontSize: 12,
+                                            },
+                                        }} />
+                                    </RadioGroup>
+                                </FormControl>
+                              </Box>
+                          </TableCell>                               
+                        </TableRow>                         
                       </Table>                       
                     </Box>
                   </Collapse>
 
-                  <Collapse in={TableExpandOpen2} timeout="auto" unmountOnExit>
+                  <Collapse in={TableExpandOpen1} timeout="auto" unmountOnExit>
                     <Box>
                         <Table>
-                          <TableHead>
-                            <TableRow>
-                                <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
-                            </TableRow>          
+                          
+                          <TableBody>
                             <TableRow>      
-                                {HeirList.map((heir)=>(
-                                <>
-                                  <TableCell id={heir.id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
-                                </>
-                                ))}                  
-                                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-                                <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
-                            </TableRow>                    
-                          </TableHead>
-                              <TableBody>
-                                <TableRow>  
-                                  {HeirLists.map((heir_lists)=>(
-                                  <>
-                                      <TableCell id={heir_lists.id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
-                                  </>
-                                  ))}                   
-                                  <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
-                                  <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
-                                </TableRow>       
+                                <TableCell colSpan={2} className="border border-light-gray border-l bg-table-gray" align="center">小規模宅地を適用する土地</TableCell>             
+                                <TableCell colSpan={2} className="border border-light-gray border-l bg-table-gray" align="center">適用面積</TableCell>
+                            </TableRow>    
+                              <TableRow>      
+                                <TableCell colSpan={2} className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>     
+                                <TableCell colSpan={2} className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>                                                                            
+                              </TableRow>  
+
+
+
+
+                            <TableRow>      
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">所在</TableCell>             
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">地積</TableCell>
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">評価額</TableCell>
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">分割情報入力</TableCell>
+                            </TableRow>    
+                            <TableRow>      
+                                <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>
+                                <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>   
+                                <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>                                              
+                                <TableCell className="border border-light-gray border-l w-15" align="center">
+                                    <IconButton
+                                      aria-label="expand row"
+                                      size="small"                                      
+                                      onClick={handleExpandFun2}
+                                    >
+                                      {TableExpandOpen2 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                    </IconButton>
+                                  </TableCell>
+                            </TableRow>       
+
+                            <TableRow className="w-full">
+                                  <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                                      <Collapse in={TableExpandOpen2} timeout="auto" unmountOnExit>
+                                        <Box>
+                                            <Table>
+                                              <TableHead>
+                                                <TableRow>
+                                                    <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
+                                                </TableRow>          
+                                                <TableRow>      
+                                                    {HeirList.map((heir)=>(
+                                                    <>
+                                                      <TableCell id={heir.heir_id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
+                                                    </>
+                                                    ))}                  
+                                                    <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
+                                                    <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                                </TableRow>                    
+                                              </TableHead>
+                                                  <TableBody>
+                                                    <TableRow>  
+                                                      {HeirList.map((heir_lists)=>(
+                                                      <>
+                                                          <TableCell id={heir_lists.heir_id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
+                                                      </>
+                                                      ))}                   
+                                                      <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
+                                                      <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                                    </TableRow>       
+                                                </TableBody>
+                                            </Table> 
+                                          </Box>
+                                      </Collapse>
+                                    </TableCell>
+                                  </TableRow>
+
                             </TableBody>
+
+                            
+                          
                         </Table> 
                       </Box>
                   </Collapse>

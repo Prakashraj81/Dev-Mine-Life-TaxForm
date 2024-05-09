@@ -31,7 +31,7 @@ import axios from "axios";
   };
   
 
-export default function DivisionPopup({OpenModalPopup, ListTotalAmount, PropertyId, ApiCallRoute, handleModalClose}){
+export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListTotalAmount, PropertyId, ApiCallRoute, handleModalClose}){
     let [selectedValue, setSelectedValue] = useState('Amount');
     let [AmountShow, setAmountShow] = useState(true);
     let [FractionShow, setFractionShow] = useState(false);

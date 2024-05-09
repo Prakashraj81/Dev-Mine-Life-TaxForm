@@ -38,48 +38,48 @@ const style = {
 };
 
 
-export default function FuneralExpensesTable({heir_details_list}) {
+export default function LivingDonationTable({heir_details_list}) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
   //let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
   let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});
   let [OpenModalPopup, setOpenModalPopup] = React.useState(false); 
     
-  let [ApiCallRoute, setApiCallRoute] = useState("funeral_expenses");
+  let [ApiCallRoute, setApiCallRoute] = useState("");
   let [HeirList, setHeirList] = useState([]);
   let [HeirDetailsList, setHeirDetailsList] = useState([]);
   let [HeirId, setHeirId] = useState(0);
   let [PropertyId, setPropertyId] = useState(0);
   let [TotalAmount, setTotalAmount] = useState(0); 
   let [ListTotalAmount, setListTotalAmount] = useState(0); 
-  let [FuneralExpensesList, setFuneralExpensesList] = useState([]);
+  let [LivingDonationList, setLivingDonationList] = useState([]);
   let [SnackbarOpen, setSnackbarOpen] = useState(false);
-  let [SnackbarMsg, setSnackbarMsg] = useState("Funeral xpenses split details saved successfully.");    
+  let [SnackbarMsg, setSnackbarMsg] = useState("Living gift donation split details saved successfully.");    
 
   useEffect(() => {
-    GetFuneralExpensesList();
+    GetLivingDonationList();
     setHeirList(heir_details_list);
     setHeirDetailsList(heir_details_list);
 }, []);  
 
 //Load cash savings list
-const GetFuneralExpensesList = async()=>{
+const GetLivingDonationList = async()=>{
   let auth_key = atob(sessionStorage.getItem("auth_key"));
   const params = { auth_key: auth_key };
   if(auth_key !== null){
       try{
-          const response = await axios.get('https://minelife-api.azurewebsites.net/list_funeral_expenses', {params});
+          const response = await axios.get('https://minelife-api.azurewebsites.net/', {params});
           if(response.status === 200){
             setTotalAmount(0);
-            setFuneralExpensesList(response.data.funeral_expenses_details);
-            {response.data.funeral_expenses_details.map((list) => {
-              if(list.amount !== 0){
-                TotalAmount = TotalAmount + list.amount;
-                setTotalAmount(TotalAmount);
-              }
-            })};
+            // setLivingDonationList(response.data.funeral_expenses_details);
+            // {response.data.funeral_expenses_details.map((list) => {
+            //   if(list.amount !== 0){
+            //     TotalAmount = TotalAmount + list.amount;
+            //     setTotalAmount(TotalAmount);
+            //   }
+            // })};
           }
           else{
-            setFuneralExpensesList([]);
+            setLivingDonationList([]);
           }
       }catch(error){
           console.log("Errro", error);
@@ -146,7 +146,7 @@ return (
     <Table aria-label="collapsible table">
           <TableHead className="table-head">
             <TableRow>
-                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">葬儀費用</span></TableCell>
+                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">生前贈与</span></TableCell>
                 <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
                 <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
                 <TableCell className="border border-light-gray border-l" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
@@ -161,13 +161,13 @@ return (
                       <Table>
                         <TableHead className="table-head-2">
                             <TableRow>
-                              <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">費用支払先氏名</span></TableCell>
+                              <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">所在場所・財産の種類</span></TableCell>
                               <TableCell className="border invisible border-light-gray border-l"><span className="font-semibold">Column</span></TableCell>
                               <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">金額</span></TableCell>
                               <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
                               <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
                             </TableRow>                                           
-                            {FuneralExpensesList.map((list, index) => (
+                            {LivingDonationList.map((list, index) => (
                               <React.Fragment key={list.id}>
                                 <TableRow key={list.id} id={list.id} value={list.customer_id}>
                                   <TableCell className="border border-light-gray border-l">{list.payee_name}</TableCell>

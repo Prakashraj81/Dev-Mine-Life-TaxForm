@@ -25,116 +25,118 @@ import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-  
+
 const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 600,
-    bgcolor: 'background.paper',  
-    boxShadow: 24,
-    p: 4,
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
 };
 
-export default function CashSavingsTable({heir_details_list}) {
-    let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
-    //let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
-    let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});
-    let [OpenModalPopup, setOpenModalPopup] = React.useState(false); 
-      
-    let [ApiCallRoute, setApiCallRoute] = useState("cash_deposit");
-    let [HeirList, setHeirList] = useState([]);
-    let [HeirDetailsList, setHeirDetailsList] = useState([]);
-    let [HeirId, setHeirId] = useState(0);
-    let [PropertyId, setPropertyId] = useState(0);
-    let [TotalAmount, setTotalAmount] = useState(0); 
-    let [ListTotalAmount, setListTotalAmount] = useState(0); 
-    let [cashSavingsList, setcashSavingsList] = useState([]);
-    let [HeirSharingDetails, setHeirSharingDetails] = useState([]);
-    let [SnackbarOpen, setSnackbarOpen] = useState(false);
-    let [SnackbarMsg, setSnackbarMsg] = useState("Cash savings split details saved successfully.");
+export default function CashSavingsTable({ heir_details_list }) {
+  let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
+  //let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
+  let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});
+  let [OpenModalPopup, setOpenModalPopup] = React.useState(false);
 
-    
+  let [ApiCallRoute, setApiCallRoute] = useState("cash_deposit");
+  let [HeirList, setHeirList] = useState([]);
+  let [HeirDetailsList, setHeirDetailsList] = useState([]);
+  let [HeirId, setHeirId] = useState(0);
+  let [PropertyId, setPropertyId] = useState(0);
+  let [TotalAmount, setTotalAmount] = useState(0);
+  let [ListTotalAmount, setListTotalAmount] = useState(0);
+  let [cashSavingsList, setcashSavingsList] = useState([]);
+  let [HeirSharingDetails, setHeirSharingDetails] = useState([]);
+  let [SnackbarOpen, setSnackbarOpen] = useState(false);
+  let [SnackbarMsg, setSnackbarMsg] = useState("Cash savings split details saved successfully.");
+
+
   useEffect(() => {
-      GetCashSavingsList();
-      setHeirList(heir_details_list);
-      setHeirDetailsList(heir_details_list);
-      //GetHeirSharingDetails();
+    GetCashSavingsList();
+    setHeirList(heir_details_list);
+    setHeirDetailsList(heir_details_list);
+    //GetHeirSharingDetails();
   }, []);
 
   //Load Heir sharing details
-  const GetHeirSharingDetails = async(cashDepositId)=>{
+  const GetHeirSharingDetails = async (cashDepositId) => {
     let auth_key = atob(sessionStorage.getItem("auth_key"));
     const params = { auth_key: auth_key, id: cashDepositId };
-    if(auth_key !== null && cashDepositId !== 0){
-        try{
-            const response = await axios.get('https://minelife-api.azurewebsites.net/get_cash_deposit', {params});
-            if(response.status === 200){
-                setHeirSharingDetails(response.data.heir_sharing_details);                
-            }
-            else{
-              setHeirSharingDetails([]);
-            }
-        }catch(error){
-            console.log("Error", error);
+    if (auth_key !== null && cashDepositId !== 0) {
+      try {
+        const response = await axios.get('https://minelife-api.azurewebsites.net/get_cash_deposit', { params });
+        if (response.status === 200) {
+          setHeirSharingDetails(response.data.heir_sharing_details);
         }
-    }        
-}
-    
+        else {
+          setHeirSharingDetails([]);
+        }
+      } catch (error) {
+        console.log("Error", error);
+      }
+    }
+  }
+
   //Load cash savings list
-  const GetCashSavingsList = async()=>{
+  const GetCashSavingsList = async () => {
     let auth_key = atob(sessionStorage.getItem("auth_key"));
     const params = { auth_key: auth_key };
-    if(auth_key !== null){
-        try{
-            const response = await axios.get('https://minelife-api.azurewebsites.net/list_cash_deposit', {params});
-            if(response.status === 200){
-                setcashSavingsList(response.data.cash_deposit_details);
-                {response.data.cash_deposit_details.map((list) => {
-                  if(list.amount !== 0){
-                    TotalAmount = TotalAmount + list.amount;
-                    setTotalAmount(TotalAmount);
-                  }
-                })};
-            }
-            else{
-                setcashSavingsList([]);
-            }
-        }catch(error){
-            console.log("Error", error);
+    if (auth_key !== null) {
+      try {
+        const response = await axios.get('https://minelife-api.azurewebsites.net/list_cash_deposit', { params });
+        if (response.status === 200) {
+          setTotalAmount(0);
+          setcashSavingsList(response.data.cash_deposit_details);
+          {response.data.cash_deposit_details.map((list) => {
+              if (list.amount !== 0) {
+                TotalAmount = TotalAmount + list.amount;
+                setTotalAmount(TotalAmount);
+              }
+            })
+          };
         }
-    }        
-}
- 
+        else {
+          setcashSavingsList([]);
+        }
+      } catch (error) {
+        console.log("Error", error);
+      }
+    }
+  }
+
 
   //Modal popup open and close function
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
-    }    
+    }
     setSnackbarOpen(false);
   };
 
-  const handleModalOpen =(event)=>{         
-    setOpenModalPopup(true);       
-  }    
-  const handleModalClose =()=>{ 
-    setOpenModalPopup(false);    
-  }    
+  const handleModalOpen = (event) => {
+    setOpenModalPopup(true);
+  }
+  const handleModalClose = () => {
+    setOpenModalPopup(false);
+  }
 
   //Table row expand function
-  const handleExpandFun =()=>{
-    setTableExpandOpen(!TableExpandOpen);    
-    setTableExpandOpen2(false);       
+  const handleExpandFun = () => {
+    setTableExpandOpen(!TableExpandOpen);
+    setTableExpandOpen2(false);
   }
 
   //Table row expand function-2
-  const handleExpandFun2 =(event)=>{
+  const handleExpandFun2 = (event) => {
     const iconClickId = Number(event.currentTarget.id);
     const customerId = Number(event.currentTarget.name);
     ListTotalAmount = event.currentTarget.value;
-    setListTotalAmount(ListTotalAmount);  
+    setListTotalAmount(ListTotalAmount);
     setPropertyId(iconClickId);
 
     setTableExpandOpen2((prevExpandState) => ({
@@ -144,141 +146,141 @@ export default function CashSavingsTable({heir_details_list}) {
 
     if (!TableExpandOpen2[iconClickId]) {
       HeirList = heir_details_list;
-    }
-    GetHeirSharingDetails(iconClickId);
+      GetHeirSharingDetails(iconClickId);
+    }    
   }
-   
+
   return (
     <>
-    <DivisionPopup OpenModalPopup={OpenModalPopup} ListTotalAmount={ListTotalAmount} PropertyId={PropertyId} ApiCallRoute={ApiCallRoute} handleModalClose={handleModalClose}/>
-    <>
-      <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+      <DivisionPopup OpenModalPopup={OpenModalPopup} HeirSharingDetails={HeirSharingDetails} ListTotalAmount={ListTotalAmount} PropertyId={PropertyId} ApiCallRoute={ApiCallRoute} handleModalClose={handleModalClose} />
+      <>
+        <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
           <Alert
-          onClose={handleSnackbarClose}
-          severity={SnackbarMsg}
-          variant="filled"
-          sx={{ width: '100%', color: "#FFF" }}
+            onClose={handleSnackbarClose}
+            severity={SnackbarMsg}
+            variant="filled"
+            sx={{ width: '100%', color: "#FFF" }}
           >
-          {SnackbarMsg}
+            {SnackbarMsg}
           </Alert>
-      </Snackbar>
-    </>
-    <div className="py-2">
+        </Snackbar>
+      </>
+      <div className="py-2">
         <Table aria-label="collapsible table">
           <TableHead className="table-head">
             <TableRow>
-                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">現金預金</span></TableCell>
-                <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-                <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-                <TableCell className="border border-light-gray border-l" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-                <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold">入力</span></TableCell>
+              <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">現金預金</span></TableCell>
+              <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+              <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+              <TableCell className="border border-light-gray border-l" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+              <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold">入力</span></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>                     
+          <TableBody>
             <TableRow>
               <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
-                  <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
-                    <Box className="my-2"> 
-                      <Table>
-                        <TableHead className="table-head-2">
-                            <TableRow>
-                                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">預金の種類</span></TableCell>
-                                <TableCell className="border border-light-gray border-l"><span className="font-semibold">金融機関名</span></TableCell>
-                                <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">金額</span></TableCell>
-                                <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
-                                <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
-                            </TableRow>                          
-                            {cashSavingsList.map((list, index) => (
-                              <React.Fragment key={list.id}>
-                                <TableRow key={list.id} id={list.id} value={list.customer_id}>
-                                  <TableCell className="border border-light-gray border-l">{list.deposit_type}</TableCell>
-                                    {list.address ?
-                                        <TableCell className="border border-light-gray border-l">{list.address}</TableCell>
-                                        :
-                                        <TableCell className="border border-light-gray border-l">{list.financial_institution_name}</TableCell>
-                                    }                                  
-                                  <TableCell className="border border-light-gray border-l w-20" align="right">
-                                    {list.amount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span>
-                                  </TableCell>
-                                  <TableCell className="border border-light-gray border-l w-15" align="center">
-                                    <IconButton
-                                      aria-label="expand row"
-                                      size="small"
-                                      id={list.id}
-                                      name={list.customer_id}
-                                      value={list.amount.toLocaleString()}
-                                      onClick={handleExpandFun2}
-                                    >
-                                      {TableExpandOpen2[list.id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                                    </IconButton>
-                                  </TableCell>
-                                  <TableCell className="border border-light-gray border-l" align="center"></TableCell>
-                                </TableRow>
-                                <TableRow className="w-full">
-                                  <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
-                                      <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
-                                        <Box>
-                                            <Table>
-                                              <TableHead>
-                                                <TableRow>
-                                                    <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
-                                                </TableRow>          
-                                                <TableRow>      
-                                                    {HeirList.map((heir)=>(
-                                                    <>
-                                                      <TableCell id={heir.heir_id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
-                                                    </>
-                                                    ))}                  
-                                                    <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-                                                    <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
-                                                </TableRow>                    
-                                              </TableHead>
-                                                  <TableBody>
-                                                    <TableRow>  
-                                                    {HeirSharingDetails.map((heir_lists) => (
-                                                        <React.Fragment key={heir_lists.heir_id}>
-                                                          {heir_lists.numerator == 0 && heir_lists.denominator == 0 ? (
-                                                            <TableCell
-                                                              id={heir_lists.heir_id}
-                                                              className="border border-light-gray border-l"
-                                                              align="right"
-                                                            >
-                                                              {heir_lists.share_amount}
-                                                              <span className="inline-block float-right border-l text-right border-light-gray pl-1">
-                                                                円
-                                                              </span>
-                                                            </TableCell>
-                                                          ) : (
-                                                            <TableCell
-                                                              id={heir_lists.heir_id}
-                                                              className="border border-light-gray border-l"
-                                                              align="right"
-                                                            >
-                                                              {heir_lists.numerator}/{heir_lists.denominator}
-                                                            </TableCell>
-                                                          )}
-                                                        </React.Fragment>
-                                                      ))}          
-                                                      <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
-                                                      <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
-                                                    </TableRow>       
-                                                </TableBody>
-                                            </Table> 
-                                          </Box>
-                                      </Collapse>
-                                    </TableCell>
-                                  </TableRow>
-                              </React.Fragment>
-                            ))}
-                        </TableHead>                        
-                      </Table>                       
-                    </Box>
-                  </Collapse>                  
+                <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
+                  <Box className="my-2">
+                    <Table>
+                      <TableHead className="table-head-2">
+                        <TableRow>
+                          <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">預金の種類</span></TableCell>
+                          <TableCell className="border border-light-gray border-l"><span className="font-semibold">金融機関名</span></TableCell>
+                          <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">金額</span></TableCell>
+                          <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
+                          <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
+                        </TableRow>
+                        {cashSavingsList.map((list, index) => (
+                          <React.Fragment key={list.id}>
+                            <TableRow key={list.id} id={list.id} value={list.customer_id}>
+                              <TableCell className="border border-light-gray border-l">{list.deposit_type}</TableCell>
+                              {list.address ?
+                                <TableCell className="border border-light-gray border-l">{list.address}</TableCell>
+                                :
+                                <TableCell className="border border-light-gray border-l">{list.financial_institution_name}</TableCell>
+                              }
+                              <TableCell className="border border-light-gray border-l w-20" align="right">
+                                {list.amount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span>
+                              </TableCell>
+                              <TableCell className="border border-light-gray border-l w-15" align="center">
+                                <IconButton
+                                  aria-label="expand row"
+                                  size="small"
+                                  id={list.id}
+                                  name={list.customer_id}
+                                  value={list.amount.toLocaleString()}
+                                  onClick={handleExpandFun2}
+                                >
+                                  {TableExpandOpen2[list.id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                </IconButton>
+                              </TableCell>
+                              <TableCell className="border border-light-gray border-l" align="center"></TableCell>
+                            </TableRow>
+                            <TableRow className="w-full">
+                              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                                <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
+                                  <Box>
+                                    <Table>
+                                      <TableHead>
+                                        <TableRow>
+                                          <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                          {HeirList.map((heir) => (
+                                            <>
+                                              <TableCell id={heir.heir_id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>
+                                            </>
+                                          ))}
+                                          <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
+                                          <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                        </TableRow>
+                                      </TableHead>
+                                      <TableBody>
+                                        <TableRow>
+                                          {HeirSharingDetails.map((heir_lists) => (
+                                            <React.Fragment key={heir_lists.heir_id}>
+                                              {heir_lists.numerator == 0 && heir_lists.denominator == 0 ? (
+                                                <TableCell
+                                                  id={heir_lists.heir_id}
+                                                  className="border border-light-gray border-l"
+                                                  align="right"
+                                                >
+                                                  {heir_lists.share_amount.toLocaleString()}
+                                                  <span className="inline-block float-right border-l text-right border-light-gray pl-1">
+                                                    円
+                                                  </span>
+                                                </TableCell>
+                                              ) : (
+                                                <TableCell
+                                                  id={heir_lists.heir_id}
+                                                  className="border border-light-gray border-l"
+                                                  align="right"
+                                                >
+                                                  {heir_lists.numerator}/{heir_lists.denominator}
+                                                </TableCell>
+                                              )}
+                                            </React.Fragment>
+                                          ))}
+                                          <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell>
+                                          <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                        </TableRow>
+                                      </TableBody>
+                                    </Table>
+                                  </Box>
+                                </Collapse>
+                              </TableCell>
+                            </TableRow>
+                          </React.Fragment>
+                        ))}
+                      </TableHead>
+                    </Table>
+                  </Box>
+                </Collapse>
               </TableCell>
             </TableRow>
-          </TableBody> 
+          </TableBody>
         </Table>
-    </div>    
+      </div>
     </>
   );
 }
