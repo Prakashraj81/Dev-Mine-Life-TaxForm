@@ -25,6 +25,9 @@ import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 const style = {
   position: 'absolute',
@@ -36,6 +39,19 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+
+const HtmlTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 450,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}));
 
 export default function CashSavingsTable({ heir_details_list }) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
@@ -173,7 +189,26 @@ export default function CashSavingsTable({ heir_details_list }) {
               <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
               <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
               <TableCell className="" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-              <TableCell className="cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold">入力</span></TableCell>
+              <TableCell className="cursor-pointer" align="right">
+              <HtmlTooltip
+                title={
+                  <React.Fragment>
+                    <Typography color="inherit">Information</Typography>
+                    <p>1. 上場株式
+原則として次の(1)から(4)までの価額のうち、最も低い価額で評価します。
+(1) 相続の開始があった日の終値
+(2) 相続の開始があった月の毎日の終値の月平均額
+(3)相続の開始があった月の前月の毎日の終値の月平均額
+(4)相続の開始があった月の前々月の毎日の終値の月平均額
+※上場株式の評価には国税庁発行の「上場株式の評価明細書」をご利用ください。
+添付書類としてそのまま提出可能です。
+【参考】</p>
+                  </React.Fragment>
+                }
+              >
+                <QuestionMarkIcon className="pr-2"/>                
+              </HtmlTooltip>
+              <span onClick={handleExpandFun} className="font-semibold bg-blue-500 rounded-sm px-1 py-1 px-2 text-white">入力</span></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

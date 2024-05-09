@@ -389,8 +389,9 @@ export default function DivisionInformation() {
                                         <OthersPropertyTable heir_details_list={heir_details_list} />
                                         <DebtTable heir_details_list={heir_details_list} />
                                         <FuneralExpensesTable heir_details_list={heir_details_list} />
-                                        <TotalPropertyAcquiredTable />
                                         <LivingDonationTable />
+                                        <TotalPropertyAcquiredTable />
+                                        {/* <LivingDonationTable /> */}
                                         <CalculatedTaxAmountEachPersons />
                                         <AdditionInheritanceTaxAmount />
                                         <GiftduringLifeTable />

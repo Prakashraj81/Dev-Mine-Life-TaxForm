@@ -142,15 +142,15 @@ return (
         </Alert>
     </Snackbar>
   </>
-  <div className="py-2">
+  <div className="py-0">
     <Table aria-label="collapsible table">
           <TableHead className="table-head">
             <TableRow>
-                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">生前贈与</span></TableCell>
-                <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-                <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-                <TableCell className="border border-light-gray border-l" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-                <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold">入力</span></TableCell>
+                <TableCell className="" align="left"><span className="font-semibold">生前贈与</span></TableCell>
+                <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+                <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+                <TableCell className="" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+                <TableCell className="cursor-pointer" align="right" onClick={handleExpandFun}><span className="font-semibold bg-blue-500 rounded-sm px-1 py-1 px-2 text-white">入力</span></TableCell>
               </TableRow>          
             </TableHead>
             <TableBody>                     
