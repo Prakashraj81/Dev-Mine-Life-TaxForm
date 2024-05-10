@@ -23,6 +23,13 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import axios from "axios";
+import Skeleton from '@mui/material/Skeleton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 //Tables import
 import CashSavingsTable from "../../components/division-info-tables/cash-savings-table";
@@ -38,9 +45,7 @@ import TotalPropertyAcquiredTable from "../../components/division-info-tables/to
 import FuneralExpensesTable from "../../components/division-info-tables/funeral-expenses-table";
 import GiftduringLifeTable from "../../components/division-info-tables/giftduring-life-table";
 import CollapsibleTable from "../../components/division-info-tables/test";
-
 import LivingDonationTable from "../../components/division-info-tables/living-gift-donation";
-
 import CalculatedTaxAmountEachPersons from "../../components/division-info-tables/calculated-tax-amount-each-persons";
 import AdditionInheritanceTaxAmount from "../../components/division-info-tables/addition-inheritance-tax-amount";
 import SpouseTaxReduction from "../../components/division-info-tables/spouse-tax-reduction";
@@ -61,7 +66,15 @@ export default function DivisionInformation() {
     let [ShowSuccessiveInput, setShowSuccessiveInput] = useState(false);
     let [heir_details_list, setheir_details_list] = useState([]);
     let [Flag, setFlag] = useState(0);
+    const [loading, setLoading] = useState(true);
 
+    // Simulate loading effect using useEffect
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2500); // Adjust the timeout as needed
+      return () => clearTimeout(timer);
+    }, []);
 
     //Load heir details list
     const GetHeirList = async () => {
@@ -379,27 +392,46 @@ export default function DivisionInformation() {
                             <div>
                                 {Flag === 1 && heir_details_list.length !== 0 && (
                                     <>
-                                        <CashSavingsTable heir_details_list={heir_details_list} />
-                                        <SecuritiesTable heir_details_list={heir_details_list} />
-                                        <BuildingsTable />
-                                        <LandTable />
-                                        <HouseholdPropertyTable heir_details_list={heir_details_list} />
-                                        <DeathBenefitTable heir_details_list={heir_details_list} />
-                                        <DeathRetirementAllowanceTable heir_details_list={heir_details_list} />
-                                        <OthersPropertyTable heir_details_list={heir_details_list} />
-                                        <DebtTable heir_details_list={heir_details_list} />
-                                        <FuneralExpensesTable heir_details_list={heir_details_list} />
-                                        <LivingDonationTable />
-                                        <TotalPropertyAcquiredTable />
-                                        {/* <LivingDonationTable /> */}
-                                        <CalculatedTaxAmountEachPersons />
-                                        <AdditionInheritanceTaxAmount />
-                                        <GiftduringLifeTable />
-                                        <SpouseTaxReduction />
-                                        <ConfirmationDeductionMinors />
-                                        <ConfirmationDeductionPersons />
-                                        <ConfirmationSuccessiveInheritance />
-                                        <DeclaredTaxAmount />
+                                        
+                                    {loading ? (
+                                        // Render skeleton loader for each list item
+                                        Array.from({ length: 20 }, (_, index) => (                                        
+                                        <Table key={index}>
+                                            <TableBody>
+                                                <TableRow>
+                                                    <TableCell className="p-0"><Skeleton variant="text" width={400} height={45} /></TableCell>
+                                                    <TableCell className="p-0"><Skeleton variant="text" width={150} height={45} /></TableCell>
+                                                    <TableCell className="p-0"><Skeleton variant="text" width={50} height={45} /></TableCell>
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>    
+                                        ))
+                                    ) : (
+                                        // Render actual content when loading is false
+                                        <>
+                                            <CashSavingsTable heir_details_list={heir_details_list} />
+                                            <SecuritiesTable heir_details_list={heir_details_list} />
+                                            <BuildingsTable />
+                                            <LandTable />
+                                            <HouseholdPropertyTable heir_details_list={heir_details_list} />
+                                            <DeathBenefitTable heir_details_list={heir_details_list} />
+                                            <DeathRetirementAllowanceTable heir_details_list={heir_details_list} />
+                                            <OthersPropertyTable heir_details_list={heir_details_list} />
+                                            <DebtTable heir_details_list={heir_details_list} />
+                                            <FuneralExpensesTable heir_details_list={heir_details_list} />
+                                            <LivingDonationTable />
+                                            <TotalPropertyAcquiredTable />
+                                            {/* <LivingDonationTable /> */}
+                                            <CalculatedTaxAmountEachPersons />
+                                            <AdditionInheritanceTaxAmount />
+                                            <GiftduringLifeTable />
+                                            <SpouseTaxReduction />
+                                            <ConfirmationDeductionMinors />
+                                            <ConfirmationDeductionPersons />
+                                            <ConfirmationSuccessiveInheritance />
+                                            <DeclaredTaxAmount />
+                                        </>
+                                    )}
                                     </>
                                 )}
                             </div>

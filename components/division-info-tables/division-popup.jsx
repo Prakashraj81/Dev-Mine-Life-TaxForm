@@ -18,6 +18,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import axios from "axios";
+import HeirListAmountShowSkeleton from './heirList-amountshow-skeleton';
+import HeirListFractionShowSkeleton from './heirList-fractionshow-skeleton';
   
   const style = {
     position: 'absolute',
@@ -321,7 +323,8 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
                     </FormControl>     
                     {AmountShow && (
                         <>
-                        <ul>     
+                        <HeirListAmountShowSkeleton HeirList={HeirList} divisionBoxCalculation={divisionBoxCalculation} BoxValues={BoxValues} divisionInputKeyPress={divisionInputKeyPress} UndecidedHeir={UndecidedHeir} AmountofMoney={AmountofMoney}/>
+                        {/* <ul>     
                         {HeirList.map((heirlist, index) => (
                             <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                                 <span>{heirlist.name}</span>
@@ -340,12 +343,13 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
                             <span>合計</span>
                             <span>{AmountofMoney}</span>
                         </li>            
-                    </ul> 
+                    </ul>  */}
                         </>
                     )}
                     {FractionShow &&(
                     <>
-                    <ul>                
+                    <HeirListFractionShowSkeleton HeirList={HeirList} fractionBoxCalculation_1={fractionBoxCalculation_1} divisionInputKeyPress={divisionInputKeyPress} fractionBoxCalculation_2={fractionBoxCalculation_2} UndecidedHeir={UndecidedHeir} AmountofMoney={AmountofMoney}/>
+                    {/* <ul>                
                         {HeirList.map((heirlist, index) => (
                             <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
                             <div className="w-70">
@@ -384,7 +388,7 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
                             <span>合計</span>
                             <span>{AmountofMoney}</span>
                         </li>             
-                    </ul>   
+                    </ul>    */}
                     </>
                     )}      
                     

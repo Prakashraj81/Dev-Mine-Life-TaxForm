@@ -210,3 +210,7 @@ input {
   .mui-style-1bsfmng-MuiInputBase-root-MuiInput-root::before, .mui-style-1bsfmng-MuiInputBase-root-MuiInput-root::after{
     border: none !important;
   }
+
+  .mui-style-1lqm68-MuiTableCell-root{
+    border: none !important;
+  }

@@ -107,13 +107,13 @@ export default function CashSavingsTable() {
                   <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
                   <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
                   <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-                  <TableCell className="border border-light-gray border-l cursor-pointer" align="right">
-                    <Box className="invisible inline-block">
+                  <TableCell className="border border-light-gray border-l cursor-pointer" align="center">
+                    {/* <Box className="invisible inline-block">
                       <HtmlTooltip>
                         <QuestionMarkIcon style={{ fontSize: 18 }} className="mr-2 p-1 bg-warning-main rounded-lg text-black"/>                
                       </HtmlTooltip>
-                    </Box>
-                    <span onClick={handleExpandFun} className="font-semibold bg-blue-500 rounded-sm py-1 px-2 text-white">入力</span>
+                    </Box> */}
+                    <span onClick={handleExpandFun} className="font-semibold text-red-500">確認</span>
                   </TableCell>
               </TableRow>
             </TableHead>
