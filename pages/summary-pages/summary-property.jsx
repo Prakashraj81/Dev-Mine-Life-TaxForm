@@ -5,6 +5,13 @@ import FullLayout from '../../components/layouts/full/FullLayout';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import { list } from "postcss";
 import axios from "axios"; 
+import Skeleton from '@mui/material/Skeleton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 export default function SummaryProperty() {
     let [Flag, setFlag] = useState(0);
@@ -18,6 +25,15 @@ export default function SummaryProperty() {
     let [OthersPropertyTotalAmount, setOthersPropertyTotalAmount] = useState(0);
     let [DebtTotalAmount, setDebtTotalAmount] = useState(0);
     let [FuneralExpensesTotalAmount, setFuneralExpensesTotalAmount] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    // Simulate loading effect using useEffect
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2500); // Adjust the timeout as needed
+      return () => clearTimeout(timer);
+    }, []);
 
     //Load cash savings list
     const GetCashSavingsList = async(auth_key, params)=>{   
@@ -331,27 +347,45 @@ const GetFuneralExpensesList = async(auth_key, params)=>{
                     </p>
                 </div>
                 <div className="summary-tables-wrapper max-w-screen-md mx-auto">
-                    <table className="text-left table">
-                        <tbody>
-                        {Flag === 1 && (
-                            <>
-                                {tableList.map((list, index) => (
-                                    <tr className="border-t" id={list.id}>
-                                        <th className="w-full py-5 font-medium">{list.heading}</th>
-                                        <td className="text-right">{list.amount.toLocaleString()}</td>
-                                        <td className="pl-10">
-                                            <Link href={list.path}>
-                                                <button id="decedent_edit" className="text-sm bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                                    {list.icon}
-                                                </button>
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </>                            
-                        )}
-                        </tbody>
-                    </table>
+                    {loading ? (
+                        // Render skeleton loader for each list item
+                        Array.from({ length: 20 }, (_, index) => (                                        
+                        <Table key={index}>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell className="p-0"><Skeleton variant="text" width={400} height={45} /></TableCell>
+                                    <TableCell className="p-0"><Skeleton variant="text" width={150} height={45} /></TableCell>
+                                    <TableCell className="p-0"><Skeleton variant="text" width={50} height={45} /></TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>    
+                        ))
+                    ) : (
+                        // Render actual content when loading is false
+                        <>
+                        <table className="text-left table">
+                            <tbody>
+                                {Flag === 1 && (
+                                    <>
+                                        {tableList.map((list, index) => (
+                                            <tr className="border-t" id={list.id}>
+                                                <th className="w-full py-5 font-medium">{list.heading}</th>
+                                                <td className="text-right">{list.amount.toLocaleString()}</td>
+                                                <td className="pl-10">
+                                                    <Link href={list.path}>
+                                                        <button id="decedent_edit" className="text-sm bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                                            {list.icon}
+                                                        </button>
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </>                            
+                                )}
+                                </tbody>
+                            </table>
+                        </>
+                    )}                    
                 </div>
                 <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                 <div className="w-full flex justify-evenly items-center">
