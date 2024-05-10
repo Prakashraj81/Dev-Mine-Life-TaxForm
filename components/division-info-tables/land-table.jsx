@@ -38,6 +38,7 @@ export default function CashSavingsTable() {
     let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
     let [TableExpandOpen1, setTableExpandOpen1] = React.useState(false);
     let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
+    let [TableExpandOpenInput, setTableExpandOpenInput] = React.useState(false);
     let [OpenModalPopup, setOpenModalPopup] = React.useState(false);   
     let [HeirDetailsList, setHeirDetailsList] = useState([]);
 
@@ -84,10 +85,12 @@ export default function CashSavingsTable() {
   const handleRadioScale = (event) => {
     let radioValue = event.target.value;
     if (radioValue === "Yes") {
-        setTableExpandOpen1(true);
+        //setTableExpandOpen1(true);
+        setTableExpandOpenInput(true);
     }
     else {      
-      setTableExpandOpen1(false);
+      //setTableExpandOpen1(false);
+      setTableExpandOpenInput(false);
     }
 };
    
@@ -146,23 +149,24 @@ export default function CashSavingsTable() {
                     </Box>
                   </Collapse>
 
-                  <Collapse in={TableExpandOpen1} timeout="auto" unmountOnExit>
+                  <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
+                    <Collapse in={TableExpandOpenInput} timeout="auto" unmountOnExit>
+                      <Box>
+                      <Table>
+                        <TableRow>      
+                          <TableCell colSpan={2} className="border border-light-gray border-l bg-table-gray" align="center">小規模宅地を適用する土地</TableCell>             
+                          <TableCell colSpan={2} className="border border-light-gray border-l bg-table-gray" align="center">適用面積</TableCell>
+                      </TableRow>    
+                        <TableRow>      
+                          <TableCell colSpan={2} className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>     
+                          <TableCell colSpan={2} className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>                                                                            
+                        </TableRow>                                                                  
+                      </Table>
+                      </Box>
+                    </Collapse> 
                     <Box>
-                        <Table>
-                          
-                          <TableBody>
-                            <TableRow>      
-                                <TableCell colSpan={2} className="border border-light-gray border-l bg-table-gray" align="center">小規模宅地を適用する土地</TableCell>             
-                                <TableCell colSpan={2} className="border border-light-gray border-l bg-table-gray" align="center">適用面積</TableCell>
-                            </TableRow>    
-                              <TableRow>      
-                                <TableCell colSpan={2} className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>     
-                                <TableCell colSpan={2} className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>                                                                            
-                              </TableRow>  
-
-
-
-
+                        <Table>                          
+                          <TableBody>                          
                             <TableRow>      
                                 <TableCell className="border border-light-gray border-l bg-table-gray" align="center">所在</TableCell>             
                                 <TableCell className="border border-light-gray border-l bg-table-gray" align="center">地積</TableCell>

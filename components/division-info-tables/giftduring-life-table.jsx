@@ -95,45 +95,11 @@ export default function CashSavingsTable() {
             <TableBody>
                      
             <TableRow>
-              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>                  
                   <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
-                    <Box className="my-2"> 
-                      <Table>
-                        <TableHead className="table-head-2">
-                          <TableRow>
-                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">勤務先会社の名称</span></TableCell>
-                            <TableCell className="border border-light-gray border-l"><span className="font-semibold">受取年月日</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">受け取った金額</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
-                            <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableRow>      
-                          <TableCell className="border border-light-gray border-l">Gift</TableCell>   
-                            <TableCell className="border border-light-gray border-l">Gift amount</TableCell>   
-                            <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell> 
-                            <TableCell className="border border-light-gray border-l" align="center">
-                              <IconButton
-                                aria-label="expand row"
-                                size="small"
-                                onClick={handleExpandFun2}
-                              >
-                                {TableExpandOpen2 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                              </IconButton>
-                            </TableCell>
-                            <TableCell className="border border-light-gray border-l" align="center"></TableCell>
-                        </TableRow>  
-                      </Table>                       
-                    </Box>
-                  </Collapse>
-
-                  <Collapse in={TableExpandOpen2} timeout="auto" unmountOnExit>
                     <Box>
                         <Table>
-                          <TableHead>
-                            <TableRow>
-                                <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
-                            </TableRow>          
+                          <TableHead>                                   
                             <TableRow>      
                                 {HeirList.map((heir)=>(
                                 <>

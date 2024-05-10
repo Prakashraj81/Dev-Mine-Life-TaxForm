@@ -40,12 +40,11 @@ const style = {
 
 export default function LivingDonationTable({heir_details_list}) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
-  //let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
-  let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});
+  let [TableExpandOpen1, setTableExpandOpen1] = React.useState(false);
   let [OpenModalPopup, setOpenModalPopup] = React.useState(false); 
     
   let [ApiCallRoute, setApiCallRoute] = useState("");
-  let [HeirList, setHeirList] = useState([]);
+  //let [HeirList, setHeirList] = useState([]);
   let [HeirDetailsList, setHeirDetailsList] = useState([]);
   let [HeirId, setHeirId] = useState(0);
   let [PropertyId, setPropertyId] = useState(0);
@@ -53,11 +52,27 @@ export default function LivingDonationTable({heir_details_list}) {
   let [ListTotalAmount, setListTotalAmount] = useState(0); 
   let [LivingDonationList, setLivingDonationList] = useState([]);
   let [SnackbarOpen, setSnackbarOpen] = useState(false);
-  let [SnackbarMsg, setSnackbarMsg] = useState("Living gift donation split details saved successfully.");    
+  let [SnackbarMsg, setSnackbarMsg] = useState("Living gift donation split details saved successfully.");   
+  
+  let HeirList = [
+    { id: 1, name: "Shree", value: "Cash savings_1", value_1: "Cash_1", total: 1500 },
+    { id: 2, name: "Prakashraj", value: "Cash savings_2", value_1: "Cash_2", total: 500  },
+    { id: 3, name: "Gowtham", value: "", value_1: "Cash_3", total: 3000  },    
+    { id: 4, name: "Dhinesh", value: "", value_1: "Cash_3", total: 700  }, 
+    { id: 5, name: "Nisar", value: "", value_1: "Cash_3", total: 1800  },      
+];
+let HeirLists = [
+    { id: 1, amount: 300 },
+    { id: 2, amount: 150 },
+    { id: 3, amount: 1000 },      
+    { id: 4, amount: 1800 }, 
+    { id: 5, amount: 1800 },      
+];
+
 
   useEffect(() => {
     GetLivingDonationList();
-    setHeirList(heir_details_list);
+    //setHeirList(heir_details_list);
     setHeirDetailsList(heir_details_list);
 }, []);  
 
@@ -106,7 +121,7 @@ const handleModalClose =()=>{
 //Table row expand function
 const handleExpandFun =()=>{
   setTableExpandOpen(!TableExpandOpen);    
-  setTableExpandOpen2(false);       
+  setTableExpandOpen1(false);       
 }
 
 //Table row expand function-2
@@ -117,12 +132,9 @@ const handleExpandFun2 =(event)=>{
   setListTotalAmount(ListTotalAmount);  
   setPropertyId(iconClickId);
 
-  setTableExpandOpen2((prevExpandState) => ({
-    ...prevExpandState,
-    [iconClickId]: !prevExpandState[iconClickId],
-  }));
+  setTableExpandOpen1(!TableExpandOpen1);
 
-  if (!TableExpandOpen2[iconClickId]) {
+  if (!TableExpandOpen1[iconClickId]) {
     HeirList = heir_details_list;
   }
 }
@@ -143,55 +155,47 @@ return (
     </Snackbar>
   </>
   <div className="py-0">
-    <Table aria-label="collapsible table">
+  <Table aria-label="collapsible table">
           <TableHead className="table-head">
-            <TableRow>
-                <TableCell className="" align="left"><span className="font-semibold">生前贈与</span></TableCell>
+              <TableRow>
+              <TableCell className="" align="left"><span className="font-semibold">生前贈与</span></TableCell>
                 <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
                 <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
                 <TableCell className="" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-                <TableCell className="cursor-pointer" align="right" onClick={handleExpandFun}><span className="font-semibold bg-blue-500 rounded-sm px-1 py-1 px-2 text-white">入力</span></TableCell>
-              </TableRow>          
+                <TableCell className="cursor-pointer" align="right" onClick={handleExpandFun}><span className="font-semibold bg-blue-500 rounded-sm py-1 px-2 text-white">入力</span></TableCell>
+              </TableRow>
             </TableHead>
-            <TableBody>                     
+            <TableBody>
+                     
             <TableRow>
               <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
                   <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
-                    <Box className="my-2"> 
-                      <Table>
-                        <TableHead className="table-head-2">
-                            <TableRow>
-                              <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">所在場所・財産の種類</span></TableCell>
-                              <TableCell className="border invisible border-light-gray border-l"><span className="font-semibold">Column</span></TableCell>
-                              <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">金額</span></TableCell>
-                              <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
-                              <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
-                            </TableRow>                                           
-                            {LivingDonationList.map((list, index) => (
-                              <React.Fragment key={list.id}>
-                                <TableRow key={list.id} id={list.id} value={list.customer_id}>
-                                  <TableCell className="border border-light-gray border-l">{list.payee_name}</TableCell>
-                                  <TableCell className="border invisible border-light-gray border-l">{list.date_of_paid}</TableCell>                           
-                                  <TableCell className="border border-light-gray border-l w-20" align="right">
-                                    {list.amount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span>
-                                  </TableCell>
-                                  <TableCell className="border border-light-gray border-l w-15" align="center">
+                    <Box>
+                        <Table>
+                          
+                          <TableBody>                            
+                            <TableRow>      
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">所在場所・財産の種類</TableCell>             
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">金額</TableCell>
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">分割情報入力</TableCell>
+                            </TableRow>    
+                            <TableRow>      
+                                <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>
+                                <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text"/></TableCell>   
+                                <TableCell className="border border-light-gray border-l w-15" align="center">
                                     <IconButton
                                       aria-label="expand row"
-                                      size="small"
-                                      id={list.id}
-                                      name={list.customer_id}
-                                      value={list.amount.toLocaleString()}
+                                      size="small"                                      
                                       onClick={handleExpandFun2}
                                     >
-                                      {TableExpandOpen2[list.id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                      {TableExpandOpen1 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                                     </IconButton>
                                   </TableCell>
-                                  <TableCell className="border border-light-gray border-l" align="center"></TableCell>
-                                </TableRow>
-                                <TableRow className="w-full">
+                            </TableRow>       
+
+                            <TableRow className="w-full">
                                   <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
-                                      <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
+                                      <Collapse in={TableExpandOpen1} timeout="auto" unmountOnExit>
                                         <Box>
                                             <Table>
                                               <TableHead>
@@ -210,7 +214,7 @@ return (
                                               </TableHead>
                                                   <TableBody>
                                                     <TableRow>  
-                                                      {HeirDetailsList.map((heir_lists)=>(
+                                                      {HeirList.map((heir_lists)=>(
                                                       <>
                                                           <TableCell id={heir_lists.heir_id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
                                                       </>
@@ -224,16 +228,16 @@ return (
                                       </Collapse>
                                     </TableCell>
                                   </TableRow>
-                              </React.Fragment>
-                            ))}
-                        </TableHead>                        
-                      </Table>                       
-                    </Box>
-                  </Collapse>                  
+
+                            </TableBody>                           
+                          
+                        </Table> 
+                      </Box>
+                  </Collapse>
               </TableCell>
             </TableRow>
-          </TableBody>             
-        </Table>        
+          </TableBody> 
+        </Table>      
     </div>   
     </>
   );
