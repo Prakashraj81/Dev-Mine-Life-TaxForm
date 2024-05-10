@@ -215,6 +215,8 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
         let totalAmount = 0;
         let undecidedHeirCount = 0;
         let dividedAmount = 0;
+        UndecidedHeir = UndecidedHeir.toLocaleString();
+        AmountofMoney = AmountofMoney.toLocaleString();
         UndecidedHeir = UndecidedHeir.replace(/,/g, '').replace('.', '');
         UndecidedHeir = parseFloat(UndecidedHeir);
         AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
@@ -299,7 +301,7 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
                 <Fade in={OpenModalPopup}>
                 <Box sx={style}>
                     <Typography id="spring-modal-title" variant="h3" component="h2">
-                    分割情報の入力
+                        分割情報の入力
                     </Typography>
                     <div className="py-3">              
                     <FormControl>
@@ -323,72 +325,12 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
                     </FormControl>     
                     {AmountShow && (
                         <>
-                        <HeirListAmountShowSkeleton HeirList={HeirList} divisionBoxCalculation={divisionBoxCalculation} BoxValues={BoxValues} divisionInputKeyPress={divisionInputKeyPress} UndecidedHeir={UndecidedHeir} AmountofMoney={AmountofMoney}/>
-                        {/* <ul>     
-                        {HeirList.map((heirlist, index) => (
-                            <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                                <span>{heirlist.name}</span>
-                                <div className="text-right"><input id={heirlist.heir_id} type="text" autoComplete="off" className="border-2 h-10 text-right form-control w-50 outline-none"
-                                    onChange={(e) => divisionBoxCalculation(e, index)}
-                                    value={BoxValues[index] ? BoxValues[index].toLocaleString() : ''}
-                                    onKeyPress={divisionInputKeyPress}
-                                /></div>
-                            </li>
-                        ))}                
-                        <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                            <span>相続人未決定</span>
-                            <span>{UndecidedHeir}</span>
-                        </li>    
-                        <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                            <span>合計</span>
-                            <span>{AmountofMoney}</span>
-                        </li>            
-                    </ul>  */}
+                            <HeirListAmountShowSkeleton HeirList={HeirList} divisionBoxCalculation={divisionBoxCalculation} BoxValues={BoxValues} divisionInputKeyPress={divisionInputKeyPress} UndecidedHeir={UndecidedHeir} AmountofMoney={AmountofMoney}/>
                         </>
                     )}
                     {FractionShow &&(
                     <>
-                    <HeirListFractionShowSkeleton HeirList={HeirList} fractionBoxCalculation_1={fractionBoxCalculation_1} divisionInputKeyPress={divisionInputKeyPress} fractionBoxCalculation_2={fractionBoxCalculation_2} UndecidedHeir={UndecidedHeir} AmountofMoney={AmountofMoney}/>
-                    {/* <ul>                
-                        {HeirList.map((heirlist, index) => (
-                            <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                            <div className="w-70">
-                                <span>{heirlist.name}</span>
-                            </div>
-                            <div className="w-30 text-right">
-                                <div className="w-full inline-block">
-                                    <div className="flex justify-between items-center">
-                                        <div><input
-                                            type="text"
-                                            className="text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
-                                            id={heirlist.heir_id}
-                                            onChange={(e) => fractionBoxCalculation_1(e, index)}
-                                            onKeyPress={divisionInputKeyPress}
-                                        /></div>
-                                        <div>
-                                            <span className="text-3xl text-gray-400">/</span>
-                                        </div>
-                                        <div><input
-                                            type="text"
-                                            className="text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
-                                            id={heirlist.heir_id}
-                                            onChange={(e) => fractionBoxCalculation_2(e, index)}
-                                            onKeyPress={divisionInputKeyPress}
-                                        /></div>
-                                    </div>
-                                </div>
-                            </div>
-                            </li>                    
-                        ))}  
-                        <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                            <span>相続人未決定</span>
-                            <span>{UndecidedHeir}</span>
-                        </li> 
-                        <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
-                            <span>合計</span>
-                            <span>{AmountofMoney}</span>
-                        </li>             
-                    </ul>    */}
+                        <HeirListFractionShowSkeleton HeirList={HeirList} fractionBoxCalculation_1={fractionBoxCalculation_1} divisionInputKeyPress={divisionInputKeyPress} fractionBoxCalculation_2={fractionBoxCalculation_2} UndecidedHeir={UndecidedHeir} AmountofMoney={AmountofMoney}/>                    
                     </>
                     )}      
                     
