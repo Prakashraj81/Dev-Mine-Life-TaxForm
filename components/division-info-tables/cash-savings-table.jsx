@@ -29,6 +29,22 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
+const HtmlTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 450,
+    maxHeight: 200,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+    overflowY: 'auto',
+    overflowX: 'auto',
+    padding: '15px 20px',
+  },
+}));
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -39,19 +55,6 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
-
-const HtmlTooltip = styled(({ className, ...props }) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: 450,
-    fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9',
-  },
-}));
 
 export default function CashSavingsTable({ heir_details_list }) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
@@ -106,7 +109,7 @@ export default function CashSavingsTable({ heir_details_list }) {
       try {
         const response = await axios.get('https://minelife-api.azurewebsites.net/list_cash_deposit', { params });
         if (response.status === 200) {
-          setTotalAmount(0);
+          TotalAmount = 0;
           setcashSavingsList(response.data.cash_deposit_details);
           {response.data.cash_deposit_details.map((list) => {
               if (list.amount !== 0) {
@@ -193,27 +196,45 @@ export default function CashSavingsTable({ heir_details_list }) {
               <HtmlTooltip
                 title={
                   <React.Fragment>
-                    <Typography color="inherit">Information</Typography>
+                    <Typography color="inherit"></Typography>
                     <p>1. 上場株式
-原則として次の(1)から(4)までの価額のうち、最も低い価額で評価します。
-(1) 相続の開始があった日の終値
-(2) 相続の開始があった月の毎日の終値の月平均額
-(3)相続の開始があった月の前月の毎日の終値の月平均額
-(4)相続の開始があった月の前々月の毎日の終値の月平均額
-※上場株式の評価には国税庁発行の「上場株式の評価明細書」をご利用ください。
-添付書類としてそのまま提出可能です。
-【参考】</p>
+                      原則として次の(1)から(4)までの価額のうち、最も低い価額で評価します。
+                      <Box>
+                        <ul>
+                          <li>(1) 相続の開始があった日の終値</li>
+                          <li>(2) 相続の開始があった月の毎日の終値の月平均額</li>
+                          <li>(3)相続の開始があった月の前月の毎日の終値の月平均額</li>
+                          <li>(4)相続の開始があった月の前々月の毎日の終値の月平均額</li>
+                        </ul>
+                      </Box>
+                      ※上場株式の評価には国税庁発行の「上場株式の評価明細書」をご利用ください。
+                      添付書類としてそのまま提出可能です。                      
+                    </p>
+                    <br/>
+                    <h4>【参考】</h4>
+                    <Box>
+                        <ul>
+                          <li>(1) 相続の開始があった日の終値</li>
+                          <li>(2) 相続の開始があった月の毎日の終値の月平均額</li>
+                          <li>(3)相続の開始があった月の前月の毎日の終値の月平均額</li>
+                          <li>(4)相続の開始があった月の前々月の毎日の終値の月平均額</li>
+                        </ul>
+                      </Box>
+                      <Box>
+                        <image src="https://minatosc.kspot.net/images/aisouzoku-logo.png"/>
+                      </Box>
                   </React.Fragment>
                 }
               >
-                <QuestionMarkIcon className="pr-2"/>                
+                <QuestionMarkIcon style={{ fontSize: 18 }} className="mr-2 p-1 bg-warning-main rounded-lg text-black"/>                
               </HtmlTooltip>
-              <span onClick={handleExpandFun} className="font-semibold bg-blue-500 rounded-sm px-1 py-1 px-2 text-white">入力</span></TableCell>
+              <span onClick={handleExpandFun} className="font-semibold bg-blue-500 rounded-sm py-1 px-2 text-white">入力</span>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+              <TableCell className="" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
                 <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                   <Box className="my-2">
                     <Table>

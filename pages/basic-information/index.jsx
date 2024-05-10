@@ -80,7 +80,7 @@ export default function BasicInformation() {
     const EditDecendent = async(event) => {
         let ValueId =  Number(event.currentTarget.id);
         let ValueName =  Number(event.currentTarget.name);
-        if(ValueId !== 0){
+        if(ValueId === 0){
             router.push(`/basic-information/decendent?Id=${btoa(ValueId)}`);            
         }
         else{

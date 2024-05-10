@@ -25,6 +25,25 @@ import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+
+const HtmlTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 450,
+    maxHeight: 200,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+    overflowY: 'auto',
+    overflowX: 'auto',
+    padding: '15px 20px',
+  },
+}));
   
 const style = {
     position: 'absolute',
@@ -150,7 +169,14 @@ return (
                 <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
                 <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
                 <TableCell className="" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-                <TableCell className="cursor-pointer" align="right" onClick={handleExpandFun}><span className="font-semibold bg-blue-500 rounded-sm px-1 py-1 px-2 text-white">入力</span></TableCell>
+                <TableCell className="cursor-pointer" align="right">
+                    <Box className="invisible inline-block">
+                      <HtmlTooltip>
+                        <QuestionMarkIcon style={{ fontSize: 18 }} className="mr-2 p-1 bg-warning-main rounded-lg text-black"/>                
+                      </HtmlTooltip>
+                    </Box>
+                    <span onClick={handleExpandFun} className="font-semibold bg-blue-500 rounded-sm py-1 px-2 text-white">入力</span>
+                  </TableCell>
               </TableRow>          
             </TableHead>
             <TableBody>                     

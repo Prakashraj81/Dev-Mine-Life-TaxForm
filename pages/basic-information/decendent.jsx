@@ -210,6 +210,7 @@ export default function Decendent() {
         
         //Api setup
         if (isSumbitDisabled !== true) {
+            setShowLoader(true);   
             let auth_key = atob(sessionStorage.getItem("auth_key"));
             const formData = new FormData();
             formData.append("auth_key", auth_key);
@@ -223,17 +224,15 @@ export default function Decendent() {
             formData.append("date_of_death", DateofDeath);
             //formData.append("completion_date", "completion_date");
             formData.append("declaration_location", WheretoSubmitReturn);
-            if(formData !== null && auth_key !== null){
+            if(formData !== null && auth_key !== null){                
                 try{
-                    setShowLoader(true);
-                    let resoponse = "";
-                    if(Id !== 0){
-                        resoponse = await axios.post('https://minelife-api.azurewebsites.net/edit_decedent', formData);
-                    }
-                    else{
-                        resoponse = await axios.post('https://minelife-api.azurewebsites.net/add_decedent', formData);
-                    }                    
-                    if(response.status === 200){
+                    var response = "";                                     
+                    if (Id !== 0) {
+                        response = await axios.post('https://minelife-api.azurewebsites.net/edit_decedent', formData);
+                    } else {
+                        response = await axios.post('https://minelife-api.azurewebsites.net/add_decedent', formData);
+                    }  
+                    if (response.status === 200) {
                         setShowLoader(false);
                         router.push(`/basic-information`); 
                     }
