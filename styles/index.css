@@ -180,8 +180,15 @@ input {
     font-size: 14px;
     margin-right: 7px;
   }
+  .table-20 {
+    width: 20%;
+  }
   .table-head > tr > th:first-child {
     width: 20%;
+    padding: 0;
+  }
+  .table-head > tr > th:last-child{
+    padding: 0;
   }
   .table-head-2 > tr > th:first-child{
     width: 25%;

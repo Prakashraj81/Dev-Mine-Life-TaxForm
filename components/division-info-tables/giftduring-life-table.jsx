@@ -106,7 +106,7 @@ export default function CashSavingsTable() {
                   <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">贈与税額控除</span></TableCell>
                   <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
                   <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-                  <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+                  <TableCell className="table-20 border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
                   <TableCell className="border border-light-gray border-l cursor-pointer" align="center">
                     {/* <Box className="invisible inline-block">
                       <HtmlTooltip>

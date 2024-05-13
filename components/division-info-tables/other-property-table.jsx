@@ -167,7 +167,7 @@ return (
             <TableCell className="" align="left"><span className="font-semibold">その他財産</span></TableCell>
             <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
             <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-            <TableCell className="" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+            <TableCell className="table-20" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
             <TableCell className="cursor-pointer" align="right">
                     <Box className="invisible inline-block">
                       <HtmlTooltip>
