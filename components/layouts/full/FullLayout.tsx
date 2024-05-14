@@ -99,10 +99,8 @@ const FullLayout: React.FC<Props> = ({ children }) => {
                     </div>
                   </div>
                 </div>
-                <div className="w-20 hidden lg:inline-block xl:inline-block 2xl:inline-block float-left border-l-2">
-                  <div className="">
+                <div className="w-20 hidden lg:inline-block xl:inline-block 2xl:inline-block float-left border-l">
                     <SideBarWidgetList />
-                  </div>
                 </div>
               </div>
             </div>

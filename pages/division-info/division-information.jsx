@@ -72,7 +72,7 @@ export default function DivisionInformation() {
     useEffect(() => {
       const timer = setTimeout(() => {
         setLoading(false);
-      }, 2500); // Adjust the timeout as needed
+      }, 2000); // Adjust the timeout as needed
       return () => clearTimeout(timer);
     }, []);
 
@@ -397,13 +397,13 @@ export default function DivisionInformation() {
                                         // Render skeleton loader for each list item
                                         Array.from({ length: 20 }, (_, index) => (                                        
                                         <Table key={index}>
-                                            <TableBody>
+                                            <TableHead className="skeleton-table-head">
                                                 <TableRow>
-                                                    <TableCell className="p-0"><Skeleton variant="text" width={400} height={45} /></TableCell>
-                                                    <TableCell className="p-0"><Skeleton variant="text" width={150} height={45} /></TableCell>
-                                                    <TableCell className="p-0"><Skeleton variant="text" width={50} height={45} /></TableCell>
+                                                    <TableCell className="p-0" align="left"><Skeleton variant="text" width={400} height={45} /></TableCell>
+                                                    <TableCell className="table-20 p-0" align="left"><Skeleton variant="text" width={150} height={45} /></TableCell>
+                                                    <TableCell className="p-0" align="right"><Skeleton variant="text" width={50} height={45} /></TableCell>
                                                 </TableRow>
-                                            </TableBody>
+                                            </TableHead>
                                         </Table>    
                                         ))
                                     ) : (

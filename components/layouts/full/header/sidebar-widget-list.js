@@ -6,7 +6,7 @@ export default function SideBarWidgetList() {
   return (
     <>
       <div className="sidebar-widget-list">
-        <div className="sidebar-heading border-b-2">
+        <div className="sidebar-heading border-b">
           <div className="flex justify-start items-center py-5 mx-5">
             <TextSnippetOutlinedIcon />
             <span className="pl-2 text-base lg:text-xl xl:text-xl 2xl:text-xl tracking-2 font-medium">
@@ -15,7 +15,7 @@ export default function SideBarWidgetList() {
           </div>
         </div>
         <div className="sidebar-list">
-          <div className="list-details w-full inline-block border-b-2">
+          <div className="list-details w-full inline-block border-b">
             <div className="mx-5 py-3">
               <div className="w-full inline-block heading">
                 <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
@@ -30,7 +30,7 @@ export default function SideBarWidgetList() {
             </div>
           </div>
 
-          <div className="list-details w-full inline-block border-b-2">
+          <div className="list-details w-full inline-block border-b">
             <div className="mx-5 py-3">
               <div className="w-full inline-block heading">
                 <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
@@ -45,7 +45,7 @@ export default function SideBarWidgetList() {
             </div>
           </div>
 
-          <div className="list-details w-full inline-block border-b-2">
+          <div className="list-details w-full inline-block border-b">
             <div className="mx-5 py-3">
               <div className="w-full inline-block heading">
                 <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
@@ -60,7 +60,7 @@ export default function SideBarWidgetList() {
             </div>
           </div>
 
-          <div className="list-details w-full inline-block border-b-2">
+          <div className="list-details w-full inline-block border-b">
             <div className="mx-5 py-3">
               <div className="w-full inline-block heading">
                 <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
@@ -75,7 +75,7 @@ export default function SideBarWidgetList() {
             </div>
           </div>
 
-          <div className="list-details w-full inline-block border-b-2">
+          <div className="list-details w-full inline-block border-b">
             <div className="mx-5 py-3">
               <div className="w-full inline-block heading">
                 <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
@@ -90,7 +90,7 @@ export default function SideBarWidgetList() {
             </div>
           </div>
 
-          <div className="list-details w-full inline-block border-b-2">
+          <div className="list-details w-full inline-block border-b">
             <div className="mx-5 py-3">
               <div className="w-full inline-block heading">
                 <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">

@@ -190,6 +190,13 @@ input {
   .table-head > tr > th:last-child{
     padding: 0;
   }
+  .skeleton-table-head> tr > th:first-child {
+    width: 75%;
+    padding: 0;
+  }
+  .skeleton-table-head > tr > th:last-child{
+    padding: 0;
+  }
   .table-head-2 > tr > th:first-child{
     width: 25%;
   }
