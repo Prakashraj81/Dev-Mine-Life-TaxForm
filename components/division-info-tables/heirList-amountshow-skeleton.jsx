@@ -9,7 +9,7 @@ const HeirListAmountShowSkeleton = ({HeirList, divisionBoxCalculation, BoxValues
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000); // Adjust the timeout as needed
+    }, 1500); // Adjust the timeout as needed
     return () => clearTimeout(timer);
   }, []);
 
