@@ -86,8 +86,8 @@ export default function ConfirmationSuccessiveInheritance() {
         <Table aria-label="collapsible table">
           <TableHead className="table-head-50">
             <TableRow>
-                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">相似相続控除</span></TableCell>
-                <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold text-red-500">確認・入力</span></TableCell>
+                <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">相似相続控除</span></TableCell>
+                <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-medium text-red-500">確認・入力</span></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>                     
@@ -140,7 +140,7 @@ export default function ConfirmationSuccessiveInheritance() {
                                             <Table>
                                               <TableHead>
                                                 <TableRow>
-                                                    <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
+                                                    <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-medium">分割情報の入力</span></TableCell>
                                                 </TableRow>          
                                                 <TableRow>      
                                                     {HeirList.map((heir)=>(

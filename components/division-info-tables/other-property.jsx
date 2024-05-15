@@ -85,11 +85,11 @@ export default function OthersPropertyTable() {
       <Table aria-label="collapsible table">
           <TableHead className="table-head">
               <TableRow>
-                  <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">その他財産</span></TableCell>
-                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+                  <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">その他財産</span></TableCell>
+                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-medium">Column</span></TableCell>
+                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-medium">Column</span></TableCell>
                   <TableCell className="border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-                  <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold bg-blue-500 rounded-sm px-1 py-1 px-2 text-white">入力</span></TableCell>
+                  <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-medium bg-blue-500 rounded-sm px-1 py-1 px-2 text-white">入力</span></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -101,11 +101,11 @@ export default function OthersPropertyTable() {
                       <Table>
                         <TableHead className="table-head-2">
                           <TableRow>
-                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">財産の名称</span></TableCell>
-                            <TableCell className="border border-light-gray border-l"><span className="font-semibold">相手先</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">評価額</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
-                            <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">財産の名称</span></TableCell>
+                            <TableCell className="border border-light-gray border-l"><span className="font-medium">相手先</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-medium">評価額</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
+                            <TableCell className="border border-light-gray border-l invisible"><span className="font-medium">Column</span></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableRow>      
@@ -132,7 +132,7 @@ export default function OthersPropertyTable() {
                         <Table>
                           <TableHead>
                             <TableRow>
-                                <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
+                                <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-medium">分割情報の入力</span></TableCell>
                             </TableRow>          
                             <TableRow>      
                                 {HeirList.map((heir)=>(

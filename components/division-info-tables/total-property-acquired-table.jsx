@@ -85,8 +85,8 @@ export default function TotalPropertyAcquiredTable() {
         <Table aria-label="collapsible table">
           <TableHead className="table-head-50">
             <TableRow>
-                <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">取得した財産の合計</span></TableCell>
-                {/* <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-semibold text-red-500">確認・入力</span></TableCell> */}
+                <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">取得した財産の合計</span></TableCell>
+                {/* <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-medium text-red-500">確認・入力</span></TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>                     

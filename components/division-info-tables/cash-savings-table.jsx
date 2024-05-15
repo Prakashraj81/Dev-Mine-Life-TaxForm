@@ -188,9 +188,9 @@ export default function CashSavingsTable({ heir_details_list }) {
         <Table aria-label="collapsible table">
           <TableHead className="table-head">
             <TableRow>
-              <TableCell className="" align="left"><span className="font-semibold">現金預金</span></TableCell>
-              <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-              <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+              <TableCell className="" align="left"><span className="font-medium">現金預金</span></TableCell>
+              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
+              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
               <TableCell className="table-20" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
               <TableCell className="cursor-pointer" align="right">
               <HtmlTooltip
@@ -228,7 +228,7 @@ export default function CashSavingsTable({ heir_details_list }) {
               >
                 <QuestionMarkIcon style={{ fontSize: 18 }} className="mr-2 p-1 bg-warning-main rounded-lg text-black"/>                
               </HtmlTooltip>
-              <span onClick={handleExpandFun} className="font-semibold bg-blue-500 rounded-sm py-1 px-2 text-white">入力</span>
+              <span onClick={handleExpandFun} className="font-medium bg-blue-500 rounded-sm py-1 px-2 text-white">入力</span>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -240,11 +240,11 @@ export default function CashSavingsTable({ heir_details_list }) {
                     <Table>
                       <TableHead className="table-head-2">
                         <TableRow>
-                          <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">預金の種類</span></TableCell>
-                          <TableCell className="border border-light-gray border-l"><span className="font-semibold">金融機関名</span></TableCell>
-                          <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">金額</span></TableCell>
-                          <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
-                          <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
+                          <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">預金の種類</span></TableCell>
+                          <TableCell className="border border-light-gray border-l"><span className="font-medium">金融機関名</span></TableCell>
+                          <TableCell className="border border-light-gray border-l" align="right"><span className="font-medium">金額</span></TableCell>
+                          <TableCell className="border border-light-gray border-l" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
+                          <TableCell className="border border-light-gray border-l invisible"><span className="font-medium">Column</span></TableCell>
                         </TableRow>
                         {cashSavingsList.map((list, index) => (
                           <React.Fragment key={list.id}>
@@ -279,7 +279,7 @@ export default function CashSavingsTable({ heir_details_list }) {
                                     <Table>
                                       <TableHead>
                                         <TableRow>
-                                          <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-semibold">分割情報の入力</span></TableCell>
+                                          <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-medium">分割情報の入力</span></TableCell>
                                         </TableRow>
                                         <TableRow>
                                           {HeirList.map((heir) => (

@@ -164,9 +164,9 @@ return (
     <Table aria-label="collapsible table">
         <TableHead className="table-head">
             <TableRow>
-              <TableCell className="" align="left"><span className="font-semibold">死亡保険金等</span></TableCell>
-              <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
-              <TableCell className="invisible" align="left"><span className="font-semibold">Column</span></TableCell>
+              <TableCell className="" align="left"><span className="font-medium">死亡保険金等</span></TableCell>
+              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
+              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
               <TableCell className="table-20" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
               <TableCell className="cursor-pointer" align="right">
                     <Box className="invisible inline-block">
