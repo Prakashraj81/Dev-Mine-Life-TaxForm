@@ -101,7 +101,7 @@ export default function CashSavingsTable() {
     <DivisionPopup OpenModalPopup={OpenModalPopup} handleModalClose={handleModalClose}/>
     <div className="py-2">
       <Table aria-label="collapsible table">
-          <TableHead className="table-head">
+          <TableHead className="table-head1">
               <TableRow>
                   <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">贈与税額控除</span></TableCell>
                   <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-medium">Column</span></TableCell>
