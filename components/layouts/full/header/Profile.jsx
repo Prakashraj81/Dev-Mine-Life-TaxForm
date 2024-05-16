@@ -36,6 +36,7 @@ const Profile = () => {
         const response = await axios.post('https://minelife-api.azurewebsites.net/user_logout', formData);
         if(response.status === 200){
           sessionStorage.clear();
+          localStorage.clear();
           router.push(`/auth/login`);
         }
         else{
