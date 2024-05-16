@@ -31,7 +31,7 @@ export default function SummaryProperty() {
     useEffect(() => {
       const timer = setTimeout(() => {
         setLoading(false);
-      }, 2500); // Adjust the timeout as needed
+      }, 2000); // Adjust the timeout as needed
       return () => clearTimeout(timer);
     }, []);
 
@@ -346,7 +346,7 @@ const GetFuneralExpensesList = async(auth_key, params)=>{
                     入力したい項目の「<EditNoteOutlinedIcon className="text-primary-gray"/>」ボタンをクリックして各財産情報を入力してください。 入力が完了しましたら「入力終了（次へ）」をクリックして贈与・控除の入力へ進んで下さい。
                     </p>
                 </div>
-                <div className="summary-tables-wrapper max-w-screen-md mx-auto">
+                <div className="summary-tables-wrapper">
                     {loading ? (
                         // Render skeleton loader for each list item
                         Array.from({ length: 20 }, (_, index) => (                                        
@@ -363,27 +363,27 @@ const GetFuneralExpensesList = async(auth_key, params)=>{
                     ) : (
                         // Render actual content when loading is false
                         <>
-                        <table className="text-left table">
-                            <tbody>
-                                {Flag === 1 && (
-                                    <>
-                                        {tableList.map((list, index) => (
-                                            <tr className="border-t" id={list.id}>
-                                                <th className="w-full py-5 font-medium">{list.heading}</th>
-                                                <td className="text-right">{list.amount.toLocaleString()}</td>
-                                                <td className="pl-10">
-                                                    <Link href={list.path}>
-                                                        <button id="decedent_edit" className="text-sm bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                                            {list.icon}
-                                                        </button>
-                                                    </Link>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </>                            
-                                )}
-                                </tbody>
-                            </table>
+                        <Table className="text-left summary-table">
+                            <TableBody>
+                                    {Flag === 1 && (
+                                        <>
+                                            {tableList.map((list, index) => (                                            
+                                                <TableRow className="border border-l-0 border-r-0" id={list.id}>
+                                                    <TableCell className="w-full font-medium"><span className="font-medium">{list.heading}</span></TableCell>
+                                                    <TableCell align="right" className="font-medium"><span className="font-medium">{list.amount.toLocaleString()}</span></TableCell>
+                                                    <TableCell align="right" className="font-medium">
+                                                        <Link href={list.path}>
+                                                            <button id="decedent_edit" className="text-sm bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                                                {list.icon}
+                                                            </button>
+                                                        </Link>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </>                            
+                                    )}
+                            </TableBody>
+                        </Table>
                         </>
                     )}                    
                 </div>
