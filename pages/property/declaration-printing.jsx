@@ -11,7 +11,7 @@ import axios from 'axios';
 const tableList = [
     {
         id: 1,
-        class:"line-through",
+        class:"",
         heading: "第1表",
         secondheading: "相続税の申告書",
         icon: <PictureAsPdfIcon className="text-white" />,
@@ -27,7 +27,7 @@ const tableList = [
     },
     {
         id: 3,
-        class:"",
+        class:"line-through",
         heading: "第4表",
         secondheading: "相続税額の加算金額の計算書",
         icon: <PictureAsPdfIcon className="text-white" />,
@@ -43,15 +43,42 @@ const tableList = [
     },
     {
         id: 5,
-        class:"",
+        class:"line-through",
         heading: "第5表",
         secondheading: "配偶者の税額軽減額の計算書",
         icon: <PictureAsPdfIcon className="text-white" />,
         path: "/gift-various/successive-inheritance",
     },    
-]
+];
 
-export default function DeclarationPrinting() {     
+
+export default function DeclarationPrinting() {   
+    let [ApiRoute, setApiRoute] = useState("");
+    let [ApiResponse, setApiResponse] = useState("");
+    let [ApiClassName, setApiClassName] = useState("");
+    let [auth_key, setauth_key] = useState("");
+
+const TargetBlankClick = () => {
+    auth_key = atob(sessionStorage.getItem("auth_key"));
+    setauth_key(auth_key);
+    if(tableHeading == "第1表"){
+        ApiRoute = "generate_table_1_pdf";        
+    }
+    else if(tableHeading == "第2表"){
+        ApiRoute = "";
+    }
+    else{
+
+    }
+    if(ApiRoute !== ""){
+        const url = `https://minelife-api.azurewebsites.net/${ApiRoute}?auth_key=${auth_key}`;
+        window.open(url, '_blank');
+    }    
+    else{
+
+    }
+};
+
     return (
         <>
             <div className="summary-property-wrapper">
@@ -75,19 +102,19 @@ export default function DeclarationPrinting() {
                     </div>
                     <table className="text-left table">
                         <tbody>
-                            {tableList.map((list, index) => (
+                        {tableList.map((list, index) => {
+                            return (
                                 <tr className="border-t w-full" id={list.id}>
                                     <td className={list.class ? "line-through w-50 py-5" : "w-50 py-5"}>{list.heading}</td>
                                     <td className={list.class ? "line-through w-50 py-5" : "w-50 py-5"}>{list.secondheading}</td>
                                     <td className="pl-10">
-                                        <a>
-                                            <button id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
-                                                {list.icon}
-                                            </button>
-                                        </a>
+                                        <button onClick={TargetBlankClick} value={list.heading} id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                                            {list.icon}                                        
+                                        </button>                                      
                                     </td>
                                 </tr>
-                            ))}
+                            );
+                        })}
                         </tbody>
                     </table>
                 </div>                
