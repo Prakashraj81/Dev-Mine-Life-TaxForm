@@ -58,14 +58,15 @@ export default function DeclarationPrinting() {
     let [ApiClassName, setApiClassName] = useState("");
     let [auth_key, setauth_key] = useState("");
 
-const TargetBlankClick = () => {
+const TargetBlankClick = (event) => {
     auth_key = atob(sessionStorage.getItem("auth_key"));
     setauth_key(auth_key);
+    let tableHeading = event.currentTarget.id;
     if(tableHeading == "第1表"){
         ApiRoute = "generate_table_1_pdf";        
     }
     else if(tableHeading == "第2表"){
-        ApiRoute = "";
+        ApiRoute = "generate_table_2_pdf";
     }
     else{
 
@@ -108,7 +109,7 @@ const TargetBlankClick = () => {
                                     <td className={list.class ? "line-through w-50 py-5" : "w-50 py-5"}>{list.heading}</td>
                                     <td className={list.class ? "line-through w-50 py-5" : "w-50 py-5"}>{list.secondheading}</td>
                                     <td className="pl-10">
-                                        <button onClick={TargetBlankClick} value={list.heading} id="decedent_edit" className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
+                                        <button onClick={TargetBlankClick} id={list.heading} className="text-sm bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
                                             {list.icon}                                        
                                         </button>                                      
                                     </td>
