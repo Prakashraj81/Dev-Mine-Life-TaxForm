@@ -19,7 +19,7 @@ const tableList = [
     },
     {
         id: 2,
-        class:"line-through",
+        class:"",
         heading: "第2表",
         secondheading: "相続税の総額の計算書",
         icon: <PictureAsPdfIcon className="text-white" />,
