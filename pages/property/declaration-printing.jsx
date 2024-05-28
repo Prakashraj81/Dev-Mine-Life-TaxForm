@@ -27,7 +27,7 @@ const tableList = [
     },
     {
         id: 3,
-        class:"line-through",
+        class:"",
         heading: "第4表",
         secondheading: "相続税額の加算金額の計算書",
         icon: <PictureAsPdfIcon className="text-white" />,
@@ -35,17 +35,27 @@ const tableList = [
     },
     {
         id: 4,
-        class:"line-through",
-        heading: "第４表の付表",
-        secondheading: "相続税額の加算金額の計算書付表",
+        class:"",
+        heading: "第6表",
+        secondheading: "未成年者・障害者控除額の計算書",
         icon: <PictureAsPdfIcon className="text-white" />,
         path: "/gift-various/allocation-amount",
     },
     {
         id: 5,
-        class:"line-through",
-        heading: "第5表",
-        secondheading: "配偶者の税額軽減額の計算書",
+        class:"",
+        heading: "第7表",
+        secondheading: "相次相続控除額の計算書",
+        icon: <PictureAsPdfIcon className="text-white" />,
+        path: "/gift-various/successive-inheritance",
+    },    
+    {
+        id: 5,
+        class:"",
+        heading: "第14表",
+        secondheading: "純資産価額に加算される暦年課税分の贈与財産価額及び特定",
+        secondheading1: "贈与財産価額明細書",
+        secondheading2: "遺贈・寄附した財産の明細書",
         icon: <PictureAsPdfIcon className="text-white" />,
         path: "/gift-various/successive-inheritance",
     },    
@@ -67,6 +77,18 @@ const TargetBlankClick = (event) => {
     }
     else if(tableHeading == "第2表"){
         ApiRoute = "generate_table_2_pdf";
+    }
+    else if(tableHeading == "第4表"){
+        ApiRoute = "generate_table_4_pdf";
+    }
+    else if(tableHeading == "第6表"){
+        ApiRoute = "generate_table_6_pdf";
+    }
+    else if(tableHeading == "第7表"){
+        ApiRoute = "generate_table_7_pdf";
+    }
+    else if(tableHeading == "第14表"){
+        ApiRoute = "generate_table_14_pdf";
     }
     else{
 

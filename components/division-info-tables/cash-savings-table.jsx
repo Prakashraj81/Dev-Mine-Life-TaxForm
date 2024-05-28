@@ -78,19 +78,18 @@ export default function CashSavingsTable({ heir_details_list }) {
   useEffect(() => {
     GetCashSavingsList();
     setHeirList(heir_details_list);
-    setHeirDetailsList(heir_details_list);
-    //GetHeirSharingDetails();
+    setHeirDetailsList(heir_details_list);    
   }, []);
 
   //Load Heir sharing details
-  const GetHeirSharingDetails = async (cashDepositId) => {
+  const GetHeirSharingDetails = async (Id) => {
     let auth_key = atob(sessionStorage.getItem("auth_key"));
-    const params = { auth_key: auth_key, id: cashDepositId };
-    if (auth_key !== null && cashDepositId !== 0) {
+    const params = { auth_key: auth_key, id: Id };
+    if (auth_key !== null && Id !== 0) {
       try {
         const response = await axios.get('https://minelife-api.azurewebsites.net/get_cash_deposit', { params });
         if (response.status === 200) {
-          setHeirSharingDetails(response.data.heir_sharing_details);
+          setHeirSharingDetails(response.data.heir_sharing_details);          
         }
         else {
           setHeirSharingDetails([]);
@@ -138,10 +137,14 @@ export default function CashSavingsTable({ heir_details_list }) {
   };
 
   const handleModalOpen = (event) => {
+    setHeirDetailsList(HeirSharingDetails);
+    setListTotalAmount(ListTotalAmount);
+    setPropertyId(PropertyId);
     setOpenModalPopup(true);
   }
   const handleModalClose = () => {
     setOpenModalPopup(false);
+    handleExpandFun2(event);   
   }
 
   //Table row expand function
@@ -170,9 +173,9 @@ export default function CashSavingsTable({ heir_details_list }) {
     });
   
     if (!TableExpandOpen2[iconClickId]) {
-      HeirList = heir_details_list;
-      GetHeirSharingDetails(iconClickId);
-    }
+      HeirList = heir_details_list;   
+      GetHeirSharingDetails(iconClickId);   
+    }    
   };
   
 

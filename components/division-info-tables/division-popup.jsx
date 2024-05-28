@@ -35,7 +35,7 @@ import HeirListFractionShowSkeleton from './heirList-fractionshow-skeleton';
 
 export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListTotalAmount, PropertyId, ApiCallRoute, handleModalClose}){
     let [selectedValue, setSelectedValue] = useState('Amount');
-    let [AmountShow, setAmountShow] = useState(true);
+    let [AmountShow, setAmountShow] = useState(false);
     let [FractionShow, setFractionShow] = useState(false);
 
     let [AmountofMoney, setAmountofMoney] = useState(0);
@@ -59,10 +59,12 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
   useEffect(() => { 
     if(OpenModalPopup === true){
         GetHeirList(); 
+        AmountofMoney = ListTotalAmount;
         setAmountofMoney(ListTotalAmount);
         //GetHeirSharingDetails();
+        setAmountShow(true);        
     }    
-  }, [OpenModalPopup]);
+  }, [OpenModalPopup, AmountofMoney]);
 
   
   //Load heir details list
@@ -94,7 +96,7 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
         const params = { auth_key: auth_key, id: popupId };
         if (auth_key !== null && popupId !== 0) {
           try {
-            const response = await axios.get('https://minelife-api.azurewebsites.net/get_cash_deposit', { params });
+            const response = await axios.get(`https://minelife-api.azurewebsites.net/get_${ApiCallRoute}`, { params });
             if (response.status === 200) {
               setHeirSharingDetails(response.data.heir_sharing_details);
             }
@@ -144,27 +146,25 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
     }
 
     //Division box calculation function
-    const divisionBoxCalculation = (e, index) => {   
-        let id = e.currentTarget.id;     
+    const divisionBoxCalculation = (e, index) => {
+        let id = e.currentTarget.id;         
         let newValue = e.target.value.replace(/,/g, '');        
         newValue = parseFloat(newValue);
-        setBoxValues([0]);
+        //setBoxValues([0]);
         let updatedBoxValues = [...BoxValues];
         updatedBoxValues[index] = isNaN(newValue) ? 0 : newValue;
         updatedBoxValues = updatedBoxValues.map((value) => (value === undefined ? 0 : value));
+        BoxValues = updatedBoxValues;
         setBoxValues(updatedBoxValues);
 
         //Amount of money convert
-        if (AmountofMoney == 0) {
-            AmountofMoney = 0;
-        }
-        else {
-            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
-            AmountofMoney = parseFloat(AmountofMoney);
-        }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
+        let convertedAmount = parseFloat(AmountofMoney.toString().replace(/,/g, '').replace('.', ''));
+        if (isNaN(convertedAmount)) convertedAmount = 0;
+
+        let totalBoxValues = BoxValues.reduce((total, value) => total + value, 0);
         totalBoxValues = isNaN(totalBoxValues) ? 0 : totalBoxValues;
-        let heirValue = AmountofMoney - totalBoxValues;
+        let heirValue = convertedAmount - totalBoxValues;
+        setAmountofMoney(convertedAmount.toLocaleString());
         if (heirValue < 0) {
             setUndecidedHeir(heirValue.toLocaleString());
             setShowIncorrectError(true);
@@ -184,6 +184,7 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
         setheir_sharing([...heir_sharing]);
     };
 
+    //Fraction box 1 calculation
     const fractionBoxCalculation_1 = (e, index) => {
         let id = e.currentTarget.id;
         let numerator = parseFloat(e.target.value) || 0;          
@@ -210,6 +211,7 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
         recalculateTotalAmount(HeirListArray, index);
     };
     
+     //Fraction box 2 calculation
     const fractionBoxCalculation_2 = (e, index) => {
         let id = e.currentTarget.id;
         let denominator = parseFloat(e.target.value) || 0;
