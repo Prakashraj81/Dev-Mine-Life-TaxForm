@@ -150,24 +150,31 @@ export default function CashSavingsTable({ heir_details_list }) {
     setTableExpandOpen2(false);
   }
 
-  //Table row expand function-2
+  //Table row expand function-2 
   const handleExpandFun2 = (event) => {
     const iconClickId = Number(event.currentTarget.id);
     const customerId = Number(event.currentTarget.name);
-    ListTotalAmount = event.currentTarget.value;
+    const ListTotalAmount = event.currentTarget.value;
+  
     setListTotalAmount(ListTotalAmount);
     setPropertyId(iconClickId);
-
-    setTableExpandOpen2((prevExpandState) => ({
-      ...prevExpandState,
-      [iconClickId]: !prevExpandState[iconClickId],
-    }));
-
+  
+    // Reset all expand states to false and then open the current one
+    setTableExpandOpen2((prevExpandState) => {
+      const newExpandState = Object.keys(prevExpandState).reduce((acc, key) => {
+        acc[key] = false;
+        return acc;
+      }, {});
+      newExpandState[iconClickId] = !prevExpandState[iconClickId];
+      return newExpandState;
+    });
+  
     if (!TableExpandOpen2[iconClickId]) {
       HeirList = heir_details_list;
       GetHeirSharingDetails(iconClickId);
-    }    
-  }
+    }
+  };
+  
 
   return (
     <>

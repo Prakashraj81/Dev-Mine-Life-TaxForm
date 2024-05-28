@@ -52,6 +52,7 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
     let [HeirList, setHeirList] = useState([]);
     let [HeirDetailsList, setHeirDetailsList] = useState([]);
     let [heir_sharing, setheir_sharing] = useState([]);
+    //let [HeirSharingDetails, setHeirSharingDetails] = useState([]);
     let [HeirId, setHeirId] = useState(0);
     let [TotalAmount, setTotalAmount] = useState(0);  
 
@@ -59,6 +60,7 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
     if(OpenModalPopup === true){
         GetHeirList(); 
         setAmountofMoney(ListTotalAmount);
+        //GetHeirSharingDetails();
     }    
   }, [OpenModalPopup]);
 
@@ -71,11 +73,11 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
           try{
               const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
               if(response.status === 200){
-                    console.log("count");
-                  setHeirList(response.data.heir_list || []);                  
+                console.log("count");
+                setHeirList(response.data.heir_list || []);                  
               }
               else{
-                  setHeirList([]);
+                setHeirList([]);
               }
           }catch (error){
               console.error('Error:', error);
@@ -85,6 +87,25 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
           //Logout();
       }      
   };
+
+    //Load Heir sharing details
+    const GetHeirSharingDetails = async (popupId) => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key, id: popupId };
+        if (auth_key !== null && popupId !== 0) {
+          try {
+            const response = await axios.get('https://minelife-api.azurewebsites.net/get_cash_deposit', { params });
+            if (response.status === 200) {
+              setHeirSharingDetails(response.data.heir_sharing_details);
+            }
+            else {
+              setHeirSharingDetails([]);
+            }
+          } catch (error) {
+            console.log("Error", error);
+          }
+        }
+      }
 
 
     //Amount and fraction open
@@ -325,13 +346,13 @@ export default function DivisionPopup({OpenModalPopup, HeirSharingDetails, ListT
                     </FormControl>     
                     {AmountShow && (
                         <>
-                            <HeirListAmountShowSkeleton HeirList={HeirList} divisionBoxCalculation={divisionBoxCalculation} BoxValues={BoxValues} divisionInputKeyPress={divisionInputKeyPress} UndecidedHeir={UndecidedHeir} AmountofMoney={AmountofMoney}/>
+                            <HeirListAmountShowSkeleton HeirList={HeirList} HeirSharingDetails={HeirSharingDetails} divisionBoxCalculation={divisionBoxCalculation} BoxValues={BoxValues} divisionInputKeyPress={divisionInputKeyPress} UndecidedHeir={UndecidedHeir} AmountofMoney={AmountofMoney}/>
                         </>
                     )}
                     {FractionShow &&(
-                    <>
-                        <HeirListFractionShowSkeleton HeirList={HeirList} fractionBoxCalculation_1={fractionBoxCalculation_1} divisionInputKeyPress={divisionInputKeyPress} fractionBoxCalculation_2={fractionBoxCalculation_2} UndecidedHeir={UndecidedHeir} AmountofMoney={AmountofMoney}/>                    
-                    </>
+                        <>
+                            <HeirListFractionShowSkeleton HeirList={HeirList} HeirSharingDetails={HeirSharingDetails} fractionBoxCalculation_1={fractionBoxCalculation_1} divisionInputKeyPress={divisionInputKeyPress} fractionBoxCalculation_2={fractionBoxCalculation_2} UndecidedHeir={UndecidedHeir} AmountofMoney={AmountofMoney}/>                    
+                        </>
                     )}      
                     
                     <div className="w-full block pt-3 lg:flex xl:flex 2xl:flex justify-evenly items-center">

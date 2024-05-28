@@ -1,17 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
-const HeirListAmountShowSkeleton = ({HeirList, divisionBoxCalculation, BoxValues, divisionInputKeyPress, UndecidedHeir, AmountofMoney}) => {
+const HeirListAmountShowSkeleton = ({HeirList, HeirSharingDetails, divisionBoxCalculation, BoxValues, divisionInputKeyPress, UndecidedHeir, AmountofMoney}) => {
   // Use state to manage loading state
   const [loading, setLoading] = useState(true);
 
   // Simulate loading effect using useEffect
-  useEffect(() => {
+  useEffect(() => {   
+
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1500); // Adjust the timeout as needed
+    }, 1000); // Adjust the timeout as needed
     return () => clearTimeout(timer);
   }, []);
+
+  const [undecidedHeir1, setUndecidedHeir1] = useState(0);
+  const [shareAmounts, setShareAmounts] = useState(
+    HeirSharingDetails.reduce((acc, detail) => {
+      acc[detail.heir_id] = detail.share_amount || '';    
+
+      return acc;
+    }, {})
+  );
+
+  // Handler to update state when input changes
+  const handleInputChange = (e, heir_id) => {
+    const { value } = e.target;
+    setShareAmounts({
+      ...shareAmounts,
+      [heir_id]: value,
+    });    
+  };
+
 
   return (
     <ul>
@@ -31,19 +51,26 @@ const HeirListAmountShowSkeleton = ({HeirList, divisionBoxCalculation, BoxValues
           {HeirList.map((heirlist, index) => (
             <li key={index} className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
               <span>{heirlist.name}</span>
-              <div className="text-right">
-                <input
-                  id={heirlist.heir_id}
-                  type="text"
-                  autoComplete="off"
-                  className="border-2 h-10 text-right form-control w-50 outline-none"
-                  onChange={(e) => divisionBoxCalculation(e, index)}
-                  value={BoxValues[index] ? BoxValues[index].toLocaleString() : ''}
-                  onKeyPress={divisionInputKeyPress}
-                />
-              </div>
+              {HeirSharingDetails.filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
+                .map((shareDetails, i) => (
+                  <div key={i} className="text-right">
+                    <input
+                      id={shareDetails.heir_id}
+                      type="text"
+                      autoComplete="off"
+                      className="border-2 h-10 text-right form-control w-50 outline-none"
+                      onChange={(e) => {
+                        handleInputChange(e, shareDetails.heir_id);
+                        divisionBoxCalculation(e, index);
+                      }}
+                      value={shareAmounts[shareDetails.heir_id].toLocaleString()}
+                      onKeyPress={divisionInputKeyPress}
+                    />
+                  </div>
+                ))}
             </li>
           ))}
+
           {/* Render other list items */}
           <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
             <span>相続人未決定</span>

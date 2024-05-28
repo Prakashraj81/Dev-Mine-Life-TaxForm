@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
-const HeirListFractionShowSkeleton = ({HeirList, fractionBoxCalculation_1, divisionInputKeyPress, fractionBoxCalculation_2, UndecidedHeir, AmountofMoney}) => {
+const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBoxCalculation_1, divisionInputKeyPress, fractionBoxCalculation_2, UndecidedHeir, AmountofMoney}) => {
   // Use state to manage loading state
   const [loading, setLoading] = useState(true);
 
