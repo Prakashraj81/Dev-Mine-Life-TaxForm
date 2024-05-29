@@ -17,6 +17,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import JapaneseCalendar from "../../components/inputbox-icon/japanese-calender";
 
 export default function Decendent() {
 
@@ -367,14 +368,8 @@ export default function Decendent() {
                                         生年月日<i className="text-red-500">*</i>
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="date"
-                                        id="DateofBirth"
-                                        value={DateofBirth}
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"
-                                        onChange={inputHandlingFunction}
-                                    />
+                                <div className="w-full inline-block mt-2">                                    
+                                    <JapaneseCalendar id={"DateofBirth"} DateofBirth={DateofBirth} inputHandlingFunction={inputHandlingFunction}/>
                                     {DateofBirthError && (
                                         <p className="text-red-500" role="alert">この項目は必須です</p>
                                     )}
@@ -455,14 +450,8 @@ export default function Decendent() {
                                             お亡くなりになった日
                                         </label>
                                     </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="date"
-                                            id="DateofDeath"
-                                            value={DateofDeath}
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-3"
-                                            onChange={inputHandlingFunction}
-                                        />
+                                    <div className="w-full inline-block mt-2">                                        
+                                        <JapaneseCalendar id={"DateofDeath"} DateofDeath={DateofDeath} inputHandlingFunction={inputHandlingFunction}/>
                                         {DateofDeathError && (
                                             <p className="text-red-500" role="alert">この項目は必須です</p>
                                         )}
