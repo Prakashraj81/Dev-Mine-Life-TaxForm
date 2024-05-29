@@ -108,6 +108,7 @@ export default function SecuritiesTable({heir_details_list}) {
         try{
             const response = await axios.get('https://minelife-api.azurewebsites.net/list_securities', {params});
             if(response.status === 200){
+                TotalAmount = 0;
                 setSecuritiesList(response.data.securities_details);
                 {response.data.securities_details.map((list) => {
                   if(list.amount !== 0){
@@ -138,7 +139,8 @@ export default function SecuritiesTable({heir_details_list}) {
     setOpenModalPopup(true);       
   }    
   const handleModalClose =()=>{ 
-    setOpenModalPopup(false);    
+    setOpenModalPopup(false); 
+    GetHeirSharingDetails(PropertyId);     
   }    
 
   //Table row expand function

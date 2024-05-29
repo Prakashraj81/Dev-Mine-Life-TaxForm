@@ -50,7 +50,7 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
       {loading ? (
         // Render skeleton loader for each list item
         Array.from({ length: HeirList.length + 2 }, (_, index) => (
-          <li key={index} className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
+          <li key={index} className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-0 border-t py-3">
             <Skeleton variant="text" width={600} height={30} />
             <div className="w-full flex justify-end items-center">
               <Skeleton variant="text" width={50} height={30} />
@@ -63,7 +63,7 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
         <>
           {/* Replace with your actual content */}          
           {HeirList.map((heirlist, index) => (
-            <li key={index} className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
+            <li key={index} className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-0 border-t py-3">
               <div className="w-70">
                   <span>{heirlist.name}</span>
               </div>
@@ -103,11 +103,11 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
                 ))}
             </li>
           ))}
-          <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
+          <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-0 border-t py-3">
               <span>相続人未決定</span>
               <span>{UndecidedHeir.toLocaleString()}</span>
           </li> 
-          <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-t-2 py-3">
+          <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-0 border-t py-3">
               <span>合計</span>
               <span>{AmountofMoney.toLocaleString()}</span>
           </li> 

@@ -109,6 +109,7 @@ const GetHouseholdList = async()=>{
       try{
           const response = await axios.get('https://minelife-api.azurewebsites.net/list_household', {params});
           if(response.status === 200){
+            TotalAmount = 0;
               setHouseholdList(response.data.household_details);
               {response.data.household_details.map((list) => {
                 if(list.valuation !== 0){

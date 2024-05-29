@@ -144,13 +144,13 @@ export default function CashSavingsTable({ heir_details_list }) {
   }
   const handleModalClose = () => {
     setOpenModalPopup(false);
-    handleExpandFun2(event);   
+    GetHeirSharingDetails(PropertyId);      
   }
 
   //Table row expand function
   const handleExpandFun = () => {
     setTableExpandOpen(!TableExpandOpen);
-    setTableExpandOpen2(false);
+    setTableExpandOpen2(true);
   }
 
   //Table row expand function-2 

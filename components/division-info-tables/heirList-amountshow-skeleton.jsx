@@ -74,11 +74,7 @@ const HeirListAmountShowSkeleton = ({HeirList, HeirSharingDetails, divisionBoxCa
                       onChange={(e) => {
                         handleInputChange(e, shareDetails.heir_id);
                         divisionBoxCalculation(e, index);
-                      }}
-                      // onLoad={(e) => {
-                      //   handleInputChange(e, shareDetails.heir_id);
-                      //   divisionBoxCalculation(e, index);
-                      // }}
+                      }}                      
                       onKeyPress={divisionInputKeyPress}
                     />
                   </div>

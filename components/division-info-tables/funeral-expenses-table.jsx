@@ -109,7 +109,7 @@ const GetFuneralExpensesList = async()=>{
       try{
           const response = await axios.get('https://minelife-api.azurewebsites.net/list_funeral_expenses', {params});
           if(response.status === 200){
-            setTotalAmount(0);
+            TotalAmount = 0;
             setFuneralExpensesList(response.data.funeral_expenses_details);
             {response.data.funeral_expenses_details.map((list) => {
               if(list.amount !== 0){
@@ -141,6 +141,7 @@ const handleModalOpen =(event)=>{
 }    
 const handleModalClose =()=>{ 
   setOpenModalPopup(false);    
+  GetHeirSharingDetails(PropertyId);  
 }    
 
 //Table row expand function

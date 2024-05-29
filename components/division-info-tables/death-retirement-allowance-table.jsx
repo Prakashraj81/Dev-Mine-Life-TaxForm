@@ -109,6 +109,7 @@ const GetDeathRetirementList = async()=>{
       try{
           const response = await axios.get('https://minelife-api.azurewebsites.net/list_death_retirement', {params});
           if(response.status === 200){
+            TotalAmount = 0;
             setDeathRetirementList(response.data.death_retirements_details);
               {response.data.death_retirements_details.map((list) => {
                 if(list.amount !== 0){
@@ -140,6 +141,7 @@ const handleModalOpen =(event)=>{
 }    
 const handleModalClose =()=>{ 
   setOpenModalPopup(false);    
+  GetHeirSharingDetails(PropertyId);  
 }    
 
 //Table row expand function

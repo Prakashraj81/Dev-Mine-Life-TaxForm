@@ -391,7 +391,7 @@ const GetFuneralExpensesList = async(auth_key, params)=>{
                 <div className="w-full flex justify-evenly items-center">
                     <BackButton />
                     <div className="end-btn text-center">
-                        <Link href="/summary-pages/summary-gifts-various">
+                        <Link href="/division-info/division-information">
                         <button
                                 type="button"
                                 

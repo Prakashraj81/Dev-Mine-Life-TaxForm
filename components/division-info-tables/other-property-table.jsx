@@ -108,6 +108,7 @@ const GetOthersPropertyList = async()=>{
       try{
           const response = await axios.get('https://minelife-api.azurewebsites.net/list_other_assets', {params});
           if(response.status === 200){
+              TotalAmount = 0;
               setOthersPropertyList(response.data.other_assets_details);
               {response.data.other_assets_details.map((list) => {
                 if(list.valuation !== 0){
@@ -139,6 +140,7 @@ const handleModalOpen =(event)=>{
 }    
 const handleModalClose =()=>{ 
   setOpenModalPopup(false);    
+  GetHeirSharingDetails(PropertyId);  
 }    
 
 //Table row expand function

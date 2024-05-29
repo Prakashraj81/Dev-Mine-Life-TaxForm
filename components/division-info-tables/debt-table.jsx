@@ -108,6 +108,7 @@ const GetDebtList = async()=>{
       try{
           const response = await axios.get('https://minelife-api.azurewebsites.net/list_debts', {params});
           if(response.status === 200){
+            TotalAmount = 0;
               setDebtList(response.data.debts_details);
               {response.data.debts_details.map((list) => {
                 if(list.amount !== 0){
@@ -138,7 +139,8 @@ const handleModalOpen =(event)=>{
   setOpenModalPopup(true);       
 }    
 const handleModalClose =()=>{ 
-  setOpenModalPopup(false);    
+  setOpenModalPopup(false);   
+  GetHeirSharingDetails(PropertyId);   
 }    
 
 //Table row expand function
