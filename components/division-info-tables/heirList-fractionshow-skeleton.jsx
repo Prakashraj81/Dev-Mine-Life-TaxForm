@@ -14,21 +14,56 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
   }, []);
 
   const [undecidedHeir1, setUndecidedHeir1] = useState(0);
-  const [shareAmounts, setShareAmounts] = useState(
+  const [shareAmountNumerator, setShareAmountNumerator] = useState(
     HeirSharingDetails.reduce((acc, detail) => {
-      acc[detail.heir_id] = detail.share_amount || '';    
+      acc[detail.heir_id] = detail.numerator || '';    
+
+      return acc;
+    }, {})
+  );
+
+  const [shareAmountDenominator, setShareAmountDenominator] = useState(
+    HeirSharingDetails.reduce((acc, detail) => {
+      acc[detail.heir_id] = detail.denominator || '';    
 
       return acc;
     }, {})
   );
 
   // Handler to update state when input changes
-  const handleInputChange = (e, heir_id) => {
+  const handleInputChange1 = (e, heir_id) => {
     const { value } = e.target;
-    setShareAmounts({
-      ...shareAmounts,
-      [heir_id]: value,
-    });    
+    if(value !== ""){
+      setShareAmountNumerator({
+        ...shareAmountNumerator,
+        [heir_id]: value,
+      });    
+    }
+    else{
+      const { value1 } = e.target;      
+      setShareAmountNumerator({
+        ...shareAmountNumerator,
+        [heir_id]: value1,
+      });    
+    }    
+  }; 
+  
+  // Handler to update state when input changes
+  const handleInputChange2 = (e, heir_id) => {
+    const { value } = e.target;
+    if(value !== ""){      
+      setShareAmountDenominator({
+        ...shareAmountDenominator,
+        [heir_id]: value,
+      });    
+    }
+    else{
+      const { value2 } = e.target;      
+      setShareAmountDenominator({
+        ...shareAmountDenominator,
+        [heir_id]: value2,
+      });    
+    }    
   }; 
 
 
@@ -36,10 +71,18 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
     HeirList.forEach((heirlist, index) => {
       HeirSharingDetails.filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
         .forEach((shareDetails) => {
-          const value = shareAmounts[shareDetails.heir_id].toLocaleString();
-          const mockEvent = { target: { value }, currentTarget: {id: shareDetails.heir_id} }; // Mock event object
-          handleInputChange(mockEvent, shareDetails.heir_id);
-          //fractionBoxCalculation_2(mockEvent, index);
+          let value;
+
+          value = shareAmountNumerator[shareDetails.heir_id];          
+          const mockEvent1 = { target: { value }, currentTarget: {id: shareDetails.heir_id} }; // Mock event object
+          fractionBoxCalculation_1(mockEvent1, index);
+
+          value = shareAmountDenominator[shareDetails.heir_id];
+          const mockEvent2 = { target: { value }, currentTarget: {id: shareDetails.heir_id} }; // Mock event object
+          fractionBoxCalculation_2(mockEvent2, index);
+
+          //handleInputChange(mockEvent1, shareDetails.heir_id);
+          //handleInputChange(mockEvent2, shareDetails.heir_id);         
         });
     });
   }, []);
@@ -76,9 +119,9 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
                             type="text"
                             className="text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
                             id={shareDetails.heir_id}
-                            //value={shareDetails.numerator}
+                            value={shareAmountNumerator[shareDetails.heir_id]}
                             onChange={(e) => {
-                              handleInputChange(e, shareDetails.heir_id);
+                              handleInputChange1(e, shareDetails.heir_id);
                               fractionBoxCalculation_1(e, index);
                             }}
                             onKeyPress={divisionInputKeyPress}
@@ -90,9 +133,9 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
                             type="text"
                             className="text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
                             id={shareDetails.heir_id}
-                            //value={shareDetails.denominator}
+                            value={shareAmountDenominator[shareDetails.heir_id]}
                             onChange={(e) => {
-                              handleInputChange(e, shareDetails.heir_id);
+                              handleInputChange2(e, shareDetails.heir_id);
                               fractionBoxCalculation_2(e, index);
                             }}
                             onKeyPress={divisionInputKeyPress}

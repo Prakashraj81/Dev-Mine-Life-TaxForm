@@ -13,7 +13,6 @@ const HeirListAmountShowSkeleton = ({HeirList, HeirSharingDetails, divisionBoxCa
     return () => clearTimeout(timer);
   }, []);
 
-  const [undecidedHeir1, setUndecidedHeir1] = useState(0);
   const [shareAmounts, setShareAmounts] = useState(
     HeirSharingDetails.reduce((acc, detail) => {
       acc[detail.heir_id] = detail.share_amount || '';    
