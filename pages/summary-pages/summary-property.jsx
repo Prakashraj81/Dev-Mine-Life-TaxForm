@@ -365,7 +365,7 @@ const GetFuneralExpensesList = async(auth_key, params)=>{
                         <>
                         <Table className="text-left summary-table">
                             <TableBody>
-                                    {Flag === 1 && (
+                                    {Flag === 0 && (
                                         <>
                                             {tableList.map((list, index) => (                                            
                                                 <TableRow className="border border-l-0 border-r-0" id={list.id}>

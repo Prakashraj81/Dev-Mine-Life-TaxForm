@@ -61,6 +61,7 @@ export default function Heir() {
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
     let [NameError, setNameError] = useState(false);
+    let [KatakanaError, setKatakanaError] = useState(false);
     let [FuriganaError, setFuriganaError] = useState(false);
     let [DateofBirthError, setDateofBirthError] = useState(false);
     let [TelephoneNumberError, setTelephoneNumberError] = useState(false);
@@ -115,6 +116,16 @@ export default function Heir() {
         }
     };
 
+    // Regular expression to match Katakana characters validate
+    const validateKatakana = (text) => {       
+        if(text !== ""){
+            const katakanaRegex = /^[\u30A0-\u30FF]+$/;    
+            if (!katakanaRegex.test(text)) {
+              return "Please enter only Katakana characters.";
+            }        
+            return null;
+        }        
+    };
 
     //All input validation check and handling function
     const inputHandlingFunction = (event) => {
@@ -123,10 +134,16 @@ export default function Heir() {
         if (inputId === "Name") {
             setName(inputValue);
             setNameError(false);
-        }
-        else if (inputId === "Furigana") {
+        }        
+        else if (inputId === "Furigana") {   
+            const errorMessage = validateKatakana(inputValue);
+            if (errorMessage === null) {
+                setKatakanaError(false);                
+            } else {           
+                setFuriganaError(false);     
+                setKatakanaError(true);
+            }
             setFurigana(inputValue);
-            setFuriganaError(false);
         }
         else if (inputId === "DateofBirth") {
             setDateofBirth(inputValue);
@@ -221,6 +238,15 @@ export default function Heir() {
         if (defaultValues.Furigana === "") {
             setFuriganaError(true);
             isSumbitDisabled = true;
+        }
+        if(defaultValues.Furigana !== ""){
+            const errorMessage = validateKatakana(defaultValues.Furigana);
+            if (errorMessage === null) {
+                setKatakanaError(false);
+            } else {
+                setKatakanaError(true);
+                isSumbitDisabled = true;
+            }
         }
         if (defaultValues.DateofBirth === "") {
             setDateofBirthError(true);
@@ -342,6 +368,9 @@ export default function Heir() {
                                             onChange={inputHandlingFunction}
                                             value={Furigana}
                                         />
+                                        {KatakanaError && (
+                                            <p className="text-red-500" role="alert">カタカナのみを気にしてください。</p>
+                                        )}
                                         {FuriganaError && (
                                             <p className="text-red-500" role="alert">この項目は必須です</p>
                                         )}

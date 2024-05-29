@@ -26,8 +26,7 @@ html:not([data-scroll="0"]) .basic-header {
   width: 100%;
   background-color: white;
   background-blend-mode: overlay;
-  opacity: 1.9;
-  
+  opacity: 1.9;  
   transition: 0.4s linear;
   z-index: 3;
 }
@@ -36,12 +35,15 @@ body {
   font-family: "Noto Sans JP", sans-serif;
   background: #fff;
   font-size: 14px;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   line-height: 26px;
   color: #000;
 }
 header {
   background: #fff !important;
+}
+.page-wrapper {
+  padding-bottom: 0 !important;
 }
 font {
   letter-spacing: 0;

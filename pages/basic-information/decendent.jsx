@@ -51,6 +51,7 @@ export default function Decendent() {
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
     let [NameError, setNameError] = useState(false);
+    let [KatakanaError, setKatakanaError] = useState(false);
     let [FuriganaError, setFuriganaError] = useState(false);
     let [DateofBirthError, setDateofBirthError] = useState(false);
     let [DateofDeathError, setDateofDeathError] = useState(false);
@@ -119,11 +120,17 @@ export default function Decendent() {
             return true;
         }
     };
-    //Furigana input validate
-    function validateFurigana(input) {
-        const furiganaPattern = /^[\u3040-\u309F\u30A0-\u30FFー々〆\u3400-\u4DBF\u20000-\u2A6DF\u2A700-\u2B73F\u2B740-\u2B81F\u2B820-\u2CEAF\u2CEB0-\u2EBEF\uF900-\uFAFF\u2F800-\u2FA1F（）〔〕［］｛｝『』「」＜＞｜ー・・]+$/;  
-        return furiganaPattern.test(input);
-    } 
+   
+    // Regular expression to match Katakana characters validate
+    const validateKatakana = (text) => {       
+        if(text !== ""){
+            const katakanaRegex = /^[\u30A0-\u30FF]+$/;    
+            if (!katakanaRegex.test(text)) {
+              return "Please enter only Katakana characters.";
+            }        
+            return null;
+        }        
+    };
 
     //All input validation check and handling function
     const inputHandlingFunction = (event) => {
@@ -133,15 +140,15 @@ export default function Decendent() {
             setName(inputValue);
             setNameError(false);
         }
-        else if (inputId === "Furigana") {    
-        if (!validateFurigana(inputValue)) {
-          event.preventDefault();
-          setFuriganaError(true);
-        }
-        else{
-            setFuriganaError(false);  
-        }    
-        setFurigana(inputValue);           
+        else if (inputId === "Furigana") {   
+            const errorMessage = validateKatakana(inputValue);
+            if (errorMessage === null) {
+                setKatakanaError(false);                
+            } else {           
+                setFuriganaError(false);     
+                setKatakanaError(true);
+            }
+            setFurigana(inputValue);
         }
         else if (inputId === "DateofBirth") {
             setDateofBirth(inputValue);
@@ -199,6 +206,15 @@ export default function Decendent() {
         if (defaultValues.Furigana === "") {
             setFuriganaError(true);
             isSumbitDisabled = true;
+        }
+        if(defaultValues.Furigana !== ""){
+            const errorMessage = validateKatakana(defaultValues.Furigana);
+            if (errorMessage === null) {
+                setKatakanaError(false);
+            } else {
+                setKatakanaError(true);
+                isSumbitDisabled = true;
+            }
         }
         if (defaultValues.DateofBirth === "") {
             setDateofBirthError(true);
@@ -353,6 +369,9 @@ export default function Decendent() {
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             onChange={inputHandlingFunction}
                                         />
+                                        {KatakanaError && (
+                                            <p className="text-red-500" role="alert">カタカナのみを気にしてください。</p>
+                                        )}
                                         {FuriganaError && (
                                             <p className="text-red-500" role="alert">この項目は必須です</p>
                                         )}
@@ -451,7 +470,7 @@ export default function Decendent() {
                                         </label>
                                     </div>
                                     <div className="w-full inline-block mt-2">                                        
-                                        <JapaneseCalendar id={"DateofDeath"} DateofDeath={DateofDeath} inputHandlingFunction={inputHandlingFunction}/>
+                                        <JapaneseCalendar id={"DateofDeath"} DateValue={DateofDeath} inputHandlingFunction={inputHandlingFunction}/>
                                         {DateofDeathError && (
                                             <p className="text-red-500" role="alert">この項目は必須です</p>
                                         )}
