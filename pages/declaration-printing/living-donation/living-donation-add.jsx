@@ -13,6 +13,7 @@ import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
+import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 
 export default function LivingDonationAdd() {
 
@@ -316,14 +317,8 @@ export default function LivingDonationAdd() {
                                     贈与年月日<i className="text-red-500">*</i>
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2 relative">
-                                <input
-                                    type="date"
-                                    id="DateOfDonation"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    onChange={inputHandlingFunction}
-                                    value={DateOfDonation}                                  
-                                />   
+                            <div className="w-full inline-block mt-2 relative">                               
+                                <JapaneseCalendar id={"DateOfDonation"} DateValue={DateOfDonation} inputHandlingFunction={inputHandlingFunction}/>
                                 {DateOfDonationError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
                                 )}                       

@@ -4,8 +4,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { ja } from 'date-fns/locale';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
-const JapaneseCalendar = ({ id, DateofBirth, inputHandlingFunction }) => {
-  const [selectedDate, setSelectedDate] = useState(DateofBirth ? new Date(DateofBirth) : null);
+const JapaneseCalendar = ({ id, DateValue, inputHandlingFunction }) => {
+  const [selectedDate, setSelectedDate] = useState(DateValue ? new Date(DateValue) : null);
 
   // Register Japanese locale with react-datepicker
   useEffect(() => {
@@ -14,8 +14,8 @@ const JapaneseCalendar = ({ id, DateofBirth, inputHandlingFunction }) => {
   }, []);
 
   useEffect(() => {
-    setSelectedDate(DateofBirth ? new Date(DateofBirth) : null);
-  }, [DateofBirth]);
+    setSelectedDate(DateValue ? new Date(DateValue) : null);
+  }, [DateValue]);
 
   const handleDateChange = (date) => {
     const dateValue = new Date(date);

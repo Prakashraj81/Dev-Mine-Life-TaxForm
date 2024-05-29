@@ -139,9 +139,9 @@ export default function Decendent() {
           setFuriganaError(true);
         }
         else{
-            setFurigana(inputValue);   
             setFuriganaError(false);  
-        }            
+        }    
+        setFurigana(inputValue);           
         }
         else if (inputId === "DateofBirth") {
             setDateofBirth(inputValue);
@@ -369,7 +369,7 @@ export default function Decendent() {
                                     </label>
                                 </div>
                                 <div className="w-full inline-block mt-2">                                    
-                                    <JapaneseCalendar id={"DateofBirth"} DateofBirth={DateofBirth} inputHandlingFunction={inputHandlingFunction}/>
+                                    <JapaneseCalendar id={"DateofBirth"} DateValue={DateofBirth} inputHandlingFunction={inputHandlingFunction}/>
                                     {DateofBirthError && (
                                         <p className="text-red-500" role="alert">この項目は必須です</p>
                                     )}

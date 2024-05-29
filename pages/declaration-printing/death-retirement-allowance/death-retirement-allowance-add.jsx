@@ -11,6 +11,7 @@ import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
+import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 
 export default function DeathRetirementAllowanceAdd() {  
     let [HeirList, setHeirList] = useState([]);
@@ -395,15 +396,8 @@ export default function DeathRetirementAllowanceAdd() {
                                         受取年月日<i className="text-red-500">*</i>
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="date"
-                                        id="DateofReceipt"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        value={DateofReceipt}
-                                        onKeyPress={handleKeyPress}
-                                        onChange={inputHandlingFunction}
-                                    />
+                                <div className="w-full inline-block mt-2">                                    
+                                    <JapaneseCalendar id={"DateofReceipt"} DateValue={DateofReceipt} inputHandlingFunction={inputHandlingFunction}/>
                                     {DateofReceiptError && (
                                         <p className="text-red-500" role="alert">この項目は必須です</p>
                                     )}

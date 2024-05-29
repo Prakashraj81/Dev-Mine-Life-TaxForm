@@ -13,6 +13,7 @@ import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
+import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 
 export default function DebtAdd() {
     let DebtList = [
@@ -497,14 +498,8 @@ let handleBoxValueChange = (e, index) => {
                                             債務発生日<i className="text-red-500">*</i>
                                         </label>
                                     </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="date"
-                                            id="ObligationDate"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            onChange={inputHandlingFunction}
-                                            value={ObligationDate}
-                                        />
+                                    <div className="w-full inline-block mt-2">                                        
+                                        <JapaneseCalendar id={"ObligationDate"} DateValue={ObligationDate} inputHandlingFunction={inputHandlingFunction}/>
                                         {ObligationDateError && (
                                             <p className="text-red-500" role="alert">この項目は必須です</p>
                                         )}
@@ -518,14 +513,8 @@ let handleBoxValueChange = (e, index) => {
                                     債務の弁済期限（確定している場合)
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="date"
-                                        id="DebtPaymentDeadline"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        onChange={inputHandlingFunction}
-                                        value={DebtPaymentDeadline}
-                                    />
+                                <div className="w-full inline-block mt-2">                                    
+                                    <JapaneseCalendar id={"DebtPaymentDeadline"} DateValue={DebtPaymentDeadline} inputHandlingFunction={inputHandlingFunction}/>
                                 </div>
                             </div>
                         </div>
