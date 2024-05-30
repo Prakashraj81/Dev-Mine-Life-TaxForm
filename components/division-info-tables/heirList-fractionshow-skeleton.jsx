@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
+import { Box } from '@mui/material';
 
 const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBoxCalculation_1, divisionInputKeyPress, fractionBoxCalculation_2, UndecidedHeir, AmountofMoney}) => {
   // Use state to manage loading state
@@ -9,7 +10,7 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 0); // Adjust the timeout as needed
+    }, 1000); // Adjust the timeout as needed
     return () => clearTimeout(timer);
   }, []);
 
@@ -94,11 +95,13 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
         // Render skeleton loader for each list item
         Array.from({ length: HeirList.length + 2 }, (_, index) => (
           <li key={index} className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-0 border-t py-3">
-            <Skeleton variant="text" width={600} height={30} />
-            <div className="w-full flex justify-end items-center">
-              <Skeleton variant="text" width={50} height={30} />
-              <Skeleton variant="text" width={50} height={30} />
-            </div>
+            <Skeleton variant="text" width={300} height={30} />
+            <div>
+              <Box className="w-full flex justify-end items-center">
+                <Skeleton variant="text" width={70} height={30} />
+                <Skeleton className='ml-2' variant="text" width={70} height={30} />
+              </Box>
+            </div>            
           </li>
         ))
       ) : (
@@ -117,7 +120,8 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
                     <div className="flex justify-between items-center">
                         <div><input
                             type="text"
-                            className="text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
+                            autoComplete="off"
+                            className="cursor-pointer text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
                             id={shareDetails.heir_id}
                             value={shareAmountNumerator[shareDetails.heir_id]}
                             onChange={(e) => {
@@ -131,7 +135,8 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
                         </div>
                         <div><input
                             type="text"
-                            className="text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
+                            autoComplete="off"
+                            className="cursor-pointer text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
                             id={shareDetails.heir_id}
                             value={shareAmountDenominator[shareDetails.heir_id]}
                             onChange={(e) => {

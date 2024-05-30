@@ -40,7 +40,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
     let [FractionShow, setFractionShow] = useState(false);
 
     let [AmountofMoney, setAmountofMoney] = useState(0);
-    let [UndecidedHeir, setUndecidedHeir] = useState(AmountofMoney);
+    let [UndecidedHeir, setUndecidedHeir] = useState(0);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
     let [BoxValues, setBoxValues] = useState([0]);
     let [HeirListArray, setHeirListArray] = useState([]);
@@ -56,40 +56,93 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
     let [HeirId, setHeirId] = useState(0);
     let [TotalAmount, setTotalAmount] = useState(0);
 
-    useEffect(() => {
-        if (OpenModalPopup === true) {
-            GetHeirList();
-            AmountofMoney = ListTotalAmount;
-            setAmountofMoney(ListTotalAmount);
-            setAmountShow(true);
+    // useEffect(() => {
+    //     if (OpenModalPopup === true) {
+    //         GetHeirList();
+    //         let amountUpdate = parseFloat(ListTotalAmount.toString().replace(/,/g, '').replace('.', ''));
+    //         AmountofMoney = amountUpdate;
+    //         setAmountofMoney(AmountofMoney);
+    //         setAmountShow(true);
 
-            if (HeirSharingDetails && Array.isArray(HeirSharingDetails)) {
-                HeirSharingDetails
-                  .map(shareDetails => {       
-                    if (shareDetails.share_amount !== 0) {
-                        setAmountShow(true);
-                        setFractionShow(false);                        
-                        selectedValue = 'Amount';
-                        setSelectedValue(selectedValue);
-                    } 
-                    else if (shareDetails.share_amount == 0 && shareDetails.denominator === 0 || shareDetails.numerator === 0) {
-                        setAmountShow(true);
-                        setFractionShow(false);                        
-                        selectedValue = 'Amount';
-                        setSelectedValue(selectedValue);
+    //         if (HeirSharingDetails && Array.isArray(HeirSharingDetails)) {
+    //             HeirSharingDetails
+    //                 .map(shareDetails => {
+    //                     if (shareDetails.share_amount !== 0) {
+    //                         setAmountShow(true);
+    //                         setFractionShow(false);
+    //                         selectedValue = 'Amount';
+    //                         setSelectedValue(selectedValue);
+    //                     }
+    //                     else if (shareDetails.share_amount == 0 && shareDetails.denominator === 0 || shareDetails.numerator === 0) {
+    //                         setAmountShow(true);
+    //                         setFractionShow(false);
+    //                         selectedValue = 'Amount';
+    //                         setSelectedValue(selectedValue);
+    //                     }
+    //                     else {
+    //                         setAmountShow(false);
+    //                         setFractionShow(true);
+    //                         selectedValue = 'Fraction';
+    //                         setSelectedValue(selectedValue);
+    //                     }
+    //                     setUndecidedHeir(AmountofMoney);
+    //                     setBoxValues([0]);
+    //                     setFractionHeir1(0);
+    //                     setFractionHeir2(0);
+    //                     setUserAmount(0);
+    //                     setheir_sharing([]);
+    //                 });
+    //         } else {
+    //             console.error('HeirSharingDetails is not defined or not an array.');
+    //         }
+    //     }
+    // }, [OpenModalPopup, AmountofMoney, UndecidedHeir, HeirSharingDetails, selectedValue]);
+
+
+    useEffect(() => {
+        const updateAmounts = async () => {
+            if (OpenModalPopup) {
+                await GetHeirList(); // Ensure GetHeirList is awaited if it's a promise
+                if (ListTotalAmount != "") { // Check if ListTotalAmount is defined
+                    let amountUpdate = parseFloat(ListTotalAmount.toString().replace(/,/g, '').replace('.', ''));
+                    setAmountofMoney(amountUpdate);
+
+                    setAmountShow(true);
+
+                    if (HeirSharingDetails && Array.isArray(HeirSharingDetails)) {
+                        HeirSharingDetails.forEach(shareDetails => {
+                            if (shareDetails.share_amount !== 0) {
+                                setAmountShow(true);
+                                setFractionShow(false);
+                                setSelectedValue('Amount');
+                            } else if (shareDetails.share_amount === 0 && (shareDetails.denominator === 0 || shareDetails.numerator === 0)) {
+                                setAmountShow(true);
+                                setFractionShow(false);
+                                setSelectedValue('Amount');
+                            } else {
+                                setAmountShow(false);
+                                setFractionShow(true);
+                                setSelectedValue('Fraction');
+                            }
+                        });
+
+                        // setUndecidedHeir(amountUpdate); // use the updated amountUpdate
+                        // setBoxValues([0]);
+                        // setFractionHeir1(0);
+                        // setFractionHeir2(0);
+                        // setUserAmount(0);
+                        // setheir_sharing([]);
+                    } else {
+                        console.error('HeirSharingDetails is not defined or not an array.');
                     }
-                    else {
-                        setAmountShow(false);
-                        setFractionShow(true);
-                        selectedValue = 'Fraction';
-                        setSelectedValue(selectedValue);
-                    }         
-                  });
-              } else {
-                console.error('HeirSharingDetails is not defined or not an array.');
+                } else {
+                    console.error('ListTotalAmount is not defined.');
+                }
             }
-        }        
-    }, [OpenModalPopup, AmountofMoney, HeirSharingDetails, selectedValue]);
+        };
+
+        updateAmounts();
+    }, [OpenModalPopup, ListTotalAmount, HeirSharingDetails]);
 
 
     //Load heir details list
@@ -117,7 +170,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
 
     //Amount and fraction open
     const handleOpenRadio = (event) => {
-        let val = event.currentTarget.value;        
+        let val = event.currentTarget.value;
         if (val === "Amount") {
             setAmountShow(true);
             setFractionShow(false);
@@ -139,7 +192,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
             setheir_sharing([]);
         }
     }
-    
+
     //Division input keypree function
     const divisionInputKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;

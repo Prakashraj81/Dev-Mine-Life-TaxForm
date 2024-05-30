@@ -9,7 +9,7 @@ const HeirListAmountShowSkeleton = ({HeirList, HeirSharingDetails, divisionBoxCa
   useEffect(() => {   
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 0); // Adjust the timeout as needed
+    }, 1000); // Adjust the timeout as needed
     return () => clearTimeout(timer);
   }, []);
 
@@ -68,7 +68,7 @@ const HeirListAmountShowSkeleton = ({HeirList, HeirSharingDetails, divisionBoxCa
                       id={shareDetails.heir_id}
                       type="text"
                       autoComplete="off"
-                      className="border-2 h-10 text-right form-control w-50 outline-none"                      
+                      className="cursor-pointer border-2 h-10 text-right form-control w-50 outline-none"                      
                       value={shareAmounts[shareDetails.heir_id].toLocaleString()}
                       onChange={(e) => {
                         handleInputChange(e, shareDetails.heir_id);
