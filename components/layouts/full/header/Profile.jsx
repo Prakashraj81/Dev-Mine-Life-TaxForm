@@ -46,7 +46,12 @@ const Profile = () => {
       else{
         console.log("Invalid auth key");
       }     
-    } catch (error){      
+    } catch (error){     
+      if(error.response.status === 440 && error.response.data.error.message === "Session Expired. Please login again."){
+        sessionStorage.clear();
+        localStorage.clear();
+        router.push(`/auth/login`);
+      } 
       console.error('Error:', error);
     }   
   }
