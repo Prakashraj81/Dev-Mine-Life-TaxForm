@@ -114,7 +114,7 @@ export default function AddAdminUserModal({AdminUserData, OpenModalPopup, handle
                           variant="outlined"
                           fullWidth
                           required
-                          value={AdminUserData.name ? AdminUserData.name : name}
+                          value={AdminUserData.admin_name ? AdminUserData.admin_name : name}
                           onChange={(e) => setName(e.target.value)}
                         />
                       </Box>
@@ -138,16 +138,7 @@ export default function AddAdminUserModal({AdminUserData, OpenModalPopup, handle
                           variant="outlined"
                           fullWidth
                           value={AdminUserData.password ? AdminUserData.password : password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          // InputProps={{
-                          //   endAdornment: (
-                          //     <InputAdornment position="end">
-                          //       <IconButton onClick={handleTogglePasswordVisibility} edge="end">
-                          //         {showPassword ? <IconEye /> : <IconEyeOff />}
-                          //       </IconButton>
-                          //     </InputAdornment>
-                          //   ),
-                          // }}
+                          onChange={(e) => setPassword(e.target.value)}                          
                         />
                       </Box>
 

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
     Typography,
     Box,
@@ -24,58 +25,6 @@ import FullLayout from "../../../../admin-components/layouts/full/FullLayout";
 import DashboardCard from "../../../../admin-components/shared/DashboardCard";
 import { IconEye, IconCirclePlus, IconTrashX, IconX } from "@tabler/icons-react";
 
-const products = [
-    {
-        id: "1",
-        name: "Prakashraj",
-        email: "prakash.raj@g-japan.com",
-        date: "2023-06-05",
-        status: "Active",
-    },
-    {
-        id: "2",
-        name: "Prakashraj",
-        email: "prakash.raj@g-japan.com",
-        date: "2023-06-05",
-        status: "InActive",
-    },
-    {
-        id: "3",
-        name: "Prakashraj",
-        email: "prakash.raj@g-japan.com",
-        date: "2023-06-05",
-        status: "Active",
-    },
-    {
-        id: "4",
-        name: "Prakashraj",
-        email: "prakash.raj@g-japan.com",
-        date: "2023-06-05",
-        status: "Active",
-    },
-    {
-        id: "5",
-        name: "Prakashraj",
-        email: "prakash.raj@g-japan.com",
-        date: "2023-06-05",
-        status: "InActive",
-    },
-    {
-        id: "6",
-        name: "Prakashraj",
-        email: "prakash.raj@g-japan.com",
-        date: "2023-06-05",
-        status: "InActive",
-    },
-    {
-        id: "7",
-        name: "Prakashraj",
-        email: "prakash.raj@g-japan.com",
-        date: "2023-06-05",
-        status: "Active",
-    },
-];
-
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
         padding: theme.spacing(2),
@@ -89,12 +38,23 @@ export default function Users() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [ViewModalOpen, setViewModalOpen] = React.useState(false);
+    let [UsersList, setUsersList] = useState([]);
+    let [CustomerName, setCustomerName] = useState("");
+    let [CustomerDOB, setCustomerDOB] = useState("");
+    let [CustomerEmail, setCustomerEmail] = useState("");
+    let [CustomerPhone, setCustomerPhone] = useState("");
+    let [CustomerAddress, setCustomerAddress] = useState("");
 
     //View details function
-    const viewUser = (event) => {
-        let viewId = Number(atob(event.currentTarget.id));
-        if (viewId !== 0) {
+    const viewUser = (lists) => {
+        //let viewId = Number(atob(event.currentTarget.id));
+        if (lists !== null) {
             setViewModalOpen(true);
+            setCustomerName(lists.customer_name);
+            setCustomerDOB(lists.customer_name);
+            setCustomerEmail(lists.email_id);
+            setCustomerPhone(lists.phone);
+            setCustomerAddress(lists.customer_name);
         }
         else {
             setViewModalOpen(false)
@@ -104,6 +64,32 @@ export default function Users() {
     const CloseModalFunction = () => {
         setViewModalOpen(false);
     };
+
+
+    useEffect(() => {        
+        GetUsersList();
+    }, []);
+
+
+    //Load users list
+    const GetUsersList = async()=>{
+        let auth_key = atob(sessionStorage.getItem("admin_auth_key"));
+        const params = { auth_key: auth_key };
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/admin/list_users', {params});
+                if(response.status === 200){
+                    setUsersList(response.data.user_details);
+                }
+                else{
+                    setUsersList([]);
+                }
+            }catch(error){
+                console.log("Errro", error);
+            }
+        }        
+    }
+
 
     return (
         <>
@@ -134,7 +120,7 @@ export default function Users() {
                                     htmlFor="username"
                                     mb="5px"
                                 >
-                                    Name : Prakashraj
+                                    Name : {CustomerName}
                                 </Typography>
 
                             </div>
@@ -146,7 +132,7 @@ export default function Users() {
                                     htmlFor="username"
                                     mb="5px"
                                 >
-                                    DOB: 06-05-1998
+                                    DOB: {CustomerDOB}
                                 </Typography>
                             </div>
                             <div className="w-full inline-block mb-7">
@@ -157,7 +143,7 @@ export default function Users() {
                                     htmlFor="username"
                                     mb="5px"
                                 >
-                                    Email: prakash.raj@g-japan.com
+                                    Email: {CustomerEmail}
                                 </Typography>
                             </div>
                             <div className="w-full inline-block mb-7">
@@ -168,7 +154,18 @@ export default function Users() {
                                     htmlFor="username"
                                     mb="5px"
                                 >
-                                    Address: Global japan network, chennai-600034
+                                    Phone: {CustomerPhone}
+                                </Typography>
+                            </div>
+                            <div className="w-full inline-block mb-7">
+                                <Typography
+                                    variant="subtitle1"
+                                    fontWeight={600}
+                                    component="label"
+                                    htmlFor="username"
+                                    mb="5px"
+                                >
+                                    Address: {CustomerAddress}
                                 </Typography>
                             </div>
                         </Grid>
@@ -204,11 +201,11 @@ export default function Users() {
                                 </TableCell>
                                 <TableCell>
                                     <Typography variant="subtitle2" fontWeight={600}>
-                                        Date
+                                        Phone
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography variant="subtitle2" fontWeight={600}>
+                                    <Typography className="text-center" variant="subtitle2" fontWeight={600}>
                                         Status
                                     </Typography>
                                 </TableCell>
@@ -220,13 +217,13 @@ export default function Users() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {products
+                            {UsersList
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((product) => (
-                                    <TableRow key={product.name} sx={{ border: "2px solid #f6f9fc" }}>
+                                .map((lists) => (
+                                    <TableRow key={lists.customer_name} sx={{ border: "2px solid #f6f9fc" }}>
                                         <TableCell sx={{ borderRight: "2px solid #f6f9fc" }}>
                                             <Typography>
-                                                {product.id}
+                                                {lists.customer_id}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderRight: "2px solid #f6f9fc" }}>
@@ -238,19 +235,19 @@ export default function Users() {
                                             >
                                                 <Box>
                                                     <Typography>
-                                                        {product.name}
+                                                        {lists.customer_name}
                                                     </Typography>
                                                 </Box>
                                             </Box>
                                         </TableCell>
                                         <TableCell sx={{ borderRight: "2px solid #f6f9fc" }}>
-                                            <Typography>{product.email}</Typography>
+                                            <Typography>{lists.email_id}</Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderRight: "2px solid #f6f9fc" }}>
-                                            <Typography>{product.date}</Typography>
+                                            <Typography>{lists.phone}</Typography>
                                         </TableCell>
-                                        <TableCell sx={{ borderRight: "2px solid #f6f9fc" }}>
-                                            {product.status === "Active" ? (
+                                        <TableCell sx={{ borderRight: "2px solid #f6f9fc", textAlign: "center" }}>
+                                            {lists.is_active === "Yes" ? (
                                                 <>
                                                     <Chip
                                                         className="text-xs"
@@ -259,7 +256,7 @@ export default function Users() {
                                                             color: theme.palette.success.main,
                                                         }}
                                                         size="small"
-                                                        label={product.status}
+                                                        label={"Active"}
                                                     ></Chip>
                                                 </>
                                             )
@@ -273,7 +270,7 @@ export default function Users() {
                                                                 backgroundColor: theme.palette.error.light,
                                                                 color: theme.palette.error.main,
                                                             }}
-                                                            label={product.status}
+                                                            label={"De-Active"}
                                                         ></Chip>
                                                     </>
                                                 )
@@ -281,7 +278,7 @@ export default function Users() {
                                         </TableCell>
                                         <TableCell>
                                             <Tooltip title="View" arrow sx={{ textAlign: "center" }}>
-                                                <IconEye id={btoa(product.id)} onClick={viewUser} className="mx-auto text-primary-blue cursor-pointer" />
+                                                <IconEye id={btoa(lists.customer_id)} onClick={() => viewUser(lists)} className="mx-auto text-primary-blue cursor-pointer" />
                                             </Tooltip>
                                         </TableCell>
                                     </TableRow>
@@ -293,7 +290,7 @@ export default function Users() {
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25, 50]}
                     component="div"
-                    count={products.length}
+                    count={UsersList.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={(event, newPage) => {

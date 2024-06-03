@@ -1,8 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Link from "next/link";
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
+import {
+  Typography,
+  Box,  
+  Chip,
+  Button,  
+} from "@mui/material";
 
 export default function SideBarWidgetList() {
+  let [RecentSaveList, setRecentSaveList] = useState([]);
+
+useEffect(() => {        
+    GetRecentSaveList();
+}, []);
+
+
+//Load users list
+const GetRecentSaveList = async()=>{
+    let auth_key = atob(sessionStorage.getItem("auth_key"));
+    const params = { auth_key: auth_key };
+    if(auth_key !== null){
+        try{
+            const response = await axios.get('https://minelife-api.azurewebsites.net/get_user_activities', {params});
+            if(response.status === 200){
+              setRecentSaveList(response.data.user_actrivities_details);
+            }
+            else{
+              setRecentSaveList([]);
+            }
+        }catch(error){
+            console.log("Errro", error);
+        }
+    }        
+}
   return (
     <>
       <div className="sidebar-widget-list">
@@ -15,95 +47,24 @@ export default function SideBarWidgetList() {
           </div>
         </div>
         <div className="sidebar-list">
-          <div className="list-details w-full inline-block border-b">
-            <div className="mx-5 py-3">
-              <div className="w-full inline-block heading">
-                <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
-                  見出し
-                </h5>
-              </div>
-              <div className="w-full mt-2 inline-block heading">
-                <p className="text-sm text-black tracking-2 font-medium leading-7">
-                  書チム書激ゅの毎者投テルラリ安想やつひレ操選連ケ
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-details w-full inline-block border-b">
-            <div className="mx-5 py-3">
-              <div className="w-full inline-block heading">
-                <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
-                  見出し
-                </h5>
-              </div>
-              <div className="w-full mt-2 inline-block heading">
-                <p className="text-sm text-black tracking-2 font-medium leading-7">
-                  書チム書激ゅの毎者投テルラリ安想やつひレ操選連ケ
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-details w-full inline-block border-b">
-            <div className="mx-5 py-3">
-              <div className="w-full inline-block heading">
-                <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
-                  見出し
-                </h5>
-              </div>
-              <div className="w-full mt-2 inline-block heading">
-                <p className="text-sm text-black tracking-2 font-medium leading-7">
-                  書チム書激ゅの毎者投テルラリ安想やつひレ操選連ケ
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-details w-full inline-block border-b">
-            <div className="mx-5 py-3">
-              <div className="w-full inline-block heading">
-                <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
-                  見出し
-                </h5>
-              </div>
-              <div className="w-full mt-2 inline-block heading">
-                <p className="text-sm text-black tracking-2 font-medium leading-7">
-                  書チム書激ゅの毎者投テルラリ安想やつひレ操選連ケ
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-details w-full inline-block border-b">
-            <div className="mx-5 py-3">
-              <div className="w-full inline-block heading">
-                <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
-                  見出し
-                </h5>
-              </div>
-              <div className="w-full mt-2 inline-block heading">
-                <p className="text-sm text-black tracking-2 font-medium leading-7">
-                  書チム書激ゅの毎者投テルラリ安想やつひレ操選連ケ
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="list-details w-full inline-block border-b">
-            <div className="mx-5 py-3">
-              <div className="w-full inline-block heading">
-                <h5 className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
-                  見出し
-                </h5>
-              </div>
-              <div className="w-full mt-2 inline-block heading">
-                <p className="text-sm text-black tracking-2 font-medium leading-7">
-                  書チム書激ゅの毎者投テルラリ安想やつひレ操選連ケ
-                </p>
-              </div>
-            </div>
-          </div>
+        {RecentSaveList.map((lists, index) => {                            
+          return (          
+            <Box className="list-details w-full inline-block border-b">
+              <Box className="mx-5 py-3">
+                <div className="w-full inline-block heading">
+                  <Typography component={"h5"} className="text-sm text-black lg:text-base xl:text-base 2xl:text-base tracking-2 font-bold">
+                    {lists.activity_description}
+                  </Typography>
+                </div>
+                <div className="w-full mt-2 inline-block heading">
+                  <Typography component={"p"} className="text-sm text-black tracking-2 font-medium leading-7">
+                    {lists.activity_message}
+                  </Typography>
+                </div>
+              </Box>
+          </Box>   
+          );   
+          })}    
         </div>
       </div>
     </>

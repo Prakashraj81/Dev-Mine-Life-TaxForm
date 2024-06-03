@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   Typography,
   Box,
@@ -21,24 +22,6 @@ import AddAdminUserModal from "../../../../admin-components/modal/add-admin-user
 import DeleteModal from "../../../../admin-components/modal/delete-modal";
 
 
-const products = [
-  {
-    id: "1",
-    name: "Prakashraj",
-    email: "prakash.raj@g-japan.com",    
-    date: "2023-06-05",
-    status: "Active",
-    password: "123456",
-  },  
-  {
-    id: "2",
-    name: "Dhinesh",
-    email: "ra.dhinesh@g-japan.com",    
-    date: "2023-06-05",
-    status: "InActive",
-    password: "123456",
-  },  
-];
 
 export default function AdminUser() {
   let [page, setPage] = React.useState(0);   
@@ -46,11 +29,36 @@ export default function AdminUser() {
   let [OpenModalPopup, setOpenModalPopup] = useState(false);   
   let [AdminUserData, setAdminUserData] = useState([]);
   let [DeleteModalOpen, setDeleteModalOpen] = useState(false);   
+  let [AdminUsersList, setAdminUsersList] = useState([]);
+
+useEffect(() => {        
+    GetAdminUsersList();
+}, []);
+
+
+//Load users list
+const GetAdminUsersList = async()=>{
+    let auth_key = atob(sessionStorage.getItem("admin_auth_key"));
+    const params = { auth_key: auth_key };
+    if(auth_key !== null){
+        try{
+            const response = await axios.get('https://minelife-api.azurewebsites.net/admin/list_admin', {params});
+            if(response.status === 200){
+                setAdminUsersList(response.data.admin_details);
+            }
+            else{
+                setAdminUsersList([]);
+            }
+        }catch(error){
+            console.log("Errro", error);
+        }
+    }        
+}
 
    //Modal popup open and close function
     const handleModalOpen =(rowData)=>{ 
-      let adminUserId = Number(rowData.id);
-      if(adminUserId !== 0){
+      //let adminUserId = Number(rowData.id);
+      if(rowData !== null){
         setAdminUserData(rowData);   
       }
       else{
@@ -116,7 +124,7 @@ export default function AdminUser() {
                 </TableCell>                
                 <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
-                    Date
+                    Role
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -132,13 +140,13 @@ export default function AdminUser() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {products
+              {AdminUsersList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((product) => (
-                  <TableRow key={product.name} sx={{ border: "2px solid #f6f9fc" }}>
+                .map((lists, index) => (
+                  <TableRow key={lists.admin_name} sx={{ border: "2px solid #f6f9fc" }}>
                     <TableCell sx={{ borderRight: "2px solid #f6f9fc" }}>
                       <Typography>
-                        {product.id}
+                        {index + 1}
                       </Typography>
                     </TableCell>
                     <TableCell sx={{ borderRight: "2px solid #f6f9fc" }}>
@@ -150,19 +158,19 @@ export default function AdminUser() {
                       >
                         <Box>
                           <Typography>
-                            {product.name}
+                            {lists.admin_name}
                           </Typography>
                         </Box>
                       </Box>
                     </TableCell>
                     <TableCell sx={{ borderRight: "2px solid #f6f9fc" }}>
-                      <Typography>{product.email}</Typography>
+                      <Typography>{lists.email}</Typography>
                     </TableCell>                    
                     <TableCell sx={{ borderRight: "2px solid #f6f9fc" }}>
-                      <Typography>{product.date}</Typography>
+                      <Typography>{lists.role_name}</Typography>
                     </TableCell>
                     <TableCell align="center" sx={{ borderRight: "2px solid #f6f9fc" }}>
-                    {product.status === "Active" ? (
+                    {lists.is_active === "Yes" ? (
                           <Chip
                               className="text-xs"
                               style={{
@@ -170,9 +178,9 @@ export default function AdminUser() {
                                   color: theme.palette.success.main,
                               }}
                               size="small"
-                              label={product.status}
+                              label={"Active"}
                           />
-                      ) : product.status === "InActive" ? (
+                      ) : lists.is_active === "No" ? (
                           <Chip
                               className="text-xs"
                               style={{
@@ -180,7 +188,7 @@ export default function AdminUser() {
                                   color: theme.palette.error.main,
                               }}
                               size="small"
-                              label={product.status}
+                              label={"InActive"}
                           />
                       ) : (
                           <Chip
@@ -195,7 +203,7 @@ export default function AdminUser() {
                         <Box className="text-center">
                           <IconButton>
                               <Tooltip title="View" arrow>
-                                <IconEdit onClick={() => handleModalOpen(product)} className="mx-auto text-primary-blue cursor-pointer" />
+                                <IconEdit onClick={() => handleModalOpen(lists)} className="mx-auto text-primary-blue cursor-pointer" />
                               </Tooltip>
                             </IconButton>
                             <IconButton>
@@ -214,7 +222,7 @@ export default function AdminUser() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25, 50]}
           component="div"
-          count={products.length}
+          count={AdminUsersList.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={(event, newPage) => {
