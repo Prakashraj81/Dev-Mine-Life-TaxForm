@@ -84,11 +84,11 @@ const HeirListAmountShowSkeleton = ({HeirList, HeirSharingDetails, divisionBoxCa
           {/* Render other list items */}
           <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-0 border-t py-3">
             <span>相続人未決定</span>
-            <span>{UndecidedHeir}</span>
+            <span>{UndecidedHeir.toLocaleString()}</span>
           </li>
           <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-0 border-t py-3">
             <span>合計</span>
-            <span>{AmountofMoney}</span>
+            <span>{AmountofMoney.toLocaleString()}</span>
           </li>
         </>
       )}

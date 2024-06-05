@@ -225,9 +225,11 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
         setAmountofMoney(convertedAmount.toLocaleString());
         if (heirValue < 0) {
             setUndecidedHeir(heirValue.toLocaleString());
+            ShowIncorrectError = true;
             setShowIncorrectError(true);
         }
         else {
+            ShowIncorrectError = false;
             setShowIncorrectError(false);
             setUndecidedHeir(heirValue.toLocaleString());
         }
@@ -308,10 +310,12 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
             const heir = HeirListArray[i];
             if (i === index) {
                 if (heir.fractionBoxValue1 !== undefined && heir.fractionBoxValue2 !== undefined) {
-                    TotalValue = heir.fractionBoxValue1 * AmountofMoney;
-                    if (heir.fractionBoxValue2 > 0 && TotalValue > 0) {
-                        TotalValue = TotalValue / heir.fractionBoxValue2;
-                        UndecidedHeir = UndecidedHeir - TotalValue;
+                    //TotalValue = heir.fractionBoxValue1 * AmountofMoney;
+                    if (heir.fractionBoxValue2 > 0) {
+                        // TotalValue = TotalValue / heir.fractionBoxValue2;
+                        // UndecidedHeir = UndecidedHeir - TotalValue;
+                        var fractionTotal = heir.fractionBoxValue1 / heir.fractionBoxValue2;
+                        UndecidedHeir = fractionTotal * AmountofMoney;
                     }
                     else {
                         for (let j = 0; j < HeirListArray.length; j++) {
@@ -415,6 +419,13 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
                                         <HeirListFractionShowSkeleton HeirList={HeirList} HeirSharingDetails={HeirSharingDetails} fractionBoxCalculation_1={fractionBoxCalculation_1} divisionInputKeyPress={divisionInputKeyPress} fractionBoxCalculation_2={fractionBoxCalculation_2} UndecidedHeir={UndecidedHeir} AmountofMoney={AmountofMoney} />
                                     </>
                                 )}
+                                {ShowIncorrectError && (
+                                    <>
+                                    <Box className="py-2 text-center">
+                                        <Typography fontSize={14} component={"p"} variant="p" className="tracking-1 text-red-600">金額配分が正しくありません</Typography>
+                                    </Box>
+                                    </>
+                                )}                                
 
                                 <div className="w-full block pt-3 lg:flex xl:flex 2xl:flex justify-evenly items-center">
                                     <button
@@ -426,6 +437,22 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
                                             戻る
                                         </span>
                                     </button>
+                                    {ShowIncorrectError ?
+                                        <>
+                                        <Button
+                                        type="button"
+                                        onClick={onSubmit}
+                                        disabled
+                                        variant="contained"
+                                        className="cursor-pointer bg-primary-color rounded px-8 py-2 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                                    >
+                                        <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                            保存
+                                        </span>
+                                    </Button>
+                                        </>
+                                    :
+                                    <>
                                     <button
                                         type="button"
                                         onClick={onSubmit}
@@ -435,6 +462,8 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
                                             保存
                                         </span>
                                     </button>
+                                    </>
+                                    }                                    
                                 </div>
                             </div>
                         </Box>
