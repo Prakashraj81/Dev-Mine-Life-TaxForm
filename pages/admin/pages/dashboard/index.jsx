@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Box, Card, Stacck, Typography } from '@mui/material';
+import { Grid, Box, Card, Stack, Typography } from '@mui/material';
 
 import TopCards from '../../../../admin-components/dashboard/TopCard';
 import CustomerTickets from '../../../../admin-components/dashboard/CustomerTickets';
