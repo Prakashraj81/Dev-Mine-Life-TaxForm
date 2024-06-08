@@ -316,6 +316,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
                         // UndecidedHeir = UndecidedHeir - TotalValue;
                         var fractionTotal = heir.fractionBoxValue1 / heir.fractionBoxValue2;
                         UndecidedHeir = fractionTotal * AmountofMoney;
+                        UndecidedHeir = AmountofMoney - UndecidedHeir;
                     }
                     else {
                         for (let j = 0; j < HeirListArray.length; j++) {
@@ -421,11 +422,11 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
                                 )}
                                 {ShowIncorrectError && (
                                     <>
-                                    <Box className="py-2 text-center">
-                                        <Typography fontSize={14} component={"p"} variant="p" className="tracking-1 text-red-600">金額配分が正しくありません</Typography>
-                                    </Box>
+                                        <Box className="py-2 text-center">
+                                            <Typography fontSize={14} component={"p"} variant="p" className="tracking-1 text-red-600">金額配分が正しくありません</Typography>
+                                        </Box>
                                     </>
-                                )}                                
+                                )}
 
                                 <div className="w-full block pt-3 lg:flex xl:flex 2xl:flex justify-evenly items-center">
                                     <button
@@ -439,31 +440,31 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
                                     </button>
                                     {ShowIncorrectError ?
                                         <>
-                                        <Button
-                                        type="button"
-                                        onClick={onSubmit}
-                                        disabled
-                                        variant="contained"
-                                        className="cursor-pointer bg-primary-color rounded px-8 py-2 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                    >
-                                        <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                            保存
-                                        </span>
-                                    </Button>
+                                            <Button
+                                                type="button"
+                                                onClick={onSubmit}
+                                                disabled
+                                                variant="contained"
+                                                className="cursor-pointer bg-primary-color rounded px-8 py-2 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                                            >
+                                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                                    保存
+                                                </span>
+                                            </Button>
                                         </>
-                                    :
-                                    <>
-                                    <button
-                                        type="button"
-                                        onClick={onSubmit}
-                                        className="cursor-pointer bg-primary-color rounded px-8 py-2 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                    >
-                                        <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                            保存
-                                        </span>
-                                    </button>
-                                    </>
-                                    }                                    
+                                        :
+                                        <>
+                                            <button
+                                                type="button"
+                                                onClick={onSubmit}
+                                                className="cursor-pointer bg-primary-color rounded px-8 py-2 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                                            >
+                                                <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                                    保存
+                                                </span>
+                                            </button>
+                                        </>
+                                    }
                                 </div>
                             </div>
                         </Box>
