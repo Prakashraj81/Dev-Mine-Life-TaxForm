@@ -1,4 +1,3 @@
-import type { ReactElement } from 'react';
 import { Grid, Box, Card, Typography, Stack } from '@mui/material';
 import Link  from 'next/link';
 import BlankLayout from '../../../admin-components/layouts/blank/BlankLayout';
@@ -67,6 +66,6 @@ const Register2 = () => (
 
 export default Register2;
 
-Register2.getLayout = function getLayout(page: ReactElement) {
+Register2.getLayout = function getLayout(page) {
   return <BlankLayout>{page}</BlankLayout>;
 };

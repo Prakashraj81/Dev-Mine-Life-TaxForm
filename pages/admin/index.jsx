@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Box, Card, Stack, Typography } from '@mui/material';
-import PageContainer from '../admin-components/container/PageContainer';
-import AdminLogin from './admin/auth/login';
+import PageContainer from '../../admin-components/container/PageContainer';
+import AdminLogin from '../auth/login';
 
 // components
-import Dashboard from './admin/pages/dashboard';
-import FullLayout from '../admin-components/layouts/full/FullLayout';
-import BlankLayout from '../admin-components/layouts/blank/BlankLayout';
+import Dashboard from './pages/dashboard';
+import FullLayout from '../../admin-components/layouts/full/FullLayout';
+import BlankLayout from '../../admin-components/layouts/blank/BlankLayout';
 
 export default function Home() {
   let [Authkey, setAuthkey] = useState(0);
