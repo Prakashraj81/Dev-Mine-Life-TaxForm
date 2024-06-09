@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useRouter } from 'next/router';
 import { styled, Container, Box } from "@mui/material";
 import Header from "./header/Header";
@@ -28,9 +29,10 @@ interface Props {
 
 
 const FullLayout: React.FC<Props> = ({ children }) => {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  let [isSidebarOpen, setSidebarOpen] = useState(true);
+  let [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   let [activeStep, setactiveStep] = useState(0);
+  let [RecentSaveList, setRecentSaveList] = useState([]);
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
   //Stepper get path function 
@@ -73,6 +75,37 @@ const FullLayout: React.FC<Props> = ({ children }) => {
       activeStep = 0;
     }
   }, [activeStep, fullPath]);  
+
+
+  
+//Recent save sidebar lists 
+useEffect(() => {        
+    GetRecentSaveList();
+    //console.log("RecentSaveList: ", RecentSaveList);
+}, []);
+
+
+//Load users list
+const GetRecentSaveList = async()=>{
+    let auth_key = atob(sessionStorage.getItem("auth_key"));
+    const params = { auth_key: auth_key };
+    if(auth_key !== null){
+        try{
+            const response = await axios.get('https://minelife-api.azurewebsites.net/get_user_activities', {params});
+            if(response.status === 200){
+              setRecentSaveList(response.data.user_actrivities_details);
+            }
+            else{
+              setRecentSaveList([]);
+            }
+        }catch(error){
+            console.log("Errro", error);
+        }
+    }        
+}
+
+
+
   return (
     <MainWrapper className="mainwrapper">      
       <Sidebar
@@ -100,7 +133,7 @@ const FullLayout: React.FC<Props> = ({ children }) => {
                   </div>
                 </div>
                 <div className="w-20 hidden lg:inline-block xl:inline-block 2xl:inline-block float-left border-l">
-                    <SideBarWidgetList />
+                    <SideBarWidgetList RecentSaveList={RecentSaveList} />
                 </div>
               </div>
             </div>

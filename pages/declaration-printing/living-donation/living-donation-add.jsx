@@ -18,14 +18,14 @@ import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calende
 export default function LivingDonationAdd() {
 
     let [HeirList, setHeirList] = useState([]);
-    let [HeirId, setHeirId] = useState(0); 
+    let [HeirId, setHeirId] = useState(0);
     let [NameofthePerson, setNameofthePerson] = useState("");
     let [DateOfDonation, setDateOfDonation] = useState("");
     let [DonatedPropertyType, setDonatedPropertyType] = useState("");
     let [DonatedPropertyDetail, setDonatedPropertyDetail] = useState("");
     let [DonatedPropertyAmount, setDonatedPropertyAmount] = useState("0");
     let [DonatedPropertyAmountTax, setDonatedPropertyAmountTax] = useState("0");
-    let [WhereTaxReturn, setWhereTaxReturn] = useState(""); 
+    let [WhereTaxReturn, setWhereTaxReturn] = useState("");
 
     //Error state and button disabled
     let [HeirListTypeError, setHeirListTypeError] = useState(false);
@@ -37,8 +37,8 @@ export default function LivingDonationAdd() {
     let [DonatedPropertyDetailError, setDonatedPropertyDetailError] = useState(false);
     let [DonatedPropertyAmountError, setDonatedPropertyAmountError] = useState(false);
     let [DonatedPropertyAmountTaxError, setDonatedPropertyAmountTaxError] = useState(false);
-    let [WhereTaxReturnError, setWhereTaxReturnError] = useState(false);   
-    
+    let [WhereTaxReturnError, setWhereTaxReturnError] = useState(false);
+
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
 
@@ -47,7 +47,7 @@ export default function LivingDonationAdd() {
         let url = router.asPath;
         let searchParams = new URLSearchParams(url.split('?')[1]);
         searchParams = searchParams.get("edit");
-        if(searchParams !== null){
+        if (searchParams !== null) {
             LivingDonationId = Number(atob(searchParams));
             //GetLivingDonationDetails(LivingDonationId);
         }
@@ -56,61 +56,61 @@ export default function LivingDonationAdd() {
 
 
     //Load heir details list
-    const GetHeirList = async() => {
+    const GetHeirList = async () => {
         let auth_key = atob(sessionStorage.getItem("auth_key"));
         const params = { auth_key: auth_key };
-        if(auth_key !== null){
-            try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
-                if(response.status === 200){
+        if (auth_key !== null) {
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', { params });
+                if (response.status === 200) {
                     setHeirList(response.data.heir_list || []);
                 }
-                else{
+                else {
                     setHeirList([]);
                 }
-            }catch (error){
+            } catch (error) {
                 console.error('Error:', error);
             }
-        }  
-        else{
+        }
+        else {
             //Logout();
-        }      
+        }
     };
 
-    
+
     //Load living donation details 
-    const GetLivingDonationDetails = async(LivingDonationId) => {       
+    const GetLivingDonationDetails = async (LivingDonationId) => {
         let auth_key = atob(sessionStorage.getItem("auth_key"));
-        const params = {auth_key: auth_key, id: LivingDonationId };
-        if(auth_key !== null && LivingDonationId !== 0){
-            try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_other_assets_details', {params});
-                if(response.status === 200){                    
-                    setPropertyName(response.data.other_assets_details.property_name); 
+        const params = { auth_key: auth_key, id: LivingDonationId };
+        if (auth_key !== null && LivingDonationId !== 0) {
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_other_assets_details', { params });
+                if (response.status === 200) {
+                    setPropertyName(response.data.other_assets_details.property_name);
                     setOtherParty(response.data.other_assets_details.other_party);
-                    setValuation(response.data.other_assets_details.valuation.toLocaleString());                                                      
+                    setValuation(response.data.other_assets_details.valuation.toLocaleString());
                 }
-                else{
+                else {
 
                 }
-            }catch (error){
+            } catch (error) {
                 console.error('Error:', error);
             }
-        }  
-        else{
+        }
+        else {
             //Logout();
-        }      
-    };    
+        }
+    };
 
     const handleChangeHeir = () => {
         let selectedOption = event.target.options[event.target.selectedIndex];
         let selectedId = Number(selectedOption.value);
         setisSumbitDisabled(false);
-        setShowIncorrectError(false);            
+        setShowIncorrectError(false);
         setHeirListTypeError(false);
-        setHeirId(selectedId);    
+        setHeirId(selectedId);
     }
-    
+
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
         const keyValue = String.fromCharCode(keyCode);
@@ -118,9 +118,9 @@ export default function LivingDonationAdd() {
         if (!numericRegex.test(keyValue)) {
             e.preventDefault();
         }
-    };       
+    };
 
-    const DonatedPropertyAmountKeyPress = (e) => {        
+    const DonatedPropertyAmountKeyPress = (e) => {
         let valuation = e.target.value;
         valuation = valuation.replace(/,/g, '').replace('.', '');
         valuation = parseFloat(valuation);
@@ -133,9 +133,9 @@ export default function LivingDonationAdd() {
             setDonatedPropertyAmount(valuation);
         }
         setisSumbitDisabled(false);
-    } 
+    }
 
-    const DonatedPropertyAmountTaxKeyPress = (e) => {        
+    const DonatedPropertyAmountTaxKeyPress = (e) => {
         let valuation = e.target.value;
         valuation = valuation.replace(/,/g, '').replace('.', '');
         valuation = parseFloat(valuation);
@@ -148,7 +148,7 @@ export default function LivingDonationAdd() {
             setDonatedPropertyAmountTax(valuation);
         }
         setisSumbitDisabled(false);
-    } 
+    }
 
     //All input validation check and handling function
     const inputHandlingFunction = (event) => {
@@ -159,26 +159,46 @@ export default function LivingDonationAdd() {
             setPropertyName(inputValue);
             setPropertyNameError(false);
         }
-        else if(inputId === "OtherParty"){
+        else if (inputId === "OtherParty") {
             setOtherParty(inputValue);
         }
         else if (inputId === "DateofAcquisition") {
             setDateofAcquisition(inputValue);
             setDateofAcquisitionError(false);
-        }       
-        else {
-            setAddress(inputValue);
-            setAddressError(false);
         }
+        else if (inputId === "DonatedPropertyType") {
+            setDonatedPropertyType(inputValue);
+            setDonatedPropertyTypeError(false);
+        }
+        else if (inputId === "DonatedPropertyDetail") {
+            setDonatedPropertyDetail(inputValue);
+            setDonatedPropertyDetailError(false);
+        }
+        else if (inputId === "DonatedPropertyAmount") {
+            //If amount enter is 0 value it's needs to be accepted
+            setDonatedPropertyAmount(inputValue);
+            setDonatedPropertyAmountError(false);
+        }
+        else if (inputId === "DonatedPropertyAmountTax") {
+            //If amount enter is 0 value it's needs to be accepted
+            setDonatedPropertyAmountTax(inputValue);
+            setDonatedPropertyAmountTaxError(false);
+        }
+        else if (inputId === "DonatedPropertyAmount") {
+            //If amount enter is 0 value it's needs to be accepted
+            setDonatedPropertyAmount(inputValue);
+            setDonatedPropertyAmountError(false);
+        }
+
         setisSumbitDisabled(false);
     }
 
 
-    
+
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = async() => {
+    const onSubmit = async () => {
         defaultValues = {
             NameofthePerson: NameofthePerson,
             DateOfDonation: DateOfDonation,
@@ -211,25 +231,21 @@ export default function LivingDonationAdd() {
             setDonatedPropertyAmountError(true);
             isSumbitDisabled = true;
         }
-        if (defaultValues.DonatedPropertyAmountTax === "0") {
-            setDonatedPropertyAmountTaxError(true);
-            isSumbitDisabled = true;
-        }
         if (defaultValues.WhereTaxReturn === "") {
             setWhereTaxReturnError(true);
             isSumbitDisabled = true;
         }
         //Api setup
         let auth_key = atob(sessionStorage.getItem("auth_key"));
-        if (isSumbitDisabled !== true && auth_key !== null) {     
+        if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let LivingDonationId = 0;
             let url = router.asPath;
             let searchParams = new URLSearchParams(url.split('?')[1]);
             searchParams = searchParams.get("edit");
-            if(searchParams !== null){
+            if (searchParams !== null) {
                 LivingDonationId = Number(atob(searchParams));
-            }              
+            }
             const formData = new FormData();
             formData.append("auth_key", auth_key);
             formData.append("id", LivingDonationId);
@@ -242,17 +258,17 @@ export default function LivingDonationAdd() {
             //formData.append("valuation", parseFloat(Valuation));
             //formData.append("DonatedPropertyAmountTax", DonatedPropertyAmountTax);
             //formData.append("WhereTaxReturn", WhereTaxReturn);            
-            try{
-                if(LivingDonationId === 0){
+            try {
+                if (LivingDonationId === 0) {
                     //response = await axios.post('https://minelife-api.azurewebsites.net/add_other_assets', formData);
                 }
-                else{
+                else {
                     //response = await axios.post('https://minelife-api.azurewebsites.net/edit_other_assets', formData);
-                }               
-                if(response.status === 200){
-                    router.push(`/declaration-printing/living-donation`); 
-                }                
-            }catch(error){
+                }
+                if (response.status === 200) {
+                    router.push(`/declaration-printing/living-donation`);
+                }
+            } catch (error) {
                 console.log('Error:', error);
             }
         }
@@ -260,18 +276,18 @@ export default function LivingDonationAdd() {
             setisSumbitDisabled(true);
             setShowLoader(false);
             //Logout();
-        }        
+        }
     };
 
-    
+
     return (
         <>
-         <>
-        {ShowLoader && (
-            <BackdropLoader ShowLoader={ShowLoader} />
-        )}
-        </>
-           
+            <>
+                {ShowLoader && (
+                    <BackdropLoader ShowLoader={ShowLoader} />
+                )}
+            </>
+
             <div className="other-property-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -286,7 +302,7 @@ export default function LivingDonationAdd() {
                     </p>
                 </div>
 
-                <form action="#" method="POST">       
+                <form action="#" method="POST">
                     <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
@@ -317,11 +333,11 @@ export default function LivingDonationAdd() {
                                     贈与年月日<i className="text-red-500">*</i>
                                 </label>
                             </div>
-                            <div className="w-full inline-block mt-2 relative">                               
-                                <JapaneseCalendar id={"DateOfDonation"} DateValue={DateOfDonation} inputHandlingFunction={inputHandlingFunction}/>
+                            <div className="w-full inline-block mt-2 relative">
+                                <JapaneseCalendar id={"DateOfDonation"} DateValue={DateOfDonation} inputHandlingFunction={inputHandlingFunction} />
                                 {DateOfDonationError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}                       
+                                )}
                             </div>
                         </div>
                     </div>
@@ -336,19 +352,19 @@ export default function LivingDonationAdd() {
                             <div className="w-full inline-block mt-2 relative">
                                 <input
                                     type="text"
-                                    id="DonatedPropertyDetail"
+                                    id="DonatedPropertyType"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     onChange={inputHandlingFunction}
-                                    value={DonatedPropertyDetail}                                    
-                                />   
+                                    value={DonatedPropertyType}
+                                />
                                 {DonatedPropertyTypeError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}                                
+                                )}
                             </div>
                         </div>
-                    </div>                    
-                    
-                   
+                    </div>
+
+
                     <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details w-full block">
                             <div className="label w-full inline-block">
@@ -363,13 +379,13 @@ export default function LivingDonationAdd() {
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     onChange={inputHandlingFunction}
                                     value={DonatedPropertyDetail}
-                                />      
+                                />
                                 {DonatedPropertyDetailError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}                              
+                                )}
                             </div>
                         </div>
-                    </div>    
+                    </div>
 
                     <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
@@ -386,12 +402,12 @@ export default function LivingDonationAdd() {
                                     onChange={DonatedPropertyAmountKeyPress}
                                     onKeyPress={handleKeyPress}
                                     value={DonatedPropertyAmount}
-                                    autocomplete="off"                                        
+                                    autocomplete="off"
                                 />
-                                <UnitPriceIcon />       
+                                <UnitPriceIcon />
                                 {DonatedPropertyAmountError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}                           
+                                )}
                             </div>
                         </div>
                     </div>
@@ -400,7 +416,7 @@ export default function LivingDonationAdd() {
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                             <div className="label w-full inline-block">
                                 <label className="form-label">
-                                    納付した贈与税額<i className="text-red-500">*</i>
+                                    納付した贈与税額
                                 </label>
                             </div>
                             <div className="w-full inline-block mt-2 relative">
@@ -411,7 +427,7 @@ export default function LivingDonationAdd() {
                                     onChange={DonatedPropertyAmountTaxKeyPress}
                                     onKeyPress={handleKeyPress}
                                     value={DonatedPropertyAmountTax}
-                                    autocomplete="off"                                        
+                                    autocomplete="off"
                                 />
                                 <UnitPriceIcon />
                                 {DonatedPropertyAmountTaxError && (
@@ -419,7 +435,7 @@ export default function LivingDonationAdd() {
                                 )}
                             </div>
                         </div>
-                    </div>   
+                    </div>
 
                     <div className="w-full block items-center justify-between mb-7">
                         <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
@@ -434,22 +450,26 @@ export default function LivingDonationAdd() {
                                     id="WhereTaxReturn"
                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     onChange={inputHandlingFunction}
-                                    value={WhereTaxReturn}                                   
-                                />    
+                                    value={WhereTaxReturn}
+                                />
                                 {WhereTaxReturnError && (
                                     <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}                            
+                                )}
                             </div>
                         </div>
-                    </div>                  
-                        
+                    </div>
+
+
                     <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton/>              
+                            <BackButton />
                             <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>                                           
-                        </div>      
-                   </form>
+                        </div>
+                        <Box className="mt-5 w-full">
+                            <Typography component={"p"} fontSize={13} className="text-red-600 text-center tracking-2">※精算課税制度の適用を受けていた場合は当システムでは作成できません。</Typography>
+                        </Box>
+                    </div>
+                </form>
             </div>
         </>
     )

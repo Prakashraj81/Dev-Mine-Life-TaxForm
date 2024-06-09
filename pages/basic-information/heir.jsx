@@ -48,6 +48,8 @@ export default function Heir() {
     let [Address, setAddress] = useState("");
     let [TelephoneNumber, setTelephoneNumber] = useState("");
     let [HeirCount, setHeirCount] = useState(0);
+    let [WhereTaxReturn, setWhereTaxReturn] = useState("");
+
 
     //Input hide and show states
     let [ShowName, setShowName] = useState(false);
@@ -66,7 +68,7 @@ export default function Heir() {
     let [DateofBirthError, setDateofBirthError] = useState(false);
     let [TelephoneNumberError, setTelephoneNumberError] = useState(false);
     let [RelationshipWithDecedentError, setRelationshipWithDecedentError] = useState(false);
-
+    let [WhereTaxReturnError, setWhereTaxReturnError] = useState(false);
     let [DisabledRadioValue, setDisabledRadioValue] = useState('None');
     let [TaxAdditionAmount, setTaxAdditionAmount] = useState('No');
     let [LegalHeirRadioValue, setLegalHeirRadioValue] = useState('No');
@@ -81,9 +83,9 @@ export default function Heir() {
     };
 
     //20% inheritance tax amount addition
-    const handleTaxAdditionAmount = (event) =>{
+    const handleTaxAdditionAmount = (event) => {
         setTaxAdditionAmount(event.target.value);
-    }    
+    }
 
     const handleRelationshipWithDecedent = (event) => {
         let selectedValue = event.target.value;
@@ -91,7 +93,7 @@ export default function Heir() {
         let selectedId = selectedOption.id;
         setRelationshipWithDecedent(selectedValue);
         setisSumbitDisabled(false);
-        setRelationshipWithDecedentError(false);        
+        setRelationshipWithDecedentError(false);
     }
 
     //Postal code 7 digit limit function
@@ -117,14 +119,14 @@ export default function Heir() {
     };
 
     // Regular expression to match Katakana characters validate
-    const validateKatakana = (text) => {       
-        if(text !== ""){
-            const katakanaRegex = /^[\u30A0-\u30FF]+$/;    
+    const validateKatakana = (text) => {
+        if (text !== "") {
+            const katakanaRegex = /^[\u30A0-\u30FF]+$/;
             if (!katakanaRegex.test(text)) {
-              return "Please enter only Katakana characters.";
-            }        
+                return "Please enter only Katakana characters.";
+            }
             return null;
-        }        
+        }
     };
 
     //All input validation check and handling function
@@ -134,13 +136,13 @@ export default function Heir() {
         if (inputId === "Name") {
             setName(inputValue);
             setNameError(false);
-        }        
-        else if (inputId === "Furigana") {   
+        }
+        else if (inputId === "Furigana") {
             const errorMessage = validateKatakana(inputValue);
             if (errorMessage === null) {
-                setKatakanaError(false);                
-            } else {           
-                setFuriganaError(false);     
+                setKatakanaError(false);
+            } else {
+                setFuriganaError(false);
                 setKatakanaError(true);
             }
             setFurigana(inputValue);
@@ -163,26 +165,26 @@ export default function Heir() {
     };
 
 
-    useEffect(() => {        
+    useEffect(() => {
         GetHeirList();
     }, []);
 
 
     //Load heir details list
-    const GetHeirList = async() => {        
+    const GetHeirList = async () => {
         let url = router.asPath;
         let searchParams = new URLSearchParams(url.split('?')[1]);
         let editId = searchParams.get("editId");
         HeirId = Number(atob(editId));
         let auth_key = atob(sessionStorage.getItem("auth_key"));
         const params = { auth_key: auth_key };
-        if(auth_key !== null){
-            try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
-                if(response.status === 200){
+        if (auth_key !== null) {
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', { params });
+                if (response.status === 200) {
                     setHeirCount(response.data.heir_list.length);
-                    for(let i = 0; i < response.data.heir_list.length; i ++){
-                        if(response.data.heir_list[i].heir_id === HeirId){
+                    for (let i = 0; i < response.data.heir_list.length; i++) {
+                        if (response.data.heir_list[i].heir_id === HeirId) {
                             setHeirId(response.data.heir_list[i].heir_id);
                             setName(response.data.heir_list[i].name);
                             setFurigana(response.data.heir_list[i].furigana);
@@ -192,30 +194,30 @@ export default function Heir() {
                             setAddress(response.data.heir_list[i].address);
                             setProfession(response.data.heir_list[i].profession);
                             setRelationshipWithDecedent(response.data.heir_list[i].relationship_with_decedent);
-                            setDisabledRadioValue(response.data.heir_list[i].disabled_deduction);                                                
-                        }        
-                    }                                               
+                            setDisabledRadioValue(response.data.heir_list[i].disabled_deduction);
+                        }
+                    }
                 }
-                else{
+                else {
                     setHeirCount(0);
                 }
-            }catch (error){
+            } catch (error) {
                 console.error('Error:', error);
             }
-        }  
-        else{
+        }
+        else {
             //Logout();
-        }      
+        }
     };
 
 
 
     //Submit API function     
     let defaultValues = {};
-    const onSubmit = async() => {
+    const onSubmit = async () => {
         //Id = Number(atob(router.query.Id));
         defaultValues = {
-            HeirId : HeirId,
+            HeirId: HeirId,
             Name: Name,
             Furigana: Furigana,
             DateofBirth: DateofBirth,
@@ -239,7 +241,7 @@ export default function Heir() {
             setFuriganaError(true);
             isSumbitDisabled = true;
         }
-        if(defaultValues.Furigana !== ""){
+        if (defaultValues.Furigana !== "") {
             const errorMessage = validateKatakana(defaultValues.Furigana);
             if (errorMessage === null) {
                 setKatakanaError(false);
@@ -287,7 +289,7 @@ export default function Heir() {
                     } else {
                         response = await axios.post('https://minelife-api.azurewebsites.net/edit_heir', formData);
                     }
-                    if (response.status === 200) {                        
+                    if (response.status === 200) {
                         router.push(`/basic-information`);
                     }
                     setShowLoader(false);
@@ -305,7 +307,7 @@ export default function Heir() {
             setisSumbitDisabled(true);
         }
     };
-    
+
 
 
     return (
@@ -386,8 +388,8 @@ export default function Heir() {
                                         生年月日<i className="text-red-500">*</i>
                                     </label>
                                 </div>
-                                <div className="w-full inline-block mt-2">                                    
-                                    <JapaneseCalendar id={"DateofBirth"} DateValue={DateofBirth} inputHandlingFunction={inputHandlingFunction}/>
+                                <div className="w-full inline-block mt-2">
+                                    <JapaneseCalendar id={"DateofBirth"} DateValue={DateofBirth} inputHandlingFunction={inputHandlingFunction} />
                                     {DateofBirthError && (
                                         <p className="text-red-500" role="alert">この項目は必須です</p>
                                     )}
@@ -549,7 +551,7 @@ export default function Heir() {
                             </div>
                         </div>
 
-                        
+
                         <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <FormControl>
@@ -576,31 +578,37 @@ export default function Heir() {
                                             },
                                         }} />
                                     </RadioGroup>
-                                </FormControl>  
-                            </div>                                                              
-
-                            <div className="legal-inheritance w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
-                                
-                                <div className="w-full flex items-center justify-start">
-                                    <label className="form-label pr-3">法定相続分</label>
-                                    <input
-                                        type="text"
-                                        value={"1"}
-                                        disabled
-                                        className="form-control text-right w-25 bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    />
-                                    <span className="text-gray text-2xl">/</span>
-                                    <input
-                                        type="text"                                            
-                                        value={"1" ? HeirCount+1 : "_ _"}
-                                        disabled
-                                        className="form-control text-right w-25 bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    />
-                                </div>
-                            </div>                            
+                                    <Box className="mt-2">
+                                        <Typography target="_blank" component={Link} href={"https://www.nta.go.jp/publication/pamph/koho/kurashi/html/03_2.htm"} fontSize={12}>こちらをクリック: <span className="text-blue-600 underline underline-offset-2">障害者控除</span></Typography>
+                                    </Box>
+                                </FormControl>
+                            </div>
                         </div>
-                            
-                         <div className="w-full block mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+
+                        <div className="legal-inheritance w-full inline-block float-left mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <div className="w-full flex items-center justify-start">
+                                <label className="form-label pr-3">法定相続分</label>
+                                <input
+                                    type="text"
+                                    value={"1"}
+                                    disabled
+                                    className="form-control text-left w-10 bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                />
+                                <span className="text-gray text-2xl">/</span>
+                                <input
+                                    type="text"
+                                    value={"1" ? HeirCount + 1 : "_ _"}
+                                    disabled
+                                    className="form-control text-left w-10 bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                />
+                            </div>
+                            <Box className="mt-2">
+                                <Typography target="_blank" component={Link} href={"https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4132.htm"} fontSize={12}>こちらをクリック: <span className="text-blue-600 underline underline-offset-2">法定相続分</span></Typography>
+                            </Box>
+                        </div>
+
+
+                        <div className="w-full block mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <FormControl>
                                 <label className="form-label" id="demo-row-radio-buttons-group-label">相続税額の2割加算の対象ですか？</label>
                                 <RadioGroup
@@ -613,15 +621,40 @@ export default function Heir() {
                                         '& .MuiSvgIcon-root': {
                                             fontSize: 16,
                                         },
-                                    }} />                                            
+                                    }} />
                                     <FormControlLabel value="No" control={<Radio />} onChange={handleTaxAdditionAmount} label="No" sx={{
                                         '& .MuiSvgIcon-root': {
                                             fontSize: 16,
                                         },
                                     }} />
                                 </RadioGroup>
+                                <Box className="mt-2">
+                                    <Typography target="_blank" component={Link} href={"https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4157.htm"} fontSize={12}>こちらをクリック: <span className="text-blue-600 underline underline-offset-2">相続税額の2割加算の対象ですか</span></Typography>
+                                </Box>
                             </FormControl>
-                         </div>
+                        </div>
+
+                        <div className="w-full block items-center justify-between mb-7">
+                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label">
+                                        申告書を提出した税務署<i className="text-red-500">*</i>
+                                    </label>
+                                </div>
+                                <div className="w-full inline-block mt-2 relative">
+                                    <input
+                                        type="text"
+                                        id="WhereTaxReturn"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        onChange={inputHandlingFunction}
+                                        value={WhereTaxReturn}
+                                    />
+                                    {WhereTaxReturnError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
 
                         <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                             <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">

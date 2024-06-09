@@ -130,8 +130,8 @@ export default function CashSavingsAdd() {
         if (selectedId === 1) {
             setDepositTypeError(false);
             setShowFinancialInstitutionName(false);
-            setShowPostCode(true);
-            setShowAddress(true);
+            setShowPostCode(false);
+            setShowAddress(false);
         }
         else if (selectedId === 2 || selectedId === 3 || selectedId === 4 || selectedId === 5 || selectedId === 6 || selectedId === 7 || selectedId === 8) {
             setDepositTypeError(false);

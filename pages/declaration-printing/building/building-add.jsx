@@ -13,6 +13,7 @@ import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-ico
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import FloorIcon from "../../../components/inputbox-icon/textbox-floor-icon";
 import AreaIcon from "../../../components/inputbox-icon/textbox-area-icon";
+import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -44,19 +45,19 @@ export default function HouseAdd() {
     let [HouseNumberNo, setHouseNumberNo] = useState('');
     let [KindsNo, setKindsNo] = useState('');
     let [StructureNo, setStructureNo] = useState('');
-    let [FloorAreaNo, setFloorAreaNo] = useState(0); 
+    let [FloorAreaNo, setFloorAreaNo] = useState(0);
 
     //Question Two
     let [InfoPropertyTaxYesNo, setInfoPropertyTaxYesNo] = useState(false);
 
     //Question Three
     let [LocationoftheHouse, setLocationoftheHouse] = useState('');
-    let [HouseNumberTwo, setHouseNumberTwo] = useState(''); 
-    let [TypeApplication, setTypeApplication] = useState(''); 
-    let [Price, setPrice] = useState(0); 
+    let [HouseNumberTwo, setHouseNumberTwo] = useState('');
+    let [TypeApplication, setTypeApplication] = useState('');
+    let [Price, setPrice] = useState(0);
 
     //Question Four
-    let [SharePercentage, setSharePercentage] = useState(''); 
+    let [SharePercentage, setSharePercentage] = useState('');
 
     let [BuildingYesImage, setBuildingYesImage] = useState(false);
     let [BuildingNoImage, setBuildingNoImage] = useState(false);
@@ -68,22 +69,22 @@ export default function HouseAdd() {
     let [AmountofMoney, setAmountofMoney] = useState(0);
     let [UndecidedHeir, setUndecidedHeir] = useState(0);
     let [totalPrice, settotalPrice] = useState(0);
-    let [boxValues, setBoxValues] = useState([]);    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [boxValues, setBoxValues] = useState([]); let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
 
 
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
-    
-        //Input keypress
-        let handleKeyPress = (e) => {
-            const keyCode = e.keyCode || e.which;
-            const keyValue = String.fromCharCode(keyCode);
-            const numericRegex = /^[0-9\b]+$/;
-            if (!numericRegex.test(keyValue)) {
-                e.preventDefault();
-            }
-        };  
+
+    //Input keypress
+    let handleKeyPress = (e) => {
+        const keyCode = e.keyCode || e.which;
+        const keyValue = String.fromCharCode(keyCode);
+        const numericRegex = /^[0-9\b]+$/;
+        if (!numericRegex.test(keyValue)) {
+            e.preventDefault();
+        }
+    };
 
     //Radio button
     const handleRadio = (event) => {
@@ -185,7 +186,7 @@ export default function HouseAdd() {
         if (isSumbitDisabled !== true) {
             console.log("API allowed");
             sessionStorage.setItem('DeathBenefit', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/building`);          
+            router.push(`/declaration-printing/building`);
         }
         else {
             console.log("API not allowed");
@@ -193,15 +194,15 @@ export default function HouseAdd() {
         }
     };
 
-   
+
     return (
         <>
-        <>
-        {ShowLoader && (
-            <BackdropLoader ShowLoader={ShowLoader} />
-        )}
-        </>
-            
+            <>
+                {ShowLoader && (
+                    <BackdropLoader ShowLoader={ShowLoader} />
+                )}
+            </>
+
             <div className="house-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -215,12 +216,12 @@ export default function HouseAdd() {
                         以下の内容を入力して[保存]ボタンを押して下さい。
                     </p>
                 </div>
-               
+
 
                 <form action="#" method="POST">
-                    
-                        <FormControl>
-                            <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
+
+                    <FormControl>
+                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">1. 被相続人が所有されていた不動産は分譲マンションの１室でしょうか。</label>
                         <RadioGroup
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
@@ -242,13 +243,13 @@ export default function HouseAdd() {
                     <div className="w-full inline-block mb-7">
                         {BuildingYesImage && (
                             <img src="/screenshots/building-yes.png" className="w-full" alt="image" height={500} width={200} />
-                        )}  
+                        )}
                         {BuildingNoImage && (
                             <img src="/screenshots/building-no.png" className="w-full" alt="image" height={500} width={200} />
-                        )}                     
+                        )}
                     </div>
 
-                    
+
                     {ShowYes && (
                         <>
                             <div className="w-full flex items-center justify-between mb-7">
@@ -268,7 +269,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">2</div>建物の名称</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">2</div>建物の名称</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -283,7 +284,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">3</div>構造</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">3</div>構造</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -297,7 +298,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">4</div>床面積m²</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">4</div>床面積m²</label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
@@ -314,7 +315,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">5</div>所在及び地番</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">5</div>所在及び地番</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -328,7 +329,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">6</div>地目</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">6</div>地目</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -336,7 +337,7 @@ export default function HouseAdd() {
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             id="GroundGrainYes"
                                             onChange={inputHandlingFunction}
-                                        />                                        
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -344,7 +345,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">7</div>地積㎡</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">7</div>地積㎡</label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
@@ -359,7 +360,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">8</div>家屋番号</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">8</div>家屋番号</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -375,7 +376,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">9</div>種類</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">9</div>種類</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -389,7 +390,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">10</div>構造</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">10</div>構造</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -405,7 +406,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">11</div>床面積 ㎡</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">11</div>床面積 ㎡</label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
@@ -414,13 +415,28 @@ export default function HouseAdd() {
                                             id="FloorAreaOneYes"
                                             onChange={inputHandlingFunction}
                                         />
-                                        <AreaIcon/>
+                                        <AreaIcon />
                                     </div>
                                 </div>
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">12</div>敷地権の種類</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">12</div>階数</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            id="FloorNumber"
+                                            onChange={inputHandlingFunction}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label flex items-center"><div className="circle-no">12</div>敷地権の種類</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -430,47 +446,54 @@ export default function HouseAdd() {
                                             onChange={inputHandlingFunction}
                                         />
                                     </div>
-                                </div>
                             </div>
 
                             <div className="w-full inline-block mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">13</div>敷地権の割合</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">13</div>築年数</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
-                                            <div className="flex justify-between items-center">
-                                                <div><input
-                                                    type="text"
-                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                /></div>
-                                                <div>
-                                                    <span className="text-3xl text-gray-500">/</span>
-                                                </div>
-                                                <div><input
-                                                    type="text"
-                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                /></div>
+                                        <JapaneseCalendar id={"AgeofConstruction"} DateValue={""} />
+                                    </div>                                    
+                                </div>                                
+                            </div>
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label flex items-center"><div className="circle-no">13</div>敷地権の割合</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <div className="flex justify-between items-center">
+                                            <div><input
+                                                type="text"
+                                                className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            /></div>
+                                            <div>
+                                                <span className="text-3xl text-gray-500">/</span>
                                             </div>
+                                            <div><input
+                                                type="text"
+                                                className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            /></div>
                                         </div>
+                                    </div>
                                     <div className="w-full hidden mt-2">
                                         <input
-                                            type="text"                                            
+                                            type="text"
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             id="PercentageofSiteRightsYes"
                                             onChange={inputHandlingFunction}
                                         />
                                     </div>
-                                </div>                                
-                            </div>                            
+                                </div>
                         </>
                     )}
                     {ShowNo && (
                         <>
-                        <div className="w-full flex items-center justify-between pt-5 mb-7">
+                            <div className="w-full flex items-center justify-between pt-5 mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">1</div>所在</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">1</div>所在</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -484,7 +507,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">2</div>家屋番号</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">2</div>家屋番号</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -500,7 +523,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">3</div>種類</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">3</div>種類</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -514,7 +537,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">4</div>構造</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">4</div>構造</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -530,7 +553,7 @@ export default function HouseAdd() {
                             <div className="w-full flex items-center justify-between mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">5</div>床面積 ㎡</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">5</div>床面積 ㎡</label>
                                     </div>
                                     <div className="w-full inline-block mt-2 relative">
                                         <input
@@ -539,20 +562,20 @@ export default function HouseAdd() {
                                             id="FloorAreaNo"
                                             onChange={inputHandlingFunction}
                                         />
-                                        <AreaIcon/>
+                                        <AreaIcon />
                                     </div>
-                                </div>                                
-                            </div>                           
+                                </div>
+                            </div>
                         </>
                     )}
 
-                    
+
                     <FormControl>
-                            <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">2．固定資産税課税明細（固定資産税評価証明書）の情報の入力</label>
+                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">2．固定資産税課税明細（固定資産税評価証明書）の情報の入力</label>
                         <RadioGroup
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"                            
+                            name="row-radio-buttons-group"
                         >
                             <FormControlLabel value="Yes" control={<Radio />} onChange={handleRadioInfoProperty} label="はい" sx={{
                                 '& .MuiSvgIcon-root': {
@@ -566,32 +589,32 @@ export default function HouseAdd() {
                             }} />
                         </RadioGroup>
                     </FormControl>
-                            <div className="w-full inline-block mb-7">
-                                {InfoPropertyTaxYesNo ||(
-                                    <img src="/screenshots/building-screenshot.png" className="w-full" alt="image" height={500} width={200} />
-                                )}                                          
-                            </div>
-                           
-                            {InfoPropertyTaxYesNo ||(
-                                <>
-                                <div className="w-full flex items-center justify-between mb-7">
-                                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                        <div className="label w-full inline-block">
+                    <div className="w-full inline-block mb-7">
+                        {InfoPropertyTaxYesNo || (
+                            <img src="/screenshots/building-screenshot.png" className="w-full" alt="image" height={500} width={200} />
+                        )}
+                    </div>
+
+                    {InfoPropertyTaxYesNo || (
+                        <>
+                            <div className="w-full flex items-center justify-between mb-7">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <div className="label w-full inline-block">
                                         <label className="form-label flex items-center"><div className="circle-no">1</div>家屋の所在</label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                id="LocationHouse"
-                                                onChange={inputHandlingFunction}
-                                            />
-                                        </div>
                                     </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            id="LocationHouse"
+                                            onChange={inputHandlingFunction}
+                                        />
+                                    </div>
+                                </div>
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">2</div>家屋番号</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">2</div>家屋番号</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -604,10 +627,10 @@ export default function HouseAdd() {
                                 </div>
                             </div>
 
-                            <div className="w-full flex items-center justify-between mb-7">
+                            <div className="w-full flex items-center justify-between mb-4">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">3</div>種類・用途</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">3</div>種類・用途</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -621,7 +644,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">4</div>価格</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">4</div>価格</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -633,150 +656,158 @@ export default function HouseAdd() {
                                     </div>
                                 </div>
                             </div>
-                                </>
-                            )}
-                            
-                    
+                            <Box className="pb-7">
+                                <Box className="w-full">
+                                    <Typography component={"p"} fontSize={13} className="text-red-600 tracking-2">※記載例は一般的なひな型のため各市区町村のものと記載位置がずれている可能性があります。</Typography>
+                                </Box>
+                                <Box className="mt-3 w-full">
+                                    <Typography component={"p"} fontSize={13} className="text-red-600 tracking-2">※マンションの場合は④の金額がマンション一棟の価格が記載されている場合がありますのでご注意ください</Typography>
+                                </Box>
+                            </Box>
 
-                <div className="mb-7 hidden">
-                    <div className="w-full inline-block py-3">
-                        <label>登記簿謄本の情報の入力</label>
-                    </div>
-                    <label className="form-label text-lg mb-7">2. 固定資産税課税明細（固定資産税評価証明書）の情報の入力</label>
-                    <div className="w-full inline-block mt-5 mb-7">
-                        <img src="/screenshots/building-second.png" className="w-full" alt="image" height={500} width={50} />                    
-                    </div>
-                    <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">1</div>家屋の所在</label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">2</div>家屋番号</label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="w-full flex items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">3</div>種類・用途</label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">4</div>価格</label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                </div>
-
-                <div className="mb-7">
-                    <FormControl>
-                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">3. 所有されていた物件に共有者はいましたか。</label>
-                        <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
-                            value={QuestionThree}
-                        >
-                            <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionThree} label="はい" sx={{
-                                '& .MuiSvgIcon-root': {
-                                    fontSize: 16,
-                                },
-                            }} />
-                            <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionThree} label="いいえ" sx={{
-                                '& .MuiSvgIcon-root': {
-                                    fontSize: 16,
-                                },
-                            }} />
-                        </RadioGroup>
-                    </FormControl>
-                    {ShowYesOption3 && (
-                        <>
-                        <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">共有割合の入力</label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <div className="flex justify-between items-center">
-                                    <div><input
-                                        type="text"
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    /></div>
-                                    <div>
-                                        <span className="text-3xl text-gray-500">/</span>
-                                    </div>
-                                    <div><input
-                                        type="text"                                        
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    /></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                         </>
                     )}
-                    {ShowNoOption3 && (
-                        <></>
-                    )}
-                </div>
-                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-16">
+
+
+                    <div className="mb-4 hidden">
+                        <div className="w-full inline-block py-3">
+                            <label>登記簿謄本の情報の入力</label>
+                        </div>
+                        <label className="form-label text-lg mb-7">2. 固定資産税課税明細（固定資産税評価証明書）の情報の入力</label>
+                        <div className="w-full inline-block mt-5 mb-7">
+                            <img src="/screenshots/building-second.png" className="w-full" alt="image" height={500} width={50} />
+                        </div>
+                        <div className="w-full flex items-center justify-between mb-7">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <div className="label w-full inline-block">
-                                    <label className="form-label text-lg" htmlFor="Valuation">
-                                       4. 評価額
-                                    </label>
+                                    <label className="form-label flex items-center"><div className="circle-no">1</div>家屋の所在</label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <input
                                         type="text"
-                                        id="Valuation"
-                                        // value={Valuation}
-                                        // onChange={ValuationKeyPress}
-                                        // onKeyPress={handleKeyPress}
-                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                     />
-                                    {/* {ValuationError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )} */}
                                 </div>
                             </div>
-                            <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label flex items-center"><div className="circle-no">2</div>家屋番号</label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="w-full flex items-center justify-between mb-7">
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label flex items-center"><div className="circle-no">3</div>種類・用途</label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <div className="label w-full inline-block">
+                                    <label className="form-label flex items-center"><div className="circle-no">4</div>価格</label>
+                                </div>
+                                <div className="w-full inline-block mt-2">
+                                    <input
+                                        type="text"
+                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mb-7">
+                        <FormControl>
+                            <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">3. 所有されていた物件に共有者はいましたか。</label>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                value={QuestionThree}
+                            >
+                                <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionThree} label="はい" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                                <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionThree} label="いいえ" sx={{
+                                    '& .MuiSvgIcon-root': {
+                                        fontSize: 16,
+                                    },
+                                }} />
+                            </RadioGroup>
+                        </FormControl>
+                        {ShowYesOption3 && (
+                            <>
+                                <div className="w-full block items-center justify-between mb-7">
+                                    <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                        <div className="label w-full inline-block">
+                                            <label className="form-label">共有割合の入力</label>
+                                        </div>
+                                        <div className="w-full inline-block mt-2">
+                                            <div className="flex justify-between items-center">
+                                                <div><input
+                                                    type="text"
+                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                /></div>
+                                                <div>
+                                                    <span className="text-3xl text-gray-500">/</span>
+                                                </div>
+                                                <div><input
+                                                    type="text"
+                                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                /></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                        {ShowNoOption3 && (
+                            <></>
+                        )}
+                    </div>
+                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-16">
+                        <div className="label w-full inline-block">
+                            <label className="form-label text-lg" htmlFor="Valuation">
+                                4. 評価額
+                            </label>
+                        </div>
+                        <div className="w-full inline-block mt-2">
+                            <input
+                                type="text"
+                                id="Valuation"
+                                // value={Valuation}
+                                // onChange={ValuationKeyPress}
+                                // onKeyPress={handleKeyPress}
+                                className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                            />
+                            {/* {ValuationError && (
+                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    )} */}
+                        </div>
+                    </div>
+                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                         <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton/>              
+                            <BackButton />
                             <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>                                           
-                        </div>   
-                   </form>
+                        </div>
+                    </div>
+                </form>
             </div>
         </>
     )

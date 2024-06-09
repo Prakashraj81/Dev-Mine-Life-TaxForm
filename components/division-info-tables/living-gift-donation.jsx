@@ -187,7 +187,7 @@ return (
                         <QuestionMarkIcon style={{ fontSize: 18 }} className="mr-2 p-1 bg-warning-main rounded-lg text-black"/>                
                       </HtmlTooltip>
                     </Box>
-                    <span onClick={handleExpandFun} className="font-medium bg-blue-500 rounded-sm py-1 px-2 text-white">入力</span>
+                    <span onClick={handleExpandFun} className="font-medium bg-blue-500 rounded-sm py-1 px-2 text-white">確認に修正</span>
                   </TableCell>
               </TableRow>
             </TableHead>
