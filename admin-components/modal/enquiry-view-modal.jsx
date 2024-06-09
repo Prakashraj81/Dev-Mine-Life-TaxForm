@@ -62,44 +62,59 @@ const style = {
   p: 4,
 };
 
-export default function EnquiryViewModal({EnquiryData, OpenModalPopup, handleModalClose}) {  
-    return (
-        <div>      
-            <Modal
-                aria-labelledby="spring-modal-title"
-                aria-describedby="spring-modal-description"
-                open={OpenModalPopup}
-                onClose={handleModalClose}
-                closeAfterTransition
-                slots={{ backdrop: Backdrop }}
-                slotProps={{
-                backdrop: {
-                    TransitionComponent: Fade,
-                },
-                }}
-            >
-                <Fade in={OpenModalPopup}>
-                    <Box sx={style}>                        
-                        <Box className="pb-7"><CustomTextField label="From" variant="outlined" disabled value={"dev@g-japan.com"} fullWidth /></Box>
-                        
-                        <Box className="pb-7"><CustomTextField className="pb-3" label="To" variant="outlined" disabled value={EnquiryData.email} fullWidth /></Box>
-                        
-                        <Box className="pb-7"><CustomTextField className="pb-3" label="Inquiry type" variant="outlined" disabled value={EnquiryData.inquiry} fullWidth /></Box>
-                        
-                        <Box className="pb-7"><TextField
-                        className="pb-3"
-                        label="Your Text"
-                        multiline
-                        fullWidth
-                        variant="outlined"                        
-                        /></Box>           
-                        <Box className="float-right">
-                            <Button onClick={handleModalClose}>Return</Button>
-                            <Button onClick={handleModalClose}>Send</Button>
-                        </Box>
-                    </Box>
-                </Fade>
-            </Modal>
-        </div>
-    );
+export default function EnquiryViewModal({ EnquiryData, OpenModalPopup, handleModalClose }) {
+  let [MessageText, setMessageText] = useState("");
+
+  const inputHandle = (event) =>{
+    let inputId = event.currentTarget.id;
+    let inputValue = event.target.value;
+    setMessageText(inputValue);
+  }
+
+  const handleModalCloseAndCall = (id) =>{
+    const params = {detail_id: id, Message: MessageText};
+    handleModalClose(params);
+  }
+
+  return (
+    <div>
+      <Modal
+        aria-labelledby="spring-modal-title"
+        aria-describedby="spring-modal-description"
+        open={OpenModalPopup}
+        onClose={() => handleModalClose(null)}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            TransitionComponent: Fade,
+          },
+        }}
+      >
+        <Fade in={OpenModalPopup}>
+          <Box sx={style}>
+            <Box className="pb-7"><CustomTextField label="From" variant="outlined" disabled value={"dev@g-japan.com"} fullWidth /></Box>
+
+            <Box className="pb-7"><CustomTextField className="pb-3" label="To" variant="outlined" disabled value={EnquiryData.email} fullWidth /></Box>
+
+            <Box className="pb-7"><CustomTextField className="pb-3" label="Inquiry type" variant="outlined" disabled value={EnquiryData.inquiry_details} fullWidth /></Box>
+
+            <Box className="pb-7"><TextField
+              className="pb-3"
+              label="Your Text"
+              multiline
+              fullWidth
+              variant="outlined"
+              onChange={inputHandle}              
+              rows={3} 
+            /></Box>
+            <Box className="float-right">
+              <Button onClick={() => handleModalClose(null)}>Return</Button>
+              <Button onClick={() => handleModalCloseAndCall(EnquiryData.contact_form_id)}>Send</Button>
+            </Box>
+          </Box>
+        </Fade>
+      </Modal>
+    </div>
+  );
 }
