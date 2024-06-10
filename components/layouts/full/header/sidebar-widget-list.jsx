@@ -55,7 +55,6 @@ export default function SideBarWidgetList({ RecentSaveList }) {
             if(basicInfoActivity2 == true){              
               url = "/basic-information";
             }
-
             //Property pages
             if(propertyActivity1 == true){
               url = "/declaration-printing/cash-savings";

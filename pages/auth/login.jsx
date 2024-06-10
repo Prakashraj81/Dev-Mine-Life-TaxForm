@@ -7,7 +7,7 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import { InputAdornment, IconButton, Input, FormControl, Button, Typography } from '@mui/material';
+import { InputAdornment, IconButton, Input, FormControl, Button, Box, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Header from "../../components/header";
@@ -112,21 +112,21 @@ export default function Login(props) {
   return (
     <>
       <Header />
-      <div className="login-form-wrapper py-14">
-        <div className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
-          <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-            <div className="page-heading">
+      <Box className="login-form-wrapper py-14">
+        <Box className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
+          <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+            <Box className="page-heading">
               <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                 ログイン
               </Typography>
-            </div>
-          </div>
-          <div className="page-description py-8">
+            </Box>
+          </Box>
+          <Box className="page-description py-8">
             <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
               登録済みのメールアドレスでログインして下さい
             </Typography>
-          </div>
-          <div className="login-forms">
+          </Box>
+          <Box className="login-forms">
             <form action="#" method="POST">
               <>
                 {LoginError && (
@@ -140,13 +140,13 @@ export default function Login(props) {
                   <BackdropLoader ShowLoader={ShowLoader} />
                 )}
               </>
-              <div className="username-details mb-7">
-                <div className="label w-full inline-block">
-                  <label className="form-label">
+              <Box className="username-details mb-7">
+                <Box className="label w-full inline-block">
+                  <Typography component={"label"} className="form-label">
                     メールアドレス
-                  </label>
-                </div>
-                <div className="w-full inline-block mt-2">
+                  </Typography>
+                </Box>
+                <Box className="w-full inline-block mt-2">
                   <input
                     type="text"
                     id="UserName"
@@ -158,16 +158,16 @@ export default function Login(props) {
                     <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
                   {isValidEmail ? null : <Typography component={"p"} className="text-red-500 mt-2" role="alert">形式が違います</Typography>}
-                </div>
-              </div>
+                </Box>
+              </Box>
 
-              <div className="password-details mb-7">
-                <div className="label w-full inline-block">
-                  <label className="form-label">
+              <Box className="password-details mb-7">
+                <Box className="label w-full inline-block">
+                  <Typography component={"label"} className="form-label">
                     パスワード
-                  </label>
-                </div>
-                <div className="w-full inline-block mt-2">
+                  </Typography>
+                </Box>
+                <Box className="w-full inline-block mt-2">
                   <input
                     type={showPassword ? 'text' : 'password'}
                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
@@ -175,21 +175,21 @@ export default function Login(props) {
                     onChange={inputHandlingFunction}
                     value={Password}
                   />
-                  <div className="py-2 mt-2">
+                  <Box className="py-2 mt-2">
                     <InputAdornment>
                       <IconButton id="Icon" onClick={handleTogglePassword} >
                         {showPassword ? <Visibility style={{ width: '18px', height: '18px' }} /> : <VisibilityOff style={{ width: '18px', height: '18px' }} />}
                       </IconButton>
-                      <label className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</label>
+                      <Typography component={"label"} className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</Typography>
                     </InputAdornment>
-                  </div>
+                  </Box>
                   {PasswordError && (
                     <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
-                </div>
-              </div>
+                </Box>
+              </Box>
 
-              <div className="login-btn pt-3 text-center">
+              <Box className="login-btn pt-3 text-center">
                 <button
                   onClick={onSubmit}
                   type="button"
@@ -199,22 +199,22 @@ export default function Login(props) {
                     ログイン
                   </span>
                 </button>
-              </div>
-              <div className="text-center">
-                <div className="mt-3">
+              </Box>
+              <Box className="text-center">
+                <Box className="mt-3">
                   <Link href="/auth/forget-password">
                     <span className="text-xs text-black font-medium">
                       パスワードを忘れた方
                     </span>
                   </Link>
-                </div>
-                <div className="mt-5">
+                </Box>
+                <Box className="mt-5">
                   <Typography component={"p"} className="text-sm text-black font-semibold">
                     はじめてご利用の方
                   </Typography>
-                </div>
-              </div>
-              <div className="register-btn pt-7 text-center">
+                </Box>
+              </Box>
+              <Box className="register-btn pt-7 text-center">
                 <Link href="/auth/register">
                   <button className="bg-white border-2 border-primary-gray rounded px-7 py-2">
                     <span className="text-primary-gray text-sm font-medium">
@@ -222,11 +222,11 @@ export default function Login(props) {
                     </span>
                   </button>
                 </Link>
-              </div>
+              </Box>
             </form>
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
       <Footer />
     </>
   );
