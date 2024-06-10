@@ -1,98 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
-import { Box } from '@mui/material';
+import { Box, Typography, Table, TableBody, TableCell, TableRow, TextField } from '@mui/material';
 
-const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBoxCalculation_1, divisionInputKeyPress, fractionBoxCalculation_2, UndecidedHeir, AmountofMoney}) => {
-  // Use state to manage loading state
+const HeirListFractionShowSkeleton = ({ HeirList, HeirSharingDetails, fractionBoxCalculation_1, divisionInputKeyPress, fractionBoxCalculation_2, UndecidedHeir, AmountofMoney, CalculatedAmounts }) => {
   const [loading, setLoading] = useState(true);
 
-  // Simulate loading effect using useEffect
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1000); // Adjust the timeout as needed
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
-  const [undecidedHeir1, setUndecidedHeir1] = useState(0);
   const [shareAmountNumerator, setShareAmountNumerator] = useState(
     HeirSharingDetails.reduce((acc, detail) => {
-      acc[detail.heir_id] = detail.numerator || '';    
-
+      acc[detail.heir_id] = detail.numerator || '';
       return acc;
     }, {})
   );
 
   const [shareAmountDenominator, setShareAmountDenominator] = useState(
     HeirSharingDetails.reduce((acc, detail) => {
-      acc[detail.heir_id] = detail.denominator || '';    
-
+      acc[detail.heir_id] = detail.denominator || '';
       return acc;
     }, {})
   );
 
-  // Handler to update state when input changes
   const handleInputChange1 = (e, heir_id) => {
     const { value } = e.target;
-    if(value !== ""){
-      setShareAmountNumerator({
-        ...shareAmountNumerator,
-        [heir_id]: value,
-      });    
-    }
-    else{
-      const { value1 } = e.target;      
-      setShareAmountNumerator({
-        ...shareAmountNumerator,
-        [heir_id]: value1,
-      });    
-    }    
-  }; 
-  
-  // Handler to update state when input changes
+    setShareAmountNumerator({
+      ...shareAmountNumerator,
+      [heir_id]: value,
+    });
+  };
+
   const handleInputChange2 = (e, heir_id) => {
     const { value } = e.target;
-    if(value !== ""){      
-      setShareAmountDenominator({
-        ...shareAmountDenominator,
-        [heir_id]: value,
-      });    
-    }
-    else{
-      const { value2 } = e.target;      
-      setShareAmountDenominator({
-        ...shareAmountDenominator,
-        [heir_id]: value2,
-      });    
-    }    
-  }; 
-
+    setShareAmountDenominator({
+      ...shareAmountDenominator,
+      [heir_id]: value,
+    });
+  };
 
   useEffect(() => {
     HeirList.forEach((heirlist, index) => {
       HeirSharingDetails.filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
         .forEach((shareDetails) => {
           let value;
-
-          value = shareAmountNumerator[shareDetails.heir_id];          
-          const mockEvent1 = { target: { value }, currentTarget: {id: shareDetails.heir_id} }; // Mock event object
+          value = shareAmountNumerator[shareDetails.heir_id];
+          const mockEvent1 = { target: { value }, currentTarget: { id: shareDetails.heir_id } };
           fractionBoxCalculation_1(mockEvent1, index);
 
           value = shareAmountDenominator[shareDetails.heir_id];
-          const mockEvent2 = { target: { value }, currentTarget: {id: shareDetails.heir_id} }; // Mock event object
+          const mockEvent2 = { target: { value }, currentTarget: { id: shareDetails.heir_id } };
           fractionBoxCalculation_2(mockEvent2, index);
-
-          //handleInputChange(mockEvent1, shareDetails.heir_id);
-          //handleInputChange(mockEvent2, shareDetails.heir_id);         
         });
     });
-  }, []);
+  }, [HeirList, HeirSharingDetails, shareAmountNumerator, shareAmountDenominator, fractionBoxCalculation_1, fractionBoxCalculation_2]);
 
   return (
     <ul>
-      {/* Render skeleton or content based on loading state */}
       {loading ? (
-        // Render skeleton loader for each list item
         Array.from({ length: HeirList.length + 2 }, (_, index) => (
           <li key={index} className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-0 border-t py-3">
             <Skeleton variant="text" width={300} height={30} />
@@ -101,68 +69,104 @@ const HeirListFractionShowSkeleton = ({HeirList, HeirSharingDetails, fractionBox
                 <Skeleton variant="text" width={70} height={30} />
                 <Skeleton className='ml-2' variant="text" width={70} height={30} />
               </Box>
-            </div>            
+            </div>
           </li>
         ))
       ) : (
-        // Render actual content when loading is false
-        <>
-          {/* Replace with your actual content */}          
-          {HeirList.map((heirlist, index) => (
-            <li key={index} className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-0 border-t py-3">
-              <div className="w-70">
-                  <span>{heirlist.name}</span>
-              </div>
-              {HeirSharingDetails.filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
-                .map((shareDetails, i) => (                  
-                <div key={i} className="w-30 text-right">
-                <div className="w-full inline-block">
-                    <div className="flex justify-between items-center">
-                        <div><input
-                            type="text"
-                            autoComplete="off"
-                            className="cursor-pointer text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
-                            id={shareDetails.heir_id}
-                            value={shareAmountNumerator[shareDetails.heir_id]}
-                            onChange={(e) => {
-                              handleInputChange1(e, shareDetails.heir_id);
-                              fractionBoxCalculation_1(e, index);
-                            }}
-                            onKeyPress={divisionInputKeyPress}
-                        /></div>
-                        <div>
-                            <span className="text-3xl text-gray-400">/</span>
-                        </div>
-                        <div><input
-                            type="text"
-                            autoComplete="off"
-                            className="cursor-pointer text-right form-control border-2 w-full focus:outline-none h-10 pl-3"
-                            id={shareDetails.heir_id}
-                            value={shareAmountDenominator[shareDetails.heir_id]}
-                            onChange={(e) => {
-                              handleInputChange2(e, shareDetails.heir_id);
-                              fractionBoxCalculation_2(e, index);
-                            }}
-                            onKeyPress={divisionInputKeyPress}
-                        /></div>
-                    </div>
-                </div>
-                </div>
+        <li>
+          <Box>
+            <Table>
+              <TableBody>
+                {HeirList.map((heirlist, index) => (
+                  <TableRow key={heirlist.heir_id} className='border border-b-1 border-t-0 border-l-0 border-r-0'>
+                    <TableCell className='division-table-padding w-40'><Typography component={"span"} fontSize={14}>{heirlist.name}</Typography></TableCell>
+                    <TableCell className='w-25 division-table-padding' align='right'>
+                      <Typography paddingRight={1} component={"span"} fontSize={14}>{CalculatedAmounts[index] ? CalculatedAmounts[index].toLocaleString() : 0}</Typography>
+                    </TableCell>
+                    <TableCell className='w-20 division-table-padding' align='right'>
+                      {HeirSharingDetails.filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
+                        .map((shareDetails) => (
+                          <Box key={shareDetails.heir_id} className="text-right">
+                            <div className="w-full inline-block">
+                              <div className="flex justify-between items-center">
+                                <div>
+                                  <TextField
+                                    type="text"
+                                    autoComplete="off"
+                                    className="text-right"
+                                    sx={{
+                                      '& .MuiInputBase-root': {
+                                        height: '40px',
+                                      },
+                                      '& .MuiOutlinedInput-input': {
+                                        padding: '14px',
+                                      },
+                                      '& .MuiInputLabel-root': {
+                                        fontSize: '14px', 
+                                      }
+                                    }}
+                                    id={shareDetails.heir_id.toString()}
+                                    value={shareAmountNumerator[shareDetails.heir_id]}
+                                    onChange={(e) => {
+                                      handleInputChange1(e, shareDetails.heir_id);
+                                      fractionBoxCalculation_1(e, index);
+                                    }}
+                                    onKeyPress={divisionInputKeyPress}
+                                  />
+                                </div>
+                                <Box>
+                                  <Typography component={"span"} className="text-4xl text-gray-400 px-1">/</Typography>
+                                </Box>
+                                <div>
+                                  <TextField
+                                    type="text"
+                                    autoComplete="off"
+                                    className="text-right"
+                                    sx={{
+                                      '& .MuiInputBase-root': {
+                                        height: '40px',
+                                      },
+                                      '& .MuiOutlinedInput-input': {
+                                        padding: '14px',
+                                      },
+                                      '& .MuiInputLabel-root': {
+                                        fontSize: '14px',
+                                      }
+                                    }}
+                                    id={shareDetails.heir_id.toString()}
+                                    value={shareAmountDenominator[shareDetails.heir_id]}
+                                    onChange={(e) => {
+                                      handleInputChange2(e, shareDetails.heir_id);
+                                      fractionBoxCalculation_2(e, index);
+                                    }}
+                                    onKeyPress={divisionInputKeyPress}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </Box>
+                        ))}
+                    </TableCell>
+                  </TableRow>
                 ))}
-            </li>
-          ))}
-          <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-0 border-t py-3">
-              <span>相続人未決定</span>
-              <span>{UndecidedHeir.toLocaleString()}</span>
-          </li> 
-          <li className="w-full flex justify-between items-center text-sm tracking-2 font-medium border-0 border-t py-3">
-              <span>合計</span>
-              <span>{AmountofMoney.toLocaleString()}</span>
-          </li> 
-        </>
+                <TableRow className='border border-b-1 border-t-0 border-l-0 border-r-0'>
+                  <TableCell className='division-table-padding w-40'><Typography component={"span"} fontSize={14}>相続人未決定</Typography></TableCell>
+                  <TableCell className='division-table-padding w-25' align='right'><Typography paddingRight={1} component={"span"} fontSize={14}>{UndecidedHeir.toLocaleString()}</Typography></TableCell>
+                  <TableCell className='invisible division-table-padding w-20' align='right'><Typography component={"span"} fontSize={14}></Typography></TableCell>
+                </TableRow>
+                <TableRow className='border border-b-1 border-t-0 border-l-0 border-r-0'>
+                  <TableCell className='division-table-padding w-40'><Typography component={"span"} fontSize={14}>合計</Typography></TableCell>
+                  <TableCell className='division-table-padding w-25' align='right'><Typography paddingRight={1} component={"span"} fontSize={14}>{AmountofMoney.toLocaleString()}</Typography></TableCell>
+                  <TableCell className='invisible division-table-padding w-20' align='right'><Typography component={"span"} fontSize={14}></Typography></TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Box>
+        </li>
       )}
     </ul>
   );
 };
 
 export default HeirListFractionShowSkeleton;
+

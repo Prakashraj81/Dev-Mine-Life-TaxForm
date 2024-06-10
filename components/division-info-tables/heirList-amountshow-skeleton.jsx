@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
+import { TextField } from '@mui/material';
 
-const HeirListAmountShowSkeleton = ({HeirList, HeirSharingDetails, divisionBoxCalculation, BoxValues, divisionInputKeyPress, UndecidedHeir, AmountofMoney}) => {
+const HeirListAmountShowSkeleton = ({ HeirList, HeirSharingDetails, divisionBoxCalculation, BoxValues, divisionInputKeyPress, UndecidedHeir, AmountofMoney }) => {
   // Use state to manage loading state
   const [loading, setLoading] = useState(true);
 
   // Simulate loading effect using useEffect
-  useEffect(() => {   
+  useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000); // Adjust the timeout as needed
@@ -15,7 +16,7 @@ const HeirListAmountShowSkeleton = ({HeirList, HeirSharingDetails, divisionBoxCa
 
   const [shareAmounts, setShareAmounts] = useState(
     HeirSharingDetails.reduce((acc, detail) => {
-      acc[detail.heir_id] = detail.share_amount || '';    
+      acc[detail.heir_id] = detail.share_amount || '';
 
       return acc;
     }, {})
@@ -27,8 +28,8 @@ const HeirListAmountShowSkeleton = ({HeirList, HeirSharingDetails, divisionBoxCa
     setShareAmounts({
       ...shareAmounts,
       [heir_id]: value,
-    });    
-  }; 
+    });
+  };
 
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const HeirListAmountShowSkeleton = ({HeirList, HeirSharingDetails, divisionBoxCa
       HeirSharingDetails.filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
         .forEach((shareDetails) => {
           const value = shareAmounts[shareDetails.heir_id].toLocaleString();
-          const mockEvent = { target: { value }, currentTarget: {id: shareDetails.heir_id} }; // Mock event object
+          const mockEvent = { target: { value }, currentTarget: { id: shareDetails.heir_id } }; // Mock event object
           handleInputChange(mockEvent, shareDetails.heir_id);
           divisionBoxCalculation(mockEvent, index);
         });
@@ -64,16 +65,29 @@ const HeirListAmountShowSkeleton = ({HeirList, HeirSharingDetails, divisionBoxCa
               {HeirSharingDetails.filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
                 .map((shareDetails, i) => (
                   <div key={i} className="text-right">
-                    <input
+                    <TextField
                       id={shareDetails.heir_id}
                       type="text"
                       autoComplete="off"
-                      className="cursor-pointer border-2 h-10 text-right form-control w-50 outline-none"                      
+                      className="w-50"
+                      sx={{
+                        '& .MuiInputBase-root': {
+                          height: '40px',
+                        },
+                        '& .MuiOutlinedInput-input': {
+                          padding: '14px',
+                          textAlign: 'right', 
+                        },
+                        '& .MuiInputLabel-root': {
+                          fontSize: '14px',
+                          letterSpacing: '0px',
+                        },
+                      }}
                       value={shareAmounts[shareDetails.heir_id].toLocaleString()}
                       onChange={(e) => {
                         handleInputChange(e, shareDetails.heir_id);
                         divisionBoxCalculation(e, index);
-                      }}                      
+                      }}
                       onKeyPress={divisionInputKeyPress}
                     />
                   </div>

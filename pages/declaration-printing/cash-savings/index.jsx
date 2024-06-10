@@ -93,7 +93,7 @@ export default function CashSavings() {
         let customerId = Number(event.currentTarget.id);
         let depositId = Number(event.currentTarget.name); 
         let buttonValue = event.currentTarget.value;  
-        let params = { auth_key: auth_key, id: 0 };        
+        let params = { auth_key: auth_key, id: depositId };        
         if(customerId !== 0 && depositId !== 0 && buttonValue === "Delete"){
             setDeleteTarget({ auth_key, customerId, depositId, buttonValue, params });
             setDeleteModalOpen(true);                

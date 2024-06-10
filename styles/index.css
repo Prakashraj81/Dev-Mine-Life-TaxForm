@@ -237,3 +237,9 @@ input {
   .mui-style-1lqm68-MuiTableCell-root{
     border: none !important;
   }
+  .division-table-padding {
+    padding: 12px 0px !important;
+  }
+  .input-height{
+    height: 20px !important;
+  }

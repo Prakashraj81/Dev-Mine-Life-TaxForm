@@ -551,6 +551,27 @@ export default function Heir() {
                             </div>
                         </div>
 
+                        <div className="legal-inheritance w-full inline-block float-left mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <div className="w-full flex items-center justify-start">
+                                <label className="form-label pr-3">法定相続分</label>
+                                <input
+                                    type="text"
+                                    value={"1"}
+                                    disabled
+                                    className="form-control text-left w-10 bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                />
+                                <span className="text-gray text-2xl">/</span>
+                                <input
+                                    type="text"
+                                    value={"1" ? HeirCount + 1 : "_ _"}
+                                    disabled
+                                    className="form-control text-left w-10 bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                />
+                            </div>
+                            <Box className="mt-2">
+                                <Typography target="_blank" component={Link} href={"https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4132.htm"} fontSize={12}>こちらをクリック: <span className="text-blue-600 underline underline-offset-2">法定相続分</span></Typography>
+                            </Box>
+                        </div>
 
                         <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
@@ -583,28 +604,6 @@ export default function Heir() {
                                     </Box>
                                 </FormControl>
                             </div>
-                        </div>
-
-                        <div className="legal-inheritance w-full inline-block float-left mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            <div className="w-full flex items-center justify-start">
-                                <label className="form-label pr-3">法定相続分</label>
-                                <input
-                                    type="text"
-                                    value={"1"}
-                                    disabled
-                                    className="form-control text-left w-10 bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                />
-                                <span className="text-gray text-2xl">/</span>
-                                <input
-                                    type="text"
-                                    value={"1" ? HeirCount + 1 : "_ _"}
-                                    disabled
-                                    className="form-control text-left w-10 bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                />
-                            </div>
-                            <Box className="mt-2">
-                                <Typography target="_blank" component={Link} href={"https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4132.htm"} fontSize={12}>こちらをクリック: <span className="text-blue-600 underline underline-offset-2">法定相続分</span></Typography>
-                            </Box>
                         </div>
 
 
