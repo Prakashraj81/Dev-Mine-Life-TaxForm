@@ -15,107 +15,109 @@ import DeleteModal from "../../../components/modal/delete-modal";
 export default function Securities() {
     let [SecuritiesList, setSecuritiesList] = useState([]);
     let [SnackbarOpen, setSnackbarOpen] = useState(false);
-    let [SnackbarMsg, setSnackbarMsg] = useState("success");
-    let [DeleteModalOpen, setDeleteModalOpen] = useState(false); 
+    let [VariantSnackbar, setVariantSnackbar] = useState("success");
+    let [SnackbarMsg, setSnackbarMsg] = useState("");
+    let [DeleteModalOpen, setDeleteModalOpen] = useState(false);
     let [deleteTarget, setDeleteTarget] = useState(null);
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
-          return;
-        }    
+            return;
+        }
         setSnackbarOpen(false);
     };
 
-    useEffect(() => {        
+    useEffect(() => {
         GetSecuritiesList();
     }, []);
 
 
     //Load cash savings list
-    const GetSecuritiesList = async()=>{
+    const GetSecuritiesList = async () => {
         let auth_key = atob(sessionStorage.getItem("auth_key"));
         const params = { auth_key: auth_key };
-        if(auth_key !== null){
-            try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_securities', {params});
-                if(response.status === 200){
+        if (auth_key !== null) {
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/list_securities', { params });
+                if (response.status === 200) {
                     setSecuritiesList(response.data.securities_details);
                 }
-                else{
+                else {
                     setSecuritiesList([]);
                 }
-            }catch(error){
+            } catch (error) {
                 console.log("Errro", error);
             }
-        }        
+        }
     }
 
 
-    const DeleteModalFunction = async(event) => {
+    const DeleteModalFunction = async (event) => {
         let value = event.currentTarget.id;
         const { auth_key, customerId, securityId, buttonValue, params } = deleteTarget;
         if (value === "Yes") {
-            try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_securities', {params});
-                if(response.status === 200){
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_securities', { params });
+                if (response.status === 200) {
+                    setVariantSnackbar("success");
+                    setSnackbarMsg(response.data.message);
+                    GetSecuritiesList();
                     setSnackbarOpen(true);
-                    setSnackbarMsg("success");
-                    GetSecuritiesList();               
                 }
-                else{
-                    setSnackbarOpen(true);
-                    setSnackbarMsg("error");
+                else {
+                    setVariantSnackbar("error");
+                    setSnackbarMsg(response.data.message);
                     GetSecuritiesList([]);
-                }                                       
-            }catch(error){
-                setSnackbarOpen(true);
-                setSnackbarMsg("error");
-                console.log("Error", error);
+                    setSnackbarOpen(true);
+                }
+            } catch (error) {
+                setVariantSnackbar("error");
+                setSnackbarMsg("Securities details not deleted");
             }
-            setDeleteModalOpen(false);     
+            setDeleteModalOpen(false);
         }
         else {
-          setDeleteModalOpen(false);
+            setDeleteModalOpen(false);
         }
-      };
+    };
 
 
-      //Edit and Delete 
+    //Edit and Delete 
     let router = useRouter();
-    const handleEdit_DeleteButtonClick = async(event) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));        
+    const handleEdit_DeleteButtonClick = async (event) => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
         let customerId = Number(event.currentTarget.id);
-        let securityId = Number(event.currentTarget.name); 
-        let buttonValue = event.currentTarget.value;  
-        let params = { auth_key: auth_key, id: securityId };        
-        if(customerId !== 0 && securityId !== 0 && buttonValue === "Delete"){
+        let securityId = Number(event.currentTarget.name);
+        let buttonValue = event.currentTarget.value;
+        let params = { auth_key: auth_key, id: securityId };
+        if (customerId !== 0 && securityId !== 0 && buttonValue === "Delete") {
             setDeleteTarget({ auth_key, customerId, securityId, buttonValue, params });
-            setDeleteModalOpen(true);                
+            setDeleteModalOpen(true);
         }
-        else{
+        else {
             router.push(`/declaration-printing/securities/securities-add?edit=${btoa(securityId)}`);
-        }  
-    };   
-    
+        }
+    };
 
-    return (         
+
+    return (
         <>
             <>
                 <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
                     <Alert
-                    onClose={handleSnackbarClose}
-                    severity={SnackbarMsg}
-                    variant="filled"
-                    sx={{ width: '100%', color: "#FFF" }}
+                        onClose={handleSnackbarClose}
+                        severity={VariantSnackbar}
+                        variant="filled"
+                        sx={{ width: '100%', color: "#FFF" }}
                     >
-                    This is a {SnackbarMsg} Alert!
+                        {SnackbarMsg}
                     </Alert>
                 </Snackbar>
 
                 {DeleteModalOpen && (
                     <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
                 )}
-            </>   
+            </>
             <div className="securities-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -126,28 +128,28 @@ export default function Securities() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    有価証券の情報を「<EditNoteOutlinedIcon className="text-primary-gray"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
+                        有価証券の情報を「<EditNoteOutlinedIcon className="text-primary-gray" />」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
                     </p>
                 </div>
-                <div className="securities-list py-8">
-                    <table className="w-full border border-light-gray">                        
-                        {SecuritiesList.map((list, index) => {                            
+                <div className="securities-list py-3">
+                    <table className="w-full border border-light-gray">
+                        {SecuritiesList.map((list, index) => {
                             return (
                                 <tr key={index}>
-                                <td className="py-2 px-2 border-r border border-light-gray">{list.name_and_issues}</td>
-                                <td className="py-2 px-2 border-r border border-light-gray">{list.securities_type}</td>
-                                <td className="py-2 px-2 border-r border border-light-gray text-right">{list.amount.toLocaleString()}</td>
-                                <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                    <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                        <EditNoteOutlinedIcon className="text-white" />
-                                    </button>
-                                </td>
-                                <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                    <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                        <HighlightOffOutlinedIcon className="text-white" />
-                                    </button>
-                                </td>
-                            </tr>
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.name_and_issues}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray">{list.securities_type}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.amount.toLocaleString()}</td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                            <EditNoteOutlinedIcon className="text-white" />
+                                        </button>
+                                    </td>
+                                    <td className="py-2 px-2 border-r border border-light-gray text-right">
+                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
+                                            <HighlightOffOutlinedIcon className="text-white" />
+                                        </button>
+                                    </td>
+                                </tr>
                             );
                         })}
                     </table>
@@ -159,10 +161,10 @@ export default function Securities() {
                             追加する
                         </button>
                     </Link>
-                </div>                
+                </div>
                 <div className="back-btn pt-5 md:pt-10 lg:pt-20 xl:pt-20 2xl:pt-20 text-center">
-                        <BackButtonIndex />
-                    </div>
+                    <BackButtonIndex />
+                </div>
             </div>
         </>
     )

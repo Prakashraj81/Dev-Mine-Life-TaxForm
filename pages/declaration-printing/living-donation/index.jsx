@@ -15,7 +15,8 @@ import DeleteModal from "../../../components/modal/delete-modal";
 export default function LivingDonation() {
     let [LivingDonationList, setLivingDonationList] = useState([]);
     let [SnackbarOpen, setSnackbarOpen] = useState(false);
-    let [SnackbarMsg, setSnackbarMsg] = useState("success");
+    let [VariantSnackbar, setVariantSnackbar] = useState("success");
+    let [SnackbarMsg, setSnackbarMsg] = useState("");
     let [DeleteModalOpen, setDeleteModalOpen] = useState(false); 
     let [deleteTarget, setDeleteTarget] = useState(null);
 
@@ -56,20 +57,21 @@ export default function LivingDonation() {
         if (value === "Yes") {
             try{
                 const response = await axios.get('https://minelife-api.azurewebsites.net/delete_living_donation', {params});
-                if(response.status === 200){
+                if (response.status === 200) {
+                    setVariantSnackbar("success");
+                    setSnackbarMsg(response.data.message);
+                    //GetLivingDonationList();
                     setSnackbarOpen(true);
-                    setSnackbarMsg("success");
-                    //GetLivingDonationList();               
                 }
-                else{
-                    setSnackbarOpen(true);
-                    setSnackbarMsg("error");
+                else {
+                    setVariantSnackbar("error");
+                    setSnackbarMsg(response.data.message);
                     //GetLivingDonationList([]);
+                    setSnackbarOpen(true);
                 }
-            }catch(error){
-                setSnackbarOpen(true);
-                setSnackbarMsg("error");
-                console.log("Error", error);
+            } catch (error) {
+                setVariantSnackbar("error");
+                setSnackbarMsg("Death retirement details not deleted");
             }
             setDeleteModalOpen(false);     
         }
@@ -99,14 +101,14 @@ export default function LivingDonation() {
     return (         
         <>
             <>
-                <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+            <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
                     <Alert
-                    onClose={handleSnackbarClose}
-                    severity={SnackbarMsg}
-                    variant="filled"
-                    sx={{ width: '100%', color: "#FFF" }}
+                        onClose={handleSnackbarClose}
+                        severity={VariantSnackbar}
+                        variant="filled"
+                        sx={{ width: '100%', color: "#FFF" }}
                     >
-                    This is a {SnackbarMsg} Alert!
+                        {SnackbarMsg}
                     </Alert>
                 </Snackbar>
 

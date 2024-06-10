@@ -14,7 +14,6 @@ export const RecentSaveListProvider = ({ children }) => {
         const response = await axios.get('https://minelife-api.azurewebsites.net/get_user_activities', { params });
         if (response.status === 200) {
           setRecentSaveList(response.data.user_actrivities_details);
-          console.log("updated");
         } else {
           setRecentSaveList([]);
         }
