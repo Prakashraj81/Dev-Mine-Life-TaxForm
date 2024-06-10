@@ -18,109 +18,109 @@ export default function CashSavings() {
     let [SnackbarOpen, setSnackbarOpen] = useState(false);
     let [VariantSnackbar, setVariantSnackbar] = useState("success");
     let [SnackbarMsg, setSnackbarMsg] = useState("");
-    let [DeleteModalOpen, setDeleteModalOpen] = useState(false);
+    let [DeleteModalOpen, setDeleteModalOpen] = useState(false); 
     let [deleteTarget, setDeleteTarget] = useState(null);
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
-            return;
-        }
+          return;
+        }    
         setSnackbarOpen(false);
     };
 
-    useEffect(() => {
+    useEffect(() => {        
         GetCashSavingsList();
     }, []);
 
 
     //Load cash savings list
-    const GetCashSavingsList = async () => {
+    const GetCashSavingsList = async()=>{
         let auth_key = atob(sessionStorage.getItem("auth_key"));
         const params = { auth_key: auth_key };
-        if (auth_key !== null) {
-            try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_cash_deposit', { params });
-                if (response.status === 200) {
+        if(auth_key !== null){
+            try{
+                const response = await axios.get('https://minelife-api.azurewebsites.net/list_cash_deposit', {params});
+                if(response.status === 200){
                     setcashSavingsList(response.data.cash_deposit_details);
                 }
-                else {
+                else{
                     setcashSavingsList([]);
                 }
-            } catch (error) {
+            }catch(error){
                 console.log("Error", error);
             }
-        }
+        }        
     }
 
-    //Delete admin user function
-    const handleDeleteUser = (event) => {
-        setDeleteModalOpen(!DeleteModalOpen);
-    }
-
-    const DeleteModalFunction = async (event) => {
-        let value = event.currentTarget.id;
-        const { auth_key, customerId, depositId, buttonValue, params } = deleteTarget;
-        if (value === "Yes") {
-            try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_cash_deposit', { params });
-                if (response.status === 200) {
-                    setVariantSnackbar("success");
-                    setSnackbarMsg(response.data.message);
-                    GetCashSavingsList();
-                    setSnackbarOpen(true);
-                }
-                else {
-                    setVariantSnackbar("error");
-                    setSnackbarMsg(response.data.message);
-                    GetCashSavingsList([]);
-                    setSnackbarOpen(true);
-                }
-            } catch (error) {
-                setVariantSnackbar("error");
-                setSnackbarMsg("Cash details not deleted");
+  //Delete admin user function
+  const handleDeleteUser = (event) => {
+    setDeleteModalOpen(!DeleteModalOpen);
+  }
+  
+  const DeleteModalFunction = async(event) => {
+    let value = event.currentTarget.id;
+    const { auth_key, customerId, depositId, buttonValue, params } = deleteTarget;
+    if (value === "Yes") {
+        try{
+            const response = await axios.get('https://minelife-api.azurewebsites.net/delete_cash_deposit', {params});
+            if(response.status === 200){                
+                setVariantSnackbar("success");
+                setSnackbarMsg(response.data.message);
+                GetCashSavingsList();     
+                setSnackbarOpen(true);          
             }
-            setDeleteModalOpen(false);
+            else{                
+                setVariantSnackbar("error");
+                setSnackbarMsg(response.data.message);
+                GetCashSavingsList([]);
+                setSnackbarOpen(true);
+            }
+        }catch(error){
+            setVariantSnackbar("error");
+            setSnackbarMsg("Cash details not deleted");
         }
-        else {
-            setDeleteModalOpen(false);
-        }
-    };
-
+        setDeleteModalOpen(false);     
+    }
+    else {
+      setDeleteModalOpen(false);
+    }
+  };
+    
     //Edit and Delete 
     let router = useRouter();
-    const handleEdit_DeleteButtonClick = async (event) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+    const handleEdit_DeleteButtonClick = async(event) => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));        
         let customerId = Number(event.currentTarget.id);
-        let depositId = Number(event.currentTarget.name);
-        let buttonValue = event.currentTarget.value;
-        let params = { auth_key: auth_key, id: 0 };
-        if (customerId !== 0 && depositId !== 0 && buttonValue === "Delete") {
+        let depositId = Number(event.currentTarget.name); 
+        let buttonValue = event.currentTarget.value;  
+        let params = { auth_key: auth_key, id: 0 };        
+        if(customerId !== 0 && depositId !== 0 && buttonValue === "Delete"){
             setDeleteTarget({ auth_key, customerId, depositId, buttonValue, params });
-            setDeleteModalOpen(true);
+            setDeleteModalOpen(true);                
         }
-        else {
+        else{
             router.push(`/declaration-printing/cash-savings/cash-savings-add?edit=${btoa(depositId)}`);
-        }
+        }  
     };
 
-    return (
+    return (         
         <>
             <>
                 <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
                     <Alert
-                        onClose={handleSnackbarClose}
-                        severity={VariantSnackbar}
-                        variant="filled"
-                        sx={{ width: '100%', color: "#FFF" }}
+                    onClose={handleSnackbarClose}
+                    severity={VariantSnackbar}
+                    variant="filled"
+                    sx={{ width: '100%', color: "#FFF" }}
                     >
-                        {SnackbarMsg}
+                    {SnackbarMsg}
                     </Alert>
                 </Snackbar>
-
+                
                 {DeleteModalOpen && (
                     <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
                 )}
-            </>
+            </>      
             <div className="cash-savings-wrapper">
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
@@ -131,12 +131,12 @@ export default function CashSavings() {
                 </div>
                 <div className="page-description py-8">
                     <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        現金・預貯金の情報を「<EditNoteOutlinedIcon className="text-primary-gray" />」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
+                    現金・預貯金の情報を「<EditNoteOutlinedIcon className="text-primary-gray"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
                     </p>
                 </div>
                 <div className="cash-list py-3">
                     <table className="w-full border border-light-gray">
-                        {cashSavingsList.map((list, index) => {
+                        {cashSavingsList.map((list, index) => {                            
                             return (
                                 <tr key={index}>
                                     {list.address ?
@@ -153,7 +153,7 @@ export default function CashSavings() {
                                     </td>
                                     <td className="py-2 px-2 border-r border border-light-gray text-right">
                                         <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                            <HighlightOffOutlinedIcon className="text-white" />
+                                            <HighlightOffOutlinedIcon className="text-white" />                                            
                                         </button>
                                     </td>
                                 </tr>
@@ -169,8 +169,7 @@ export default function CashSavings() {
                         </button>
                     </Link>
                 </div>
-                <div className="Total-property-section py-5 md:py-10 lg:py-20 xl:py-20 2xl:py-20 px-5 md:px-10 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
-
+                <div className="Total-property-section py-5 md:py-10 lg:py-20 xl:py-20 2xl:py-20 px-5 md:px-10 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">                    
                     <BackButtonIndex />
                 </div>
             </div>
