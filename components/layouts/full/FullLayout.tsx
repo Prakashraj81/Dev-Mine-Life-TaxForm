@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useRouter } from 'next/router';
 import { styled, Container, Box } from "@mui/material";
 import Header from "./header/Header";
@@ -6,7 +7,6 @@ import Footer from './../../footer';
 import TopStepper from "./stepper/top-stepper";
 import SideBarWidgetList from "./header/sidebar-widget-list";
 import Sidebar from "./sidebar/Sidebar";
-import { useRecentSaveList } from './header/recent-save-lists-context';
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -28,10 +28,10 @@ interface Props {
 }
 
 const FullLayout: React.FC<Props> = ({ children }) => {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(0);
-  const { RecentSaveList, GetRecentSaveList } = useRecentSaveList();
+  let [isSidebarOpen, setSidebarOpen] = useState(true);
+  let [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  let [activeStep, setActiveStep] = useState(0);
+  let [RecentSaveList, setRecentSaveList] = useState([]);
   const router = useRouter();
 
   // Function to determine the active step based on the path
@@ -52,6 +52,24 @@ const FullLayout: React.FC<Props> = ({ children }) => {
       setActiveStep(3);
     } else {
       setActiveStep(0);
+    }
+  };
+
+  // Fetch the recent save list
+  const GetRecentSaveList = async () => {
+    let auth_key = atob(sessionStorage.getItem("auth_key"));
+    const params = { auth_key: auth_key };
+    if (auth_key !== null) {
+      try {
+        const response = await axios.get('https://minelife-api.azurewebsites.net/get_user_activities', { params });
+        if (response.status === 200) {
+          setRecentSaveList(response.data.user_actrivities_details);
+        } else {
+          setRecentSaveList([]);
+        }
+      } catch (error) {
+        console.log("Error", error);
+      }
     }
   };
 

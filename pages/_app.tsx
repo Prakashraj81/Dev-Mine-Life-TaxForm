@@ -7,7 +7,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import createEmotionCache from "../components/layouts/createEmotionCache";
 import theme from '../components/layouts/theme/theme';
-import { RecentSaveListProvider } from '../components/layouts/full/header/recent-save-lists-context';
 import "../styles/index.css";
 import '../styles/_container.css'
 import '../styles/_sidebar.css'
@@ -42,11 +41,6 @@ const MyApp = (props: MyAppProps) => {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         {getLayout(<Component {...pageProps} />)}
-
-        {/* <RecentSaveListProvider>
-            {getLayout(<Component {...pageProps} />)}
-        </RecentSaveListProvider> */}
-
       </ThemeProvider>
     </CacheProvider>
   );

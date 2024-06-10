@@ -7,6 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Box, Button, Typography, Select, MenuItem, InputLabel, FormHelperText } from '@mui/material';
+import FullLayout from "../../../components/layouts/full/FullLayout";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
