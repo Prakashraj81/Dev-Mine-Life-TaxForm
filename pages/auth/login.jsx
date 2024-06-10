@@ -26,6 +26,7 @@ export default function Login(props) {
   let [PasswordError, setPasswordError] = useState(false);
   let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
   let [showPassword, setShowPassword] = useState(false);
+  let [AlertMessage, setAlertMessage] = useState("IDまたはパスワードが違います");
 
   //All input validation check and handling function
   const inputHandlingFunction = (event) => {
@@ -69,9 +70,9 @@ export default function Login(props) {
 
     //Api setup
     if (isSumbitDisabled !== true) {
-      try{
+      try {
         const response = await axios.post('https://minelife-api.azurewebsites.net/user_login', formData);
-        if(response.status === 200){
+        if (response.status === 200) {
           let encode_auth_key = btoa(response.data.auth_key);
           let encode_login = btoa(response.data.is_authenticated);
           sessionStorage.setItem('auth_key', encode_auth_key);
@@ -80,15 +81,21 @@ export default function Login(props) {
           setShowLoader(false);
           router.push(`/basic-information`);
         }
-        else{
+        else {
           setLoginError(true);
           setShowLoader(false);
-        }        
-      } catch (error){
-        setLoginError(true);
+        }
+      } catch (error) {
+        if (error.response.data.error.code === 'InternalServerError') {
+          setAlertMessage("SQL Server connection is failed.");
+          setLoginError(true);
+        }
+        else if (error.response.data.error.message === "Authentication Failure") {
+          setAlertMessage("IDまたはパスワードが違います");
+          setLoginError(true);
+        }
         setShowLoader(false);
-        console.error('Error:', error);
-      }     
+      }
     }
     else {
       setisSumbitDisabled(true);
@@ -102,11 +109,6 @@ export default function Login(props) {
   };
 
 
-
-
-
-
-
   return (
     <>
       <Header />
@@ -114,22 +116,22 @@ export default function Login(props) {
         <div className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
           <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
             <div className="page-heading">
-              <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+              <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                 ログイン
-              </p>
+              </Typography>
             </div>
           </div>
           <div className="page-description py-8">
-            <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+            <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
               登録済みのメールアドレスでログインして下さい
-            </p>
+            </Typography>
           </div>
           <div className="login-forms">
             <form action="#" method="POST">
               <>
                 {LoginError && (
                   <Stack className="pb-5" sx={{ width: '100%' }} spacing={2}>
-                    <Alert severity="error">IDまたはパスワードが違います</Alert>
+                    <Alert severity="error">{AlertMessage}</Alert>
                   </Stack>
                 )}
               </>
@@ -153,9 +155,9 @@ export default function Login(props) {
                     value={UserName}
                   />
                   {UserNameError && (
-                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
-                  {isValidEmail ? null : <p className="text-red-500 mt-2" role="alert">形式が違います</p>}
+                  {isValidEmail ? null : <Typography component={"p"} className="text-red-500 mt-2" role="alert">形式が違います</Typography>}
                 </div>
               </div>
 
@@ -182,12 +184,12 @@ export default function Login(props) {
                     </InputAdornment>
                   </div>
                   {PasswordError && (
-                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
                 </div>
               </div>
 
-              <div className="login-btn pt-10 text-center">
+              <div className="login-btn pt-3 text-center">
                 <button
                   onClick={onSubmit}
                   type="button"
@@ -206,13 +208,13 @@ export default function Login(props) {
                     </span>
                   </Link>
                 </div>
-                <div className="mt-7">
-                  <p className="text-sm text-black font-semibold">
+                <div className="mt-5">
+                  <Typography component={"p"} className="text-sm text-black font-semibold">
                     はじめてご利用の方
-                  </p>
+                  </Typography>
                 </div>
               </div>
-              <div className="register-btn pt-10 text-center">
+              <div className="register-btn pt-7 text-center">
                 <Link href="/auth/register">
                   <button className="bg-white border-2 border-primary-gray rounded px-7 py-2">
                     <span className="text-primary-gray text-sm font-medium">
