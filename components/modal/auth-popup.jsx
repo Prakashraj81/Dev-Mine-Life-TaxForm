@@ -3,7 +3,7 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, B
 import { useRouter } from 'next/router';
 import { Padding } from '@mui/icons-material';
 
-const AuthPopup = ({ open, handleCloseAuthPopup }) => {
+const AuthKeyPopup = ({ open, handleCloseAuthPopup }) => {
     const router = useRouter();
 
     const handleLoginRedirect = () => {
@@ -31,4 +31,4 @@ const AuthPopup = ({ open, handleCloseAuthPopup }) => {
     );
 };
 
-export default AuthPopup;
+export default AuthKeyPopup;

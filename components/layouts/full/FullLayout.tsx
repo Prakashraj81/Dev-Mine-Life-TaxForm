@@ -7,7 +7,7 @@ import Footer from './../../footer';
 import TopStepper from "./stepper/top-stepper";
 import SideBarWidgetList from "./header/sidebar-widget-list";
 import Sidebar from "./sidebar/Sidebar";
-import AuthPopup from "../../modal/auth-popup";
+import AuthKeyPopup from "../../modal/auth-popup";
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -115,7 +115,7 @@ const FullLayout: React.FC<Props> = ({ children }) => {
 
   return (
     <MainWrapper className="mainwrapper">
-      <AuthPopup open={openAuthPopup} />
+      <AuthKeyPopup open={openAuthPopup} handleCloseAuthPopup={handleCloseAuthPopup}/>
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         isMobileSidebarOpen={isMobileSidebarOpen}
