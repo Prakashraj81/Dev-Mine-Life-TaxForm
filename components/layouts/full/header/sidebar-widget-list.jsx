@@ -19,7 +19,7 @@ export default function SideBarWidgetList({ RecentSaveList }) {
       <Box className="sidebar-widget-list">
         <Box className="sidebar-heading border-b">
           <Box className="flex justify-start items-center py-5 mx-5">
-            <TextSnippetOutlinedIcon />
+            <TextSnippetOutlinedIcon className="text-custom-black"/>
             <Typography component={"span"} className="pl-2 text-base lg:text-xl xl:text-xl 2xl:text-xl tracking-2 font-medium">
               最近の詳細
             </Typography>
