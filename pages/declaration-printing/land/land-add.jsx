@@ -45,11 +45,7 @@ export default function LandAdd() {
 
     let [QuestionThree, setQuestionThree] = useState("");
     let [ShowYesOption3, setShowYesOption3] = useState(false);
-    let [ShowNoOption3, setShowNoOption3] = useState(false);
-
-    let [QuestionFour, setQuestionFour] = useState("");
-    let [ShowYesOption4, setShowYesOption4] = useState(false);
-    let [ShowNoOption4, setShowNoOption4] = useState(false);
+    let [ShowNoOption3, setShowNoOption3] = useState(false);    
 
     //Input items
     let [LocationLotNumberYes, setLocationLotNumberYes] = useState("");
@@ -128,20 +124,7 @@ export default function LandAdd() {
             setShowNoOption3(true);
             setShowYesOption3(false);
         }
-    }
-
-    const handleQuestionFour = () => {
-        let radioValue = event.target.value;
-        setQuestionFour(radioValue);
-        if (radioValue === "Yes") {
-            setShowYesOption4(true);
-            setShowNoOption4(false);
-        }
-        else {
-            setShowNoOption4(true);
-            setShowYesOption4(false);
-        }
-    }
+    }   
 
     //Disabled deduction radio button
     const handleDisabledRadio = (event) => {
@@ -674,49 +657,7 @@ export default function LandAdd() {
                         {ShowNoOption3 && (
                             <></>
                         )}
-                    </Box>
-
-                    <Box className="mb-7">
-                        <FormControl>
-                            <Typography component={"label"} className="form-label text-lg" id="demo-row-radio-buttons-group-label">4. 総階数3階以上のマンションでしょうか</Typography>
-                            <RadioGroup
-                                row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="row-radio-buttons-group"
-                                value={QuestionFour}
-                            >
-                                <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionFour} label="はい" sx={{
-                                    '& .MuiSvgIcon-root': {
-                                        fontSize: 16,
-                                    },
-                                }} />
-                                <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionFour} label="いいえ" sx={{
-                                    '& .MuiSvgIcon-root': {
-                                        fontSize: 16,
-                                    },
-                                }} />
-                            </RadioGroup>
-                        </FormControl>
-                        {ShowYesOption4 && (
-                            <>
-                                <Box className="w-full inline-block">
-                                    <Box className="w-full mb-2"><Typography component={"label"}>区分所有補正率の入力</Typography></Box>
-                                    <Box className="w-full">
-                                        <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                            <input
-                                                type="text"
-                                                id="sectionalOwnershipRates"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            />
-                                        </Box>
-                                    </Box>
-                                </Box>
-                            </>
-                        )}
-                        {ShowNoOption4 && (
-                            <></>
-                        )}
-                    </Box>
+                    </Box>                    
 
                     <Box className="w-full inline-block">
                         <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-16">
