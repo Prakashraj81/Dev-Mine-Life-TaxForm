@@ -67,7 +67,7 @@ const Menuitems = [
     child: [
       {        
         old_title: "まとめ",
-        title: "財産債務の一覧",
+        title: "まとめ（財産債務の一覧）",
         icon: <SummarizeOutlinedIcon/>,
         href: "/summary-pages/summary-property", 
         translateHeading: "summary-property",

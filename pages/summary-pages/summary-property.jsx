@@ -354,7 +354,7 @@ export default function SummaryProperty() {
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
                         <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                            {/* まとめ */} 財産債務の一覧
+                            {/* まとめ */} まとめ（財産債務の一覧）
                         </p>
                     </div>
                 </div>

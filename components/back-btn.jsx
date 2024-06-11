@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import { Box, Button } from '@mui/material';
 
 const BackButton = () => {
     const router = useRouter();
@@ -9,18 +10,32 @@ const BackButton = () => {
     };
 
     return (
-        <>
-            <div className="back-btn text-center">
-                <button
-                    type='button'
+        <>            
+            <Box>
+                <Button
+                    type="button"
                     onClick={goToPreviousPage}
-                    className="bg-return-bg rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                    variant="contained"
+                    sx={{
+                        width: 'auto',
+                        backgroundColor: 'gray',
+                        color: 'white',
+                        '&:hover': {
+                            backgroundColor: 'lightgray',
+                            color: 'black',
+                        },
+                        borderRadius: '3px',
+                        paddingLeft: 3.5,
+                        paddingRight: 3.5,
+                        py: 1,
+                        transition: 'all 0.3s ease',
+                    }}
                 >
                     <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                    保存せず戻る
+                        戻る
                     </span>
-                </button>
-            </div>
+                </Button>
+            </Box>
         </>
     )
 };

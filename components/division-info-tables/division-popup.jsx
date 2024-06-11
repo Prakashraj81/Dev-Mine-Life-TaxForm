@@ -73,10 +73,10 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
                             }
                         });
                     } else {
-                        console.error('HeirSharingDetails is not defined or not an array.');
+                        console.log('HeirSharingDetails is not defined or not an array.');
                     }
                 } else {
-                    console.error('ListTotalAmount is not defined.');
+                    console.log('ListTotalAmount is not defined.');
                 }
             }
         };
@@ -164,6 +164,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
         setheir_sharing([...heir_sharing]);
     };
 
+    //Fraction box calculation (Box-1)
     const fractionBoxCalculation_1 = (e, index) => {
         let id = e.currentTarget.id;
         let numerator = parseFloat(e.target.value) || 0;
@@ -182,6 +183,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
         recalculateTotalAmount(updatedHeirListArray);
     };
 
+    //Fraction box calculation (Box-2)
     const fractionBoxCalculation_2 = (e, index) => {
         let id = e.currentTarget.id;
         let denominator = parseFloat(e.target.value) || 0;
@@ -200,6 +202,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
         recalculateTotalAmount(updatedHeirListArray);
     };
 
+    //Fraction box calculation (Both)
     const recalculateTotalAmount = (HeirListArray) => {
         let dividedAmount = 0;
         let undecidedHeirAmount = parseFloat(AmountofMoney.toString().replace(/,/g, '').replace('.', ''));
@@ -219,6 +222,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
         setCalculatedAmounts(calculatedAmounts);
     };
 
+    //Save api
     const onSubmit = async () => {
         let auth_key = atob(sessionStorage.getItem("auth_key"));
         if (auth_key !== null && PropertyId !== 0) {
@@ -312,21 +316,49 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
                                     </Box>
                                 )}
                                 <div className="w-full block pt-3 lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                                    <button
-                                        type='button'
+                                    
+                                    <Button
+                                        type="button"
                                         onClick={handleModalClose}
-                                        className="bg-return-bg rounded px-8 py-2 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                                        variant="contained"
+                                        sx={{
+                                            width: 'auto',
+                                            backgroundColor: 'gray',
+                                            color: 'white',
+                                            '&:hover': {
+                                                backgroundColor: 'primary.main',
+                                                color: 'white',
+                                            },
+                                            borderRadius: '3px',
+                                            paddingLeft: 3,
+                                            paddingRight: 3,
+                                            py: 1,
+                                            transition: 'all 0.3s ease',
+                                        }}
                                     >
-                                        <span className="text-sm font-medium">
-                                            戻る
+                                        <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                        戻る
                                         </span>
-                                    </button>
+                                    </Button>
                                     <Button
                                         type="button"
                                         onClick={onSubmit}
                                         disabled={ShowIncorrectError}
                                         variant="contained"
-                                        className="cursor-pointer bg-primary-color rounded px-8 py-2 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                                        sx={{
+                                            width: 'auto',
+                                            backgroundColor: 'primary.main',
+                                            color: 'white',
+                                            '&:hover': {
+                                                backgroundColor: 'gray',
+                                                color: 'white',
+                                            },
+                                            borderRadius: '3px',
+                                            paddingLeft: 3,
+                                            paddingRight: 3,
+                                            py: 1,
+                                            transition: 'all 0.3s ease',
+                                        }}
                                     >
                                         <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
                                             保存
