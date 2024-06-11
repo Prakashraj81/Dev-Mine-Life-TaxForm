@@ -218,8 +218,16 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
             }
         }
         undecidedHeirAmount = parseFloat(AmountofMoney.toString().replace(/,/g, '').replace('.', '')) - dividedAmount;
-        setUndecidedHeir(undecidedHeirAmount.toLocaleString());
-        setCalculatedAmounts(calculatedAmounts);
+
+        if (undecidedHeirAmount < 0) {
+            setUndecidedHeir(undecidedHeirAmount.toLocaleString());
+            setCalculatedAmounts(calculatedAmounts);
+            setShowIncorrectError(true);
+        } else {
+            setShowIncorrectError(false);
+            setUndecidedHeir(undecidedHeirAmount.toLocaleString());
+            setCalculatedAmounts(calculatedAmounts);
+        }       
     };
 
     //Save api
@@ -326,8 +334,8 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
                                             backgroundColor: 'gray',
                                             color: 'white',
                                             '&:hover': {
-                                                backgroundColor: 'primary.main',
-                                                color: 'white',
+                                                backgroundColor: 'lightgray',
+                                                color: 'black',
                                             },
                                             borderRadius: '3px',
                                             paddingLeft: 3,
@@ -350,8 +358,8 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
                                             backgroundColor: 'primary.main',
                                             color: 'white',
                                             '&:hover': {
-                                                backgroundColor: 'gray',
-                                                color: 'white',
+                                                backgroundColor: 'primary.light',
+                                                color: 'primary.main',
                                             },
                                             borderRadius: '3px',
                                             paddingLeft: 3,

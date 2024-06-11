@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
 import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../components/back-btn";
 import SubmitButton from "../../components/submit-btn";
@@ -18,6 +18,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import JapaneseCalendar from "../../components/inputbox-icon/japanese-calender";
+import CustomInput from "../../components/inputbox-icon/custom-input";
+import CustomPostalcodeInput from "../../components/inputbox-icon/custom-postalcode-input";
+import CustomPhoneInput from "../../components/inputbox-icon/custom-phone-input";
 
 export default function Heir() {
     let router = useRouter();
@@ -41,7 +44,7 @@ export default function Heir() {
     let [Furigana, setFurigana] = useState("");
     let [DateofBirth, setDateofBirth] = useState("");
     let [PostCode, setPostCode] = useState("");
-    let [InheritanceDivisionCompletionDate, setInheritanceDivisionCompletionDate] = useState("");
+    let [InheritanceBoxisionCompletionDate, setInheritanceBoxisionCompletionDate] = useState("");
     let [DateofDeath, setDateofDeath] = useState("");
     let [Profession, setProfession] = useState("");
     let [RelationshipWithDecedent, setRelationshipWithDecedent] = useState("");
@@ -226,7 +229,7 @@ export default function Heir() {
             TelephoneNumber: TelephoneNumber,
             Profession: Profession,
             RelationshipWithDecedent: RelationshipWithDecedent,
-            InheritanceDivisionCompletionDate: InheritanceDivisionCompletionDate,
+            InheritanceBoxisionCompletionDate: InheritanceBoxisionCompletionDate,
             DisabledRadioValue: DisabledRadioValue,
             TaxAdditionAmount: TaxAdditionAmount,
             LegalHeirRadioValue: LegalHeirRadioValue,
@@ -317,184 +320,145 @@ export default function Heir() {
                     <BackdropLoader ShowLoader={ShowLoader} />
                 )}
             </>
-            <div className="basic-information-wrapper">
-                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-                    <div className="page-heading">
-                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+            <Box className="basic-information-wrapper">
+                <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <Box className="page-heading">
+                        <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                             相続人 {propName}
-                        </p>
-                    </div>
-                </div>
-                <div className="page-description py-8">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box className="page-description py-8">
+                    <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         以下の内容を入力して[保存]ボタンを押して下さい。
-                    </p>
-                </div>
-                <div className="login-forms">
+                    </Typography>
+                </Box>
+                <Box className="login-forms">
                     <form action="#" method="POST">
-                        <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
-                                <div className="user-details">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="Name" className="form-label">
+                        <Box className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
+                                <Box className="user-details">
+                                    <Box className="label w-full inline-block">
+                                        <Typography component={"label"} htmlFor="Name" className="form-label">
                                             お名前<i className="text-red-500">*</i>
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="Name"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            onChange={inputHandlingFunction}
-                                            value={Name}
-                                        />
+                                        </Typography>
+                                    </Box>
+                                    <Box className="w-full inline-block mt-2">
+                                        <CustomInput type={"text"} id={"Name"} onChange={inputHandlingFunction} value={Name}/>
                                         {NameError && (
-                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                            <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                         )}
-                                    </div>
-                                </div>
-                            </div>
+                                    </Box>
+                                </Box>
+                            </Box>
 
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
-                                <div className="user-details">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="Furigana" className="form-label">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
+                                <Box className="user-details">
+                                    <Box className="label w-full inline-block">
+                                        <Typography component={"label"} htmlFor="Furigana" className="form-label">
                                             フリガナ<i className="text-red-500">*</i>
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="Furigana"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            onChange={inputHandlingFunction}
-                                            value={Furigana}
-                                        />
+                                        </Typography>
+                                    </Box>
+                                    <Box className="w-full inline-block mt-2">
+                                        <CustomInput type={"text"} id={"Furigana"} onChange={inputHandlingFunction} value={Furigana}/>                                        
                                         {KatakanaError && (
-                                            <p className="text-red-500" role="alert">カタカナのみを気にしてください。</p>
+                                            <Typography component={"p"} className="text-red-500" role="alert">カタカナのみを気にしてください。</Typography>
                                         )}
                                         {FuriganaError && (
-                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                            <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                         )}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Box>
 
-                        <div className="w-full inline-block float-left mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="DateofBirth" className="form-label">
+                        <Box className="w-full inline-block float-left mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} htmlFor="DateofBirth" className="form-label">
                                         生年月日<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
                                     <JapaneseCalendar id={"DateofBirth"} DateValue={DateofBirth} inputHandlingFunction={inputHandlingFunction} />
                                     {DateofBirthError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
 
-                        <div className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         郵便番号
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2 relative">
-                                    <input
-                                        type="text"
-                                        id="PostCode"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
-                                        onKeyPress={handleKeyPress}
-                                        onChange={postalcodeDigit}
-                                        value={PostCode}
-                                    />
-                                    <PostcodeIcon />
-                                </div>
-                                <div className="mt-3">
-                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
-                                </div>
-                                {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
-                            </div>
-                        </div>
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2 relative">                                    
+                                    <CustomPostalcodeInput type={"text"} id={"PostCode"} onChange={postalcodeDigit} onKeyPress={handleKeyPress} value={PostCode}/>                                  
+                                </Box>
+                                <Box className="mt-3">
+                                    <Typography component={"p"} className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
+                                </Box>
+                                {!isValid && <Typography component={"p"}>数字7桁で入力して下さい。海外の場合は入力不要です。</Typography>}
+                            </Box>
+                        </Box>
 
-                        <div className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            <div className="user-details">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <Box className="user-details">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         住所
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="Address"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        onChange={inputHandlingFunction}
-                                        value={Address}
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">                                    
+                                    <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address}/>   
+                                </Box>
+                            </Box>
+                        </Box>
 
-                        <div className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-3 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         電話番号<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="TelephoneNumber"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        onChange={inputHandlingFunction}
-                                        onKeyPress={handleKeyPress}
-                                        value={TelephoneNumber}
-                                    />
-                                    <div className="mt-3">
-                                        <p className="text-xs text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
-                                    </div>
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">                                
+                                    <CustomPhoneInput type={"text"} id={"TelephoneNumber"} onChange={inputHandlingFunction} onKeyPress={handleKeyPress} value={TelephoneNumber}/> 
+                                    <Box className="mt-3">
+                                        <Typography component={"p"} className="text-xs text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
+                                    </Box>
                                     {TelephoneNumberError && (
-                                        <p className="text-red-500 pt-3" role="alert">この項目は必須です</p>
+                                        <Typography component={"p"} className="text-red-500 pt-3" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
 
 
-                        <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
-                                <div className="user-details">
-                                    <div className="label w-full inline-block">
-                                        <label className="form-label">
+                        <Box className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
+                                <Box className="user-details">
+                                    <Box className="label w-full inline-block">
+                                        <Typography component={"label"} className="form-label">
                                             職業
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="Profession"
-                                            onChange={inputHandlingFunction}
-                                            value={Profession}
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                                        </Typography>
+                                    </Box>
+                                    <Box className="w-full inline-block mt-2">                                        
+                                        <CustomInput type={"text"} id={"Profession"} onChange={inputHandlingFunction} value={Profession}/>   
+                                    </Box>
+                                </Box>
+                            </Box>
 
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         被相続人との続柄<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
                                     <select id="RelationshipWithDecedent" value={RelationshipWithDecedent} onChange={handleRelationshipWithDecedent} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
                                         <option value='' id=""></option>
                                         <option id="Disabled_deduction" value="夫"> 夫 </option>
@@ -545,15 +509,15 @@ export default function Heir() {
                                         </optgroup>
                                     </select>
                                     {RelationshipWithDecedentError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
 
-                        <div className="legal-inheritance w-full inline-block float-left mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            <div className="w-full flex items-center justify-start">
-                                <label className="form-label pr-3">法定相続分</label>
+                        <Box className="legal-inheritance w-full inline-block float-left mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <Box className="w-full flex items-center justify-start">
+                                <Typography component={"label"} className="form-label pr-3">法定相続分</Typography>
                                 <input
                                     type="text"
                                     value={"1"}
@@ -567,16 +531,16 @@ export default function Heir() {
                                     disabled
                                     className="form-control text-left w-10 bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
-                            </div>
+                            </Box>
                             <Box className="mt-2">
                                 <Typography target="_blank" component={Link} href={"https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4132.htm"} fontSize={12}>こちらをクリック: <span className="text-blue-600 underline underline-offset-2">法定相続分</span></Typography>
                             </Box>
-                        </div>
+                        </Box>
 
-                        <div className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
+                        <Box className="w-full block lg:flex xl:flex 2xl:flex items-center justify-between mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-3 lg:mb-0 xl:mb-0 2xl:mb-0">
                                 <FormControl>
-                                    <label className="form-label" id="demo-row-radio-buttons-group-label">障害者控除</label>
+                                    <Typography component={"label"} className="form-label" id="demo-row-radio-buttons-group-label">障害者控除</Typography>
                                     <RadioGroup
                                         row
                                         aria-labelledby="demo-row-radio-buttons-group-label"
@@ -585,17 +549,17 @@ export default function Heir() {
                                     >
                                         <FormControlLabel value="None" control={<Radio />} onChange={handleDisabledRadio} label="なし" sx={{
                                             '& .MuiSvgIcon-root': {
-                                                fontSize: 16,
+                                                fontSize: 14,
                                             },
                                         }} />
                                         <FormControlLabel value="General disabled" control={<Radio />} onChange={handleDisabledRadio} label="一般障害者" sx={{
                                             '& .MuiSvgIcon-root': {
-                                                fontSize: 16,
+                                                fontSize: 14,
                                             },
                                         }} />
                                         <FormControlLabel value="Special handicapped" control={<Radio />} onChange={handleDisabledRadio} label="特別障害者" sx={{
                                             '& .MuiSvgIcon-root': {
-                                                fontSize: 16,
+                                                fontSize: 14,
                                             },
                                         }} />
                                     </RadioGroup>
@@ -603,13 +567,13 @@ export default function Heir() {
                                         <Typography target="_blank" component={Link} href={"https://www.nta.go.jp/publication/pamph/koho/kurashi/html/03_2.htm"} fontSize={12}>こちらをクリック: <span className="text-blue-600 underline underline-offset-2">障害者控除</span></Typography>
                                     </Box>
                                 </FormControl>
-                            </div>
-                        </div>
+                            </Box>
+                        </Box>
 
 
-                        <div className="w-full block mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
+                        <Box className="w-full block mb-0 lg:mb-7 xl:mb-7 2xl:mb-7">
                             <FormControl>
-                                <label className="form-label" id="demo-row-radio-buttons-group-label">相続税額の2割加算の対象ですか？</label>
+                                <Typography component={"label"} className="form-label" id="demo-row-radio-buttons-group-label">相続税額の2割加算の対象ですか？</Typography>
                                 <RadioGroup
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
@@ -618,12 +582,12 @@ export default function Heir() {
                                 >
                                     <FormControlLabel value="Yes" control={<Radio />} onChange={handleTaxAdditionAmount} label="Yes" sx={{
                                         '& .MuiSvgIcon-root': {
-                                            fontSize: 16,
+                                            fontSize: 14,
                                         },
                                     }} />
                                     <FormControlLabel value="No" control={<Radio />} onChange={handleTaxAdditionAmount} label="No" sx={{
                                         '& .MuiSvgIcon-root': {
-                                            fontSize: 16,
+                                            fontSize: 14,
                                         },
                                     }} />
                                 </RadioGroup>
@@ -631,39 +595,33 @@ export default function Heir() {
                                     <Typography target="_blank" component={Link} href={"https://www.nta.go.jp/taxes/shiraberu/taxanswer/sozoku/4157.htm"} fontSize={12}>こちらをクリック: <span className="text-blue-600 underline underline-offset-2">相続税額の2割加算の対象ですか</span></Typography>
                                 </Box>
                             </FormControl>
-                        </div>
+                        </Box>
 
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-7">
+                            <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         申告書を提出した税務署<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2 relative">
-                                    <input
-                                        type="text"
-                                        id="WhereTaxReturn"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        onChange={inputHandlingFunction}
-                                        value={WhereTaxReturn}
-                                    />
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2 relative">                                    
+                                    <CustomInput type={"text"} id={"WhereTaxReturn"} onChange={inputHandlingFunction} value={WhereTaxReturn}/>
                                     {WhereTaxReturnError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
 
-                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                            <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                        <Box className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                            <Box className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                                 <BackButton />
                                 <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                            </div>
-                        </div>
+                            </Box>
+                        </Box>
                     </form>
-                </div>
-            </div>
+                </Box>
+            </Box>
         </>
     )
 }

@@ -12,6 +12,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { Box, Button } from '@mui/material';
 
 export default function SummaryProperty() {
     let [Flag, setFlag] = useState(0);
@@ -270,56 +271,48 @@ export default function SummaryProperty() {
             id: 1,
             heading: "現金預金(外貨含む)",
             amount: CashTotalAmount,
-            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/cash-savings",
         },
         {
             id: 2,
             heading: "有価証券",
             amount: SecuritiesTotalAmount,
-            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/securities",
         },
         {
             id: 3,
             heading: "建物",
             amount: 0,
-            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/building",
         },
         {
             id: 4,
             heading: "土地",
             amount: 0,
-            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/land",
         },
         {
             id: 5,
             heading: "家庭用財産",
             amount: HouseHoldPropertyTotalAmount,
-            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/household-property",
         },
         {
             id: 6,
             heading: "死亡保険金等",
             amount: DeathBenifitTotalAmount,
-            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/death-benefit",
         },
         {
             id: 7,
             heading: "死亡退職金等",
             amount: DeathRetirementTotalAmount,
-            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/death-retirement-allowance",
         },
         {
             id: 8,
             heading: "その他財産",
             amount: OthersPropertyTotalAmount,
-            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/other-property",
         },
         {
@@ -327,14 +320,12 @@ export default function SummaryProperty() {
             heading: "債務",
             old_heading: "財産債務の一覧",
             amount: DebtTotalAmount,
-            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/debt",
         },
         {
             id: 10,
             heading: "葬式費用",
             amount: FuneralExpensesTotalAmount,
-            icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/funeral-expenses",
         },
         // {
@@ -388,9 +379,28 @@ export default function SummaryProperty() {
                                             <TableCell align="right" className="font-medium"><span className="font-medium">{list.amount.toLocaleString()}</span></TableCell>
                                             <TableCell align="right" className="font-medium">
                                                 <Link href={list.path}>
-                                                    <button id="decedent_edit" className="text-sm bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                                        {list.icon}
-                                                    </button>
+                                                    <Button
+                                                        sx={{
+                                                            minWidth: 'auto',
+                                                            backgroundColor: 'info.main',
+                                                            color: 'white',
+                                                            '&:hover': {
+                                                                backgroundColor: 'info.light',
+                                                                color: 'info.main',
+                                                                '& .MuiSvgIcon-root': {
+                                                                    color: 'info.main', // Change the icon color on hover
+                                                                },
+                                                            },
+                                                            borderRadius: '3px',
+                                                            paddingLeft: 0.7,
+                                                            paddingRight: 0.7,
+                                                            py: 0.4,
+                                                            transition: 'all 0.7s ease',
+                                                        }}
+                                                        id="decedent_edit"
+                                                    >
+                                                        <EditNoteOutlinedIcon />
+                                                    </Button>
                                                 </Link>
                                             </TableCell>
                                         </TableRow>
@@ -403,19 +413,30 @@ export default function SummaryProperty() {
                 <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
                     <div className="w-full flex justify-evenly items-center">
                         <BackButton />
-                        <div className="end-btn text-center">
-                            <Link href="/division-info/division-information">
-                                <button
-                                    type="button"
-
-                                    className="cursor-pointer bg-primary-color rounded px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                                >
-                                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                                        入力終了（次へ）
-                                    </span>
-                                </button>
-                            </Link>
-                        </div>
+                        <Box>
+                            <Button
+                                type="button"
+                                variant="contained"
+                                sx={{
+                                    width: 'auto',
+                                    backgroundColor: 'primary.main',
+                                    color: 'white',
+                                    '&:hover': {
+                                        backgroundColor: 'primary.light',
+                                        color: 'primary.main',
+                                    },
+                                    borderRadius: '3px',
+                                    paddingLeft: 3,
+                                    paddingRight: 3,
+                                    py: 1,
+                                    transition: 'all 0.3s ease',
+                                }}
+                            >
+                                <Link href="/division-info/division-information" className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                    入力終了（次へ）
+                                </Link>
+                            </Button>
+                        </Box>
                     </div>
                 </div>
             </div>

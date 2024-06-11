@@ -54,7 +54,7 @@ const HeirListAmountShowSkeleton = ({ HeirList, HeirSharingDetails, divisionBoxC
         <Table>
           <TableBody>
             {HeirList.map((heirlist, index) => (
-              <TableRow key={heirlist.heir_id} className='border border-b-1 border-t-0 border-l-0 border-r-0'>
+              <TableRow key={heirlist.heir_id} className='border border-b-1 border-t-1 border-l-0 border-r-0'>
                 <TableCell className='division-table-padding w-40'>
                   <Typography component={"span"} fontSize={14}>{heirlist.name}</Typography>
                 </TableCell>
@@ -76,7 +76,7 @@ const HeirListAmountShowSkeleton = ({ HeirList, HeirSharingDetails, divisionBoxC
                             textAlign: 'right',
                           },
                           '& .MuiInputLabel-root': {
-                            fontSize: '14px',
+                            fontSize: '10px',
                             letterSpacing: '0px',
                           },
                         }}

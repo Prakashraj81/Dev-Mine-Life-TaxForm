@@ -78,7 +78,7 @@ const HeirListFractionShowSkeleton = ({ HeirList, HeirSharingDetails, fractionBo
             <Table>
               <TableBody>
                 {HeirList.map((heirlist, index) => (
-                  <TableRow key={heirlist.heir_id} className='border border-b-1 border-t-0 border-l-0 border-r-0'>
+                  <TableRow key={heirlist.heir_id} className='border border-b-1 border-t-1 border-l-0 border-r-0'>
                     <TableCell className='division-table-padding w-40'><Typography component={"span"} fontSize={14}>{heirlist.name}</Typography></TableCell>
                     <TableCell className='w-25 division-table-padding' align='right'>
                       <Typography paddingRight={1} component={"span"} fontSize={14}>{CalculatedAmounts[index] ? CalculatedAmounts[index].toLocaleString() : 0}</Typography>

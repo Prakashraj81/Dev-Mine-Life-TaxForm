@@ -29,12 +29,17 @@ const theme = createTheme({
       light: "#fdf3f5",
     },
     info: {
-      main: "#0bb2fb",
-      light: "#a7e3f4",
+      oldmain: "#0bb2fb",
+      old_main: "#539BFF",
+      main: "rgb(37 99 235)",
+      light: "rgb(191 219 254)",
+      old_light: "#a7e3f4",
     },
     error: {
-      main: "#e46a76",
-
+      old_main: "#e46a76",
+      main1: "rgb(220 38 38)",
+      main: "rgb(239 68 68)",
+      light: "rgb(254 202 202)",
       dark: "#e45a68",
     },
     warning: {
