@@ -23,16 +23,12 @@ const theme = createTheme({
       contrastText: "#ffffff",
     },
     info: {
-      oldmain: "#0bb2fb",
-      old_main: "#539BFF",
       main: "rgb(37 99 235)",
       light: "rgb(191 219 254)",
-      old_light: "#a7e3f4",
       dark: "#1682d4",
       contrastText: "#ffffff",
     },
     error: {
-      old_main: "#F4002C",
       main: "rgb(220 38 38)",
       light: "#FFE8EC",
       dark: "#F4002C",
