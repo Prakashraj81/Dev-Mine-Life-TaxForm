@@ -26,34 +26,34 @@ const Profile = () => {
     setAnchorEl2(null);
   };
 
-  const router = useRouter();  
-  const FunctionLogOut = async () => {   
-    try{
+  const router = useRouter();
+  const FunctionLogOut = async () => {
+    try {
       let auth_key = atob(sessionStorage.getItem("auth_key"));
       let formData = new FormData();
       formData.append('auth_key', auth_key);
-      if(auth_key !== null){
+      if (auth_key !== null) {
         const response = await axios.post('https://minelife-api.azurewebsites.net/user_logout', formData);
-        if(response.status === 200){
+        if (response.status === 200) {
           sessionStorage.clear();
           localStorage.clear();
           router.push(`/auth/login`);
         }
-        else{
+        else {
           console.log("Please contact vendor");
-        }  
+        }
       }
-      else{
+      else {
         console.log("Invalid auth key");
-      }     
-    } catch (error){     
-      if(error.response.status === 440 && error.response.data.error.message === "Session Expired. Please login again."){
+      }
+    } catch (error) {
+      if (error.response.status === 440 && error.response.data.error.message === "Session Expired. Please login again.") {
         sessionStorage.clear();
         localStorage.clear();
         router.push(`/auth/login`);
-      } 
+      }
       console.error('Error:', error);
-    }   
+    }
   }
 
   return (
@@ -112,6 +112,8 @@ const Profile = () => {
                     sx={{
                       width: 35,
                       height: 35,
+                      maxWidth: 35,
+                      maxHeight: 35,
                     }}
                   />
                 </IconButton>
@@ -165,7 +167,7 @@ const Profile = () => {
             },
           }}
         >
-        
+
           <MenuItem>
             <ListItemIcon>
               <AppRegistrationOutlinedIcon width={18} />
@@ -176,12 +178,12 @@ const Profile = () => {
             <ListItemIcon>
               <BeenhereOutlinedIcon width={18} />
             </ListItemIcon>
-            <p className="text-sm">有料会員登録</p>           
+            <p className="text-sm">有料会員登録</p>
           </MenuItem>
           <Box mt={1} py={1} px={2}>
             <Button
               href=""
-             onClick={FunctionLogOut}
+              onClick={FunctionLogOut}
               variant="outlined"
               color="primary"
               component={Link}
