@@ -324,8 +324,8 @@ export default function SummaryProperty() {
         },
         {
             id: 9,
-            headings: "債務",
-            heading: "財産債務の一覧",
+            heading: "債務",
+            old_heading: "財産債務の一覧",
             amount: DebtTotalAmount,
             icon: <EditNoteOutlinedIcon className="text-white" />,
             path: "/declaration-printing/debt",
@@ -354,7 +354,7 @@ export default function SummaryProperty() {
                 <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <div className="page-heading">
                         <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                            まとめ
+                            {/* まとめ */} 財産債務の一覧
                         </p>
                     </div>
                 </div>

@@ -18,7 +18,7 @@ const AuthKeyPopup = ({ open, handleCloseAuthPopup }) => {
                 <DialogContent>
                     <DialogContentText>
                         <Typography className='tracking-2' component={"p"} fontSize={14}>セッションの有効期限が切れているか、セッションが無効です。</Typography>
-                        <Typography className='tracking-2' component={"p"} fontSize={14}>もう一度ログインしてください。</Typography>
+                        <Typography className='tracking-2' lineHeight={3} component={"p"} fontSize={14}>もう一度ログインしてください。</Typography>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
