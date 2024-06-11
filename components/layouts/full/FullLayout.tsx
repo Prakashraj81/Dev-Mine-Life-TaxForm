@@ -7,6 +7,7 @@ import Footer from './../../footer';
 import TopStepper from "./stepper/top-stepper";
 import SideBarWidgetList from "./header/sidebar-widget-list";
 import Sidebar from "./sidebar/Sidebar";
+import AuthPopup from "../../modal/auth-popup";
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -28,11 +29,12 @@ interface Props {
 }
 
 const FullLayout: React.FC<Props> = ({ children }) => {
+  let [openAuthPopup, setOpenAuthPopup] = useState(false);
   let [isSidebarOpen, setSidebarOpen] = useState(true);
   let [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   let [activeStep, setActiveStep] = useState(0);
   let [RecentSaveList, setRecentSaveList] = useState([]);
-  const router = useRouter();
+  let router = useRouter();
 
   // Function to determine the active step based on the path
   const determineActiveStep = (fullPath: string) => {
@@ -93,8 +95,27 @@ const FullLayout: React.FC<Props> = ({ children }) => {
     };
   }, [router]);
 
+
+
+  useEffect(() => {
+    const handleAuthKeyUpdate = () => {
+      const authKey = sessionStorage.getItem('auth_key');      
+      if (authKey === null) { 
+        setOpenAuthPopup(true);
+      }
+    };
+
+    handleAuthKeyUpdate();
+  }, []);
+
+  const handleCloseAuthPopup = () => {
+    setOpenAuthPopup(false);
+  };
+
+
   return (
     <MainWrapper className="mainwrapper">
+      <AuthPopup open={openAuthPopup} />
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         isMobileSidebarOpen={isMobileSidebarOpen}
