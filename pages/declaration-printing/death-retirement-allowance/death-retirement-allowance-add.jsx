@@ -2,8 +2,7 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
 import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
@@ -12,10 +11,12 @@ import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
+import CustomInput from "../../../components/inputbox-icon/custom-input";
+import CustomPostalcodeInput from "../../../components/inputbox-icon/custom-postalcode-input";
 
-export default function DeathRetirementAllowanceAdd() {  
+export default function DeathRetirementAllowanceAdd() {
     let [HeirList, setHeirList] = useState([]);
-    let [HeirId, setHeirId] = useState(0);  
+    let [HeirId, setHeirId] = useState(0);
     let [NameoftheCompany, setNameoftheCompany] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [Address, setAddress] = useState("");
@@ -38,13 +39,13 @@ export default function DeathRetirementAllowanceAdd() {
 
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
-    
+
     useEffect(() => {
         let deathRetirementId = 0;
         let url = router.asPath;
         let searchParams = new URLSearchParams(url.split('?')[1]);
         searchParams = searchParams.get("edit");
-        if(searchParams !== null){
+        if (searchParams !== null) {
             deathRetirementId = Number(atob(searchParams));
             GetDeathRetirementList(deathRetirementId);
         }
@@ -53,62 +54,62 @@ export default function DeathRetirementAllowanceAdd() {
     }, []);
 
     //Load heir details list
-    const GetHeirList = async() => {
+    const GetHeirList = async () => {
         let auth_key = atob(sessionStorage.getItem("auth_key"));
         const params = { auth_key: auth_key };
-        if(auth_key !== null){
-            try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
-                if(response.status === 200){
+        if (auth_key !== null) {
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', { params });
+                if (response.status === 200) {
                     setHeirList(response.data.heir_list || []);
                 }
-                else{
+                else {
                     setHeirList([]);
                 }
-            }catch (error){
+            } catch (error) {
                 console.error('Error:', error);
             }
-        }  
-        else{
+        }
+        else {
             //Logout();
-        }      
+        }
     };
-    
+
     //Load cash savings details    
-    const GetDeathRetirementList = async(deathRetirementId) => {       
+    const GetDeathRetirementList = async (deathRetirementId) => {
         let auth_key = atob(sessionStorage.getItem("auth_key"));
-        const params = {auth_key: auth_key, id: deathRetirementId };
-        if(auth_key !== null && deathRetirementId !== 0){
-            try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_death_retirement_details', {params});
-                if(response.status === 200){                    
-                    setNameoftheCompany(response.data.death_retirements_details.name_of_work_company); 
+        const params = { auth_key: auth_key, id: deathRetirementId };
+        if (auth_key !== null && deathRetirementId !== 0) {
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_death_retirement_details', { params });
+                if (response.status === 200) {
+                    setNameoftheCompany(response.data.death_retirements_details.name_of_work_company);
                     setPostCode(response.data.death_retirements_details.postal_code);
-                    setAddress(response.data.death_retirements_details.address);  
+                    setAddress(response.data.death_retirements_details.address);
                     //setNameofRetirementAllowance();
-                    setDateofReceipt(response.data.death_retirements_details.receipt_date);   
-                    setHeirId(response.data.death_retirements_details.person_being_photographed);                
-                    setAmountReceived(response.data.death_retirements_details.amount.toLocaleString());                                                      
+                    setDateofReceipt(response.data.death_retirements_details.receipt_date);
+                    setHeirId(response.data.death_retirements_details.person_being_photographed);
+                    setAmountReceived(response.data.death_retirements_details.amount.toLocaleString());
                 }
-                else{
+                else {
 
                 }
-            }catch (error){
+            } catch (error) {
                 console.error('Error:', error);
             }
-        }  
-        else{
+        }
+        else {
             //Logout();
-        }      
+        }
     };
 
     const handleChangeHeir = () => {
         let selectedOption = event.target.options[event.target.selectedIndex];
         let selectedId = Number(selectedOption.value);
         setisSumbitDisabled(false);
-        setShowIncorrectError(false);            
+        setShowIncorrectError(false);
         setHeirListTypeError(false);
-        setHeirId(selectedId);    
+        setHeirId(selectedId);
     }
 
     const AmountReceivedKeyPress = (e) => {
@@ -159,7 +160,7 @@ export default function DeathRetirementAllowanceAdd() {
             setDateofReceipt(inputValue);
             setDateofReceiptError(false);
         }
-        else if(inputId === "NameofRetirementAllowance"){
+        else if (inputId === "NameofRetirementAllowance") {
             setNameofRetirementAllowance(inputValue);
         }
         else {
@@ -183,8 +184,8 @@ export default function DeathRetirementAllowanceAdd() {
         if (AmountReceived == 0) {
             AmountReceived = 0;
         }
-        else {            
-            AmountReceived = parseFloat(AmountReceived.replace(/,/g, '').replace('.', ''));            
+        else {
+            AmountReceived = parseFloat(AmountReceived.replace(/,/g, '').replace('.', ''));
         }
         let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
         if (isNaN(totalBoxValues)) {
@@ -204,7 +205,7 @@ export default function DeathRetirementAllowanceAdd() {
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = async() => {
+    const onSubmit = async () => {
         defaultValues = {
             NameoftheCompany: NameoftheCompany,
             PostCode: PostCode,
@@ -234,37 +235,37 @@ export default function DeathRetirementAllowanceAdd() {
 
         //Api setup
         let auth_key = atob(sessionStorage.getItem("auth_key"));
-        if (isSumbitDisabled !== true && auth_key !== null) {     
+        if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let deathRetirementId = 0;
             let url = router.asPath;
             let searchParams = new URLSearchParams(url.split('?')[1]);
             searchParams = searchParams.get("edit");
-            if(searchParams !== null){
+            if (searchParams !== null) {
                 deathRetirementId = Number(atob(searchParams));
-            }              
+            }
             const formData = new FormData();
             formData.append("auth_key", auth_key);
             formData.append("id", deathRetirementId);
-            formData.append("name_of_work_company", NameoftheCompany);            
-            formData.append("address", Address);    
+            formData.append("name_of_work_company", NameoftheCompany);
+            formData.append("address", Address);
             //formData.append("NameofRetirementAllowance", NameofRetirementAllowance);        
             formData.append("postal_code", PostCode);
             formData.append("receipt_date", DateofReceipt);
             formData.append("heir_id", HeirId);
             AmountReceived = AmountReceived.replace(/,/g, '').replace('.', '');
             formData.append("amount_received", parseFloat(AmountReceived));
-            try{
-                if(deathRetirementId === 0){
+            try {
+                if (deathRetirementId === 0) {
                     response = await axios.post('https://minelife-api.azurewebsites.net/add_death_retirement', formData);
                 }
-                else{
+                else {
                     response = await axios.post('https://minelife-api.azurewebsites.net/edit_death_retirement', formData);
-                }               
-                if(response.status === 200){
-                    router.push(`/declaration-printing/death-retirement-allowance`); 
-                }                
-            }catch(error){
+                }
+                if (response.status === 200) {
+                    router.push(`/declaration-printing/death-retirement-allowance`);
+                }
+            } catch (error) {
                 console.log('Error:', error);
             }
         }
@@ -272,195 +273,161 @@ export default function DeathRetirementAllowanceAdd() {
             setisSumbitDisabled(true);
             setShowLoader(false);
             //Logout();
-        }         
+        }
     };
 
-    
+
     return (
         <>
-        <>
-        {ShowLoader && (
-            <BackdropLoader ShowLoader={ShowLoader} />
-        )}
-        </>
-            
-            <div className="cash-savings-wrapper">
-                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-                    <div className="page-heading">
-                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+            <>
+                {ShowLoader && (
+                    <BackdropLoader ShowLoader={ShowLoader} />
+                )}
+            </>
+
+            <Box className="cash-savings-wrapper">
+                <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <Box className="page-heading">
+                        <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                             死亡退職金等1
-                        </p>
-                    </div>
-                </div>
-                <div className="page-description py-8">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box className="page-description py-8">
+                    <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         以下の内容を入力して[保存]ボタンを押して下さい。
-                    </p>
-                </div>
-                <div className="w-full inline-block">
+                    </Typography>
+                </Box>
+                <Box className="w-full inline-block">
                     <form action="#" method="POST">
-                        
-                        <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="NameoftheCompany" className="form-label">
+
+                        <Box className="w-full inline-block items-center justify-between mb-7">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} htmlFor="NameoftheCompany" className="form-label">
                                         勤務先会社等の名称<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="NameoftheCompany"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                        
-                                        onChange={inputHandlingFunction}
-                                        value={NameoftheCompany}
-                                    />
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
+                                    <CustomInput type={"text"} id={"NameoftheCompany"} onChange={inputHandlingFunction} value={NameoftheCompany} />
                                     {NameoftheCompanyError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
 
-                        <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="Location" className="form-label">
+                        <Box className="w-full inline-block items-center justify-between mb-7">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} htmlFor="Location" className="form-label">
                                         勤務先会社等の所在地（郵便番号）
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2 relative">
-                                    <input
-                                        type="text"
-                                        id="PostCode"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-12"
-                                        onKeyPress={handleKeyPress}
-                                        onChange={postalcodeDigit}
-                                        value={PostCode}
-                                    />
-                                    <PostcodeIcon />
-                                </div>
-                                <div className="mt-3">
-                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
-                                </div>
-                                {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
-                            </div>
-                        </div>
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2 relative">
+                                    <CustomPostalcodeInput type={"text"} id={"PostCode"} onChange={postalcodeDigit} onKeyPress={handleKeyPress} value={PostCode} />
+                                </Box>
+                                <Box className="mt-3">
+                                    <Typography component={"p"} className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
+                                </Box>
+                                {!isValid && <Typography component={"p"}>数字7桁で入力して下さい。海外の場合は入力不要です。</Typography>}
+                            </Box>
+                        </Box>
 
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-7">
+                            <Box className="user-details">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         勤務先会社等の所在地（住所）<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="Address"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        onKeyPress={handleKeyPress}
-                                        onChange={inputHandlingFunction}
-                                        value={Address}
-                                    />
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
+                                    <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} />
                                     {AddressError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
 
-                        <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="NameoftheCompany" className="form-label">
+                        <Box className="w-full inline-block items-center justify-between mb-7">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} htmlFor="NameoftheCompany" className="form-label">
                                         退職手当金などの名称
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="NameofRetirementAllowance"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"                                        
-                                        onChange={inputHandlingFunction}
-                                        value={NameofRetirementAllowance}
-                                    />                                    
-                                </div>
-                            </div>
-                        </div>
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
+                                    <CustomInput type={"text"} id={"NameofRetirementAllowance"} onChange={inputHandlingFunction} value={NameofRetirementAllowance} />
+                                </Box>
+                            </Box>
+                        </Box>
 
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-7">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         受取年月日<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">                                    
-                                    <JapaneseCalendar id={"DateofReceipt"} DateValue={DateofReceipt} inputHandlingFunction={inputHandlingFunction}/>
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
+                                    <JapaneseCalendar id={"DateofReceipt"} DateValue={DateofReceipt} inputHandlingFunction={inputHandlingFunction} />
                                     {DateofReceiptError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
 
 
 
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
-                                    受け取った相続人<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <select id="HeirListType" value={HeirId} onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                    <option value='' id="0"></option>
-                                    {HeirList.map((option) => (
-                                        <option key={option.heir_id} value={option.heir_id}>
-                                            {option.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                {HeirListTypeError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
+                        <Box className="w-full block items-center justify-between mb-7">
+                            <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
+                                        受け取った相続人<i className="text-red-500">*</i>
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
+                                    <select id="HeirListType" value={HeirId} onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
+                                        <option value='' id="0"></option>
+                                        {HeirList.map((option) => (
+                                            <option key={option.heir_id} value={option.heir_id}>
+                                                {option.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {HeirListTypeError && (
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    )}
+                                </Box>
+                            </Box>
+                        </Box>
 
 
 
 
-                        <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full inline-block items-center justify-between mb-7">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         受け取った金額
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="AmountReceived"
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        value={AmountReceived}
-                                        onChange={AmountReceivedKeyPress}
-                                        onKeyPress={handleKeyPress}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton/>              
-                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>                                           
-                        </div>     
-                   </form>
-                </div>
-            </div>
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
+                                    <CustomInput type={"text"} id={"AmountReceived"} onChange={AmountReceivedKeyPress} value={AmountReceived} onKeyPress={handleKeyPress} textAlign={"right"} />
+                                </Box>
+                            </Box>
+                        </Box>
+                        <Box className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                            <Box className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                                <BackButton />
+                                <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                            </Box>
+                        </Box>
+                    </form>
+                </Box>
+            </Box>
         </>
     )
 }

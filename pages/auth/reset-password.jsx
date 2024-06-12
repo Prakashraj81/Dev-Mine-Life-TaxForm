@@ -13,6 +13,7 @@ import Header from "../../components/header";
 import Footer from "../../components/footer";
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
 import BackdropLoader from '../../components/loader/backdrop-loader';
+import CustomInput from "../../components/inputbox-icon/custom-input";
 
 export default function OtpVerification() {
   let [Email, setEmail] = useState("");
@@ -109,24 +110,24 @@ export default function OtpVerification() {
   return (
     <>
       <Header />
-      <div className="forget-password-form-wrapper py-32">
-        <div className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
-          <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-            <div className="page-heading">
-              <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+      <Box className="forget-password-form-wrapper py-12">
+        <Box className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
+          <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+            <Box className="page-heading">
+              <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                 メールアドレスの確認
-              </p>
-            </div>
-          </div>
-          <div className="page-description py-8">
-            <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+              </Typography>
+            </Box>
+          </Box>
+          <Box className="page-description py-8">
+            <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
               入力いただいたメールアドレス宛に６桁の認証コードを送信しました。
-            </p>
-            <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium mt-1">
+            </Typography>
+            <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium mt-1">
               認証コードを入力して下さい。
-            </p>
-          </div>
-          <div className="login-forms">
+            </Typography>
+          </Box>
+          <Box className="login-forms">
             <form action="#" method="POST">
               <>
                 {OtpCheckError && (
@@ -153,31 +154,18 @@ export default function OtpVerification() {
                     パスワード
                   </Typography>
                 </Box>
-                <Box className="mb-5">
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    className="form-control w-full mx-auto bg-custom-gray focus:outline-none border-0 rounded h-12 pl-3 focus:ring-0 hover:ring-0"
-                    id="new_password"
-                    onChange={handleInput}
-                    value={new_password}
-                    endAdornment={
-                      <InputAdornment>
-                        <IconButton
-                          size="small"
-                          id="new_password"
-                          onClick={handleTogglePassword}
-                        >
-                          {showPassword ? (
-                            <VisibilityOff fontSize="small" />
-                          ) : (
-                            <Visibility fontSize="small" />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
+                <Box className="mb-5">                 
+                  <CustomInput type={showPassword ? 'text' : 'password'} id={"new_password"} onChange={handleInput} value={new_password} />
+                  <Box className="py-2 mt-2">
+                    <InputAdornment>
+                      <IconButton id="new_password" onClick={handleTogglePassword} >
+                        {showPassword ? <Visibility style={{ width: '18px', height: '18px' }} /> : <VisibilityOff style={{ width: '18px', height: '18px' }} />}
+                      </IconButton>
+                      <Typography fontSize={12} component={"label"} className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</Typography>
+                    </InputAdornment>
+                  </Box>                
                   {new_password_error && (
-                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
                 </Box>                
 
@@ -187,31 +175,18 @@ export default function OtpVerification() {
                   </Typography>
                 </Box>
                 <>
-                  <Box className="mb-5">
-                    <Input
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      className="form-control w-full mx-auto bg-custom-gray focus:outline-none border-0 rounded h-12 pl-3"
-                      id="confirm_password"
-                      onChange={handleInput}
-                      value={confirm_password}
-                      endAdornment={
-                        <InputAdornment>
-                          <IconButton
-                            size="small"
-                            id="confirm_password"
-                            onClick={handleTogglePassword}
-                          >
-                            {showConfirmPassword ? (
-                              <VisibilityOff fontSize="small" />
-                            ) : (
-                              <Visibility fontSize="small" />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
+                  <Box className="mb-5">                    
+                    <CustomInput type={showConfirmPassword ? 'text' : 'password'} id={"confirm_password"} onChange={handleInput} value={confirm_password} />
+                  <Box className="py-2 mt-2">
+                    <InputAdornment>
+                      <IconButton id="confirm_password" onClick={handleTogglePassword} >
+                        {showConfirmPassword ? <Visibility style={{ width: '18px', height: '18px' }} /> : <VisibilityOff style={{ width: '18px', height: '18px' }} />}
+                      </IconButton>
+                      <Typography fontSize={12} component={"label"} className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</Typography>
+                    </InputAdornment>
+                  </Box>          
                     {confirm_password_error && (
-                      <p className="text-red-500" role="alert">この項目は必須です</p>
+                      <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                     )}
                   </Box>                  
 
@@ -221,35 +196,43 @@ export default function OtpVerification() {
                       認証コード
                     </Typography>
                   </Box>
-                  <Box className="mb-5">
-                    <input
-                      type="text"
-                      id="pwd_code"
-                      onChange={handleInput}
-                      value={pwd_code}
-                      className="form-control w-full mx-auto bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                    />
+                  <Box className="mb-5">                    
+                    <CustomInput type={'text'} id={"pwd_code"} onChange={handleInput} value={pwd_code} />
                     {pwd_code_error && (
-                      <p className="text-red-500" role="alert">この項目は必須です</p>
+                      <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                     )}
                   </Box>                 
 
                 </>
-                <div className="login-btn pt-10 text-center">
-                  <button
+                <Box className="login-btn pt-10 text-center">
+                  <Button
                     type="button"
                     onClick={onSubmit}
-                    className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                  >
+                    variant="contained"
+                    sx={{
+                        width: 'auto',
+                        backgroundColor: 'primary.main',
+                        color: 'white',
+                        '&:hover': {
+                            backgroundColor: 'primary.light',
+                            color: 'primary.main',
+                        },                        
+                        borderRadius: '3px',
+                        paddingLeft: 3,
+                        paddingRight: 3,
+                        py: 1,
+                        transition: 'all 0.3s ease',
+                    }}
+                >
                     <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                      次へ
+                    次へ
                     </span>
-                  </button>
-                </div>
+                </Button>
+                </Box>
               </form>
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
       <Footer />
     </>
   );

@@ -12,7 +12,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 
 export default function SummaryProperty() {
     let [Flag, setFlag] = useState(0);
@@ -341,20 +341,20 @@ export default function SummaryProperty() {
 
     return (
         <>
-            <div className="summary-property-wrapper">
-                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-                    <div className="page-heading">
-                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+            <Box className="summary-property-wrapper">
+                <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <Box className="page-heading">
+                        <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                             {/* まとめ */} まとめ（財産債務の一覧）
-                        </p>
-                    </div>
-                </div>
-                <div className="page-description py-8">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box className="page-description py-8">
+                    < Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         入力したい項目の「<EditNoteOutlinedIcon className="text-primary-gray" />」ボタンをクリックして各財産情報を入力してください。 入力が完了しましたら「入力終了（次へ）」をクリックして贈与・控除の入力へ進んで下さい。
-                    </p>
-                </div>
-                <div className="summary-tables-wrapper">
+                    </Typography>
+                </Box>
+                <Box className="summary-tables-wrapper">
                     {loading ? (
                         // Render skeleton loader for each list item
                         Array.from({ length: 20 }, (_, index) => (
@@ -394,7 +394,7 @@ export default function SummaryProperty() {
                                                             borderRadius: '3px',
                                                             paddingLeft: 0.7,
                                                             paddingRight: 0.7,
-                                                            py: 0.4,
+                                                            py: 0.5,
                                                             transition: 'all 0.7s ease',
                                                         }}
                                                         id="decedent_edit"
@@ -409,9 +409,9 @@ export default function SummaryProperty() {
                             </Table>
                         </>
                     )}
-                </div>
-                <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                    <div className="w-full flex justify-evenly items-center">
+                </Box>
+                <Box className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                    <Box className="w-full flex justify-evenly items-center">
                         <BackButton />
                         <Box>
                             <Button
@@ -432,14 +432,14 @@ export default function SummaryProperty() {
                                     transition: 'all 0.3s ease',
                                 }}
                             >
-                                <Link href="/division-info/division-information" className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                                <Link href="/Boxision-info/Boxision-information" className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
                                     入力終了（次へ）
                                 </Link>
                             </Button>
                         </Box>
-                    </div>
-                </div>
-            </div>
+                    </Box>
+                </Box>
+            </Box>
         </>
     )
 }

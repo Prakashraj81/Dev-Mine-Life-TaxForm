@@ -3,8 +3,7 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
 import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
@@ -13,6 +12,8 @@ import FullLayout from '../../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
+import CustomInput from "../../../components/inputbox-icon/custom-input";
+import CustomAmountInput from "../../../components/inputbox-icon/custom-amount-input";
 
 export default function OtherPropertyAdd() {
     let PropertyList = [
@@ -65,36 +66,36 @@ export default function OtherPropertyAdd() {
         let url = router.asPath;
         let searchParams = new URLSearchParams(url.split('?')[1]);
         searchParams = searchParams.get("edit");
-        if(searchParams !== null){
+        if (searchParams !== null) {
             OtherPropertyId = Number(atob(searchParams));
             GetOtherPropertyDetails(OtherPropertyId);
         }
     }, []);
 
-    
+
     //Load other property details    
-    const GetOtherPropertyDetails = async(OtherPropertyId) => {       
+    const GetOtherPropertyDetails = async (OtherPropertyId) => {
         let auth_key = atob(sessionStorage.getItem("auth_key"));
-        const params = {auth_key: auth_key, id: OtherPropertyId };
-        if(auth_key !== null && OtherPropertyId !== 0){
-            try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_other_assets_details', {params});
-                if(response.status === 200){                    
-                    setPropertyName(response.data.other_assets_details.property_name); 
+        const params = { auth_key: auth_key, id: OtherPropertyId };
+        if (auth_key !== null && OtherPropertyId !== 0) {
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_other_assets_details', { params });
+                if (response.status === 200) {
+                    setPropertyName(response.data.other_assets_details.property_name);
                     setOtherParty(response.data.other_assets_details.other_party);
-                    setValuation(response.data.other_assets_details.valuation.toLocaleString());                                                      
+                    setValuation(response.data.other_assets_details.valuation.toLocaleString());
                 }
-                else{
+                else {
 
                 }
-            }catch (error){
+            } catch (error) {
                 console.error('Error:', error);
             }
-        }  
-        else{
+        }
+        else {
             //Logout();
-        }      
-    };    
+        }
+    };
 
     //Postal code 7 digit limit function
     const [isValid, setIsValid] = useState(true);
@@ -113,8 +114,8 @@ export default function OtherPropertyAdd() {
     const handlePropertyType = (event) => {
         let selectedValue = event.target.value;
         let selectedOptions = PropertyList.find(option => option.value === selectedValue);
-        let selectedId = Number(selectedOptions.id);        
-        setProperty(selectedValue);        
+        let selectedId = Number(selectedOptions.id);
+        setProperty(selectedValue);
         setisSumbitDisabled(false);
         if (selectedId === 1) {
             setShowContent(false);
@@ -212,7 +213,7 @@ export default function OtherPropertyAdd() {
             setReductionAmount(0);
         }
         setisSumbitDisabled(false);
-    }   
+    }
 
 
     let flag = 0;
@@ -255,7 +256,7 @@ export default function OtherPropertyAdd() {
         setisSumbitDisabled(false);
     }
 
-    const ValuationKeyPress = (e) => {        
+    const ValuationKeyPress = (e) => {
         let valuation = e.target.value;
         valuation = valuation.replace(/,/g, '').replace('.', '');
         valuation = parseFloat(valuation);
@@ -272,7 +273,7 @@ export default function OtherPropertyAdd() {
         setisSumbitDisabled(false);
     }
 
-  
+
 
     //All input validation check and handling function
     const inputHandlingFunction = (event) => {
@@ -283,13 +284,13 @@ export default function OtherPropertyAdd() {
             setPropertyName(inputValue);
             setPropertyNameError(false);
         }
-        else if(inputId === "OtherParty"){
+        else if (inputId === "OtherParty") {
             setOtherParty(inputValue);
         }
         else if (inputId === "DateofAcquisition") {
             setDateofAcquisition(inputValue);
             setDateofAcquisitionError(false);
-        }       
+        }
         else {
             setAddress(inputValue);
             setAddressError(false);
@@ -298,11 +299,11 @@ export default function OtherPropertyAdd() {
     }
 
 
-    
+
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = async() => {
+    const onSubmit = async () => {
         defaultValues = {
             Property: Property,
             PropertyName: PropertyName,
@@ -315,7 +316,7 @@ export default function OtherPropertyAdd() {
             Valuation: Valuation,
             UndecidedHeir: UndecidedHeir,
             TotalPrice: Valuation,
-            boxValues:boxValues,
+            boxValues: boxValues,
         }
 
         //input Validation        
@@ -349,33 +350,33 @@ export default function OtherPropertyAdd() {
         }
         //Api setup
         let auth_key = atob(sessionStorage.getItem("auth_key"));
-        if (isSumbitDisabled !== true && auth_key !== null) {     
+        if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let OtherPropertyId = 0;
             let url = router.asPath;
             let searchParams = new URLSearchParams(url.split('?')[1]);
             searchParams = searchParams.get("edit");
-            if(searchParams !== null){
+            if (searchParams !== null) {
                 OtherPropertyId = Number(atob(searchParams));
-            }              
+            }
             const formData = new FormData();
             formData.append("auth_key", auth_key);
             formData.append("id", OtherPropertyId);
-            formData.append("property_name", PropertyName);            
+            formData.append("property_name", PropertyName);
             formData.append("other_party", OtherParty);
             Valuation = Valuation.replace(/,/g, '').replace('.', '');
             formData.append("valuation", parseFloat(Valuation));
-            try{
-                if(OtherPropertyId === 0){
+            try {
+                if (OtherPropertyId === 0) {
                     response = await axios.post('https://minelife-api.azurewebsites.net/add_other_assets', formData);
                 }
-                else{
+                else {
                     response = await axios.post('https://minelife-api.azurewebsites.net/edit_other_assets', formData);
-                }               
-                if(response.status === 200){
-                    router.push(`/declaration-printing/other-property`); 
-                }                
-            }catch(error){
+                }
+                if (response.status === 200) {
+                    router.push(`/declaration-printing/other-property`);
+                }
+            } catch (error) {
                 console.log('Error:', error);
             }
         }
@@ -383,88 +384,76 @@ export default function OtherPropertyAdd() {
             setisSumbitDisabled(true);
             setShowLoader(false);
             //Logout();
-        }        
+        }
     };
 
-    
+
     return (
         <>
-         <>
-        {ShowLoader && (
-            <BackdropLoader ShowLoader={ShowLoader} />
-        )}
-        </>
-           
-            <div className="other-property-wrapper">
-                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-                    <div className="page-heading">
-                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+            <>
+                {ShowLoader && (
+                    <BackdropLoader ShowLoader={ShowLoader} />
+                )}
+            </>
+
+            <Box className="other-property-wrapper">
+                <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <Box className="page-heading">
+                        <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                             その他の財産1
-                        </p>
-                    </div>
-                </div>
-                <div className="page-description py-8">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box className="page-description py-8">
+                    <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         以下の内容を入力して[保存]ボタンを押して下さい。
-                    </p>
-                </div>
+                    </Typography>
+                </Box>
 
                 <form action="#" method="POST">
-                    
-                        <div className="w-full flex items-center justify-between mb-7"> 
-                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
-                                    財産の名称<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    id="PropertyName"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    onChange={inputHandlingFunction}
-                                    value={PropertyName}
-                                />
-                                {PropertyNameError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                        </div>
 
-                        <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                            <div className="user-details">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
-                                    相手先
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    id="OtherParty"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3" 
-                                    onChange={inputHandlingFunction}
-                                    value={OtherParty}                                   
-                                />                          
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <Box className="w-full flex items-center justify-between mb-7">
+                        <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} className="form-label">
+                                    財産の名称<i className="text-red-500">*</i>
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2">                                
+                                <CustomInput type={"text"} id={"PropertyName"} onChange={inputHandlingFunction} value={PropertyName} />
+                                {PropertyNameError && (
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                )}
+                            </Box>
+                        </Box>
+
+                        <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                            <Box className="user-details">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
+                                        相手先
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">                                    
+                                    <CustomInput type={"text"} id={"OtherParty"} onChange={inputHandlingFunction} value={OtherParty} />
+                                </Box>
+                            </Box>
+                        </Box>
+                    </Box>
 
                     {ShowContent && (
-                        <div className="py-3"><p>相続人が<span className="font-semibold">23歳未満、在学中、教育訓練給付⾦の⽀給対象となる教育訓練を受講している</span>のいずれかに該当する場合は相続税の課税対象外ですので⼊⼒は不要です。</p></div>
+                        <Box className="py-3"><Typography component={"p"}>相続人が<span className="font-semibold">23歳未満、在学中、教育訓練給付⾦の⽀給対象となる教育訓練を受講している</span>のいずれかに該当する場合は相続税の課税対象外ですので⼊⼒は不要です。</Typography></Box>
                     )}
 
                     {ShowDateofAcquisition && (
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-7">
+                            <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         財産の取得日<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
                                     <input
                                         type="date"
                                         id="DateofAcquisition"
@@ -473,22 +462,22 @@ export default function OtherPropertyAdd() {
                                         value={DateofAcquisition}
                                     />
                                     {DateofAcquisitionError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
                     )}
 
                     {ShowPostCode && (
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-7">
+                            <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         郵便番号
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2 relative">
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2 relative">
                                     <input
                                         type="text"
                                         id="PostCode"
@@ -497,94 +486,71 @@ export default function OtherPropertyAdd() {
                                         onChange={postalcodeDigit}
                                         value={PostCode}
                                     />
-                                    <PostcodeIcon />
-                                </div>
-                                <div className="mt-3">
-                                    <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
-                                </div>
-                                {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
-                            </div>
-                        </div>
+                                </Box>
+                                <Box className="mt-3">
+                                    <Typography component={"p"} className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
+                                </Box>
+                                {!isValid && <Typography component={"p"}>数字7桁で入力して下さい。海外の場合は入力不要です。</Typography>}
+                            </Box>
+                        </Box>
                     )}
 
 
                     {ShowAddress && (
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details w-full block">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-7">
+                            <Box className="user-details w-full block">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         住所<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="Address"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        onChange={inputHandlingFunction}
-                                        value={Address}
-                                    />
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">                                 
+                                    <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} />
                                     {AddressError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
                     )}
 
                     {ShowUnitPriceQuantity && (
-                        <div className="w-full flex items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="user-details">
-                                    <div className="label w-full inline-block">
-                                        <label className="form-label">
+                        <Box className="w-full flex items-center justify-between mb-7">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <Box className="user-details">
+                                    <Box className="label w-full inline-block">
+                                        <Typography component={"label"} className="form-label">
                                             単価
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="UnitPrice"
-                                            value={UnitPrice}
-                                            onChange={onchangeUnitPrice}
-                                            onKeyPress={handleKeyPress}
-                                            autocomplete="off"
-                                            className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                                        </Typography>
+                                    </Box>
+                                    <Box className="w-full inline-block mt-2">                                        
+                                        <CustomInput type={"text"} id={"UnitPrice"} onChange={onchangeUnitPrice} onKeyPress={handleKeyPress} value={UnitPrice} />
+                                    </Box>
+                                </Box>
+                            </Box>
 
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="Quantity" className="form-label">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} htmlFor="Quantity" className="form-label">
                                         数量
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="Quantity"
-                                        value={Quantity}
-                                        onChange={onchangeQuantity}
-                                        onKeyPress={handleKeyPress}
-                                        autocomplete="off"
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">                                   
+                                    <CustomInput type={"text"} id={"Quantity"} onChange={onchangeQuantity} onKeyPress={handleKeyPress} value={Quantity} textAlign={"right"} />
+                                </Box>
+                            </Box>
+                        </Box>
                     )}
 
                     {ShowReductionRate && (
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-7">
+                            <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         減額割合<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
                                     <input
                                         type="text"
                                         id="ReductionRate"
@@ -594,64 +560,55 @@ export default function OtherPropertyAdd() {
                                         autocomplete="off"
                                     />
                                     {ReductionRateError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
                     )}
 
 
                     {ShowValuation && (
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-7">
+                            <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         評価額<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2 relative">
-                                    <input
-                                        type="text"
-                                        id="Valuation"
-                                        className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                        onChange={ValuationKeyPress}
-                                        onKeyPress={handleKeyPress}
-                                        value={Valuation}
-                                        autocomplete="off"                                        
-                                    />
-                                    <UnitPriceIcon />
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2 relative">                                  
+                                    <CustomAmountInput type={"text"} id={"Valuation"} onChange={ValuationKeyPress} onKeyPress={handleKeyPress} value={Valuation} textAlign={"right"}/>
                                     {ValuationError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
                     )}
 
 
                     {ShowCompensatoryProperty && (
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full block items-center justify-between mb-7">
+                            <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label">
                                         代償財産の分割方法
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
 
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
                     )}
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton/>              
+                    <Box className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                        <Box className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                            <BackButton />
                             <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>                                           
-                        </div>      
-                   </form>
-            </div>
+                        </Box>
+                    </Box>
+                </form>
+            </Box>
         </>
     )
 }

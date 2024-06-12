@@ -3,8 +3,7 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
 import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
@@ -14,7 +13,7 @@ import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-ico
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import PrintIcon from '@mui/icons-material/Print';
-import { list } from "postcss";
+import CustomInput from "../../../components/inputbox-icon/custom-input";
 
 export default function CashSavingsAdd() {
     let DepositList = [
@@ -34,7 +33,7 @@ export default function CashSavingsAdd() {
         { id: 3, name: "Prakashraj", name1: "Prakashraj" },
         { id: 4, name: "Gowtham", name1: "Gowtham" },
     ];
-    
+
     let [DepositType, setDepositType] = useState("");
     let [FinancialInstitutionName, setFinancialInstitutionName] = useState("");
     let [PostCode, setPostCode] = useState("");
@@ -45,7 +44,7 @@ export default function CashSavingsAdd() {
     let [ShowPostCode, setShowPostCode] = useState(false);
     let [ShowAddress, setShowAddress] = useState(false);
     let [UndecidedHeir, setUndecidedHeir] = useState("0");
-    let [totalPrice, settotalPrice] = useState("0");    
+    let [totalPrice, settotalPrice] = useState("0");
     let [boxValues, setBoxValues] = useState([]);
 
     //Error state and button disabled
@@ -56,23 +55,23 @@ export default function CashSavingsAdd() {
     let [AddressError, setAddressError] = useState(false);
     let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
 
-     // Proceed to next step
-     let [ShowLoader, setShowLoader] = useState(false);
-     
-    
+    // Proceed to next step
+    let [ShowLoader, setShowLoader] = useState(false);
+
+
     useEffect(() => {
         setShowFinancialInstitutionName(true);
         setShowPostCode(false);
-        setShowAddress(false);        
-        
+        setShowAddress(false);
+
         let depositId = 0;
         let url = router.asPath;
         let searchParams = new URLSearchParams(url.split('?')[1]);
         searchParams = searchParams.get("edit");
-        if(searchParams !== null){
+        if (searchParams !== null) {
             depositId = Number(atob(searchParams));
             GetCashSavingsDetails(depositId);
-        }        
+        }
     }, []);
 
     //Clear function
@@ -87,43 +86,43 @@ export default function CashSavingsAdd() {
 
 
     //Load cash savings details    
-    const GetCashSavingsDetails = async(depositId) => {       
+    const GetCashSavingsDetails = async (depositId) => {
         let auth_key = atob(sessionStorage.getItem("auth_key"));
-        const params = {auth_key: auth_key, id: depositId };
-        if(auth_key !== null && depositId !== 0){
-            try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_cash_deposit', {params});
-                if(response.status === 200){                    
-                    setDepositType(response.data.cash_deposit_details.deposit_type);                      
-                    setAmountofMoney(response.data.cash_deposit_details.amount.toLocaleString());   
-                    if(response.data.cash_deposit_details.financial_institution_name !== ""){
+        const params = { auth_key: auth_key, id: depositId };
+        if (auth_key !== null && depositId !== 0) {
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_cash_deposit', { params });
+                if (response.status === 200) {
+                    setDepositType(response.data.cash_deposit_details.deposit_type);
+                    setAmountofMoney(response.data.cash_deposit_details.amount.toLocaleString());
+                    if (response.data.cash_deposit_details.financial_institution_name !== "") {
                         setShowPostCode(false);
                         setShowAddress(false);
                         setFinancialInstitutionName(response.data.cash_deposit_details.financial_institution_name);
-                    }  
-                    else{
+                    }
+                    else {
                         setShowPostCode(response.data.cash_deposit_details.postal_code);
                         setShowAddress(response.data.cash_deposit_details.address);
                         setFinancialInstitutionName(false);
-                    }                                      
+                    }
                 }
-                else{
+                else {
 
                 }
-            }catch (error){
+            } catch (error) {
                 console.error('Error:', error);
             }
-        }  
-        else{
+        }
+        else {
             //Logout();
-        }      
+        }
     };
 
     //Deposit type dropdown
     const handleDepositType = (event) => {
         let selectedValue = event.target.value;
         let selectedOptions = DepositList.find(option => option.value === selectedValue);
-        let selectedId = Number(selectedOptions.id);        
+        let selectedId = Number(selectedOptions.id);
         setDepositType(selectedValue);
         setisSumbitDisabled(false);
         clearFunction();
@@ -202,7 +201,7 @@ export default function CashSavingsAdd() {
         }
         setisSumbitDisabled(false);
     }
-    
+
 
     function valueConvertFun(convertValue) {
         if (convertValue === 0) {
@@ -248,7 +247,7 @@ export default function CashSavingsAdd() {
         }
     }
 
-     //Footer box values and calculation
+    //Footer box values and calculation
     let handleBoxValueChange = (e, index) => {
         let newValue = parseFloat(e.target.value);
         if (isNaN(newValue)) {
@@ -285,7 +284,7 @@ export default function CashSavingsAdd() {
     //Submit insert and edit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = async() => {        
+    const onSubmit = async () => {
         defaultValues = {
             DepositType: DepositType,
             FinancialInstitutionName: FinancialInstitutionName,
@@ -306,14 +305,14 @@ export default function CashSavingsAdd() {
             if (ShowFinancialInstitutionName === true) {
                 setFinancialInstitutionNameError(true);
                 isSumbitDisabled = true;
-            }            
+            }
         }
 
         if (defaultValues.Address === "") {
             if (ShowAddress === true) {
                 setAddressError(true);
                 isSumbitDisabled = true;
-            }            
+            }
         }
 
         if (defaultValues.AmountofMoney !== "" || defaultValues.AmountofMoney === 0) {
@@ -327,35 +326,35 @@ export default function CashSavingsAdd() {
 
         //Api setup
         let auth_key = atob(sessionStorage.getItem("auth_key"));
-        if (isSumbitDisabled !== true && auth_key !== null) {     
+        if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let depositId = 0;
             let url = router.asPath;
             let searchParams = new URLSearchParams(url.split('?')[1]);
             searchParams = searchParams.get("edit");
-            if(searchParams !== null){
+            if (searchParams !== null) {
                 depositId = Number(atob(searchParams));
-            }              
+            }
             const formData = new FormData();
             formData.append("auth_key", auth_key);
             formData.append("id", depositId);
-            formData.append("deposit_type", DepositType);            
+            formData.append("deposit_type", DepositType);
             formData.append("address", Address);
             formData.append("financial_institution_name", FinancialInstitutionName);
             formData.append("postal_code", PostCode);
             AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
             formData.append("amount", parseFloat(AmountofMoney));
-            try{
-                if(depositId === 0){
+            try {
+                if (depositId === 0) {
                     response = await axios.post('https://minelife-api.azurewebsites.net/add_cash_deposit', formData);
                 }
-                else{
+                else {
                     response = await axios.post('https://minelife-api.azurewebsites.net/edit_cash_deposit', formData);
-                }               
-                if(response.status === 200){
-                    router.push(`/declaration-printing/cash-savings`); 
-                }                
-            }catch(error){
+                }
+                if (response.status === 200) {
+                    router.push(`/declaration-printing/cash-savings`);
+                }
+            } catch (error) {
                 console.log('Error:', error);
             }
         }
@@ -364,40 +363,40 @@ export default function CashSavingsAdd() {
             setShowLoader(false);
             //Logout();
         }
-    };    
-   
-    return (        
+    };
+
+    return (
         <>
-        <>
-        {ShowLoader && (
-            <BackdropLoader ShowLoader={ShowLoader} />
-        )}
-        </>            
-            <div className="cash-savings-wrapper">
-                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-                    <div className="page-heading">
-                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+            <>
+                {ShowLoader && (
+                    <BackdropLoader ShowLoader={ShowLoader} />
+                )}
+            </>
+            <Box className="cash-savings-wrapper">
+                <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <Box className="page-heading">
+                        <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                             現金・預貯金1
-                        </p>
-                    </div>
-                </div>
-                <div className="page-description py-8">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box className="page-description py-8">
+                    <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         以下の内容を入力して[保存]ボタンを押して下さい。
-                    </p>
-                </div>
-                <div className="w-full inline-block">
-                    <form action="#" method="POST">                       
-                            <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="DepositType" className="form-label">
+                    </Typography>
+                </Box>
+                <Box className="w-full inline-block">
+                    <form action="#" method="POST">
+                        <Box className="w-full inline-block items-center justify-between mb-7">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} htmlFor="DepositType" className="form-label">
                                         預金の種類<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
                                     <select id="DepositType" value={DepositType} className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2" onChange={handleDepositType}>
-                                        <option value='' id="0"></option>                                        
+                                        <option value='' id="0"></option>
                                         {DepositList.map((option) => (
                                             <option key={option.value} id={option.id} value={option.value}>
                                                 {option.label}
@@ -405,21 +404,21 @@ export default function CashSavingsAdd() {
                                         ))}
                                     </select>
                                     {DepositTypeError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
+                                </Box>
+                            </Box>
+                        </Box>
 
                         {ShowPostCode && (
-                            <div className="w-full inline-block items-center justify-between mb-7">
-                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="PostCode" className="form-label">
+                            <Box className="w-full inline-block items-center justify-between mb-7">
+                                <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <Box className="label w-full inline-block">
+                                        <Typography component={"label"} htmlFor="PostCode" className="form-label">
                                             郵便番号
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2 relative">
+                                        </Typography>
+                                    </Box>
+                                    <Box className="w-full inline-block mt-2 relative">
                                         <input
                                             type="text"
                                             id="PostCode"
@@ -428,98 +427,77 @@ export default function CashSavingsAdd() {
                                             onChange={postalcodeDigit}
                                             value={PostCode}
                                         />
-                                        <PostcodeIcon />
-                                    </div>
-                                    <div className="mt-3">
-                                        <p className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</p>
-                                    </div>
-                                    {!isValid && <p>数字7桁で入力して下さい。海外の場合は入力不要です。</p>}
-                                </div>
-                            </div>
+                                        <Typography fontSize={14} component={"p"} ostcodeIcon />
+                                    </Box>
+                                    <Box className="mt-3">
+                                        <Typography fontSize={14} component={"p"} className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
+                                    </Box>
+                                    {!isValid && <Typography fontSize={14} component={"p"}>数字7桁で入力して下さい。海外の場合は入力不要です。</Typography>}
+                                </Box>
+                            </Box>
                         )}
 
                         {ShowAddress && (
-                            <div className="w-full inline-block items-center justify-between mb-7">
-                                <div className="w-full inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="Address" className="form-label">
+                            <Box className="w-full inline-block items-center justify-between mb-7">
+                                <Box className="w-full inline-block float-left">
+                                    <Box className="label w-full inline-block">
+                                        <Typography component={"label"} htmlFor="Address" className="form-label">
                                             住所<i className="text-red-500">*</i>
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="Address"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            onChange={inputHandlingFunction}
-                                            value={Address}
-                                        />
+                                        </Typography>
+                                    </Box>
+                                    <Box className="w-full inline-block mt-2">                                        
+                                        <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} />
                                         {AddressError && (
-                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                            <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                         )}
-                                    </div>
-                                </div>
-                            </div>
+                                    </Box>
+                                </Box>
+                            </Box>
                         )}
 
                         {ShowFinancialInstitutionName && (
-                            <div className="w-full block items-center justify-between mb-7">
-                                <div className="user-details">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="FinancialInstitutionName" className="form-label">
+                            <Box className="w-full block items-center justify-between mb-7">
+                                <Box className="user-details">
+                                    <Box className="label w-full inline-block">
+                                        <Typography component={"label"} htmlFor="FinancialInstitutionName" className="form-label">
                                             金融機関名<i className="text-red-500">*</i> <span>（例：みずほ銀行　新宿支店）</span>
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            id="FinancialInstitutionName"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            onChange={inputHandlingFunction}
-                                            value={FinancialInstitutionName}
-                                        />
+                                        </Typography>
+                                    </Box>
+                                    <Box className="w-full inline-block mt-2">
+                                        <CustomInput type={"text"} id={"FinancialInstitutionName"} onChange={inputHandlingFunction} value={FinancialInstitutionName} />
                                         {FinancialInstitutionNameError && (
-                                            <p className="text-red-500" role="alert">この項目は必須です</p>
+                                            <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                         )}
-                                    </div>
-                                </div>
-                            </div>
+                                    </Box>
+                                </Box>
+                            </Box>
                         )}
 
-
-
-                        <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label">
+                        <Box className="w-full inline-block items-center justify-between mb-7">
+                            <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"}>
                                         金額<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        value={AmountofMoney}
-                                        onChange={AmountofMoneyKeyPress}
-                                        onKeyPress={handleKeyPress}
-                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-
-                                    />
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2">
+                                    <CustomInput type={"text"} id={"AmountofMoney"} onChange={AmountofMoneyKeyPress} value={AmountofMoney} onKeyPress={handleKeyPress} textAlign={"right"} />
                                     {AmountofMoneyError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                        <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                        </div>
-                           
-                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton/>              
-                            <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>                                           
-                        </div>         
-                    </form>   
-                </div>
-            </div>
+                                </Box>
+                            </Box>
+                        </Box>
+
+                        <Box className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                            <Box className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                                <BackButton />
+                                <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
+                            </Box>
+                        </Box>
+                    </form>
+                </Box>
+            </Box>
         </>
     )
 }

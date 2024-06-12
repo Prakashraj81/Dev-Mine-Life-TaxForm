@@ -3,8 +3,7 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
 import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
@@ -14,9 +13,10 @@ import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-ico
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
 import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
+import CustomInput from "../../../components/inputbox-icon/custom-input";
+import CustomAmountInput from "../../../components/inputbox-icon/custom-amount-input";
 
 export default function LivingDonationAdd() {
-
     let [HeirList, setHeirList] = useState([]);
     let [HeirId, setHeirId] = useState(0);
     let [NameofthePerson, setNameofthePerson] = useState("");
@@ -288,29 +288,29 @@ export default function LivingDonationAdd() {
                 )}
             </>
 
-            <div className="other-property-wrapper">
-                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-                    <div className="page-heading">
-                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+            <Box className="other-property-wrapper">
+                <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <Box className="page-heading">
+                        <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                             生前贈与1
-                        </p>
-                    </div>
-                </div>
-                <div className="page-description py-8">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box className="page-description py-8">
+                    <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         以下の内容を入力して[保存]ボタンを押して下さい。
-                    </p>
-                </div>
+                    </Typography>
+                </Box>
 
                 <form action="#" method="POST">
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
+                    <Box className="w-full block items-center justify-between mb-7">
+                        <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} className="form-label">
                                     贈与を受けた方の氏名<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2">
                                 <select id="HeirListType" value={HeirId} onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
                                     <option value='' id="0"></option>
                                     {HeirList.map((option) => (
@@ -320,157 +320,120 @@ export default function LivingDonationAdd() {
                                     ))}
                                 </select>
                                 {HeirListTypeError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
-                            </div>
-                        </div>
-                    </div>
+                            </Box>
+                        </Box>
+                    </Box>
 
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
+                    <Box className="w-full block items-center justify-between mb-7">
+                        <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} className="form-label">
                                     贈与年月日<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2 relative">
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2 relative">
                                 <JapaneseCalendar id={"DateOfDonation"} DateValue={DateOfDonation} inputHandlingFunction={inputHandlingFunction} />
                                 {DateOfDonationError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
-                            </div>
-                        </div>
-                    </div>
+                            </Box>
+                        </Box>
+                    </Box>
 
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
+                    <Box className="w-full block items-center justify-between mb-7">
+                        <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} className="form-label">
                                     贈与財産の種類<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2 relative">
-                                <input
-                                    type="text"
-                                    id="DonatedPropertyType"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    onChange={inputHandlingFunction}
-                                    value={DonatedPropertyType}
-                                />
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2 relative">
+                                <CustomInput type={"text"} id={"DonatedPropertyType"} onChange={inputHandlingFunction} value={DonatedPropertyType} />
                                 {DonatedPropertyTypeError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
-                            </div>
-                        </div>
-                    </div>
+                            </Box>
+                        </Box>
+                    </Box>
 
 
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
+                    <Box className="w-full block items-center justify-between mb-7">
+                        <Box className="user-details w-full block">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} className="form-label">
                                     贈与財産の詳細<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2">
-                                <input
-                                    type="text"
-                                    id="DonatedPropertyDetail"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    onChange={inputHandlingFunction}
-                                    value={DonatedPropertyDetail}
-                                />
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2">
+                                <CustomInput type={"text"} id={"DonatedPropertyDetail"} onChange={inputHandlingFunction} value={DonatedPropertyDetail} />
                                 {DonatedPropertyDetailError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
-                            </div>
-                        </div>
-                    </div>
+                            </Box>
+                        </Box>
+                    </Box>
 
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
+                    <Box className="w-full block items-center justify-between mb-7">
+                        <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} className="form-label">
                                     贈与財産の金額<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2 relative">
-                                <input
-                                    type="text"
-                                    id="DonatedPropertyAmount"
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                    onChange={DonatedPropertyAmountKeyPress}
-                                    onKeyPress={handleKeyPress}
-                                    value={DonatedPropertyAmount}
-                                    autocomplete="off"
-                                />
-                                <UnitPriceIcon />
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2 relative">
+                                <CustomAmountInput type={"text"} id={"DonatedPropertyAmount"} onChange={DonatedPropertyAmountKeyPress} onKeyPress={handleKeyPress} value={DonatedPropertyAmount} textAlign={"right"} />
                                 {DonatedPropertyAmountError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
-                            </div>
-                        </div>
-                    </div>
+                            </Box>
+                        </Box>
+                    </Box>
 
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
+                    <Box className="w-full block items-center justify-between mb-7">
+                        <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} className="form-label">
                                     納付した贈与税額
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2 relative">
-                                <input
-                                    type="text"
-                                    id="DonatedPropertyAmountTax"
-                                    className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pr-12"
-                                    onChange={DonatedPropertyAmountTaxKeyPress}
-                                    onKeyPress={handleKeyPress}
-                                    value={DonatedPropertyAmountTax}
-                                    autocomplete="off"
-                                />
-                                <UnitPriceIcon />
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2 relative">
+                                <CustomAmountInput type={"text"} id={"DonatedPropertyAmountTax"} onChange={DonatedPropertyAmountTaxKeyPress} onKeyPress={handleKeyPress} value={DonatedPropertyAmountTax} textAlign={"right"} />
                                 {DonatedPropertyAmountTaxError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
-                            </div>
-                        </div>
-                    </div>
+                            </Box>
+                        </Box>
+                    </Box>
 
-                    <div className="w-full block items-center justify-between mb-7">
-                        <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                            <div className="label w-full inline-block">
-                                <label className="form-label">
+                    <Box className="w-full block items-center justify-between mb-7">
+                        <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} className="form-label">
                                     申告書を提出した税務署<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-full inline-block mt-2 relative">
-                                <input
-                                    type="text"
-                                    id="WhereTaxReturn"
-                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    onChange={inputHandlingFunction}
-                                    value={WhereTaxReturn}
-                                />
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2 relative">
+                                <CustomInput type={"text"} id={"WhereTaxReturn"} onChange={inputHandlingFunction} value={WhereTaxReturn} />
                                 {WhereTaxReturnError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
-                            </div>
-                        </div>
-                    </div>
+                            </Box>
+                        </Box>
+                    </Box>
 
-
-                    <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                    <Box className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                        <Box className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                             <BackButton />
                             <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>
+                        </Box>
                         <Box className="mt-5 w-full">
                             <Typography component={"p"} fontSize={13} className="text-red-600 text-center tracking-2">※精算課税制度の適用を受けていた場合は当システムでは作成できません。</Typography>
                         </Box>
-                    </div>
+                    </Box>
                 </form>
-            </div>
+            </Box>
         </>
     )
 }

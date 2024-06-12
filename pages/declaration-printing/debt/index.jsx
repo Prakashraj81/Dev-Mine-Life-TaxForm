@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import AddIcon from '@mui/icons-material/Add';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Box,
+    Button,
+    Typography
+} from '@mui/material';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -8,10 +19,10 @@ import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import axios from "axios";
 import { useRouter } from 'next/router';
-import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import DeleteModal from "../../../components/modal/delete-modal";
+import AddPageButton from "../../../components/add-page-btn";
 
 export default function Debt() {
     let [DebtList, setDebtList] = useState([]);
@@ -117,55 +128,101 @@ export default function Debt() {
                     <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
                 )}
             </>
-            <div className="life-insurance-wrapper">
-                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-                    <div className="page-heading">
-                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+            <Box className="life-insurance-wrapper">
+                <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <Box className="page-heading">
+                        <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                             債務
-                        </p>
-                    </div>
-                </div>
-                <div className="page-description py-8">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box className="page-description py-8 pb-4">
+                    <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         債務の情報を「<EditNoteOutlinedIcon className="text-primary-gray" />」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
-                    </p>
-                </div>
-                <div className="cash-list py-3">
-                    <table className="w-full border border-light-gray">
-                        {DebtList.map((list, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td className="py-2 px-2 border-r border border-light-gray">{list.name}</td>
-                                    <td className="py-2 px-2 border-r border border-light-gray">{list.other_party}</td>
-                                    <td className="py-2 px-2 border-r border border-light-gray text-right">{list.amount.toLocaleString()}</td>
-                                    <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Edit" className="text-base bg-blue-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                            <EditNoteOutlinedIcon className="text-white" />
-                                        </button>
-                                    </td>
-                                    <td className="py-2 px-2 border-r border border-light-gray text-right">
-                                        <button id={list.customer_id} name={list.id} onClick={handleEdit_DeleteButtonClick} value="Delete" className="text-base bg-red-500 rounded-sm px-1 py-1 tracking-2 text-custom-black">
-                                            <HighlightOffOutlinedIcon className="text-white" />
-                                        </button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-
-                    </table>
-                </div>
-                <div className="w-full inline-block text-left">
-                    <Link href="/declaration-printing/debt/debt-add">
-                        <button id="decedent_edit" className="text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
-                            <AddIcon className="text-white" />
-                            追加する
-                        </button>
-                    </Link>
-                </div>
-                <div className="text-center Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
+                    </Typography>
+                </Box>
+                <Box className="cash-list py-3">
+                    <Table aria-label="Debt table">
+                        <TableBody>
+                            {DebtList.map((list, index) => (
+                                <TableRow key={index} className="border border-light-gray">
+                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>
+                                        {list.name}
+                                    </TableCell>
+                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>{list.other_party}</TableCell>
+                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                        {list.amount.toLocaleString()}
+                                    </TableCell>
+                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                        <Box className="flex justify-end items-end">
+                                            <Box>
+                                                <Button
+                                                    onClick={handleEdit_DeleteButtonClick}
+                                                    id={list.customer_id}
+                                                    name={list.id}
+                                                    value="Edit"
+                                                    sx={{
+                                                        minWidth: 'auto',
+                                                        backgroundColor: 'info.main',
+                                                        color: 'white',
+                                                        '&:hover': {
+                                                            backgroundColor: 'info.light',
+                                                            color: 'info.main',
+                                                            '& .MuiSvgIcon-root': {
+                                                                color: 'info.main',
+                                                            },
+                                                        },
+                                                        borderRadius: '3px',
+                                                        paddingLeft: 0.7,
+                                                        paddingRight: 0.7,
+                                                        py: 0.6,
+                                                        transition: 'all 0.7s ease',
+                                                    }}
+                                                >
+                                                    <EditNoteOutlinedIcon />
+                                                </Button>
+                                            </Box>
+                                            <Box className="pl-5">
+                                                <Button
+                                                    onClick={handleEdit_DeleteButtonClick}
+                                                    id={list.customer_id}
+                                                    name={list.id}
+                                                    value="Delete"
+                                                    sx={{
+                                                        minWidth: 'auto',
+                                                        backgroundColor: 'error.main',
+                                                        color: 'white',
+                                                        '&:hover': {
+                                                            backgroundColor: 'error.light',
+                                                            color: 'error.main',
+                                                            '& .MuiSvgIcon-root': {
+                                                                color: 'error.main',
+                                                            },
+                                                        },
+                                                        borderRadius: '3px',
+                                                        paddingLeft: 0.7,
+                                                        paddingRight: 0.7,
+                                                        py: 0.6,
+                                                        transition: 'all 0.7s ease',
+                                                    }}
+                                                >
+                                                    <HighlightOffOutlinedIcon />
+                                                </Button>
+                                            </Box>
+                                        </Box>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Box>
+                <Box className="w-full inline-block text-left pt-3">
+                    <AddPageButton pageLink={"/declaration-printing/debt/debt-add"} />
+                </Box>
+                <Box className="text-center Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
                     <BackButtonIndex />
-                </div>
-            </div>
+                </Box>
+            </Box>
         </>
     )
 }

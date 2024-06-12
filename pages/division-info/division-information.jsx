@@ -1,9 +1,43 @@
 "use client";
-import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
-import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import Link from "next/link";
+
+// Material-UI Components
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Box,
+  Stepper,
+  Step,
+  StepLabel,
+  StepButton,
+  Button,
+  Typography,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@mui/material';
+
+// Material-UI Icons
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+
+// Custom Components
 import BackButton from "../../components/back-btn";
 import SubmitButton from "../../components/submit-btn";
 import HeirListBox from "../../components/heir-list-box/heir-list-box";
@@ -11,25 +45,10 @@ import IncorrectError from "../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../components/loader/backdrop-loader';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AreaIcon from "../../components/inputbox-icon/textbox-area-icon";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+
+// Axios for API calls
 import axios from "axios";
-import Skeleton from '@mui/material/Skeleton';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 
 //Tables import
 import CashSavingsTable from "../../components/division-info-tables/cash-savings-table";
@@ -54,7 +73,7 @@ import ConfirmationDeductionPersons from "../../components/division-info-tables/
 import ConfirmationSuccessiveInheritance from "../../components/division-info-tables/confirmation-successive-inheritance";
 import DeclaredTaxAmount from "../../components/division-info-tables/declared-tax-amount";
 
-export default function DivisionInformation() {
+export default function divisionInformation() {
     let DepositList = [];
     let [ResidentialLandType, setResidentialLandType] = useState("");
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
@@ -70,10 +89,10 @@ export default function DivisionInformation() {
 
     // Simulate loading effect using useEffect
     useEffect(() => {
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 2000); // Adjust the timeout as needed
-      return () => clearTimeout(timer);
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 2000); // Adjust the timeout as needed
+        return () => clearTimeout(timer);
     }, []);
 
     //Load heir details list
@@ -186,25 +205,25 @@ export default function DivisionInformation() {
                     <BackdropLoader ShowLoader={ShowLoader} />
                 )}
             </>
-            <div className="basic-information-wrapper">
-                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-                    <div className="page-heading">
-                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+            <Box className="basic-information-wrapper">
+                <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <Box className="page-heading">
+                        <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                             分割情報、特例等の入力
-                        </p>
-                    </div>
-                </div>
-            </div>
+                        </Typography>
+                    </Box>
+                </Box>
+            </Box>
 
-            <div className="cash-savings-wrapper mt-7">
-                <div className="page-description py-8 hidden">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+            <Box className="cash-savings-wrapper mt-7">
+                <Box className="page-description py-8 hidden">
+                    <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         当システムでは「特定居住用（被相続人の居住のように供していた宅地）」のみ小規模宅地等の特例の適用が可能です。※適用要件を満たしているかの確認等ご不明な点は税理士への有料相談でご確認ください。
-                    </p>
-                </div>
+                    </Typography>
+                </Box>
                 <Box className="mb-7 hidden">
                     <FormControl>
-                        <label className="form-label text-lg" id="demo-row-radio-buttons-group-label">小規模宅地等の特例の適用を受ける</label>
+                        <Typography component={"label"} className="form-label text-lg" id="demo-row-radio-buttons-group-label">小規模宅地等の特例の適用を受ける</Typography>
                         <RadioGroup
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
@@ -227,14 +246,14 @@ export default function DivisionInformation() {
                 {ShowSuccessiveInheritance && (
                     <>
                         <Box>
-                            <div className="w-full inline-block items-center justify-between mb-7">
-                                <div className="w-full inline-block float-left">
-                                    <div className="label w-full inline-block">
-                                        <label htmlFor="Deposit" className="form-label">
+                            <Box className="w-full inline-block items-center justify-between mb-7">
+                                <Box className="w-full inline-block float-left">
+                                    <Box className="label w-full inline-block">
+                                        <Typography component={"label"} htmlFor="Deposit" className="form-label">
                                             小規模宅地の特例を適用する土地
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2">
+                                        </Typography>
+                                    </Box>
+                                    <Box className="w-full inline-block mt-2">
                                         <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleResidentialLandType}>
                                             <option value='' id='0'></option>
                                             {DepositList.map((option) => (
@@ -243,13 +262,13 @@ export default function DivisionInformation() {
                                                 </option>
                                             ))}
                                         </select>
-                                    </div>
+                                    </Box>
 
-                                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left pt-7">
-                                        <div className="label w-full inline-block">
-                                            <label className="form-label flex items-center">適用面積</label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2 relative">
+                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left pt-7">
+                                        <Box className="label w-full inline-block">
+                                            <Typography component={"label"} className="form-label flex items-center">適用面積</Typography>
+                                        </Box>
+                                        <Box className="w-full inline-block mt-2 relative">
                                             <input
                                                 type="text"
                                                 className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
@@ -257,18 +276,18 @@ export default function DivisionInformation() {
                                                 onChange={inputHandlingFunction}
                                             />
                                             <AreaIcon />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Box>
 
-                            <div className="w-full inline-block text-left mb-7">
-                                <p className="float-left pr-7 text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">相似相続控除</p>
+                            <Box className="w-full inline-block text-left mb-7">
+                                <Typography component={"p"} className="float-left pr-7 text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">相似相続控除</Typography>
                                 <button onClick={AddSuccessiveInput} className="float-left text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2">
                                     {ShowSuccessiveInput ? <RemoveIcon className="text-white" /> : <AddIcon className="text-white" />}
                                     {ShowSuccessiveInput ? "隠れる" : "追加する"}
                                 </button>
-                            </div>
+                            </Box>
                         </Box>
                     </>
                 )}
@@ -277,180 +296,180 @@ export default function DivisionInformation() {
                     <>
                         <Box className="py-3">
                             <form action="#" method="POST">
-                                <div className="w-full flex items-center justify-between mb-7">
-                                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                        <div className="user-details">
-                                            <div className="label w-full inline-block">
-                                                <label htmlFor="NameofDecedent" className="form-label">
+                                <Box className="w-full flex items-center justify-between mb-7">
+                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                        <Box className="user-details">
+                                            <Box className="label w-full inline-block">
+                                                <Typography component={"label"} htmlFor="NameofDecedent" className="form-label">
                                                     前相続の被相続人氏名<i className="text-red-500">*</i>
-                                                </label>
-                                            </div>
-                                            <div className="w-full inline-block mt-2">
+                                                </Typography>
+                                            </Box>
+                                            <Box className="w-full inline-block mt-2">
                                                 <input
                                                     type="text"
                                                     id="NameofDecedent"
                                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                                 />
-                                            </div>
-                                        </div>
-                                    </div>
+                                            </Box>
+                                        </Box>
+                                    </Box>
 
-                                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="RelationshipDecedent" className="form-label">
+                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                        <Box className="label w-full inline-block">
+                                            <Typography component={"label"} htmlFor="RelationshipDecedent" className="form-label">
                                                 今回の被相続人と前回の被相続人の続柄
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
+                                            </Typography>
+                                        </Box>
+                                        <Box className="w-full inline-block mt-2">
                                             <input
                                                 type="text"
                                                 id="RelationshipDecedent"
                                                 className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             />
-                                        </div>
-                                    </div>
-                                </div>
+                                        </Box>
+                                    </Box>
+                                </Box>
 
 
-                                <div className="w-full flex items-center justify-between mb-7">
-                                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                        <div className="user-details">
-                                            <div className="label w-full inline-block">
-                                                <label htmlFor="OccurrenceDate" className="form-label">
+                                <Box className="w-full flex items-center justify-between mb-7">
+                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                        <Box className="user-details">
+                                            <Box className="label w-full inline-block">
+                                                <Typography component={"label"} htmlFor="OccurrenceDate" className="form-label">
                                                     前相続の発生日<i className="text-red-500">*</i>
-                                                </label>
-                                            </div>
-                                            <div className="w-full inline-block mt-2">
+                                                </Typography>
+                                            </Box>
+                                            <Box className="w-full inline-block mt-2">
                                                 <input
                                                     type="date"
                                                     id="OccurrenceDate"
                                                     className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                                 />
-                                            </div>
-                                        </div>
-                                    </div>
+                                            </Box>
+                                        </Box>
+                                    </Box>
 
-                                    <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="AmountGiftType" className="form-label">
+                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                        <Box className="label w-full inline-block">
+                                            <Typography component={"label"} htmlFor="AmountGiftType" className="form-label">
                                                 相続税申告書の提出先
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
+                                            </Typography>
+                                        </Box>
+                                        <Box className="w-full inline-block mt-2">
                                             <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
                                                 <option value=''></option>
                                             </select>
-                                        </div>
-                                    </div>
-                                </div>
+                                        </Box>
+                                    </Box>
+                                </Box>
 
-                                <div className="w-full block items-center justify-between mb-7">
-                                    <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="AssetValue" className="w-full inline-block mt-1 form-label">
+                                <Box className="w-full block items-center justify-between mb-7">
+                                    <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                        <Box className="label w-full inline-block">
+                                            <Typography component={"label"} htmlFor="AssetValue" className="w-full inline-block mt-1 form-label">
                                                 今回の被相続人が前相続において取得した財
-                                            </label>
-                                            <label htmlFor="AssetValue" className="w-full inline-block mt-1 form-label">
+                                            </Typography>
+                                            <Typography component={"label"} htmlFor="AssetValue" className="w-full inline-block mt-1 form-label">
                                                 産額（相続時精算課税適用財産含む）
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
+                                            </Typography>
+                                        </Box>
+                                        <Box className="w-full inline-block mt-2">
                                             <input
                                                 type="text"
                                                 id="AssetValue"
                                                 className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             />
-                                        </div>
-                                    </div>
-                                </div>
+                                        </Box>
+                                    </Box>
+                                </Box>
 
 
-                                <div className="w-full block items-center justify-between mb-7">
-                                    <div className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                        <div className="label w-full inline-block">
-                                            <label htmlFor="InheritanceTax" className="w-full inline-block mt-1 form-label">
+                                <Box className="w-full block items-center justify-between mb-7">
+                                    <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
+                                        <Box className="label w-full inline-block">
+                                            <Typography component={"label"} htmlFor="InheritanceTax" className="w-full inline-block mt-1 form-label">
                                                 前相続で今回の被相続人が支払った相続税額
-                                            </label>
-                                        </div>
-                                        <div className="w-full inline-block mt-2">
+                                            </Typography>
+                                        </Box>
+                                        <Box className="w-full inline-block mt-2">
                                             <input
                                                 type="text"
                                                 id="InheritanceTax"
                                                 className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             />
-                                        </div>
-                                    </div>
-                                </div>
+                                        </Box>
+                                    </Box>
+                                </Box>
                             </form>
                         </Box>
                     </>
                 )}
 
-                <div className="w-full inline-block">
+                <Box className="w-full inline-block">
                     <form className="hidden1" action="#" method="POST">
-                        <div className="material-tables">
-                            <div>
+                        <Box className="material-tables">
+                            <Box>
                                 {Flag === 1 && heir_details_list.length !== 0 && (
                                     <>
-                                        
-                                    {loading ? (
-                                        // Render skeleton loader for each list item
-                                        Array.from({ length: 20 }, (_, index) => (                                        
-                                        <Table key={index}>
-                                            <TableHead className="skeleton-table-head">
-                                                <TableRow>
-                                                    <TableCell className="p-0" align="left"><Skeleton variant="text" width={400} height={45} /></TableCell>
-                                                    <TableCell className="table-20 p-0" align="left"><Skeleton variant="text" width={150} height={45} /></TableCell>
-                                                    <TableCell className="p-0" align="right"><Skeleton variant="text" width={50} height={45} /></TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                        </Table>    
-                                        ))
-                                    ) : (
-                                        // Render actual content when loading is false
-                                        <>
-                                            <CashSavingsTable heir_details_list={heir_details_list} />
-                                            <SecuritiesTable heir_details_list={heir_details_list} />
-                                            <BuildingsTable />
-                                            <LandTable />
-                                            <HouseholdPropertyTable heir_details_list={heir_details_list} />
-                                            <DeathBenefitTable heir_details_list={heir_details_list} />
-                                            <DeathRetirementAllowanceTable heir_details_list={heir_details_list} />
-                                            <OthersPropertyTable heir_details_list={heir_details_list} />
-                                            <DebtTable heir_details_list={heir_details_list} />
-                                            <FuneralExpensesTable heir_details_list={heir_details_list} />
-                                            
-                                            <TotalPropertyAcquiredTable />
-                                            <LivingDonationTable />
-                                            <CalculatedTaxAmountEachPersons />
-                                            <AdditionInheritanceTaxAmount />
-                                            <GiftduringLifeTable />
-                                            <SpouseTaxReduction />
-                                            <ConfirmationDeductionMinors />
-                                            <ConfirmationDeductionPersons />
-                                            <ConfirmationSuccessiveInheritance />
-                                            <DeclaredTaxAmount />
-                                        </>
-                                    )}
+
+                                        {loading ? (
+                                            // Render skeleton loader for each list item
+                                            Array.from({ length: 20 }, (_, index) => (
+                                                <Table key={index}>
+                                                    <TableHead className="skeleton-table-head">
+                                                        <TableRow>
+                                                            <TableCell className="p-0" align="left"><Skeleton variant="text" width={400} height={45} /></TableCell>
+                                                            <TableCell className="table-20 p-0" align="left"><Skeleton variant="text" width={150} height={45} /></TableCell>
+                                                            <TableCell className="p-0" align="right"><Skeleton variant="text" width={50} height={45} /></TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                </Table>
+                                            ))
+                                        ) : (
+                                            // Render actual content when loading is false
+                                            <>
+                                                <CashSavingsTable heir_details_list={heir_details_list} />
+                                                <SecuritiesTable heir_details_list={heir_details_list} />
+                                                <BuildingsTable />
+                                                <LandTable />
+                                                <HouseholdPropertyTable heir_details_list={heir_details_list} />
+                                                <DeathBenefitTable heir_details_list={heir_details_list} />
+                                                <DeathRetirementAllowanceTable heir_details_list={heir_details_list} />
+                                                <OthersPropertyTable heir_details_list={heir_details_list} />
+                                                <DebtTable heir_details_list={heir_details_list} />
+                                                <FuneralExpensesTable heir_details_list={heir_details_list} />
+
+                                                <TotalPropertyAcquiredTable />
+                                                <LivingDonationTable />
+                                                <CalculatedTaxAmountEachPersons />
+                                                <AdditionInheritanceTaxAmount />
+                                                <GiftduringLifeTable />
+                                                <SpouseTaxReduction />
+                                                <ConfirmationDeductionMinors />
+                                                <ConfirmationDeductionPersons />
+                                                <ConfirmationSuccessiveInheritance />
+                                                <DeclaredTaxAmount />
+                                            </>
+                                        )}
                                     </>
                                 )}
-                            </div>
-                        </div>
-                        <div className="Total-property-section hidden py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                            <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                            </Box>
+                        </Box>
+                        <Box className="Total-property-section hidden py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                            <Box className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
                                 <BackButton />
                                 <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                            </div>
-                        </div>
+                            </Box>
+                        </Box>
                     </form>
-                </div>
-            </div>
+                </Box>
+            </Box>
         </>
     )
 }
 
 
-DivisionInformation.getLayout = function getLayout(page) {
+divisionInformation.getLayout = function getLayout(page) {
     return <FullLayout>{page}</FullLayout>;
 };
 

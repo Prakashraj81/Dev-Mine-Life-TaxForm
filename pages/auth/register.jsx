@@ -5,8 +5,12 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import { InputAdornment, IconButton, Input, FormControl, Button, Box, Typography } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
+import CustomInput from "../../components/inputbox-icon/custom-input";
+import CustomPhoneInput from "../../components/inputbox-icon/custom-phone-input";
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
 import BackdropLoader from "../../components/loader/backdrop-loader";
 
@@ -27,7 +31,22 @@ export default function Register(props) {
   let [ConfirmPasswordError, setConfirmPasswordError] = useState(false);
   let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
   let [SuccessToast, setSuccessToast] = useState(false);
-  let [ErrorToast, setErrorToast] = useState(false); 
+  let [ErrorToast, setErrorToast] = useState(false);
+  let [showPassword, setShowPassword] = useState(false);
+
+  //Password hide / show
+  const handleTogglePassword = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const handleKeyPress = (e) => {
+    const keyCode = e.keyCode || e.which;
+    const keyValue = String.fromCharCode(keyCode);
+    const numericRegex = /^[0-9\b]+$/;
+    if (!numericRegex.test(keyValue)) {
+      e.preventDefault();
+    }
+  };
 
   //All input validation check and handling function
   const inputHandlingFunction = (event) => {
@@ -94,55 +113,55 @@ export default function Register(props) {
     };
 
     //User email check Api
-    if (isSumbitDisabled !== true) { 
-      try{
+    if (isSumbitDisabled !== true) {
+      try {
         const params = { email: Email };
-        const response = await axios.get('https://minelife-api.azurewebsites.net/check_user_email', {params});
-        if(response.status === 200){
+        const response = await axios.get('https://minelife-api.azurewebsites.net/check_user_email', { params });
+        if (response.status === 200) {
           await register_user(formData);
-        }    
-        else{
-          console.log("User Already Exist");   
+        }
+        else {
+          console.log("User Already Exist");
           setRegisterError(true);
           setShowLoader(false);
-        }     
-      } catch (error){
-        console.log("User not created.");          
+        }
+      } catch (error) {
+        console.log("User not created.");
         setRegisterError(true);
         setShowLoader(false);
         console.error('Error:', error);
-      }           
+      }
     }
     else {
-      console.log("User not created.");  
+      console.log("User not created.");
       setisSumbitDisabled(true);
       setShowLoader(false);
     }
-  };  
+  };
 
   //User register Api
-  const register_user = async(formData) => {   
-    if(formData !== null){
-      try{
+  const register_user = async (formData) => {
+    if (formData !== null) {
+      try {
         const response = await axios.post('https://minelife-api.azurewebsites.net/register_user', formData);
-        if(response.status === 200){          
+        if (response.status === 200) {
           setRegisterError(false);
           setShowLoader(false);
           router.push(`/auth/register-complete`);
           //router.push(`/auth/login`);
         }
-        else{
+        else {
           setLoginError(true);
           setShowLoader(false);
-        }        
-      } catch (error){
+        }
+      } catch (error) {
         setRegisterError(true);
         setShowLoader(false);
         console.error('Error:', error);
-      }    
-    }    
-    else{
-      console.log("formData is empty.");  
+      }
+    }
+    else {
+      console.log("formData is empty.");
       setisSumbitDisabled(true);
       setShowLoader(false);
     }
@@ -151,9 +170,9 @@ export default function Register(props) {
   return (
     <>
       <Header />
-      <div className="register-form-wrapper py-14">
-        <div className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
-          <div className="register-forms">
+      <Box className="register-form-wrapper py-14">
+        <Box className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
+          <Box className="register-forms">
             <form action="#" method="POST">
               <>
                 {RegisterError && (
@@ -164,157 +183,176 @@ export default function Register(props) {
               </>
               <>
                 {ShowLoader && (
-                  <BackdropLoader ShowLoader={ShowLoader}/>
+                  <BackdropLoader ShowLoader={ShowLoader} />
                 )}
               </>
-              <div className="username-details mb-7">
-                <div className="label w-full inline-block">
+              <Box className="username-details mb-7">
+                <Box className="label w-full inline-block">
                   <label htmlFor="Name" className="form-label">
                     お名前
                   </label>
-                </div>
-                <div className="w-full inline-block mt-2">
-                  <input
-                    type="text"
-                    id="Name"
-                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                    onChange={inputHandlingFunction}
-                    value={Name}
-                  />
+                </Box>
+                <Box className="w-full inline-block mt-2">
+                  <CustomInput type={"text"} id={"Name"} onChange={inputHandlingFunction} value={Name} />
                   {NameError && (
-                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                    <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
-                </div>
-              </div>
+                </Box>
+              </Box>
 
-              <div className="phone-details mb-7">
-                <div className="label w-full inline-block">
+              <Box className="phone-details mb-7">
+                <Box className="label w-full inline-block">
                   <label htmlFor="PhoneNo" className="form-label">
                     電話番号
                   </label>
-                </div>
-                <div className="w-full inline-block mt-2">
-                  <input
-                    type="text"
-                    id="PhoneNo"
-                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                    onChange={inputHandlingFunction}
-                    value={PhoneNo}
-                  />
+                </Box>
+                <Box className="w-full inline-block mt-2">
+                  <CustomPhoneInput type={"text"} id={"PhoneNo"} onChange={inputHandlingFunction} onKeyPress={handleKeyPress} value={PhoneNo} />
                   {PhoneNoError && (
-                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                    <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
-                </div>
-                <div className="mt-1">
-                  <p className="text-xs font-medium text-black">
+                </Box>
+                <Box className="mt-1">
+                  <Typography fontSize={14} component={"p"} className="text-xs font-medium text-black">
                     ハイフン抜きで入力して下さい
-                  </p>
-                </div>
-              </div>
+                  </Typography>
+                </Box>
+              </Box>
 
-              <div className="username-details mb-7">
-                <div className="label w-full inline-block">
+              <Box className="username-details mb-7">
+                <Box className="label w-full inline-block">
                   <label htmlFor="Email" className="form-label">
                     メールアドレス
                   </label>
-                </div>
-                <div className="w-full inline-block mt-2">
-                  <input
-                    type="text"
-                    id="Email"
-                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                    onChange={inputHandlingFunction}
-                    value={Email}
-                  />
+                </Box>
+                <Box className="w-full inline-block mt-2">
+                  <CustomInput type={"text"} id={"Email"} onChange={inputHandlingFunction} value={Email} />
                   {EmailError && (
-                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                    <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
-                  {isValidEmail ? null : <p className="text-red-500 mt-2" role="alert">形式が違います</p>}
-                </div>
-              </div>
+                  {isValidEmail ? null : <Typography component={"p"} className="text-red-500 mt-2" role="alert">形式が違います</Typography>}
+                </Box>
+              </Box>
 
-              <div className="password-details mb-7">
-                <div className="label w-full inline-block">
+              <Box className="password-details mb-7">
+                <Box className="label w-full inline-block">
                   <label htmlFor="Password" className="form-label">
                     パスワード
                   </label>
-                </div>
-                <div className="w-full inline-block mt-2">
-                  <input
-                    type="password"
-                    id="Password"
-                    className="form-control w-full bg-custom-gray rounded focus:outline-none h-12 pl-3"
-                    onChange={inputHandlingFunction}
-                    value={Password}
-                  />
+                </Box>
+                <Box className="w-full inline-block mt-2">
+                  <CustomInput type={showPassword ? 'text' : 'password'} id={"Password"} onChange={inputHandlingFunction} value={Password} />
+                  <Box className="py-2 mt-2">
+                    <InputAdornment>
+                      <IconButton id="Icon" onClick={handleTogglePassword} >
+                        {showPassword ? <Visibility style={{ width: '18px', height: '18px' }} /> : <VisibilityOff style={{ width: '18px', height: '18px' }} />}
+                      </IconButton>
+                      <Typography fontSize={12} component={"label"} className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</Typography>
+                    </InputAdornment>
+                  </Box>
                   {PasswordError && (
-                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                    <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
-                </div>
-              </div>
+                </Box>
+              </Box>
 
-              <div className="password-details mb-7">
-                <div className="label w-full inline-block">
+              <Box className="password-details mb-7">
+                <Box className="label w-full inline-block">
                   <label htmlFor="ConfirmPassword" className="form-label">
                     Confirm パスワード
                   </label>
-                </div>
-                <div className="w-full inline-block mt-2">
-                  <input
-                    type="password"
-                    id="ConfirmPassword"
-                    className="form-control w-full bg-custom-gray rounded focus:outline-none h-12 pl-3"
-                    onChange={inputHandlingFunction}
-                    value={ConfirmPassword}
-                  />
+                </Box>
+                <Box className="w-full inline-block mt-2">
+                  <CustomInput type={showPassword ? 'text' : 'password'} id={"ConfirmPassword"} onChange={inputHandlingFunction} value={ConfirmPassword} />
+                  <Box className="py-2 mt-2">
+                    <InputAdornment>
+                      <IconButton id="Icon" onClick={handleTogglePassword} >
+                        {showPassword ? <Visibility style={{ width: '18px', height: '18px' }} /> : <VisibilityOff style={{ width: '18px', height: '18px' }} />}
+                      </IconButton>
+                      <Typography fontSize={12} component={"label"} className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</Typography>
+                    </InputAdornment>
+                  </Box>
                   {ConfirmPasswordError && (
-                    <p className="text-red-500" role="alert">この項目は必須です</p>
+                    <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
-                </div>
-              </div>
+                </Box>
+              </Box>
 
-              <div className="login-btn pt-10 text-center">
-                <button
+              <Box className="login-btn pt-5 text-center">
+                <Button
                   type="button"
                   onClick={onSubmit}
-                  className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                  variant="contained"
+                  sx={{
+                    width: 'auto',
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'primary.light',
+                      color: 'primary.main',
+                    },
+                    borderRadius: '3px',
+                    paddingLeft: 3,
+                    paddingRight: 3,
+                    py: 1,
+                    transition: 'all 0.3s ease',
+                  }}
                 >
-                  <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                  <Typography component={"span"} className="text-sm font-medium">
                     Mine life 相続を始める
-                  </span>
-                </button>
-              </div>
-              <div className="text-center">
-                <div className="mt-3">
-                  <p>
-                    <span className="text-xs text-black font-medium">
+                  </Typography>
+                </Button>
+              </Box>
+              <Box className="text-center">
+                <Box className="mt-3">
+                  <Typography component={"p"}>
+                    <Typography fontSize={14} component={"span"} className="text-xs text-black font-medium">
                       Mine life 相続に登録することで、
                       <Link href="/pages/terms-of-use" className="text-blue-600">
                         利用規約
                       </Link>
                       に同意したものとみなします。
-                    </span>
-                  </p>
-                </div>
-                <div className="mt-7">
-                  <p className="text-sm text-black font-medium">
+                    </Typography>
+                  </Typography>
+                </Box>
+                <Box className="mt-7">
+                  <Typography fontSize={14} component={"p"} className="text-sm text-black font-medium">
                     会員登録済みの方
-                  </p>
-                </div>
-              </div>
-              <div className="register-btn pt-10 text-center">
-                <Link href="/auth/login">
-                  <button className="bg-white border-2 border-primary-gray rounded px-7 py-2">
-                    <span className="text-primary-gray text-sm font-medium">
-                      ログイン
-                    </span>
-                  </button>
-                </Link>
-              </div>
+                  </Typography>
+                </Box>
+              </Box>
+              <Box className="register-btn pt-7 text-center">
+                <Button
+                  component={Link}
+                  href="/auth/login"
+                  type="button"
+                  variant="contained"
+                  sx={{
+                    width: 'auto',
+                    backgroundColor: 'white',
+                    color: 'gray',
+                    border: '1.6px solid',
+                    borderColor: 'gray',
+                    '&:hover': {
+                      backgroundColor: 'lightgray',
+                      color: 'gray',
+                    },
+                    borderRadius: '3px',
+                    paddingLeft: 3,
+                    paddingRight: 3,
+                    py: 1,
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  <Typography component={"span"} className="text-sm font-medium">
+                    ログイン
+                  </Typography>
+                </Button>
+              </Box>
             </form>
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
       <Footer />
     </>
   );

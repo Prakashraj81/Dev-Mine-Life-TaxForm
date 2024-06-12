@@ -1,45 +1,127 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import AddIcon from '@mui/icons-material/Add';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Box,
+    Button,
+    Typography
+} from '@mui/material';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
+import AddPageButton from "../../../components/add-page-btn";
 import FullLayout from '../../../components/layouts/full/FullLayout';
 
 export default function House() {
+    let [List, setList] = useState([]);
     return (
         <>
-            <div className="house-wrapper">
-                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-                    <div className="page-heading">
-                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+            <Box className="house-wrapper">
+                <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <Box className="page-heading">
+                        <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                             家屋
-                        </p>
-                    </div>
-                </div>
-                <div className="page-description py-8">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    家屋の情報を「<EditNoteOutlinedIcon className="text-primary-gray"/>」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
-                    </p>
-                </div>
-                
-                <div className="w-full inline-block text-left">
-                    <Link href="/declaration-printing/building/building-add">
-                        <button id="decedent_edit" className="text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2 text-custom-black">
-                            <AddIcon className="text-white" />
-                            追加する
-                        </button>
-                    </Link>
-                </div>
-                <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">                                  
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box className="page-description py-8">
+                    <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                        家屋の情報を「<EditNoteOutlinedIcon className="text-primary-gray" />」ボタン、「追加する」ボタンをクリックし、ご入力ください。 入力が完了しましたら「戻る」をクリックしてください。
+                    </Typography>
+                </Box>
+
+                <Box className="cash-list py-3">
+                    <Table aria-label="Building table">
+                        <TableBody>
+                            {List.map((list, index) => (
+                                <TableRow key={index} className="border border-light-gray">
+                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>
+                                        {list.address ? list.address : list.financial_institution_name}
+                                    </TableCell>
+                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>{list.deposit_type}</TableCell>
+                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                        {list.amount.toLocaleString()}
+                                    </TableCell>
+                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                        <Box className="flex justify-end items-end">
+                                            <Box>
+                                                <Button
+                                                    onClick={handleEdit_DeleteButtonClick}
+                                                    id={list.customer_id}
+                                                    name={list.id}
+                                                    value="Edit"
+                                                    sx={{
+                                                        minWidth: 'auto',
+                                                        backgroundColor: 'info.main',
+                                                        color: 'white',
+                                                        '&:hover': {
+                                                            backgroundColor: 'info.light',
+                                                            color: 'info.main',
+                                                            '& .MuiSvgIcon-root': {
+                                                                color: 'info.main',
+                                                            },
+                                                        },
+                                                        borderRadius: '3px',
+                                                        paddingLeft: 0.7,
+                                                        paddingRight: 0.7,
+                                                        py: 0.6,
+                                                        transition: 'all 0.7s ease',
+                                                    }}
+                                                >
+                                                    <EditNoteOutlinedIcon />
+                                                </Button>
+                                            </Box>
+                                            <Box className="pl-5">
+                                                <Button
+                                                    onClick={handleEdit_DeleteButtonClick}
+                                                    id={list.customer_id}
+                                                    name={list.id}
+                                                    value="Delete"
+                                                    sx={{
+                                                        minWidth: 'auto',
+                                                        backgroundColor: 'error.main',
+                                                        color: 'white',
+                                                        '&:hover': {
+                                                            backgroundColor: 'error.light',
+                                                            color: 'error.main',
+                                                            '& .MuiSvgIcon-root': {
+                                                                color: 'error.main',
+                                                            },
+                                                        },
+                                                        borderRadius: '3px',
+                                                        paddingLeft: 0.7,
+                                                        paddingRight: 0.7,
+                                                        py: 0.6,
+                                                        transition: 'all 0.7s ease',
+                                                    }}
+                                                >
+                                                    <HighlightOffOutlinedIcon />
+                                                </Button>
+                                            </Box>
+                                        </Box>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Box>
+                <Box className="w-full inline-block text-left pt-3">
+                    <AddPageButton pageLink={"/declaration-printing/building/building-add"} />
+                </Box>
+                <Box className="text-center Total-property-section py-5 md:py-10 lg:py-20 xl:py-20 2xl:py-20 px-5 md:px-10 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs">
                     <BackButtonIndex />
-                </div>
-            </div>
+                </Box>
+            </Box>
         </>
     )
 }
 
 House.getLayout = function getLayout(page) {
-  return <FullLayout>{page}</FullLayout>;
+    return <FullLayout>{page}</FullLayout>;
 };

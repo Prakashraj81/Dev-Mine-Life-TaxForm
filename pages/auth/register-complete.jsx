@@ -20,43 +20,57 @@ export default function RegisterComplete() {
   return (
     <>
     <Header/>
-      <div className="forget-password-form-wrapper py-32">
-        <div className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
-          <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-            <div className="page-heading">
-              <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+      <Box className="forget-password-form-wrapper py-32">
+        <Box className="max-w-full lg:max-w-screen-xs xl:max-w-screen-xs 2xl:max-w-screen-xs mx-auto">
+          <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+            <Box className="page-heading">
+              <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                 ユーザー登録が完了しました。
-              </p>
-            </div>
-          </div>
-          <div className="page-description py-8">
-            <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+             </Typography>
+            </Box>
+          </Box>
+          <Box className="page-description py-8">
+            <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                 Mine life 相続をご利用いただきありがとうございます。
-            </p>
-            <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium my-1">
+           </Typography>
+            <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium my-1">
                 ユーザー登録が完了しました。
-            </p>
-            <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+           </Typography>
+            <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                 下記ログインページよりログイン後、相続税申告書の作成へとお進みください
-            </p>
-          </div>
-          <div className="login-forms">
+           </Typography>
+          </Box>
+          <Box className="login-forms">
             <form action="#" method="POST">            
-              <div className="login-btn pt-5 text-center">
-                <button
+              <Box className="login-btn pt-5 text-center">                
+                <Button
                   type="button"
                   onClick={onSubmit}
-                  className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
+                  variant="contained"
+                  sx={{
+                    width: 'auto',
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'primary.light',
+                      color: 'primary.main',
+                    },
+                    borderRadius: '3px',
+                    paddingLeft: 3,
+                    paddingRight: 3,
+                    py: 1,
+                    transition: 'all 0.3s ease',
+                  }}
                 >
-                  <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                  <Typography component={"span"} className="text-sm font-medium">
                   ログインページへ
-                  </span>
-                </button>
-              </div>
+                  </Typography>
+                </Button>
+              </Box>
             </form>
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
       <Footer/>
     </>
   );

@@ -2,8 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
-import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
 import HeirListBox from "../../../components/heir-list-box/heir-list-box";
@@ -15,8 +14,8 @@ import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-i
 import InfoIcon from '@mui/icons-material/Info';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import PrintIcon from '@mui/icons-material/Print';
-import { list } from "postcss";
 import axios from "axios";
+import CustomInput from "../../../components/inputbox-icon/custom-input";
 
 export default function SecuritiesAdd() {
     let SecuritiesList = [
@@ -78,7 +77,7 @@ export default function SecuritiesAdd() {
     let [showFinancialInstitutionName, setshowFinancialInstitutionName] = useState(false);
     let [showQuantityPrice, setshowQuantityPrice] = useState(false);
     let [showNameSecurities, setshowNameSecurities] = useState(true);
-    let [Equitydividendmethod, setEquitydividendmethod] = useState(false);
+    let [EquityBoxidendmethod, setEquityBoxidendmethod] = useState(false);
     let [showUnitDetails, setshowUnitDetails] = useState(false);
     let [showMoneyOrderQuantity, setshowMoneyOrderQuantity] = useState(false);
     let [showReducationAmount, setshowReducationAmount] = useState(false);
@@ -92,26 +91,26 @@ export default function SecuritiesAdd() {
     let [NameofSecuritiesError, setNameofSecuritiesError] = useState(false);
     let [UnitPriceError, setUnitPriceError] = useState(false);
     let [FinancialInstitutionNameError, setFinancialInstitutionNameError] = useState(false);
-    let [AmountofMoneyError, setAmountofMoneyError] = useState(false);   
-    
-    
+    let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
+
+
     // Proceed to next step
-    let [ShowLoader, setShowLoader] = useState(false);    
+    let [ShowLoader, setShowLoader] = useState(false);
 
 
     //Securities dropdown
     let selectId = 0;
-    const SecuritiesDropdownChange = (event) => {        
+    const SecuritiesDropdownChange = (event) => {
         let selectedValue = event.target.value;
-        if(selectedValue !== "0"){
+        if (selectedValue !== "0") {
             let selectedOptions = SecuritiesList.find(option => option.value === selectedValue);
-            selectId = Number(selectedOptions.id);  
+            selectId = Number(selectedOptions.id);
         }
-        else{
+        else {
             selectId = 0;
-        }          
-        setSecuritiesType(selectedValue);   
-        console.log(selectedValue);  
+        }
+        setSecuritiesType(selectedValue);
+        console.log(selectedValue);
         if (selectId !== 0) {
             setSecuritiesTypeError(false);
             handleInputChange(selectId);
@@ -124,12 +123,12 @@ export default function SecuritiesAdd() {
     const UnitsDropdownChange = (event) => {
         let selectedValue = event.target.value;
         let selectedOptions = UnitsList.find(option => option.value === selectedValue);
-        selectId = Number(selectedOptions.id);    
-        setUnitPrice(selectedValue);    
-        if(selectId === 3){
+        selectId = Number(selectedOptions.id);
+        setUnitPrice(selectedValue);
+        if (selectId === 3) {
             setShowOtherFreeInput(true);
         }
-        else{
+        else {
             setShowOtherFreeInput(false);
         }
     }
@@ -137,8 +136,8 @@ export default function SecuritiesAdd() {
     const UnitDetailsDropdownChange = (event) => {
         let selectedValue = event.target.value;
         let selectedOptions = UnitDetailsList.find(option => option.value === selectedValue);
-        selectId = Number(selectedOptions.id);    
-        setUnitDetails(selectedValue);       
+        selectId = Number(selectedOptions.id);
+        setUnitDetails(selectedValue);
         if (selectId !== 0) {
             setUnitDetailsError(false);
             handleInputChange(selectId);
@@ -161,38 +160,38 @@ export default function SecuritiesAdd() {
         let url = router.asPath;
         let searchParams = new URLSearchParams(url.split('?')[1]);
         searchParams = searchParams.get("edit");
-        if(searchParams !== null){
+        if (searchParams !== null) {
             securityId = Number(atob(searchParams));
             GetSecuritiesDetails(securityId);
-        }        
+        }
     }, []);
-    
+
     //Load cash savings details    
-    const GetSecuritiesDetails = async(securityId) => {       
+    const GetSecuritiesDetails = async (securityId) => {
         let auth_key = atob(sessionStorage.getItem("auth_key"));
-        const params = {auth_key: auth_key, id: securityId };
-        if(auth_key !== null && securityId !== 0){
-            try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_securities', {params});
-                if(response.status === 200){                    
-                    setSecuritiesType(response.data.securities_details.securities_type);  
-                    setNameofSecurities(response.data.securities_details.name_and_brand);                                     
+        const params = { auth_key: auth_key, id: securityId };
+        if (auth_key !== null && securityId !== 0) {
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/get_securities', { params });
+                if (response.status === 200) {
+                    setSecuritiesType(response.data.securities_details.securities_type);
+                    setNameofSecurities(response.data.securities_details.name_and_brand);
                     setFinancialInstitutionName(response.data.securities_details.financial_institution_name);
-                    setUnitDetails(response.data.securities_details.unit_details);     
+                    setUnitDetails(response.data.securities_details.unit_details);
                     setUnitPrice(response.data.securities_details.unit_1_details);
                     setQuantity(response.data.securities_details.quantity);
-                    setAmountofMoney(response.data.securities_details.amount.toLocaleString());                                                     
+                    setAmountofMoney(response.data.securities_details.amount.toLocaleString());
                 }
-                else{
+                else {
 
                 }
-            }catch (error){
+            } catch (error) {
                 console.error('Error:', error);
             }
-        }  
-        else{
+        }
+        else {
             //Logout();
-        }      
+        }
     };
 
     function inputClear() {
@@ -353,7 +352,7 @@ export default function SecuritiesAdd() {
     const QuantityKeyPress = (e) => {
         let unit_price = parseFloat(e.target.value);
         setQuantity(unit_price);
-    }    
+    }
 
     //All input validation check and handling function
     const inputHandlingFunction = (event) => {
@@ -417,12 +416,12 @@ export default function SecuritiesAdd() {
             }
         }
     }
-    
+
 
     //Submit insert and edit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = async() => {
+    const onSubmit = async () => {
         defaultValues = {
             SecuritiesType: SecuritiesType,
             UnitDetails: UnitDetails,
@@ -460,45 +459,45 @@ export default function SecuritiesAdd() {
                 setFinancialInstitutionNameError(true);
                 isSumbitDisabled = true;
             }
-        }        
+        }
 
         if (defaultValues.AmountofMoney !== "" || defaultValues.AmountofMoney === 0) {
             valueConvertFun(defaultValues.AmountofMoney);
-        }        
+        }
 
         //Api setup
         let auth_key = atob(sessionStorage.getItem("auth_key"));
-        if (isSumbitDisabled !== true && auth_key !== null) {     
+        if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let securityId = 0;
             let url = router.asPath;
             let searchParams = new URLSearchParams(url.split('?')[1]);
             searchParams = searchParams.get("edit");
-            if(searchParams !== null){
+            if (searchParams !== null) {
                 securityId = Number(atob(searchParams));
-            }            
+            }
             const formData = new FormData();
             formData.append("auth_key", auth_key);
             formData.append("id", securityId);
-            formData.append("securities_type", SecuritiesType);            
+            formData.append("securities_type", SecuritiesType);
             formData.append("name_and_brand", NameofSecurities);
             formData.append("quantity", Quantity);
             formData.append("financial_institution_name", FinancialInstitutionName);
             formData.append("unit_details", UnitDetails);
-            formData.append("unit_1_details",  OthersUnitInput);
+            formData.append("unit_1_details", OthersUnitInput);
             AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
             formData.append("amount", parseFloat(AmountofMoney));
-            try{
-                if(securityId === 0){
+            try {
+                if (securityId === 0) {
                     response = await axios.post('https://minelife-api.azurewebsites.net/add_securities', formData);
                 }
-                else{
+                else {
                     response = await axios.post('https://minelife-api.azurewebsites.net/edit_securities', formData);
-                }               
-                if(response.status === 200){
-                    router.push(`/declaration-printing/securities`); 
-                }                
-            }catch(error){
+                }
+                if (response.status === 200) {
+                    router.push(`/declaration-printing/securities`);
+                }
+            } catch (error) {
                 console.log('Error:', error);
             }
         }
@@ -507,201 +506,164 @@ export default function SecuritiesAdd() {
             setisSumbitDisabled(true);
             setShowLoader(false);
             //Logout();
-        }        
+        }
     };
 
-    
+
     return (
         <>
-        <>
-        {ShowLoader && (
-            <BackdropLoader ShowLoader={ShowLoader} />
-        )}
-        </>
-            
-            <div className="securities-wrapper">
-                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-                    <div className="page-heading">
-                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+            <>
+                {ShowLoader && (
+                    <BackdropLoader ShowLoader={ShowLoader} />
+                )}
+            </>
+
+            <Box className="securities-wrapper">
+                <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <Box className="page-heading">
+                        <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                             有価証券1
-                        </p>
-                    </div>
-                </div>
-                <div className="page-description py-8">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box className="page-description py-8">
+                    <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                         以下の内容を入力して[保存]ボタンを押して下さい。
-                    </p>
-                </div>
-            </div>
-            <div className="w-full inline-block">
-                <form action="#" method="POST">                   
-                        <div className="w-full flex items-center  mb-12">
-                            <div className="label w-25 inline-block">
-                                <label htmlFor="SecuritiesType" className="form-label">
-                                    有価証券の種類<i className="text-red-500">*</i>
-                                </label>
-                            </div>
-                            <div className="w-50 inline-block mt-2">
-                                <select id="SecuritiesType" value={SecuritiesType} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={SecuritiesDropdownChange}>
-                                    <option value='0' id="0"></option>
-                                    {SecuritiesList.map((option) => (
-                                        <option key={option.value} id={option.id} value={option.value}>
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
-                                {SecuritiesTypeError && (
-                                    <p className="text-red-500" role="alert">この項目は必須です</p>
-                                )}
-                            </div>
-                                      
-                    </div>
+                    </Typography>
+                </Box>
+            </Box>
+            <Box className="w-full inline-block">
+                <form action="#" method="POST">
+                    <Box className="w-full flex items-center  mb-12">
+                        <Box className="label w-25 inline-block">
+                            <Typography component={"label"} htmlFor="SecuritiesType" className="form-label">
+                                有価証券の種類<i className="text-red-500">*</i>
+                            </Typography>
+                        </Box>
+                        <Box className="w-50 inline-block mt-2">
+                            <select id="SecuritiesType" value={SecuritiesType} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={SecuritiesDropdownChange}>
+                                <option value='0' id="0"></option>
+                                {SecuritiesList.map((option) => (
+                                    <option key={option.value} id={option.id} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                            {SecuritiesTypeError && (
+                                <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                            )}
+                        </Box>
 
-                    <div className="w-full inline-block items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="NameofSecurities" className="form-label">
+                    </Box>
+
+                    <Box className="w-full inline-block items-center justify-between mb-7">
+                        <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} htmlFor="NameofSecurities" className="form-label">
                                     有価証券の名称・銘柄 <i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="NameofSecurities"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        onChange={inputHandlingFunction}
-                                        value={NameofSecurities}
-                                    />
-                                    {NameofSecuritiesError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2">
+                                <CustomInput type={"text"} id={"NameofSecurities"} onChange={inputHandlingFunction} value={NameofSecurities} />
+                                {NameofSecuritiesError && (
+                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                )}
+                            </Box>
+                        </Box>
+                    </Box>
 
-                        <div className="w-full block items-center justify-between mb-7">
-                            <div className="user-details">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="FinancialInstitutionName" className="form-label">
+                    <Box className="w-full block items-center justify-between mb-7">
+                        <Box className="user-details">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} htmlFor="FinancialInstitutionName" className="form-label">
                                     金融機関名<i className="text-red-500">*</i>
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="FinancialInstitutionName"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        onChange={inputHandlingFunction}
-                                        value={FinancialInstitutionName}
-                                    />
-                                    {FinancialInstitutionNameError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    
-                    
-                        <div className="w-full flex items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="Quantity" className="form-label">
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2">
+                                <CustomInput type={"text"} id={"FinancialInstitutionName"} onChange={inputHandlingFunction} value={FinancialInstitutionName} />
+                                {FinancialInstitutionNameError && (
+                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                )}
+                            </Box>
+                        </Box>
+                    </Box>
+
+                    <Box className="w-full flex items-center justify-between mb-7">
+                        <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} htmlFor="Quantity" className="form-label">
                                     数量
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="Quantity"                                       
-                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        value={Quantity}
-                                        onChange={QuantityKeyPress}
-                                        onKeyPress={handleKeyPress}
-                                    />
-                                </div>
-                            </div>
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="user-details">
-                                    <div className="label w-full inline-block">
-                                        <label className="form-label flex items-center">
-                                        単位 
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2 relative">
-                                        <select id="UnitsType" className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={UnitsDropdownChange}>
-                                            <option value='' id="0"></option>
-                                            {UnitsList.map((option) => (
-                                                <option key={option.value} id={option.id} value={option.value}>
-                                                    {option.label}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {UnitPriceError && (
-                                            <p className="text-red-500" role="alert">この項目は必須です</p>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div className="w-full flex items-center justify-between mb-7">
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="label w-full inline-block">
-                                    <label htmlFor="AmountofMoney" className="form-label">
-                                        金額
-                                    </label>
-                                </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        id="AmountofMoney"
-                                        value={AmountofMoney}
-                                        onChange={AmountofMoneyKeyPress}
-                                        onKeyPress={handleKeyPress}
-                                        className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                    />
-                                    {AmountofMoneyError && (
-                                        <p className="text-red-500" role="alert">この項目は必須です</p>
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2">
+                                <CustomInput type={"text"} id={"Quantity"} onChange={QuantityKeyPress} value={Quantity} onKeyPress={handleKeyPress} textAlign={"right"} />
+                            </Box>
+                        </Box>
+                        <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                            <Box className="user-details">
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label flex items-center">
+                                        単位
+                                    </Typography>
+                                </Box>
+                                <Box className="w-full inline-block mt-2 relative">
+                                    <select id="UnitsType" className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={UnitsDropdownChange}>
+                                        <option value='' id="0"></option>
+                                        {UnitsList.map((option) => (
+                                            <option key={option.value} id={option.id} value={option.value}>
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {UnitPriceError && (
+                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
-                                </div>
-                            </div>
-                            {ShowOtherFreeInput && (
+                                </Box>
+                            </Box>
+                        </Box>
+                    </Box>
+
+
+                    <Box className="w-full flex items-center justify-between mb-7">
+                        <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                            <Box className="label w-full inline-block">
+                                <Typography component={"label"} htmlFor="AmountofMoney" className="form-label">
+                                    金額
+                                </Typography>
+                            </Box>
+                            <Box className="w-full inline-block mt-2">
+                                <CustomInput type={"text"} id={"AmountofMoney"} onChange={AmountofMoneyKeyPress} value={AmountofMoney} onKeyPress={handleKeyPress} textAlign={"right"} />
+                                {AmountofMoneyError && (
+                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                )}
+                            </Box>
+                        </Box>
+                        {ShowOtherFreeInput && (
                             <>
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                <div className="user-details">
-                                    <div className="label w-full inline-block">
-                                        <label className="form-label flex items-center">
-                                        その他を選択した場合、単位を記載
-                                        </label>
-                                    </div>
-                                    <div className="w-full inline-block mt-2 relative">
-                                        <input
-                                            type="text"
-                                            id="OthersUnitInput"  
-                                            value={OthersUnitInput} 
-                                            onChange={inputHandlingFunction}
-                                            onKeyPress={handleKeyPress}                              
-                                            className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                        
-                                    </div>
-                                </div>
-                            </div>
+                                <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                    <Box className="user-details">
+                                        <Box className="label w-full inline-block">
+                                            <Typography component={"label"} className="form-label flex items-center">
+                                                その他を選択した場合、単位を記載
+                                            </Typography>
+                                        </Box>
+                                        <Box className="w-full inline-block mt-2 relative">
+                                            <CustomInput type={"text"} id={"OthersUnitInput"} onChange={inputHandlingFunction} value={OthersUnitInput} onKeyPress={handleKeyPress} textAlign={"right"} />
+                                        </Box>
+                                    </Box>
+                                </Box>
                             </>
                         )}
-                        </div>
+                    </Box>
 
-                        
-                       
-                        <div className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
-                        <div className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
-                            <BackButton/>              
+                    <Box className="Total-property-section py-10 lg:py-20 xl:py-20 2xl:py-20 px-20 lg:px-36 xl:px-36 2xl:px-36 mx-auto w-full lg:max-w-screen-md xl:max-w-screen-md 2xl:max-w-screen-md">
+                        <Box className="w-full block lg:flex xl:flex 2xl:flex justify-evenly items-center">
+                            <BackButton />
                             <SubmitButton onSubmit={onSubmit} isSumbitDisabled={isSumbitDisabled} />
-                        </div>                                           
-                        </div>   
+                        </Box>
+                    </Box>
                 </form>
-            </div>
+            </Box>
         </>
     )
 }

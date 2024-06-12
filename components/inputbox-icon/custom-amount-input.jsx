@@ -1,19 +1,22 @@
 import React from "react";
-import { TextField } from "@mui/material";
+import { TextField, Box } from "@mui/material";
+import UnitPriceIcon from "./textbox-unitprice-icon";
 
-export default function CustomInput({ type, id, onChange, value, textAlign }) {
+export default function CustomAmountInput({ type, id, onChange, onKeyPress, value, textAlign }) {
     return (
         <>
             <TextField
                 type={type}
                 id={id}
-                className="form-control w-full bg-custom-gray rounded h-12 pl-3"
+                className="form-control w-full bg-custom-gray rounded h-12 pr-12"
                 onChange={onChange}
+                onKeyPress={onKeyPress}
                 value={value}
                 autoComplete="off"
                 sx={{
                     '& .MuiOutlinedInput-root': {
                         border: 'none',
+                        paddingRight: 4,
                         '& fieldset': {
                             border: 'none',
                         },
@@ -29,6 +32,7 @@ export default function CustomInput({ type, id, onChange, value, textAlign }) {
                     },
                 }}
             />
+            <UnitPriceIcon/>
         </>
     );
 };

@@ -14,6 +14,7 @@ import Header from "../../components/header";
 import Footer from "../../components/footer";
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
 import BackdropLoader from '../../components/loader/backdrop-loader';
+import CustomInput from "../../components/inputbox-icon/custom-input";
 
 export default function Login(props) {
   let [UserName, setUserName] = useState("");
@@ -122,7 +123,7 @@ export default function Login(props) {
             </Box>
           </Box>
           <Box className="page-description py-8">
-            <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+            <Typography fontSize={14} component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
               登録済みのメールアドレスでログインして下さい
             </Typography>
           </Box>
@@ -147,15 +148,9 @@ export default function Login(props) {
                   </Typography>
                 </Box>
                 <Box className="w-full inline-block mt-2">
-                  <input
-                    type="text"
-                    id="UserName"
-                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                    onChange={inputHandlingFunction}
-                    value={UserName}
-                  />
+                  <CustomInput type={"text"} id={"UserName"} onChange={inputHandlingFunction} value={UserName} />
                   {UserNameError && (
-                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                    <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
                   {isValidEmail ? null : <Typography component={"p"} className="text-red-500 mt-2" role="alert">形式が違います</Typography>}
                 </Box>
@@ -168,37 +163,48 @@ export default function Login(props) {
                   </Typography>
                 </Box>
                 <Box className="w-full inline-block mt-2">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                    id="Password"
-                    onChange={inputHandlingFunction}
-                    value={Password}
-                  />
+                  <CustomInput type={showPassword ? 'text' : 'password'} id={"Password"} onChange={inputHandlingFunction} value={Password} />
                   <Box className="py-2 mt-2">
                     <InputAdornment>
                       <IconButton id="Icon" onClick={handleTogglePassword} >
                         {showPassword ? <Visibility style={{ width: '18px', height: '18px' }} /> : <VisibilityOff style={{ width: '18px', height: '18px' }} />}
                       </IconButton>
-                      <Typography component={"label"} className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</Typography>
+                      <Typography fontSize={12} component={"label"} className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</Typography>
                     </InputAdornment>
                   </Box>
                   {PasswordError && (
-                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                    <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
                 </Box>
               </Box>
 
               <Box className="login-btn pt-3 text-center">
-                <button
-                  onClick={onSubmit}
-                  type="button"
-                  className="bg-primary-color rounded  px-10 py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
-                >
-                  <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
-                    ログイン
-                  </span>
-                </button>
+                <Box>
+                  <Button
+                    type="button"
+                    onClick={onSubmit}
+                    disabled={false}
+                    variant="contained"
+                    sx={{
+                      width: 'auto',
+                      backgroundColor: 'primary.main',
+                      color: 'white',
+                      '&:hover': {
+                        backgroundColor: 'primary.light',
+                        color: 'primary.main',
+                      },
+                      borderRadius: '3px',
+                      paddingLeft: 3,
+                      paddingRight: 3,
+                      py: 1,
+                      transition: 'all 0.3s ease',
+                    }}
+                  >
+                    <Typography component={"span"} className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                      ログイン
+                    </Typography>
+                  </Button>
+                </Box>
               </Box>
               <Box className="text-center">
                 <Box className="mt-3">
@@ -215,13 +221,32 @@ export default function Login(props) {
                 </Box>
               </Box>
               <Box className="register-btn pt-7 text-center">
-                <Link href="/auth/register">
-                  <button className="bg-white border-2 border-primary-gray rounded px-7 py-2">
-                    <span className="text-primary-gray text-sm font-medium">
-                      会員登録
-                    </span>
-                  </button>
-                </Link>
+                <Button
+                  component={Link}
+                  href="/auth/register"
+                  type="button"
+                  variant="contained"
+                  sx={{
+                    width: 'auto',
+                    backgroundColor: 'white',
+                    color: 'gray',
+                    border: '1.6px solid',
+                    borderColor: 'gray',
+                    '&:hover': {
+                      backgroundColor: 'lightgray',
+                      color: 'gray',
+                    },
+                    borderRadius: '3px',
+                    paddingLeft: 3,
+                    paddingRight: 3,
+                    py: 1,
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  <Typography component={"span"} className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                    会員登録
+                  </Typography>
+                </Button>
               </Box>
             </form>
           </Box>

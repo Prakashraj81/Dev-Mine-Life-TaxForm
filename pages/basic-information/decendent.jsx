@@ -1,9 +1,26 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Box,
+  Stepper,
+  Step,
+  StepLabel,
+  StepButton,
+  Button,
+  Typography,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../components/back-btn";
 import SubmitButton from "../../components/submit-btn";
@@ -12,11 +29,6 @@ import IncorrectError from "../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../components/layouts/full/FullLayout';
 import PostcodeIcon from "../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../components/loader/backdrop-loader';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import JapaneseCalendar from "../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../components/inputbox-icon/custom-input";
 import CustomPostalcodeInput from "../../components/inputbox-icon/custom-postalcode-input";

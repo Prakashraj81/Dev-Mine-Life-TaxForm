@@ -1,11 +1,10 @@
 "use client";
 import React, { useState, useEffect, useRef, Fragment, Controller } from "react";
 import Link from "next/link";
-import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import BackButton from "../../components/back-btn";
 import FullLayout from '../../components/layouts/full/FullLayout';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import { list } from "postcss";
 import axios from 'axios';
 
 const tableList = [
@@ -104,25 +103,25 @@ const TargetBlankClick = (event) => {
 
     return (
         <>
-            <div className="summary-property-wrapper">
-                <div className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
-                    <div className="page-heading">
-                        <p className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
+            <Box className="summary-property-wrapper">
+                <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
+                    <Box className="page-heading">
+                        <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
                         3年以内贈与・各種特例・税額控除の入力
-                        </p>
-                    </div>
-                </div>
-                <div className="page-description py-8">
-                    <p className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box className="page-description py-8">
+                <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
                     入力おつかれさまでした。ご入力いただいた情報を基に作成された相続税申告書のダウンロードができます。<br/>
                     マイナンバーおよび提出日を手書きしてください。
-                    </p>
-                </div>
+                    </Typography>
+                </Box>
 
-                <div className="summary-tables-wrapper max-w-screen-md mx-auto">
-                    <div className="py-5 text-center w-full inline-block">
-                        <h5 className="text-xl font-medium tracking-2">個別ダウンロード</h5>
-                    </div>
+                <Box className="summary-tables-wrapper max-w-screen-md mx-auto">
+                    <Box className="py-5 text-center w-full inline-block">
+                    <Typography component={"h5"} className="text-xl font-medium tracking-2">個別ダウンロード</Typography>
+                    </Box>
                     <table className="text-left table">
                         <tbody>
                         {tableList.map((list, index) => {
@@ -140,11 +139,11 @@ const TargetBlankClick = (event) => {
                         })}
                         </tbody>
                     </table>
-                </div>                
+                </Box>                
                 
-                <div className="w-full hidden flex justify-evenly items-center py-10">
+                <Box className="w-full hidden flex justify-evenly items-center py-10">
                     <BackButton />
-                    <div className="save-btn text-center">
+                    <Box className="save-btn text-center">
                         <button
                             type="submit"
                             className="bg-primary-color rounded px-4 md:px-6 lg:px-10 xl:px-10 2xl:px-10 py-1 md:py-2 lg:py-3 xl:py-3 2xl:py-3 text-white hover:text-black hover:bg-gray-200 transition-colors duration-300"
@@ -153,9 +152,9 @@ const TargetBlankClick = (event) => {
                                 保存
                             </span>
                         </button>
-                    </div>
-                </div>
-            </div>
+                    </Box>
+                </Box>
+            </Box>
         </>
     )
 }
