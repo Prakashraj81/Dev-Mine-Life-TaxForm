@@ -15,6 +15,7 @@ import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-i
 import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../../components/inputbox-icon/custom-input";
 import CustomAmountInput from "../../../components/inputbox-icon/custom-amount-input";
+import CustomDropdownInput from "../../../components/inputbox-icon/custom-dropdown";
 
 export default function LivingDonationAdd() {
     let [HeirList, setHeirList] = useState([]);
@@ -102,14 +103,12 @@ export default function LivingDonationAdd() {
         }
     };
 
-    const handleChangeHeir = () => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        let selectedId = Number(selectedOption.value);
+    const handleChangeHeir = (event) => {
+        let selectedId = Number(event.target.value);
         setisSumbitDisabled(false);
-        setShowIncorrectError(false);
         setHeirListTypeError(false);
         setHeirId(selectedId);
-    }
+    };
 
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
@@ -311,16 +310,9 @@ export default function LivingDonationAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">
-                                <select id="HeirListType" value={HeirId} onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                    <option value='' id="0"></option>
-                                    {HeirList.map((option) => (
-                                        <option key={option.heir_id} value={option.heir_id}>
-                                            {option.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                <CustomDropdownInput id={"HeirListType"} lists={HeirList} onChange={handleChangeHeir} value={HeirId} error={HeirListTypeError}/>
                                 {HeirListTypeError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -334,9 +326,9 @@ export default function LivingDonationAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2 relative">
-                                <JapaneseCalendar id={"DateOfDonation"} DateValue={DateOfDonation} inputHandlingFunction={inputHandlingFunction} />
+                                <JapaneseCalendar id={"DateOfDonation"} DateValue={DateOfDonation} inputHandlingFunction={inputHandlingFunction} error={DateOfDonationError} />
                                 {DateOfDonationError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -350,9 +342,9 @@ export default function LivingDonationAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2 relative">
-                                <CustomInput type={"text"} id={"DonatedPropertyType"} onChange={inputHandlingFunction} value={DonatedPropertyType} />
+                                <CustomInput type={"text"} id={"DonatedPropertyType"} onChange={inputHandlingFunction} value={DonatedPropertyType} error={DonatedPropertyTypeError} />
                                 {DonatedPropertyTypeError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -367,9 +359,9 @@ export default function LivingDonationAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">
-                                <CustomInput type={"text"} id={"DonatedPropertyDetail"} onChange={inputHandlingFunction} value={DonatedPropertyDetail} />
+                                <CustomInput type={"text"} id={"DonatedPropertyDetail"} onChange={inputHandlingFunction} value={DonatedPropertyDetail} error={DonatedPropertyDetailError} />
                                 {DonatedPropertyDetailError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -383,9 +375,9 @@ export default function LivingDonationAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2 relative">
-                                <CustomAmountInput type={"text"} id={"DonatedPropertyAmount"} onChange={DonatedPropertyAmountKeyPress} onKeyPress={handleKeyPress} value={DonatedPropertyAmount} textAlign={"right"} />
+                                <CustomAmountInput type={"text"} id={"DonatedPropertyAmount"} onChange={DonatedPropertyAmountKeyPress} onKeyPress={handleKeyPress} value={DonatedPropertyAmount} textAlign={"right"} error={DonatedPropertyAmountError} />
                                 {DonatedPropertyAmountError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -399,9 +391,9 @@ export default function LivingDonationAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2 relative">
-                                <CustomAmountInput type={"text"} id={"DonatedPropertyAmountTax"} onChange={DonatedPropertyAmountTaxKeyPress} onKeyPress={handleKeyPress} value={DonatedPropertyAmountTax} textAlign={"right"} />
+                                <CustomAmountInput type={"text"} id={"DonatedPropertyAmountTax"} onChange={DonatedPropertyAmountTaxKeyPress} onKeyPress={handleKeyPress} value={DonatedPropertyAmountTax} textAlign={"right"} error={DonatedPropertyAmountTaxError} />
                                 {DonatedPropertyAmountTaxError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -415,9 +407,9 @@ export default function LivingDonationAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2 relative">
-                                <CustomInput type={"text"} id={"WhereTaxReturn"} onChange={inputHandlingFunction} value={WhereTaxReturn} />
+                                <CustomInput type={"text"} id={"WhereTaxReturn"} onChange={inputHandlingFunction} value={WhereTaxReturn} error={WhereTaxReturnError} />
                                 {WhereTaxReturnError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>

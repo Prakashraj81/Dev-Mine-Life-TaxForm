@@ -14,6 +14,8 @@ import BackdropLoader from '../../../components/loader/backdrop-loader';
 import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../../components/inputbox-icon/custom-input";
 import CustomPostalcodeInput from "../../../components/inputbox-icon/custom-postalcode-input";
+import CustomDropdownInput from "../../../components/inputbox-icon/custom-dropdown";
+import { set } from "date-fns";
 
 export default function DeathBenefitAdd() {
 
@@ -36,6 +38,7 @@ export default function DeathBenefitAdd() {
     let [NameofLifeInsuranceError, setNameofLifeInsuranceError] = useState(false);
     let [AddressError, setAddressError] = useState(false);
     let [DateofReceiptError, setDateofReceiptError] = useState(false);
+    let [ValuationAmountError, setValuationAmountError] = useState(false);
     let [HeirListTypeError, setHeirListTypeError] = useState(false);
 
     // Proceed to next step
@@ -103,14 +106,12 @@ export default function DeathBenefitAdd() {
         }      
     };
 
-    const handleChangeHeir = () => {
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        let selectedId = Number(selectedOption.value);
+    const handleChangeHeir = (event) => {
+        let selectedId = Number(event.target.value);
         setisSumbitDisabled(false);
-        setShowIncorrectError(false);            
         setHeirListTypeError(false);
-        setHeirId(selectedId);    
-    }
+        setHeirId(selectedId);
+    };
 
     const ValuationKeyPress = (e) => {
         let amount_of_money = e.target.value;
@@ -119,9 +120,11 @@ export default function DeathBenefitAdd() {
         amount_of_money = amount_of_money.toLocaleString();
         if (amount_of_money === "NaN") {
             setValuation(0);
+            setValuationAmountError(true);
         }
         else {
             setValuation(amount_of_money);
+            setValuationAmountError(false);
         }
     }
 
@@ -167,38 +170,6 @@ export default function DeathBenefitAdd() {
         setisSumbitDisabled(false);
     }
 
-    //Footer box values and calculation
-    let handleBoxValueChange = (e, index) => {
-        let newValue = parseFloat(e.target.value);
-        if (isNaN(newValue)) {
-            newValue = 0;
-        }
-        const updatedBoxValues = [...boxValues];
-        updatedBoxValues[index] = newValue;
-        setBoxValues(updatedBoxValues);
-
-        //Amount of money convert
-        if (Valuation == 0) {
-            Valuation = 0;
-        }
-        else {            
-            Valuation = parseFloat(Valuation.replace(/,/g, '').replace('.', ''));            
-        }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = Valuation - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    };
-
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
@@ -210,14 +181,16 @@ export default function DeathBenefitAdd() {
             DateofReceipt: DateofReceipt,
             Valuation: Valuation,
             HeirListType: HeirListType,
-            HeirId: HeirId,
-            UndecidedHeir: UndecidedHeir,
-            TotalPrice: Valuation,
+            HeirId: HeirId,            
         };
 
         //input Validation
         if (defaultValues.NameofLifeInsurance === "") {
             setNameofLifeInsuranceError(true);
+            isSumbitDisabled = true;
+        }
+        if(defaultValues.DateofReceipt === ""){
+            setDateofReceiptError(true);
             isSumbitDisabled = true;
         }
         if (defaultValues.Address === "") {
@@ -226,6 +199,10 @@ export default function DeathBenefitAdd() {
         }
         if (defaultValues.HeirId === 0) {
             setHeirListTypeError(true);
+            isSumbitDisabled = true;
+        }
+        if(defaultValues.Valuation === "" || defaultValues.Valuation === "0"){
+            setValuationAmountError(true);
             isSumbitDisabled = true;
         }
         //Api setup
@@ -302,9 +279,9 @@ export default function DeathBenefitAdd() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">                                   
-                                    <CustomInput type={"text"} id={"NameofLifeInsurance"} onChange={inputHandlingFunction} value={NameofLifeInsurance} />
+                                    <CustomInput type={"text"} id={"NameofLifeInsurance"} onChange={inputHandlingFunction} value={NameofLifeInsurance} error={NameofLifeInsuranceError} />
                                     {NameofLifeInsuranceError && (
-                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                        <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
                                 </Box>
                             </Box>
@@ -318,12 +295,12 @@ export default function DeathBenefitAdd() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2 relative">                                  
-                                    <CustomPostalcodeInput type={"text"} id={"PostCode"} onChange={postalcodeDigit} onKeyPress={handleKeyPress} value={PostCode}/>       
+                                    <CustomPostalcodeInput type={"text"} id={"PostCode"} onChange={postalcodeDigit} onKeyPress={handleKeyPress} value={PostCode} />       
                                 </Box>
                                 <Box className="mt-3">
-                                    <Typography component={"p"} className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
                                 </Box>
-                                {!isValid && <Typography component={"p"}>数字7桁で入力して下さい。海外の場合は入力不要です。</Typography>}
+                                {!isValid && <Typography fontSize={14} component={"p"}>数字7桁で入力して下さい。海外の場合は入力不要です。</Typography>}
                             </Box>
                         </Box>
 
@@ -335,9 +312,9 @@ export default function DeathBenefitAdd() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">                                    
-                                    <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} />
+                                    <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} error={AddressError} />
                                     {AddressError && (
-                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                        <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
                                 </Box>
                             </Box>
@@ -352,9 +329,9 @@ export default function DeathBenefitAdd() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">                                    
-                                    <JapaneseCalendar id={"DateofReceipt"} DateValue={DateofReceipt} inputHandlingFunction={inputHandlingFunction}/>
+                                    <JapaneseCalendar id={"DateofReceipt"} DateValue={DateofReceipt} inputHandlingFunction={inputHandlingFunction} error={DateofReceiptError} />
                                     {DateofReceiptError && (
-                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                        <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
                                 </Box>
                             </Box>
@@ -368,17 +345,10 @@ export default function DeathBenefitAdd() {
                                     受け取った相続人<i className="text-red-500">*</i>
                                 </Typography>
                             </Box>
-                            <Box className="w-full inline-block mt-2">
-                                <select id="HeirListType" value={HeirId} onChange={handleChangeHeir} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                    <option value='' id="0"></option>
-                                    {HeirList.map((option) => (
-                                        <option key={option.heir_id} value={option.heir_id}>
-                                            {option.name}
-                                        </option>
-                                    ))}
-                                </select>
+                            <Box className="w-full inline-block mt-2">                                
+                                <CustomDropdownInput id={"HeirListType"} lists={HeirList} onChange={handleChangeHeir} value={HeirId} error={HeirListTypeError}/>
                                 {HeirListTypeError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -389,11 +359,14 @@ export default function DeathBenefitAdd() {
                             <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                 <Box className="label w-full inline-block">
                                     <Typography component={"label"} className="form-label">
-                                        受け取った金額
+                                        受け取った金額<i className="text-red-500">*</i>
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">                                    
-                                    <CustomInput type={"text"} id={"Valuation"} onChange={ValuationKeyPress} onKeyPress={handleKeyPress} value={Valuation} textAlign={"right"} />
+                                    <CustomInput type={"text"} id={"Valuation"} onChange={ValuationKeyPress} onKeyPress={handleKeyPress} value={Valuation} textAlign={"right"} error={ValuationAmountError} />
+                                    {ValuationAmountError && (
+                                        <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    )}
                                 </Box>
                             </Box>
                         </Box>

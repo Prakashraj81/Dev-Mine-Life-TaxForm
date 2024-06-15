@@ -356,9 +356,9 @@ export default function Heir() {
                                         </Typography>
                                     </Box>
                                     <Box className="w-full inline-block mt-2">
-                                        <CustomInput type={"text"} id={"Name"} onChange={inputHandlingFunction} value={Name}/>
+                                        <CustomInput type={"text"} id={"Name"} onChange={inputHandlingFunction} value={Name} error={NameError}/>
                                         {NameError && (
-                                            <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                            <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                         )}
                                     </Box>
                                 </Box>
@@ -372,12 +372,12 @@ export default function Heir() {
                                         </Typography>
                                     </Box>
                                     <Box className="w-full inline-block mt-2">
-                                        <CustomInput type={"text"} id={"Furigana"} onChange={inputHandlingFunction} value={Furigana}/>                                        
+                                        <CustomInput type={"text"} id={"Furigana"} onChange={inputHandlingFunction} value={Furigana} error={FuriganaError}/>                                        
                                         {KatakanaError && (
-                                            <Typography component={"p"} className="text-red-500" role="alert">カタカナのみを気にしてください。</Typography>
+                                            <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">カタカナのみを気にしてください。</Typography>
                                         )}
                                         {FuriganaError && (
-                                            <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                            <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                         )}
                                     </Box>
                                 </Box>
@@ -392,9 +392,9 @@ export default function Heir() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">
-                                    <JapaneseCalendar id={"DateofBirth"} DateValue={DateofBirth} inputHandlingFunction={inputHandlingFunction} />
+                                    <JapaneseCalendar id={"DateofBirth"} DateValue={DateofBirth} inputHandlingFunction={inputHandlingFunction} error={DateofBirthError} />
                                     {DateofBirthError && (
-                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                        <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
                                 </Box>
                             </Box>
@@ -438,12 +438,12 @@ export default function Heir() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">                                
-                                    <CustomPhoneInput type={"text"} id={"TelephoneNumber"} onChange={inputHandlingFunction} onKeyPress={handleKeyPress} value={TelephoneNumber}/> 
+                                    <CustomPhoneInput type={"text"} id={"TelephoneNumber"} onChange={inputHandlingFunction} onKeyPress={handleKeyPress} value={TelephoneNumber} error={TelephoneNumberError}/> 
                                     <Box className="mt-3">
-                                        <Typography component={"p"} className="text-xs text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
+                                        <Typography component={"p"} fontSize={12} className="text-xs text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
                                     </Box>
                                     {TelephoneNumberError && (
-                                        <Typography component={"p"} className="text-red-500 pt-3" role="alert">この項目は必須です</Typography>
+                                        <Typography component={"p"} fontSize={14} className="text-red-500 pt-3" role="alert">この項目は必須です</Typography>
                                     )}
                                 </Box>
                             </Box>
@@ -521,7 +521,7 @@ export default function Heir() {
                                         </optgroup>
                                     </select>
                                     {RelationshipWithDecedentError && (
-                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                        <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
                                 </Box>
                             </Box>
@@ -613,7 +613,7 @@ export default function Heir() {
                             <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <Box className="label w-full inline-block">
                                     <Typography component={"label"} className="form-label">
-                                        申告書を提出した税務署<i className="text-red-500">*</i>
+                                        申告書を提出した税務署
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2 relative">                                    

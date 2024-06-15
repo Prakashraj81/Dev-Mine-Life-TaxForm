@@ -37,14 +37,14 @@ const theme = createTheme({
     },
     error: {
       old_main: "#e46a76",
-      main1: "rgb(220 38 38)",
-      main: "rgb(239 68 68)",
-      light: "rgb(254 202 202)",
+      main1: "#EF2626",
+      main: "#EF4444",
+      light: "#FECACA",
       dark: "#e45a68",
-    },
+      contrastText: "#EF4444",
+    },    
     warning: {
       main: "#fec90f",
-
       dark: "#dcb014",
       contrastText: "#ffffff",
     },

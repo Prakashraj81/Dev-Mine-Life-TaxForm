@@ -198,26 +198,11 @@ export default function FuneralExpensesAdd() {
             setDatePaidError(true);
             isSumbitDisabled = true;
         }
-        if (defaultValues.AmountPaid === "") {
+        if (defaultValues.AmountPaid === "" || defaultValues.AmountPaid === "0") {
             setAmountPaidError(true);
             isSumbitDisabled = true;
         }
-        if (defaultValues.UndecidedHeir !== "") {
-            if (defaultValues.UndecidedHeir === 0) {
-                UndecidedHeir = 0;
-            }
-            else {
-                UndecidedHeir = defaultValues.UndecidedHeir.replace(/,/g, '').replace('.', '');
-                UndecidedHeir = parseFloat(UndecidedHeir);
-            }
-            if (defaultValues.UndecidedHeir < 0) {
-                setShowIncorrectError(true);
-                isSumbitDisabled = true;
-            }
-            else {
-                setShowIncorrectError(true);
-            }
-        }
+        
 
         //Api setup
         let auth_key = atob(sessionStorage.getItem("auth_key"));
@@ -294,9 +279,9 @@ export default function FuneralExpensesAdd() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">
-                                    <CustomInput type={"text"} id={"FeePayeeName"} onChange={inputHandlingFunction} value={FeePayeeName} />
+                                    <CustomInput type={"text"} id={"FeePayeeName"} onChange={inputHandlingFunction} value={FeePayeeName} error={FeePayeeNameError} />
                                     {FeePayeeNameError && (
-                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                        <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
                                 </Box>
                             </Box>
@@ -317,9 +302,9 @@ export default function FuneralExpensesAdd() {
                                 <CustomPostalcodeInput type={"text"} id={"PostCode"} onChange={postalcodeDigit} onKeyPress={handleKeyPress} value={PostCode} />
                             </Box>
                             <Box className="mt-3">
-                                <Typography component={"p"} className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
+                                <Typography component={"p"} fontSize={14} className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
                             </Box>
-                            {!isValid && <Typography component={"p"}>数字7桁で入力して下さい。海外の場合は入力不要です。</Typography>}
+                            {!isValid && <Typography component={"p"} fontSize={14}>数字7桁で入力して下さい。海外の場合は入力不要です。</Typography>}
                         </Box>
                     </Box>
 
@@ -331,9 +316,9 @@ export default function FuneralExpensesAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">
-                                <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} />
+                                <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} error={AddressError} />
                                 {AddressError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -349,9 +334,9 @@ export default function FuneralExpensesAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">
-                                <JapaneseCalendar id={"DatePaid"} DateValue={DatePaid} inputHandlingFunction={inputHandlingFunction} />
+                                <JapaneseCalendar id={"DatePaid"} DateValue={DatePaid} inputHandlingFunction={inputHandlingFunction} error={DatePaidError} />
                                 {DatePaidError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -366,9 +351,9 @@ export default function FuneralExpensesAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">
-                                <CustomInput type={"text"} id={"AmountPaid"} onChange={AmountPaidKeyPress} onKeyPress={handleKeyPress} value={AmountPaid} textAlign={"right"} />
+                                <CustomInput type={"text"} id={"AmountPaid"} onChange={AmountPaidKeyPress} onKeyPress={handleKeyPress} value={AmountPaid} textAlign={"right"} error={AmountPaidError} />
                                 {AmountPaidError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>

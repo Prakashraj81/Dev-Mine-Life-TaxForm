@@ -342,7 +342,7 @@ export default function OtherPropertyAdd() {
                 isSumbitDisabled = true;
             }
         }
-        if (defaultValues.Valuation === "") {
+        if (defaultValues.Valuation === "" || defaultValues.Valuation === "0") {
             if (ShowValuation === true) {
                 setValuationError(true);
                 isSumbitDisabled = true;
@@ -420,7 +420,7 @@ export default function OtherPropertyAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">                                
-                                <CustomInput type={"text"} id={"PropertyName"} onChange={inputHandlingFunction} value={PropertyName} />
+                                <CustomInput type={"text"} id={"PropertyName"} onChange={inputHandlingFunction} value={PropertyName} error={PropertyNameError} />
                                 {PropertyNameError && (
                                     <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
@@ -577,9 +577,9 @@ export default function OtherPropertyAdd() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2 relative">                                  
-                                    <CustomAmountInput type={"text"} id={"Valuation"} onChange={ValuationKeyPress} onKeyPress={handleKeyPress} value={Valuation} textAlign={"right"}/>
+                                    <CustomAmountInput type={"text"} id={"Valuation"} onChange={ValuationKeyPress} onKeyPress={handleKeyPress} value={Valuation} textAlign={"right"} error={ValuationError} />
                                     {ValuationError && (
-                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                        <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
                                 </Box>
                             </Box>

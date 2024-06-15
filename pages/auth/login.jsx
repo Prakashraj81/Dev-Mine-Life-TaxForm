@@ -87,8 +87,12 @@ export default function Login(props) {
           setShowLoader(false);
         }
       } catch (error) {
-        if (error.response.data.error.code === 'InternalServerError') {
-          setAlertMessage("SQL Server connection is failed.");
+        if (error.code === 'ERR_NETWORK') {
+          setAlertMessage("Server error.");
+          setLoginError(true);
+        }
+        else if (error.response.data.error.code === 'InternalServerError') {
+          setAlertMessage("Internal server error.");
           setLoginError(true);
         }
         else if (error.response.data.error.message === "Authentication Failure") {
@@ -148,7 +152,7 @@ export default function Login(props) {
                   </Typography>
                 </Box>
                 <Box className="w-full inline-block mt-2">
-                  <CustomInput type={"text"} id={"UserName"} onChange={inputHandlingFunction} value={UserName} />
+                  <CustomInput type={"text"} id={"UserName"} onChange={inputHandlingFunction} value={UserName} error={UserNameError} />
                   {UserNameError && (
                     <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
@@ -163,7 +167,7 @@ export default function Login(props) {
                   </Typography>
                 </Box>
                 <Box className="w-full inline-block mt-2">
-                  <CustomInput type={showPassword ? 'text' : 'password'} id={"Password"} onChange={inputHandlingFunction} value={Password} />
+                  <CustomInput type={showPassword ? 'text' : 'password'} id={"Password"} onChange={inputHandlingFunction} value={Password} error={PasswordError} />
                   <Box className="py-2 mt-2">
                     <InputAdornment>
                       <IconButton id="Icon" onClick={handleTogglePassword} >

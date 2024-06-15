@@ -14,17 +14,18 @@ import BackdropLoader from '../../../components/loader/backdrop-loader';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import PrintIcon from '@mui/icons-material/Print';
 import CustomInput from "../../../components/inputbox-icon/custom-input";
+import CustomDropdownInput from "../../../components/inputbox-icon/custom-dropdown";
 
 export default function CashSavingsAdd() {
     let DepositList = [
-        { id: 1, value: '現金', label: '現金' },
-        { id: 2, value: '普通預金', label: '普通預金' },
-        { id: 3, value: '定期預金', label: '定期預金' },
-        { id: 4, value: '当座預金', label: '当座預金' },
-        { id: 5, value: '通常貯金', label: '通常貯金' },
-        { id: 6, value: '普通貯金', label: '普通貯金' },
-        { id: 7, value: '定期貯金', label: '定期貯金' },
-        { id: 8, value: 'その他', label: 'その他' },
+        { id: 1, value: '現金', name: '現金' },
+        { id: 2, value: '普通預金', name: '普通預金' },
+        { id: 3, value: '定期預金', name: '定期預金' },
+        { id: 4, value: '当座預金', name: '当座預金' },
+        { id: 5, value: '通常貯金', name: '通常貯金' },
+        { id: 6, value: '普通貯金', name: '普通貯金' },
+        { id: 7, value: '定期貯金', name: '定期貯金' },
+        { id: 8, value: 'その他', name: 'その他' },
     ];
 
     let HeirList = [
@@ -394,15 +395,8 @@ export default function CashSavingsAdd() {
                                         預金の種類<i className="text-red-500">*</i>
                                     </Typography>
                                 </Box>
-                                <Box className="w-full inline-block mt-2">
-                                    <select id="DepositType" value={DepositType} className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2" onChange={handleDepositType}>
-                                        <option value='' id="0"></option>
-                                        {DepositList.map((option) => (
-                                            <option key={option.value} id={option.id} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
+                                <Box className="w-full inline-block mt-2">                                    
+                                    <CustomDropdownInput id={DepositType} lists={DepositList} onChange={handleDepositType} value={DepositType} error={DepositTypeError}/>
                                     {DepositTypeError && (
                                         <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
@@ -446,7 +440,7 @@ export default function CashSavingsAdd() {
                                         </Typography>
                                     </Box>
                                     <Box className="w-full inline-block mt-2">                                        
-                                        <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} />
+                                        <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} error={AddressError} />
                                         {AddressError && (
                                             <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                         )}
@@ -464,7 +458,7 @@ export default function CashSavingsAdd() {
                                         </Typography>
                                     </Box>
                                     <Box className="w-full inline-block mt-2">
-                                        <CustomInput type={"text"} id={"FinancialInstitutionName"} onChange={inputHandlingFunction} value={FinancialInstitutionName} />
+                                        <CustomInput type={"text"} id={"FinancialInstitutionName"} onChange={inputHandlingFunction} value={FinancialInstitutionName} error={FinancialInstitutionNameError} />
                                         {FinancialInstitutionNameError && (
                                             <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                         )}
@@ -481,7 +475,7 @@ export default function CashSavingsAdd() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">
-                                    <CustomInput type={"text"} id={"AmountofMoney"} onChange={AmountofMoneyKeyPress} value={AmountofMoney} onKeyPress={handleKeyPress} textAlign={"right"} />
+                                    <CustomInput type={"text"} id={"AmountofMoney"} onChange={AmountofMoneyKeyPress} value={AmountofMoney} onKeyPress={handleKeyPress} textAlign={"right"} error={AmountofMoneyError} />
                                     {AmountofMoneyError && (
                                         <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}

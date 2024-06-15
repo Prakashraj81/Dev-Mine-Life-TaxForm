@@ -303,10 +303,12 @@ export default function DebtAdd() {
             }
         }
         if (defaultValues.ObligationDate === "") {
-            if (ShowObligationDateDebtPaymentDeadline === true) {
-                setShowObligationDateDebtPaymentDeadlineError(true);
-                isSumbitDisabled = true;
-            }
+            setObligationDateError(true);
+            isSumbitDisabled = true;
+        }
+        if(defaultValues.AmountofMoney === "" || defaultValues.AmountofMoney === "0"){
+            setAmountofMoneyError(true);
+            isSumbitDisabled = true;
         }
         //Api setup
         let auth_key = atob(sessionStorage.getItem("auth_key"));
@@ -384,10 +386,10 @@ export default function DebtAdd() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">
-                                    <CustomInput type={"text"} id={"NameofDebt"} onChange={inputHandlingFunction} value={NameofDebt} />
+                                    <CustomInput type={"text"} id={"NameofDebt"} onChange={inputHandlingFunction} value={NameofDebt} error={NameofDebtError}/>
                                 </Box>
                                 {NameofDebtError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -402,7 +404,7 @@ export default function DebtAdd() {
                         <Box className="w-full inline-block mt-2">
                             <CustomInput type={"text"} id={"OtherParty"} onChange={inputHandlingFunction} value={OtherParty} />
                             <Box className="mt-3">
-                                <Typography component={"p"} className="text-sm text-black tracking-2 font-medium">15文字以内で入力して下さい</Typography>
+                                <Typography component={"p"} fontSize={14} className="text-sm text-black tracking-2 font-medium">15文字以内で入力して下さい</Typography>
                             </Box>
                         </Box>
                     </Box>
@@ -415,12 +417,12 @@ export default function DebtAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">
-                                <CustomInput type={"text"} id={"CauseofUnpaidBalance"} onChange={inputHandlingFunction} value={CauseofUnpaidBalance} />
+                                <CustomInput type={"text"} id={"CauseofUnpaidBalance"} onChange={inputHandlingFunction} value={CauseofUnpaidBalance} error={CauseofUnpaidBalanceError} />
                                 <Box className="mt-3">
-                                    <Typography component={"p"} className="text-sm text-black tracking-2 font-medium">15文字以内で入力して下さい</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-sm text-black tracking-2 font-medium">15文字以内で入力して下さい</Typography>
                                 </Box>
                                 {CauseofUnpaidBalanceError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -438,9 +440,9 @@ export default function DebtAdd() {
                                 <CustomPostalcodeInput type={"text"} id={"PostCode"} onChange={postalcodeDigit} onKeyPress={handleKeyPress} value={PostCode} />
                             </Box>
                             <Box className="mt-3">
-                                <Typography component={"p"} className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
+                                <Typography component={"p"} fontSize={14} className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
                             </Box>
-                            {!isValid && <Typography component={"p"}>数字7桁で入力して下さい。海外の場合は入力不要です。</Typography>}
+                            {!isValid && <Typography component={"p"} fontSize={14}>数字7桁で入力して下さい。海外の場合は入力不要です。</Typography>}
                         </Box>
                     </Box>
 
@@ -452,9 +454,9 @@ export default function DebtAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">
-                                <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} />
+                                <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} error={AddressError} />
                                 {AddressError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -469,9 +471,9 @@ export default function DebtAdd() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">
-                                    <JapaneseCalendar id={"ObligationDate"} DateValue={ObligationDate} inputHandlingFunction={inputHandlingFunction} />
+                                    <JapaneseCalendar id={"ObligationDate"} DateValue={ObligationDate} inputHandlingFunction={inputHandlingFunction} error={ObligationDateError} />
                                     {ObligationDateError && (
-                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                        <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
                                 </Box>
                             </Box>
@@ -498,9 +500,9 @@ export default function DebtAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2 relative">
-                                <CustomAmountInput type={"text"} id={"AmountofMoney"} onChange={AmountofMoneyKeyPress} onKeyPress={handleKeyPress} value={AmountofMoney} textAlign={"right"} />
+                                <CustomAmountInput type={"text"} id={"AmountofMoney"} onChange={AmountofMoneyKeyPress} onKeyPress={handleKeyPress} value={AmountofMoney} textAlign={"right"} error={AmountofMoneyError} />
                                 {AmountofMoneyError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>

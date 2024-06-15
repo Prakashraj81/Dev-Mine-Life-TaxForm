@@ -16,12 +16,13 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import PrintIcon from '@mui/icons-material/Print';
 import axios from "axios";
 import CustomInput from "../../../components/inputbox-icon/custom-input";
+import CustomDropdownInput from "../../../components/inputbox-icon/custom-dropdown";
 
 export default function SecuritiesAdd() {
     let SecuritiesList = [
-        { id: 1, value: '上場株式及び出資', label: '上場株式及び出資' },
-        { id: 2, value: '公債及び社債', label: '公債及び社債' },
-        { id: 3, value: '証券投資信託・貸付信託の受益証券', label: '証券投資信託・貸付信託の受益証券' },
+        { id: 1, value: '上場株式及び出資', name: '上場株式及び出資' },
+        { id: 2, value: '公債及び社債', name: '公債及び社債' },
+        { id: 3, value: '証券投資信託・貸付信託の受益証券', name: '証券投資信託・貸付信託の受益証券' },
         // { id: 1, value: '特定同族会社の株式出資（配当還元方式）', label: '特定同族会社の株式出資（配当還元方式）' },
         // { id: 2, value: '特定同族会社の株式出資（その他の方式）', label: '特定同族会社の株式出資（その他の方式）' },
         // { id: 3, value: '上記以外の株式（上場株式など）', label: '上記以外の株式（上場株式など）' },
@@ -40,23 +41,10 @@ export default function SecuritiesAdd() {
     ];
 
     let UnitsList = [
-        { id: 1, value: '株', label: '株' },
-        { id: 2, value: '口', label: '口' },
-        { id: 3, value: 'その他', label: 'その他（フリー入力）' },
+        { id: 1, value: '株', name: '株' },
+        { id: 2, value: '口', name: '口' },
+        { id: 3, value: 'その他', name: 'その他（フリー入力）' },
     ];
-
-    let HeirList = [
-        { id: 1, name: "User", name1: "山田　太郎" },
-        { id: 2, name: "Shree", name1: "Shree" },
-        { id: 3, name: "Prakashraj", name1: "Prakashraj" },
-        { id: 4, name: "Gowtham", name1: "Gowtham" },
-    ];
-
-    const buttonStyle = {
-        width: '18px',
-        height: '18px',
-    };
-
 
     let [SecuritiesType, setSecuritiesType] = useState("");
     let [UnitDetails, setUnitDetails] = useState("");
@@ -540,17 +528,10 @@ export default function SecuritiesAdd() {
                                 有価証券の種類<i className="text-red-500">*</i>
                             </Typography>
                         </Box>
-                        <Box className="w-50 inline-block mt-2">
-                            <select id="SecuritiesType" value={SecuritiesType} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={SecuritiesDropdownChange}>
-                                <option value='0' id="0"></option>
-                                {SecuritiesList.map((option) => (
-                                    <option key={option.value} id={option.id} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
+                        <Box className="w-50 inline-block mt-2">                            
+                            <CustomDropdownInput id={"SecuritiesType"} lists={SecuritiesList} onChange={SecuritiesDropdownChange} value={SecuritiesType} error={SecuritiesTypeError} />
                             {SecuritiesTypeError && (
-                                <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                             )}
                         </Box>
 
@@ -564,9 +545,9 @@ export default function SecuritiesAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">
-                                <CustomInput type={"text"} id={"NameofSecurities"} onChange={inputHandlingFunction} value={NameofSecurities} />
+                                <CustomInput type={"text"} id={"NameofSecurities"} onChange={inputHandlingFunction} value={NameofSecurities} error={NameofSecuritiesError} />
                                 {NameofSecuritiesError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -580,9 +561,9 @@ export default function SecuritiesAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">
-                                <CustomInput type={"text"} id={"FinancialInstitutionName"} onChange={inputHandlingFunction} value={FinancialInstitutionName} />
+                                <CustomInput type={"text"} id={"FinancialInstitutionName"} onChange={inputHandlingFunction} value={FinancialInstitutionName} error={FinancialInstitutionNameError} />
                                 {FinancialInstitutionNameError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>
@@ -606,17 +587,10 @@ export default function SecuritiesAdd() {
                                         単位
                                     </Typography>
                                 </Box>
-                                <Box className="w-full inline-block mt-2 relative">
-                                    <select id="UnitsType" className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={UnitsDropdownChange}>
-                                        <option value='' id="0"></option>
-                                        {UnitsList.map((option) => (
-                                            <option key={option.value} id={option.id} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
+                                <Box className="w-full inline-block mt-2 relative">                                    
+                                    <CustomDropdownInput id={"UnitPrice"} lists={UnitsList} onChange={UnitsDropdownChange} value={UnitPrice} error={UnitDetailsError} />
                                     {UnitPriceError && (
-                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                        <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
                                 </Box>
                             </Box>
@@ -632,9 +606,9 @@ export default function SecuritiesAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">
-                                <CustomInput type={"text"} id={"AmountofMoney"} onChange={AmountofMoneyKeyPress} value={AmountofMoney} onKeyPress={handleKeyPress} textAlign={"right"} />
+                                <CustomInput type={"text"} id={"AmountofMoney"} onChange={AmountofMoneyKeyPress} value={AmountofMoney} onKeyPress={handleKeyPress} textAlign={"right"} error={AmountofMoneyError} />
                                 {AmountofMoneyError && (
-                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
                         </Box>

@@ -119,11 +119,11 @@ export default function ForgetPassword() {
                   </Typography>
                 </Box>
                 <Box className="w-full inline-block mt-2">
-                  <CustomInput type={"email"} id={"ForgetPasswordEmail"} onChange={handleForgetPwdInput} value={ForgetPasswordEmail} />
+                  <CustomInput type={"email"} id={"ForgetPasswordEmail"} onChange={handleForgetPwdInput} value={ForgetPasswordEmail} error={ForgetPasswordEmailError}/>
                   {ForgetPasswordEmailError && (
-                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
-                  {isValidEmail ? null : <Typography component={"p"} className="text-red-500 mt-2" role="alert">形式が違います</Typography>}
+                  {isValidEmail ? null : <Typography component={"p"} fontSize={14} className="text-red-500 mt-2" role="alert">形式が違います</Typography>}
                 </Box>
               </Box>
 

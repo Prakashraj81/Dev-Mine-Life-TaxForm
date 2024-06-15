@@ -1,8 +1,17 @@
 import React from "react";
 import { TextField, Box } from "@mui/material";
 import UnitPriceIcon from "./textbox-unitprice-icon";
+import { keyframes } from "@mui/system";
 
-export default function CustomAmountInput({ type, id, onChange, onKeyPress, value, textAlign }) {
+// Define the shake keyframes
+const shake = keyframes`
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+`;
+export default function CustomAmountInput({ type, id, onChange, onKeyPress, value, textAlign, error }) {
     return (
         <>
             <TextField
@@ -15,8 +24,9 @@ export default function CustomAmountInput({ type, id, onChange, onKeyPress, valu
                 autoComplete="off"
                 sx={{
                     '& .MuiOutlinedInput-root': {
-                        border: 'none',
                         paddingRight: 4,
+                        border: error ? '1px solid red' : 'none',     
+                        animation: error ? `${shake} 0.5s` : 'none',  
                         '& fieldset': {
                             border: 'none',
                         },
@@ -28,6 +38,8 @@ export default function CustomAmountInput({ type, id, onChange, onKeyPress, valu
                         },
                         '& input': {
                             textAlign: textAlign ? textAlign : 'left',
+                            padding: '16px',
+                            height: '1em',
                         },
                     },
                 }}

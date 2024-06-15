@@ -11,6 +11,18 @@ import FullLayout from "../../../components/layouts/full/FullLayout";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import CustomInput from '../../../components/inputbox-icon/custom-input';
+import CustomDropdownInput from '../../../components/inputbox-icon/custom-dropdown';
+import { keyframes } from "@mui/system";
+
+// Define the shake keyframes
+const shake = keyframes`
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+`;
 
 const selectMenuItems = [
     { id: 0, name: "選択してください", value: "選択してください" },
@@ -261,60 +273,75 @@ export default function ContactUs() {
                             )}
                         </Box>
 
-                        <Box className='dropdown pb-7'>
-                            <Typography component={"label"} className="text-base pb-5 font-medium block">サービス名（サービスに関するご相談・お申し込みの方</Typography>
-                            <FormControl className='mt-5 px-3 py-3' sx={{ width: " 100% " }}>
-                                <Select
-                                    onChange={handleMenuItems}
-                                    value={ServiceName}
-                                    placeholder='選択してください'
-                                >
-                                    {selectMenuItems.map((menu) => (
-                                        <MenuItem
-                                            key={menu.id}
-                                            id={menu.id}
-                                            value={menu.value}
-                                        >
-                                            {menu.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                        <Box className='dropdown pb-3'>
+                            <Typography component={"label"} className="text-base pb-3 font-medium block">サービス名（サービスに関するご相談・お申し込みの方</Typography>                            
+                            <CustomDropdownInput id={"ServiceName"} lists={selectMenuItems} onChange={handleMenuItems} value={ServiceName}/>
                         </Box>
 
-                        <Box className="form-control block pb-7">
+                        <Box className="form-control block pb-3">
                             <Box className="input-field w-full inline-block">
-                                <Typography component={"label"} className="text-base font-medium pb-5 block">お名前<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></Typography>
-                                <TextField className="pt-5 w-50 inline-block" variant="outlined" id='Name' value={Name} onChange={handleInputValidation} />
+                                <Typography component={"label"} className="text-base font-medium pb-3 block">お名前<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></Typography>                                
+                                <Box className="w-50">
+                                    <CustomInput type={"text"} id={"Name"} onChange={handleInputValidation} value={Name} error={NameError}/>
+                                </Box>
                                 {NameError && (
                                     <Typography component="p" fontWeight={500} fontSize={12} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
-                            <Box className="input-field w-full inline-block pt-5">
-                                <Typography component={"label"} className="text-base font-medium pb-5 block">メールアドレス<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></Typography>
-                                <TextField className="pt-5 w-50 inline-block" variant="outlined" id='Email' value={Email} onChange={handleInputValidation} />
+                            <Box className="input-field w-full inline-block pt-3">
+                                <Typography component={"label"} className="text-base font-medium pb-3 block">メールアドレス<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></Typography>
+                                <Box className="w-50">
+                                    <CustomInput type={"text"} id={"Email"} onChange={handleInputValidation} value={Email} error={EmailError}/>
+                                </Box>                                
                                 {EmailError && (
                                     <Typography component="p" fontWeight={500} fontSize={12} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
-                            <Box className="input-field w-full inline-block pt-5">
-                                <Typography component={"label"} className="text-base font-medium pb-5 block">電話番号<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></Typography>
-                                <TextField className="pt-5 w-50 inline-block" variant="outlined" id='PhoneNumber' value={PhoneNumber} onChange={handleInputValidation} onKeyPress={handleKeyPress} />
+                            <Box className="input-field w-full inline-block pt-3">
+                                <Typography component={"label"} className="text-base font-medium pb-3 block">電話番号<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></Typography>
+                                <Box className="w-50">
+                                    <CustomInput type={"text"} id={"PhoneNumber"} onChange={handleInputValidation} onKeyPress={handleKeyPress} value={PhoneNumber} error={PhoneNumberError}/>
+                                </Box>                                
                                 {PhoneNumberError && (
                                     <Typography component="p" fontWeight={500} fontSize={12} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
-                            <Box className="input-field w-full inline-block pt-5">
-                                <Typography component={"label"} className="text-base font-medium pb-5 block">郵便番号</Typography>
-                                <TextField className="pt-5 w-50 inline-block" variant="outlined" id='Postalcode' value={Postalcode} onChange={handleInputValidation} onKeyPress={handleKeyPress} />
+                            <Box className="input-field w-full inline-block pt-3">
+                                <Typography component={"label"} className="text-base font-medium pb-3 block">郵便番号</Typography>
+                                <Box className="w-50">
+                                    <CustomInput type={"text"} id={"Postalcode"} onChange={handleInputValidation} onKeyPress={handleKeyPress} value={Postalcode}/>
+                                </Box>                                
                             </Box>
-                            <Box className="input-field w-full inline-block pt-5">
-                                <Typography component={"label"} className="text-base font-medium pb-5 block">住所</Typography>
-                                <TextField className="pt-5 w-full inline-block" variant="outlined" id='Address' value={Address} onChange={handleInputValidation} />
+                            <Box className="input-field w-full inline-block pt-3">
+                                <Typography component={"label"} className="text-base font-medium pb-3 block">住所</Typography>
+                                <Box className="w-full">
+                                    <CustomInput type={"text"} id={"Address"} onChange={handleInputValidation} value={Address}/>
+                                </Box>                                
                             </Box>
-                            <Box className="input-field w-full inline-block pt-5">
-                                <Typography component={"label"} className="text-base font-medium pb-5 block">お問い合わせ内容<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></Typography>
-                                <TextField multiline rows={6} className="pt-5 w-full inline-block" variant="outlined" id='Inquiry' value={Inquiry} onChange={handleInputValidation} />
+                            <Box className="input-field w-full inline-block pt-3">
+                                <Typography component={"label"} className="text-base font-medium pb-3 block">お問い合わせ内容<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></Typography>
+                                <Box className="w-full">
+                                    <TextField multiline rows={6} className="pt-5 w-full bg-custom-gray inline-block" variant="outlined" id='Inquiry' value={Inquiry} onChange={handleInputValidation} 
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            border: InquiryError ? '1px solid red' : 'none',     
+                                            animation: InquiryError ? `${shake} 0.5s` : 'none',                   
+                                            '& fieldset': {
+                                                border: 'none',
+                                            },
+                                            '&:hover fieldset': {
+                                                border: 'none',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                border: 'none',
+                                            },
+                                            '& input': {
+                                                padding: '16px',
+                                            },
+                                        },
+                                    }}
+                                    />
+                                </Box>                                
                                 {InquiryError && (
                                     <Typography component="p" fontWeight={500} fontSize={12} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}

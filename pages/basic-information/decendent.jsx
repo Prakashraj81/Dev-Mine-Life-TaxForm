@@ -354,7 +354,7 @@ export default function Decendent() {
                                             </Typography>
                                         </Box>
                                         <Box className="w-full inline-block mt-2">
-                                            <CustomInput type={"text"} id={"Name"} onChange={inputHandlingFunction} value={Name} />
+                                            <CustomInput type={"text"} id={"Name"} onChange={inputHandlingFunction} value={Name} error={NameError} />
                                             {NameError && (
                                                 <p className="text-red-500" role="alert">この項目は必須です</p>
                                             )}
@@ -370,7 +370,7 @@ export default function Decendent() {
                                             </Typography>
                                         </Box>
                                         <Box className="w-full inline-block mt-2">
-                                            <CustomInput type={"text"} id={"Furigana"} onChange={inputHandlingFunction} value={Furigana} />
+                                            <CustomInput type={"text"} id={"Furigana"} onChange={inputHandlingFunction} value={Furigana} error={FuriganaError} />
                                             {KatakanaError && (
                                                 <p className="text-red-500" role="alert">カタカナのみを気にしてください。</p>
                                             )}
@@ -390,7 +390,7 @@ export default function Decendent() {
                                         </Typography>
                                     </Box>
                                     <Box className="w-full inline-block mt-2">
-                                        <JapaneseCalendar id={"DateofBirth"} DateValue={DateofBirth} inputHandlingFunction={inputHandlingFunction} />
+                                        <JapaneseCalendar id={"DateofBirth"} DateValue={DateofBirth} inputHandlingFunction={inputHandlingFunction} error={DateofBirthError} />
                                         {DateofBirthError && (
                                             <p className="text-red-500" role="alert">この項目は必須です</p>
                                         )}

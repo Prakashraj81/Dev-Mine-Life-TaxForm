@@ -21,15 +21,12 @@ export default function HouseholdPropertyAdd() {
     let [Address, setAddress] = useState("");
     let [Valuation, setValuation] = useState("0");
 
-    let [UndecidedHeir, setUndecidedHeir] = useState("0");
-    let [TotalPrice, setTotalPrice] = useState("0");
-    let [boxValues, setBoxValues] = useState([]);
-
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
     let [PropertyContentError, setPropertyContentError] = useState(false);
     let [AddressError, setAddressError] = useState(false);
+    let [ValuationAmountError, setValuationAmountError] = useState(false);
 
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
@@ -72,24 +69,6 @@ export default function HouseholdPropertyAdd() {
         }
     };
 
-
-    // const ValuationKeyPress = (e) => {
-    //     let value = e.target.value;
-    //     value = value.replace(/,/g, '').replace('.', '');
-    //     value = parseFloat(value);        
-    //     if(value > 0){
-    //         value = value.toLocaleString();
-    //         setValuation(value);
-    //         setUndecidedHeir(value);
-    //         setTotalPrice(value);
-    //     }
-    //     else{
-    //         setValuation("0");
-    //         setUndecidedHeir("0");
-    //         setTotalPrice("0");
-    //     }
-    // };
-
     const ValuationKeyPress = (e) => {
         let amount_of_money = e.target.value;
         amount_of_money = amount_of_money.replace(/,/g, '').replace('.', '');
@@ -97,9 +76,11 @@ export default function HouseholdPropertyAdd() {
         amount_of_money = amount_of_money.toLocaleString();
         if (amount_of_money === "NaN") {
             setValuation(0);
+            setValuationAmountError(true);
         }
         else {
             setValuation(amount_of_money.toLocaleString());
+            setValuationAmountError(false);
         }
     }
 
@@ -137,41 +118,10 @@ export default function HouseholdPropertyAdd() {
         else {
             setAddress(inputValue);
             setAddressError(false);
-        }
+        }        
         setisSumbitDisabled(false);
     }
 
-    //Footer box values and calculation
-    let handleBoxValueChange = (e, index) => {
-        let newValue = parseFloat(e.target.value);
-        if (isNaN(newValue)) {
-            newValue = 0;
-        }
-        const updatedBoxValues = [...boxValues];
-        updatedBoxValues[index] = newValue;
-        setBoxValues(updatedBoxValues);
-
-        //Amount of money convert
-        if (Valuation == 0) {
-            Valuation = 0;
-        }
-        else {
-            Valuation = parseFloat(Valuation.replace(/,/g, '').replace('.', ''));
-        }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = Valuation - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    };
 
     //Submit API function 
     const router = useRouter();
@@ -181,9 +131,7 @@ export default function HouseholdPropertyAdd() {
             PropertyContent: PropertyContent,
             PostCode: PostCode,
             Address: Address,
-            Valuation: Valuation,
-            UndecidedHeir: UndecidedHeir,
-            TotalPrice: Valuation,
+            Valuation: Valuation,            
         };
 
         //input Validation
@@ -193,6 +141,10 @@ export default function HouseholdPropertyAdd() {
         }
         if (defaultValues.Address === "") {
             setAddressError(true);
+            isSumbitDisabled = true;
+        }
+        if(defaultValues.Valuation === "" || defaultValues.Valuation === "0"){
+            setValuationAmountError(true);
             isSumbitDisabled = true;
         }
         //Api setup
@@ -267,7 +219,7 @@ export default function HouseholdPropertyAdd() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">
-                                    <CustomInput type={"text"} id={"PropertyContent"} onChange={inputHandlingFunction} value={PropertyContent} />
+                                    <CustomInput type={"text"} id={"PropertyContent"} onChange={inputHandlingFunction} value={PropertyContent} error={PropertyContentError} />
                                     {PropertyContentError && (
                                         <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
@@ -300,7 +252,7 @@ export default function HouseholdPropertyAdd() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">
-                                    <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} />
+                                    <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} error={AddressError} />
                                     {AddressError && (
                                         <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
@@ -316,7 +268,10 @@ export default function HouseholdPropertyAdd() {
                                     </label>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">
-                                    <CustomInput type={"text"} id={"Valuation"} onChange={ValuationKeyPress} onKeyPress={handleKeyPress} value={Valuation} textAlign={"right"} />
+                                    <CustomInput type={"text"} id={"Valuation"} onChange={ValuationKeyPress} onKeyPress={handleKeyPress} value={Valuation} textAlign={"right"} error={ValuationAmountError} />
+                                    {ValuationAmountError && (
+                                        <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                    )}
                                 </Box>
                             </Box>
                         </Box>

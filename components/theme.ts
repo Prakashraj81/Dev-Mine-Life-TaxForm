@@ -34,6 +34,12 @@ const theme = createTheme({
       dark: "#F4002C",
       contrastText: "#ffffff",
     },
+    // alerterror:{
+    //   main: "#F49200",
+    //   light: "#FFF6E8",
+    //   dark: "#F49200",
+    //   contrastText: "#ffffff",
+    // },
     warning: {
       main: "#F49200",
       light: "#FFF6E8",

@@ -1,7 +1,17 @@
 import React from "react";
 import { TextField, Box } from "@mui/material";
+import { keyframes } from "@mui/system";
 
-export default function CustomPhoneInput({ type, id, onChange, onKeyPress, value }) {
+// Define the shake keyframes
+const shake = keyframes`
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+`;
+
+export default function CustomPhoneInput({ type, id, onChange, onKeyPress, value, textAlign, error }) {
     return (
         <>
             <TextField
@@ -14,7 +24,8 @@ export default function CustomPhoneInput({ type, id, onChange, onKeyPress, value
                 autoComplete="off"
                 sx={{
                     '& .MuiOutlinedInput-root': {
-                        border: 'none',
+                        border: error ? '1px solid red' : 'none',     
+                        animation: error ? `${shake} 0.5s` : 'none',  
                         '& fieldset': {
                             border: 'none',
                         },
@@ -23,6 +34,11 @@ export default function CustomPhoneInput({ type, id, onChange, onKeyPress, value
                         },
                         '&.Mui-focused fieldset': {
                             border: 'none',
+                        },
+                        '& input': {
+                            textAlign: textAlign ? textAlign : 'left',
+                            padding: '16px',
+                            height: '1em',
                         },
                     },
                 }}

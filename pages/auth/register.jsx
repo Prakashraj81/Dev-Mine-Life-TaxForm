@@ -97,6 +97,10 @@ export default function Register(props) {
       setPasswordError(true);
       isSumbitDisabled = true;
     }
+    if (ConfirmPassword === "") {
+      setConfirmPasswordError(true);
+      isSumbitDisabled = true;
+    }
     if (Password !== ConfirmPassword) {
       setRegisterError(true);
       isSumbitDisabled = true;
@@ -177,7 +181,7 @@ export default function Register(props) {
               <>
                 {RegisterError && (
                   <Stack className="pb-5" sx={{ width: '100%' }} spacing={2}>
-                    <Alert severity="error">IDまたはパスワードが違います</Alert>
+                    <Alert severity="error"><Typography>IDまたはパスワードが違います</Typography></Alert>
                   </Stack>
                 )}
               </>
@@ -193,7 +197,7 @@ export default function Register(props) {
                   </label>
                 </Box>
                 <Box className="w-full inline-block mt-2">
-                  <CustomInput type={"text"} id={"Name"} onChange={inputHandlingFunction} value={Name} />
+                  <CustomInput type={"text"} id={"Name"} onChange={inputHandlingFunction} value={Name} error={NameError}/>
                   {NameError && (
                     <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
@@ -207,7 +211,7 @@ export default function Register(props) {
                   </label>
                 </Box>
                 <Box className="w-full inline-block mt-2">
-                  <CustomPhoneInput type={"text"} id={"PhoneNo"} onChange={inputHandlingFunction} onKeyPress={handleKeyPress} value={PhoneNo} />
+                  <CustomPhoneInput type={"text"} id={"PhoneNo"} onChange={inputHandlingFunction} onKeyPress={handleKeyPress} value={PhoneNo} error={PhoneNoError} />
                   {PhoneNoError && (
                     <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
@@ -226,7 +230,7 @@ export default function Register(props) {
                   </label>
                 </Box>
                 <Box className="w-full inline-block mt-2">
-                  <CustomInput type={"text"} id={"Email"} onChange={inputHandlingFunction} value={Email} />
+                  <CustomInput type={"text"} id={"Email"} onChange={inputHandlingFunction} value={Email} error={EmailError}/>
                   {EmailError && (
                     <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
@@ -241,7 +245,7 @@ export default function Register(props) {
                   </label>
                 </Box>
                 <Box className="w-full inline-block mt-2">
-                  <CustomInput type={showPassword ? 'text' : 'password'} id={"Password"} onChange={inputHandlingFunction} value={Password} />
+                  <CustomInput type={showPassword ? 'text' : 'password'} id={"Password"} onChange={inputHandlingFunction} value={Password} error={PasswordError}/>
                   <Box className="py-2 mt-2">
                     <InputAdornment>
                       <IconButton id="Icon" onClick={handleTogglePassword} >
@@ -263,7 +267,7 @@ export default function Register(props) {
                   </label>
                 </Box>
                 <Box className="w-full inline-block mt-2">
-                  <CustomInput type={showPassword ? 'text' : 'password'} id={"ConfirmPassword"} onChange={inputHandlingFunction} value={ConfirmPassword} />
+                  <CustomInput type={showPassword ? 'text' : 'password'} id={"ConfirmPassword"} onChange={inputHandlingFunction} value={ConfirmPassword} error={ConfirmPasswordError} />
                   <Box className="py-2 mt-2">
                     <InputAdornment>
                       <IconButton id="Icon" onClick={handleTogglePassword} >

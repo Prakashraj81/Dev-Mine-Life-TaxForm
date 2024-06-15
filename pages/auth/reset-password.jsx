@@ -69,21 +69,26 @@ export default function OtpVerification() {
   const onSubmit = async () => {    
     if (new_password === "") {
       setnew_password_error(true);
+      isSumbitDisabled = true;
       setisSumbitDisabled(true);
     }
-    else if (confirm_password === "") {
+    if (confirm_password === "") {
       setconfirm_password_error(true);
+      isSumbitDisabled = true;
       setisSumbitDisabled(true);
     }
-    else if (pwd_code === "") {
+    if (pwd_code === "") {
       setpwd_code_error(true);
+      isSumbitDisabled = true;
       setisSumbitDisabled(true);
     }
-    else if(new_password !== confirm_password){
+    if(new_password !== confirm_password){
       setPasswordCheckError(true);
+      isSumbitDisabled = true;
       setisSumbitDisabled(true);
     }
-    else {
+    
+    if(isSumbitDisabled === false){
       Email = router.query.email;
       Email = atob(Email);
       try {    
@@ -155,17 +160,17 @@ export default function OtpVerification() {
                   </Typography>
                 </Box>
                 <Box className="mb-5">                 
-                  <CustomInput type={showPassword ? 'text' : 'password'} id={"new_password"} onChange={handleInput} value={new_password} />
+                  <CustomInput type={showPassword ? 'text' : 'password'} id={"new_password"} onChange={handleInput} value={new_password} error={new_password_error} />
                   <Box className="py-2 mt-2">
                     <InputAdornment>
                       <IconButton id="new_password" onClick={handleTogglePassword} >
                         {showPassword ? <Visibility style={{ width: '18px', height: '18px' }} /> : <VisibilityOff style={{ width: '18px', height: '18px' }} />}
                       </IconButton>
-                      <Typography fontSize={12} component={"label"} className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</Typography>
+                      <Typography fontSize={14} component={"label"} className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</Typography>
                     </InputAdornment>
                   </Box>                
                   {new_password_error && (
-                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                    <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                   )}
                 </Box>                
 
@@ -176,17 +181,17 @@ export default function OtpVerification() {
                 </Box>
                 <>
                   <Box className="mb-5">                    
-                    <CustomInput type={showConfirmPassword ? 'text' : 'password'} id={"confirm_password"} onChange={handleInput} value={confirm_password} />
+                    <CustomInput type={showConfirmPassword ? 'text' : 'password'} id={"confirm_password"} onChange={handleInput} value={confirm_password} error={confirm_password_error} />
                   <Box className="py-2 mt-2">
                     <InputAdornment>
                       <IconButton id="confirm_password" onClick={handleTogglePassword} >
                         {showConfirmPassword ? <Visibility style={{ width: '18px', height: '18px' }} /> : <VisibilityOff style={{ width: '18px', height: '18px' }} />}
                       </IconButton>
-                      <Typography fontSize={12} component={"label"} className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</Typography>
+                      <Typography fontSize={14} component={"label"} className="text-sm" onClick={handleTogglePassword}>パスワードを表示する</Typography>
                     </InputAdornment>
                   </Box>          
                     {confirm_password_error && (
-                      <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                      <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                     )}
                   </Box>                  
 
@@ -197,9 +202,9 @@ export default function OtpVerification() {
                     </Typography>
                   </Box>
                   <Box className="mb-5">                    
-                    <CustomInput type={'text'} id={"pwd_code"} onChange={handleInput} value={pwd_code} />
+                    <CustomInput type={'text'} id={"pwd_code"} onChange={handleInput} value={pwd_code} error={pwd_code_error} />
                     {pwd_code_error && (
-                      <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                      <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                     )}
                   </Box>                 
 
