@@ -4,22 +4,26 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import axios from "axios";
 import {
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Box,
-  Stepper,
-  Step,
-  StepLabel,
-  StepButton,
-  Button,
-  Typography,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemIcon,
+    Box,
+    Stepper,
+    Step,
+    StepLabel,
+    StepButton,
+    Button,
+    Typography,
+    Radio,
+    RadioGroup,
+    FormControlLabel,
+    FormControl,
+    FormLabel,
+    Select,
+    MenuItem,
+    InputLabel,
+    OutlinedInput,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../components/back-btn";
@@ -33,6 +37,16 @@ import JapaneseCalendar from "../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../components/inputbox-icon/custom-input";
 import CustomPostalcodeInput from "../../components/inputbox-icon/custom-postalcode-input";
 import CustomPhoneInput from "../../components/inputbox-icon/custom-phone-input";
+import { keyframes } from "@mui/system";
+
+// Define the shake keyframes
+const shake = keyframes`
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+`;
 
 export default function Heir() {
     let router = useRouter();
@@ -64,7 +78,6 @@ export default function Heir() {
     let [TelephoneNumber, setTelephoneNumber] = useState("");
     let [HeirCount, setHeirCount] = useState(0);
     let [WhereTaxReturn, setWhereTaxReturn] = useState("");
-
 
     //Input hide and show states
     let [ShowName, setShowName] = useState(false);
@@ -103,9 +116,7 @@ export default function Heir() {
     }
 
     const handleRelationshipWithDecedent = (event) => {
-        let selectedValue = event.target.value;
-        let selectedOption = event.target.options[event.target.selectedIndex];
-        let selectedId = selectedOption.id;
+        let selectedValue = event.target.value;        
         setRelationshipWithDecedent(selectedValue);
         setisSumbitDisabled(false);
         setRelationshipWithDecedentError(false);
@@ -356,7 +367,7 @@ export default function Heir() {
                                         </Typography>
                                     </Box>
                                     <Box className="w-full inline-block mt-2">
-                                        <CustomInput type={"text"} id={"Name"} onChange={inputHandlingFunction} value={Name} error={NameError}/>
+                                        <CustomInput type={"text"} id={"Name"} onChange={inputHandlingFunction} value={Name} error={NameError} />
                                         {NameError && (
                                             <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                         )}
@@ -372,7 +383,7 @@ export default function Heir() {
                                         </Typography>
                                     </Box>
                                     <Box className="w-full inline-block mt-2">
-                                        <CustomInput type={"text"} id={"Furigana"} onChange={inputHandlingFunction} value={Furigana} error={FuriganaError}/>                                        
+                                        <CustomInput type={"text"} id={"Furigana"} onChange={inputHandlingFunction} value={Furigana} error={FuriganaError} />
                                         {KatakanaError && (
                                             <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">カタカナのみを気にしてください。</Typography>
                                         )}
@@ -407,8 +418,8 @@ export default function Heir() {
                                         郵便番号
                                     </Typography>
                                 </Box>
-                                <Box className="w-full inline-block mt-2 relative">                                    
-                                    <CustomPostalcodeInput type={"text"} id={"PostCode"} onChange={postalcodeDigit} onKeyPress={handleKeyPress} value={PostCode}/>                                  
+                                <Box className="w-full inline-block mt-2 relative">
+                                    <CustomPostalcodeInput type={"text"} id={"PostCode"} onChange={postalcodeDigit} onKeyPress={handleKeyPress} value={PostCode} />
                                 </Box>
                                 <Box className="mt-3">
                                     <Typography component={"p"} className="text-sm text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
@@ -424,8 +435,8 @@ export default function Heir() {
                                         住所
                                     </Typography>
                                 </Box>
-                                <Box className="w-full inline-block mt-2">                                    
-                                    <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address}/>   
+                                <Box className="w-full inline-block mt-2">
+                                    <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} />
                                 </Box>
                             </Box>
                         </Box>
@@ -437,8 +448,8 @@ export default function Heir() {
                                         電話番号<i className="text-red-500">*</i>
                                     </Typography>
                                 </Box>
-                                <Box className="w-full inline-block mt-2">                                
-                                    <CustomPhoneInput type={"text"} id={"TelephoneNumber"} onChange={inputHandlingFunction} onKeyPress={handleKeyPress} value={TelephoneNumber} error={TelephoneNumberError}/> 
+                                <Box className="w-full inline-block mt-2">
+                                    <CustomPhoneInput type={"text"} id={"TelephoneNumber"} onChange={inputHandlingFunction} onKeyPress={handleKeyPress} value={TelephoneNumber} error={TelephoneNumberError} />
                                     <Box className="mt-3">
                                         <Typography component={"p"} fontSize={12} className="text-xs text-black tracking-2 font-medium">ハイフン抜きで入力してください</Typography>
                                     </Box>
@@ -458,8 +469,8 @@ export default function Heir() {
                                             職業
                                         </Typography>
                                     </Box>
-                                    <Box className="w-full inline-block mt-2">                                        
-                                        <CustomInput type={"text"} id={"Profession"} onChange={inputHandlingFunction} value={Profession}/>   
+                                    <Box className="w-full inline-block mt-2">
+                                        <CustomInput type={"text"} id={"Profession"} onChange={inputHandlingFunction} value={Profession} />
                                     </Box>
                                 </Box>
                             </Box>
@@ -471,55 +482,79 @@ export default function Heir() {
                                     </Typography>
                                 </Box>
                                 <Box className="w-full inline-block mt-2">
-                                    <select id="RelationshipWithDecedent" value={RelationshipWithDecedent} onChange={handleRelationshipWithDecedent} className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                        <option value='' id=""></option>
-                                        <option id="Disabled_deduction" value="夫"> 夫 </option>
-                                        <option id="Disabled_deduction" value="妻"> 妻 </option>
-                                        <optgroup label="息子">
-                                            <option id="Legal_heir" value="長男">長男</option>
-                                            <option id="Legal_heir" value="二男">二男</option>
-                                            <option id="Legal_heir" value="三男">三男</option>
-                                            <option id="Legal_heir" value="四男">四男</option>
-                                            <option id="Legal_heir" value="五男">五男</option>
-                                        </optgroup>
-                                        <optgroup label="娘">
-                                            <option id="Disabled_deduction" value="長女">長女</option>
-                                            <option id="Disabled_deduction" value="二女">二女</option>
-                                            <option id="Disabled_deduction" value="三女">三女</option>
-                                            <option id="Disabled_deduction" value="四女">四女</option>
-                                            <option id="Disabled_deduction" value="五女">五女</option>
-                                        </optgroup>
-                                        <optgroup label="養子">
-                                            <option id="Legal_heir_adopt" value="養子">養子</option>
-                                            <option id="Legal_heir_adopt" value="孫養子">孫養子</option>
-                                        </optgroup>
-                                        <optgroup label="父母">
-                                            <option id="" value="父">父</option>
-                                            <option id="" value="母">母</option>
-                                            <option id="" value="養親">養親</option>
-                                        </optgroup>
-                                        <optgroup label="祖父母">
-                                            <option id="" value="祖父">祖父</option>
-                                            <option id="" value="祖母">祖母</option>
-                                        </optgroup>
-                                        <optgroup label="兄弟姉妹">
-                                            <option id="" value="兄">兄</option>
-                                            <option id="" value="弟">弟</option>
-                                            <option id="" value="姉">姉</option>
-                                            <option id="" value="妹">妹</option>
-                                        </optgroup>
-                                        <optgroup label="その他">
-                                            <option id="Legal_heir" value="甥">甥</option>
-                                            <option id="Legal_heir" value="姪">姪</option>
-                                            <option id="Legal_heir" value="孫">孫</option>
-                                            <option id="Legal_heir" value="配偶者">配偶者</option>
-                                            <option id="Legal_heir" value="孫">孫</option>
-                                            <option id="Legal_heir" value="兄弟姉妹">兄弟姉妹</option>
-                                            <option id="Legal_heir" value="父母">父母</option>
-                                            <option id="Legal_heir" value="おい・めい">おい・めい</option>
-                                            <option id="Legal_heir" value="その他">その他</option>
-                                        </optgroup>
-                                    </select>
+                                    <FormControl
+                                        variant="outlined"
+                                        className='form-control w-full bg-custom-gray focus:outline-none rounded px-3 py-3 h-12'
+                                        sx={{ width: "100%" }}
+                                    >                                        
+                                        <Select
+                                            id={"RelationshipWithDecedent"}
+                                            value={RelationshipWithDecedent}
+                                            onChange={handleRelationshipWithDecedent}
+                                            input={
+                                                <OutlinedInput
+                                                    sx={{
+                                                        '& .MuiOutlinedInput-notchedOutline': {
+                                                          border: 'none',
+                                                        },
+                                                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                          border: 'none',
+                                                        },
+                                                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                          border: 'none',
+                                                        },
+                                                        '& .MuiSelect-root': {
+                                                          padding: '16px',
+                                                          height: '1em',
+                                                        },
+                                                        border: RelationshipWithDecedentError ? '1px solid red' : 'none',
+                                                        animation: RelationshipWithDecedentError ? `${shake} 0.5s` : 'none',
+                                                    }}                                                    
+                                                />
+                                            }
+                                        >
+                                            <MenuItem value=""><em>None</em></MenuItem>
+                                            <MenuItem value="夫" id="Disabled_deduction">夫</MenuItem>
+                                            <MenuItem value="妻" id="Disabled_deduction">妻</MenuItem>
+                                            <MenuItem disabled><em>息子</em></MenuItem>
+                                            <MenuItem value="長男" id="Legal_heir">長男</MenuItem>
+                                            <MenuItem value="二男" id="Legal_heir">二男</MenuItem>
+                                            <MenuItem value="三男" id="Legal_heir">三男</MenuItem>
+                                            <MenuItem value="四男" id="Legal_heir">四男</MenuItem>
+                                            <MenuItem value="五男" id="Legal_heir">五男</MenuItem>
+                                            <MenuItem disabled><em>娘</em></MenuItem>
+                                            <MenuItem value="長女" id="Disabled_deduction">長女</MenuItem>
+                                            <MenuItem value="二女" id="Disabled_deduction">二女</MenuItem>
+                                            <MenuItem value="三女" id="Disabled_deduction">三女</MenuItem>
+                                            <MenuItem value="四女" id="Disabled_deduction">四女</MenuItem>
+                                            <MenuItem value="五女" id="Disabled_deduction">五女</MenuItem>
+                                            <MenuItem disabled><em>養子</em></MenuItem>
+                                            <MenuItem value="養子" id="Legal_heir_adopt">養子</MenuItem>
+                                            <MenuItem value="孫養子" id="Legal_heir_adopt">孫養子</MenuItem>
+                                            <MenuItem disabled><em>父母</em></MenuItem>
+                                            <MenuItem value="父">父</MenuItem>
+                                            <MenuItem value="母">母</MenuItem>
+                                            <MenuItem value="養親">養親</MenuItem>
+                                            <MenuItem disabled><em>祖父母</em></MenuItem>
+                                            <MenuItem value="祖父">祖父</MenuItem>
+                                            <MenuItem value="祖母">祖母</MenuItem>
+                                            <MenuItem disabled><em>兄弟姉妹</em></MenuItem>
+                                            <MenuItem value="兄">兄</MenuItem>
+                                            <MenuItem value="弟">弟</MenuItem>
+                                            <MenuItem value="姉">姉</MenuItem>
+                                            <MenuItem value="妹">妹</MenuItem>
+                                            <MenuItem disabled><em>その他</em></MenuItem>
+                                            <MenuItem value="甥" id="Legal_heir">甥</MenuItem>
+                                            <MenuItem value="姪" id="Legal_heir">姪</MenuItem>
+                                            <MenuItem value="孫" id="Legal_heir">孫</MenuItem>
+                                            <MenuItem value="配偶者" id="Legal_heir">配偶者</MenuItem>
+                                            <MenuItem value="孫" id="Legal_heir">孫</MenuItem>
+                                            <MenuItem value="兄弟姉妹" id="Legal_heir">兄弟姉妹</MenuItem>
+                                            <MenuItem value="父母" id="Legal_heir">父母</MenuItem>
+                                            <MenuItem value="おい・めい" id="Legal_heir">おい・めい</MenuItem>
+                                            <MenuItem value="その他" id="Legal_heir">その他</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                     {RelationshipWithDecedentError && (
                                         <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
@@ -616,8 +651,8 @@ export default function Heir() {
                                         申告書を提出した税務署
                                     </Typography>
                                 </Box>
-                                <Box className="w-full inline-block mt-2 relative">                                    
-                                    <CustomInput type={"text"} id={"WhereTaxReturn"} onChange={inputHandlingFunction} value={WhereTaxReturn}/>
+                                <Box className="w-full inline-block mt-2 relative">
+                                    <CustomInput type={"text"} id={"WhereTaxReturn"} onChange={inputHandlingFunction} value={WhereTaxReturn} />
                                     {WhereTaxReturnError && (
                                         <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}

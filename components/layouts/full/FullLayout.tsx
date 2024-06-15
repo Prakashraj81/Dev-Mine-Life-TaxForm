@@ -8,6 +8,7 @@ import TopStepper from "./stepper/top-stepper";
 import SideBarWidgetList from "./header/sidebar-widget-list";
 import Sidebar from "./sidebar/Sidebar";
 import AuthKeyPopup from "../../modal/auth-popup";
+import PageLoader from "../../loader/page-loader";
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -34,6 +35,7 @@ const FullLayout: React.FC<Props> = ({ children }) => {
   let [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   let [activeStep, setActiveStep] = useState(0);
   let [RecentSaveList, setRecentSaveList] = useState([]);
+  let [loading, setLoading] = useState(false);
   let router = useRouter();
 
   // Function to determine the active step based on the path
@@ -71,6 +73,8 @@ const FullLayout: React.FC<Props> = ({ children }) => {
         }
       } catch (error) {
         console.log("Error", error);
+      } finally {
+        setLoading(false); // Hide loader
       }
     }
   };
@@ -95,8 +99,6 @@ const FullLayout: React.FC<Props> = ({ children }) => {
     };
   }, [router]);
 
-
-
   useEffect(() => {
     const handleAuthKeyUpdate = () => {
       const authKey = sessionStorage.getItem('auth_key');      
@@ -112,9 +114,9 @@ const FullLayout: React.FC<Props> = ({ children }) => {
     setOpenAuthPopup(false);
   };
 
-
   return (
     <MainWrapper className="mainwrapper">
+      <PageLoader loading={loading} /> 
       <AuthKeyPopup open={openAuthPopup} handleCloseAuthPopup={handleCloseAuthPopup}/>
       <Sidebar
         isSidebarOpen={isSidebarOpen}
