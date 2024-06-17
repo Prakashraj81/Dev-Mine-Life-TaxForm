@@ -4,22 +4,22 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import axios from "axios";
 import {
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Box,
-  Stepper,
-  Step,
-  StepLabel,
-  StepButton,
-  Button,
-  Typography,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemIcon,
+    Box,
+    Stepper,
+    Step,
+    StepLabel,
+    StepButton,
+    Button,
+    Typography,
+    Radio,
+    RadioGroup,
+    FormControlLabel,
+    FormControl,
+    FormLabel,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../components/back-btn";
@@ -27,7 +27,6 @@ import SubmitButton from "../../components/submit-btn";
 import HeirListBox from "../../components/heir-list-box/heir-list-box";
 import IncorrectError from "../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../components/loader/backdrop-loader';
 import JapaneseCalendar from "../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../components/inputbox-icon/custom-input";
@@ -470,8 +469,11 @@ export default function Decendent() {
                                             </Typography>
                                             <span className="text-xs tracking-2 leading-7 text-custom-black py-1 w-full inline-block">被相続人の住所を管轄する税務署</span>
                                         </Box>
-                                        <Box className="w-full inline-block mt-2">
+                                        <Box className="w-full relative inline-block mt-2">
                                             <CustomInput type={"text"} id={"WheretoSubmitReturn"} onChange={inputHandlingFunction} value={WheretoSubmitReturn} />
+                                            <Typography component={"span"} fontSize={14} className="absolute right-0 top-0 bg-input-color text-black rounded-r p-3.5 text-sm">
+                                                税務署
+                                            </Typography>
                                         </Box>
                                     </Box>
                                 </Box>

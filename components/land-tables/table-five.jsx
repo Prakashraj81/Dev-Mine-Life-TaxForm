@@ -7,17 +7,21 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-export default function TableThree() {
+export default function TableFive() {
     const [inputValue_1, setInputValue_1] = useState('');
     const [inputValue_2, setInputValue_2] = useState('');
+    const [inputValue_3, setInputValue_3] = useState('');
 
     const handleInputChange = (event) => {
         let inputId = event.currentTarget.id;        
         if(inputId === "inputId_1"){
             setInputValue_1(event.target.value);
-        }        
-        else{
+        }
+        else if(inputId === "inputId_2"){
             setInputValue_2(event.target.value);
+        }
+        else{
+            setInputValue_3(event.target.value);
         }
     };
     return (
@@ -26,7 +30,7 @@ export default function TableThree() {
            <Table aria-label="customized table">
                         <TableHead>
                             <TableRow className="bg-custom-light text-black">
-                            <TableCell className="w-width-10"></TableCell>
+                                <TableCell className="w-width-10"></TableCell>
                                 <TableCell>路線価</TableCell>
                                 <TableCell>地区区分</TableCell>
                                 {/* <TableCell>正面選択</TableCell> */}
@@ -35,7 +39,7 @@ export default function TableThree() {
                         </TableHead>
                         <TableBody>
                             <TableRow>
-                                <TableCell>01</TableCell>
+                                <TableCell>①</TableCell>
                                 <TableCell className="w-3/12 inline-block">
                                     <input type="text" id="inputId_1" className="w-70 h-8 border text-right focus:outline-none"
                                         value={inputValue_1} onChange={handleInputChange} />
@@ -63,7 +67,7 @@ export default function TableThree() {
                                 </TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell>02</TableCell>
+                                <TableCell>②</TableCell>
                                 <TableCell className="w-3/12 inline-block">
                                     <input type="text" id="inputId_2" className="w-70 h-8 border text-right focus:outline-none"
                                         value={inputValue_2} onChange={handleInputChange} />
@@ -90,9 +94,65 @@ export default function TableThree() {
                                     </select>
                                 </TableCell>
                             </TableRow>
+                            <TableRow>
+                                <TableCell>③</TableCell>
+                                <TableCell className="w-3/12 inline-block">
+                                    <input type="text" id="inputId_3" className="w-70 h-8 border text-right focus:outline-none"
+                                        value={inputValue_3} onChange={handleInputChange} />
+                                    <label>円</label>
+                                </TableCell>
+                                <TableCell className="w-3/12 inline-block">
+                                    <select className="w-70 h-8 border focus:outline-none">
+                                        <option value="">選択</option>
+                                        <option value="1">ビル街地区</option>
+                                        <option value="2">高度商業地区</option>
+                                        <option value="3">繁華街地区</option>
+                                        <option value="4">普通商業・併用住宅地区</option>
+                                        <option value="5">普通住宅地区</option>
+                                        <option value="6">中小工場地区</option>
+                                        <option value="7">大工場地区</option>
+                                    </select>
+                                </TableCell>
+                                {/* <TableCell></TableCell> */}
+                                <TableCell className="w-3/12 inline-block">
+                                <select className="w-70 h-8 border focus:outline-none">
+                                        <option value="">選択</option>
+                                        <option value="1">角地</option>
+                                        <option value="2">準角地</option>                                        
+                                    </select>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>④</TableCell>
+                                <TableCell className="w-3/12 inline-block">
+                                    <input type="text" id="inputId_1" className="w-70 h-8 border text-right focus:outline-none"
+                                        value={inputValue_1} onChange={handleInputChange} />
+                                    <label>円</label>
+                                </TableCell>
+                                <TableCell className="w-3/12 inline-block">
+                                    <select className="w-70 h-8 border focus:outline-none">
+                                        <option value="">選択</option>
+                                        <option value="1">ビル街地区</option>
+                                        <option value="2">高度商業地区</option>
+                                        <option value="3">繁華街地区</option>
+                                        <option value="4">普通商業・併用住宅地区</option>
+                                        <option value="5">普通住宅地区</option>
+                                        <option value="6">中小工場地区</option>
+                                        <option value="7">大工場地区</option>
+                                    </select>
+                                </TableCell>
+                                {/* <TableCell></TableCell> */}
+                                <TableCell className="w-3/12 inline-block">
+                                <select className="w-70 h-8 border focus:outline-none">
+                                        <option value="">選択</option>
+                                        <option value="1">角地</option>
+                                        <option value="2">準角地</option>                                        
+                                    </select>
+                                </TableCell>
+                            </TableRow>
                         </TableBody>
                     </Table>    
-            </TableContainer>            
+                </TableContainer>            
         </>
     )
 }

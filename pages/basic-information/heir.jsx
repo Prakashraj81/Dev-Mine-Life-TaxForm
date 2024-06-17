@@ -644,7 +644,7 @@ export default function Heir() {
                             </FormControl>
                         </Box>
 
-                        <Box className="w-full block items-center justify-between mb-7">
+                        <Box className="w-full hidden items-center justify-between mb-7">
                             <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
                                 <Box className="label w-full inline-block">
                                     <Typography component={"label"} className="form-label">

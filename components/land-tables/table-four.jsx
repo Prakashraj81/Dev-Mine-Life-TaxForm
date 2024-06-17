@@ -30,7 +30,7 @@ export default function TableFour() {
            <Table aria-label="customized table">
                         <TableHead>
                             <TableRow className="bg-custom-light text-black">
-                                <TableCell className="w-width-10">いいえ</TableCell>
+                                <TableCell className="w-width-10"></TableCell>
                                 <TableCell>路線価</TableCell>
                                 <TableCell>地区区分</TableCell>
                                 {/* <TableCell>正面選択</TableCell> */}

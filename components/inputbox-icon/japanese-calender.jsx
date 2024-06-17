@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import DatePicker, { registerLocale, setDefaultLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ja } from 'date-fns/locale';
@@ -17,6 +17,8 @@ const shake = keyframes`
 
 const JapaneseCalendar = ({ id, DateValue, inputHandlingFunction, textAlign, error }) => {
   const [selectedDate, setSelectedDate] = useState(DateValue ? new Date(DateValue) : null);
+  const [open, setOpen] = useState(false);
+  const datePickerRef = useRef(null);
 
   // Register Japanese locale with react-datepicker
   useEffect(() => {
@@ -35,9 +37,17 @@ const JapaneseCalendar = ({ id, DateValue, inputHandlingFunction, textAlign, err
     inputHandlingFunction({ target: { value: formattedDate }, currentTarget: { id } });
   };
 
+  const handleIconClick = () => {
+    setOpen(!open);
+    if (datePickerRef.current) {
+      open ? datePickerRef.current.setOpen(false) : datePickerRef.current.setOpen(true);
+    }
+  };
+
   return (
     <div className="relative inline-block">
       <DatePicker
+        ref={datePickerRef}
         className={`form-control w-full cursor-pointer bg-custom-gray focus:outline-none rounded h-12 px-3 pr-10 ${error ? 'shake' : ''}`}
         selected={selectedDate}
         onChange={handleDateChange}
@@ -45,13 +55,18 @@ const JapaneseCalendar = ({ id, DateValue, inputHandlingFunction, textAlign, err
         locale="ja"
         dateFormat="yyyy年MM月dd日"
         showYearDropdown
+        yearDropdownItemNumber={100}
+        scrollableYearDropdown
         showMonthDropdown
-        dropdownMode="select"
+        dropdownMode="select"        
         style={{
           textAlign: textAlign ? textAlign : 'left',
         }}
       />
-      <CalendarMonthIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
+      <CalendarMonthIcon 
+        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer" 
+        onClick={handleIconClick}
+      />
       <style jsx global>{`
         .shake {
           animation: ${shake} 0.5s;

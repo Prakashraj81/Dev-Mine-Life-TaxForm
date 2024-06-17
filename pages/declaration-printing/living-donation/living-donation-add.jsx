@@ -295,9 +295,10 @@ export default function LivingDonationAdd() {
                         </Typography>
                     </Box>
                 </Box>
-                <Box className="page-description py-8">
+                <Box className="page-description py-8">                    
                     <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                        以下の内容を入力して[保存]ボタンを押して下さい。
+                    以下の内容を入力して[保存]ボタンを押して下さい。の下に以下の文章を追加<br/>
+                    <Typography component={"span"}>※精算課税制度の適用を受けていた場合は当システムでは作成できません。</Typography>
                     </Typography>
                 </Box>
 
@@ -310,7 +311,7 @@ export default function LivingDonationAdd() {
                                 </Typography>
                             </Box>
                             <Box className="w-full inline-block mt-2">
-                                <CustomDropdownInput id={"HeirListType"} lists={HeirList} onChange={handleChangeHeir} value={HeirId} error={HeirListTypeError}/>
+                                <CustomDropdownInput id={"HeirListType"} lists={HeirList} onChange={handleChangeHeir} value={HeirId} error={HeirListTypeError} />
                                 {HeirListTypeError && (
                                     <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
@@ -406,8 +407,11 @@ export default function LivingDonationAdd() {
                                     申告書を提出した税務署<i className="text-red-500">*</i>
                                 </Typography>
                             </Box>
-                            <Box className="w-full inline-block mt-2 relative">
+                            <Box className="w-full relative inline-block mt-2">
                                 <CustomInput type={"text"} id={"WhereTaxReturn"} onChange={inputHandlingFunction} value={WhereTaxReturn} error={WhereTaxReturnError} />
+                                <Typography component={"span"} fontSize={14} className="absolute right-0 top-0 bg-input-color text-black rounded-r p-3.5 text-sm">
+                                    税務署
+                                </Typography>
                                 {WhereTaxReturnError && (
                                     <Typography component={"p"} fontSize={14} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}

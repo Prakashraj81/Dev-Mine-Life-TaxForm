@@ -780,7 +780,7 @@ export default function HouseAdd() {
 
                     <Box className="mb-7">
                         <FormControl>
-                            <Typography component={"label"} className="form-label text-lg" id="demo-row-radio-buttons-group-label">4. 総階数3階以上のマンションでしょうか</Typography>
+                            <Typography component={"label"} className="form-label text-lg" id="demo-row-radio-buttons-group-label">4. 該当地は総階数3階以上のマンションの敷地でしょうか</Typography>
                             <RadioGroup
                                 row
                                 aria-labelledby="demo-row-radio-buttons-group-label"
@@ -802,7 +802,7 @@ export default function HouseAdd() {
                         {ShowYesOption4 && (
                             <>
                                 <Box className="w-full inline-block">
-                                    <Box className="w-full mb-2"><Typography component={"label"}>区分所有補正率の入力</Typography></Box>
+                                    <Box className="w-full mb-2"><Typography component={"label"}>建物の入力時に自動計算された区分所有補正率を入力してください</Typography></Box>
                                     <Box className="w-full">
                                         <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                             <input
