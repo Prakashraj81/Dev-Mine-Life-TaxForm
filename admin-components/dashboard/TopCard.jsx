@@ -1,34 +1,28 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import CardDataStats from './CardDataStats';
-import { IconUsers, IconTicket, IconAddressBook, IconAtom } from '@tabler/icons-react';
-import theme from '../theme';
+import { IconUsers, IconAddressBook } from '@tabler/icons-react'; // Updated to use only imported icons
+import theme from '../theme'; // Make sure to use theme if it's required
 
 const TopCards = () => {
     return (
         <Box>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+            <Box
+                display="grid"
+                gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr', xl: '1fr 1fr 1fr 1fr' }}
+                gap={{ xs: 4, md: 6, xl: 6 }}
+            >
                 <CardDataStats title="Total Users" total="1,500" bgColorClass="success.light">
-                    <div className="">
+                    <Box>
                         <IconUsers className='text-success-main' />
-                    </div>
+                    </Box>
                 </CardDataStats>
-                {/* <CardDataStats title="Support Tickets" total="2,500" bgColorClass="secondary.light">
-                    <div className="">
-                        <IconTicket className='text-secondary-main' />
-                    </div>
-                </CardDataStats> */}
-                <CardDataStats title="Contact us" total="2.450" bgColorClass="warning.light">
-                    <div className="">
+                <CardDataStats title="Contact us" total="2,450" bgColorClass="warning.light">
+                    <Box>
                         <IconAddressBook className='text-warning-main' />
-                    </div>
+                    </Box>
                 </CardDataStats>
-                {/* <CardDataStats title="Consultations" total="3.456" bgColorClass="primary.light">
-                    <div className="">
-                        <IconAtom className='text-primary-main' />
-                    </div>
-                </CardDataStats> */}
-            </div>
+            </Box>
         </Box>
     );
 };

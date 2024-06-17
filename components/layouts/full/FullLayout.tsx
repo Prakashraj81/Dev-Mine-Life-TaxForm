@@ -126,26 +126,26 @@ const FullLayout: React.FC<Props> = ({ children }) => {
       <PageWrapper className="page-wrapper">
         <Header toggleMobileSidebar={() => setMobileSidebarOpen(true)} />
         <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
-          <div className="wrapper relative w-full inline-block">
-            <div className="layout-wrapper">
-              <div className="w-full inline-block">
-                <div className="w-full lg:w-80 xl:w-80 2xl:w-80 inline-block float-left px-0 lg:px-10 xl:px-10 2xl:px-10 py-0 lg:py-10 xl:py-10 2xl:py-10">
-                  <div className="top-stepper-sec max-w-screen-md mx-auto">
+          <Box className="wrapper relative w-full inline-block">
+            <Box className="layout-wrapper">
+              <Box className="w-full inline-block">
+                <Box className="w-full lg:w-80 xl:w-80 2xl:w-80 inline-block float-left px-0 lg:px-10 xl:px-10 2xl:px-10 py-0 lg:py-10 xl:py-10 2xl:py-10">
+                  <Box className="top-stepper-sec max-w-screen-md mx-auto">
                     <TopStepper activeStep={activeStep} />
-                  </div>
-                  <div className="page-wrapper">
+                  </Box>
+                  <Box className="page-wrapper">
                     {children}
-                    <div className="footer-sec pt-10">
+                    <Box className="footer-sec pt-10">
                       <Footer />
-                    </div>
-                  </div>
-                </div>
-                <div className="w-20 hidden lg:inline-block xl:inline-block 2xl:inline-block float-left border-l">
+                    </Box>
+                  </Box>
+                </Box>
+                <Box className="w-20 hidden lg:inline-block xl:inline-block 2xl:inline-block float-left border-l">
                   <SideBarWidgetList RecentSaveList={RecentSaveList} />
-                </div>
-              </div>
-            </div>
-          </div>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         </Box>
       </PageWrapper>
     </MainWrapper>

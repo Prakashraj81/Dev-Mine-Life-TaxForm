@@ -12,14 +12,8 @@ export default function AdminDashboard() {
   return (
     <>
       <Box>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TopCards />
-          </Grid>          
-          <Grid item xs={12} lg={12}>
-            <CustomerTickets />
-          </Grid> 
-        </Grid>
+        <TopCards />
+        <CustomerTickets />        
       </Box>
     </>
   )
