@@ -83,9 +83,9 @@ export default function TotalPropertyAcquiredTable() {
     <DivisionPopup OpenModalPopup={OpenModalPopup} handleModalClose={handleModalClose}/>
     <div className="py-2">
         <Table aria-label="collapsible table">
-          <TableHead className="table-head-50">
+          <TableHead sx={{background: "#e8918857", borderBottom: "1px solid #e89188"}} className="table-head-50">
             <TableRow>
-                <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">取得した財産の合計</span></TableCell>
+                <TableCell sx={{borderBottom: "1px solid #e89188"}} className="border border-primary-color border-l" align="left"><span className="font-medium">取得した財産の合計</span></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>                     

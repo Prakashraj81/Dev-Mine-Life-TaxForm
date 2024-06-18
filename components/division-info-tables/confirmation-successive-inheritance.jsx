@@ -134,7 +134,7 @@ export default function ConfirmationSuccessiveInheritance() {
                             </TableRow>       
 
                             <TableRow className="w-full">
-                                  <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                                  <TableCell className="border border-light-gray border-l" style={{ padding: 0 }} colSpan={10}>
                                       <Collapse in={TableExpandOpen1} timeout="auto" unmountOnExit>
                                         <Box>
                                             <Table>
