@@ -35,7 +35,7 @@ const style = {
 
 
 export default function CalculatedTaxAmountEachPersons() {
-    let [TableExpandOpen, setTableExpandOpen] = React.useState(true);
+    let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
     let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
     let [OpenModalPopup, setOpenModalPopup] = React.useState(false);   
 
@@ -86,7 +86,7 @@ export default function CalculatedTaxAmountEachPersons() {
           <TableHead className="table-head-50">
             <TableRow>
                 <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">各人の算出税額</span></TableCell>
-                <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-medium text-red-500">確認・入力</span></TableCell>
+                <TableCell className="border border-light-gray border-l cursor-pointer" align="left" onClick={handleExpandFun}><span className="font-medium text-red-500">確認・入力</span></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>                     
@@ -103,7 +103,6 @@ export default function CalculatedTaxAmountEachPersons() {
                                 </>
                                 ))}                  
                                 {/* <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell> */}
-                                <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
                             </TableRow>                    
                           </TableHead>
                               <TableBody>
@@ -114,7 +113,6 @@ export default function CalculatedTaxAmountEachPersons() {
                                   </>
                                   ))}                   
                                   {/* <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon className="cursor-pointer" onClick={handleModalOpen}/></TableCell> */}
-                                  <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
                                 </TableRow>       
                             </TableBody>
                         </Table> 

@@ -29,22 +29,22 @@ const SidebarItems = () => {
   let location = curl.pathname;
   const paths = location.split('/');
 
-if (paths.length >= 4) {  
-  paths.splice(3, 1); 
-  location = paths.join('/');  
-} 
+  if (paths.length >= 4) {
+    paths.splice(3, 1);
+    location = paths.join('/');
+  }
 
   let [open, setOpen] = React.useState(true);
   let [ShowLoader, setShowLoader] = useState(false);
   let [activeDivIndex, setActiveDivIndex] = useState(null);
-  let [isClassRemoved, setIsClassRemoved] = useState(false);  
+  let [isClassRemoved, setIsClassRemoved] = useState(false);
 
-  const handleClick = (index) => {          
+  const handleClick = (index) => {
     if (open === index) {
       setOpen((prevopen) => !prevopen);
     } else {
       setOpen(index);
-    }    
+    }
   };
 
   const [Id, setId] = useState(0);
@@ -52,26 +52,26 @@ if (paths.length >= 4) {
   //Accordion function
   const [expanded, setExpanded] = useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
-      setExpanded(isExpanded ? panel : false);
+    setExpanded(isExpanded ? panel : false);
   };
 
   const SubMenuOpen = (id) => {
     setShowLoader(true);
     let menu_id = id;
     if (Id === menu_id) {
-      setActiveDivIndex(null); 
+      setActiveDivIndex(null);
       setvisible(false);
       setId(0);
     } else {
       setIsClassRemoved(true);
-      setActiveDivIndex(menu_id === activeDivIndex ? null : menu_id); 
+      setActiveDivIndex(menu_id === activeDivIndex ? null : menu_id);
       sessionStorage.setItem("menu_id", menu_id);
       sessionStorage.setItem("activeDivIndex", activeDivIndex);
       setvisible(true);
       setId(menu_id);
-    }    
+    }
     setShowLoader(true);
-  };  
+  };
 
   // useEffect(() => {
   //   let sessionMenuId = Number(sessionStorage.getItem("menu_id"));
@@ -131,93 +131,88 @@ if (paths.length >= 4) {
   //   setMenuOpen(!isMenuOpen);
   // };  
 
-  return ( 
-    <Box sx={{ px: 0 }}>     
+  return (
+    <Box sx={{ px: 0 }}>
       {Menuitems.map((item, index) => (
         <Accordion className="py-1 shadow-none accordion-top-div border-0 p-0"
-        expanded={expanded === item.id} onChange={handleChange(item.id)}
+          expanded={expanded === item.id} onChange={handleChange(item.id)}
         >
-        <AccordionSummary
-          className="p-0 inline-block accordion-div-main w-full"          
-          aria-controls="panel1a-content"
-          disablePadding
-          id={item.id}
-          key={item.title}
+          <AccordionSummary
+            className="p-0 inline-block accordion-div-main w-full"
+            aria-controls="panel1a-content"
+            disablePadding
+            id={item.id}
+            key={item.title}
           // onClick={() => handleClick(index)}                     
-        >
-          <NextLink className="accordion-link" href={item.href}>
-        <ListItem
-              onClick={() => SubMenuOpen(item.id)}
-              id={`${item.id}`}
-              button
-              selected={location === item.href}
-              key={index}
-              className={`Main_Menu_${item.id} div-item accordion-div-item inline-block w-full p-0 ${activeDivIndex === item.id ? 'border-l-4 active-0' : ''}`}              
-            >
-            <ListItemIcon className={`${ location === item.href ? "text-black" : "text-primary-color" }`}>
-                {item.icon}
-              </ListItemIcon>
-
-              <ListItemText
-                className={`${location === item.href ? "text-black" : ""}`}
+          >
+            <NextLink className="accordion-link" href={item.href}>
+              <ListItem
+                onClick={() => SubMenuOpen(item.id)}
                 id={`${item.id}`}
+                button
+                selected={location === item.href}
+                key={index}
+                className={`Main_Menu_${item.id} div-item accordion-div-item inline-block w-full p-0 ${activeDivIndex === item.id ? 'border-l-4 active-0' : ''}`}
               >
-                {item.title}
-              </ListItemText>
-              <ListItemIcon
-                className="transition ease-in-out delay-150 duration-300"                
-              >
-                {item.href === "" && item.id === Id
-                  ? item.iconOpened
-                  : item.child
-                  ? item.iconClosed
-                  : null}
-              </ListItemIcon>             
-            </ListItem>
+                <ListItemIcon className={`${location === item.href ? "text-black" : "text-primary-color"}`}>
+                  {item.icon}
+                </ListItemIcon>
+
+                <ListItemText
+                  className={`${location === item.href ? "text-black" : ""}`}
+                  id={`${item.id}`}
+                >
+                  {item.title}
+                </ListItemText>
+                <ListItemIcon
+                  className="transition ease-in-out delay-150 duration-300"
+                >
+                  {item.href === "" && item.id === Id
+                    ? item.iconOpened
+                    : item.child
+                      ? item.iconClosed
+                      : null}
+                </ListItemIcon>
+              </ListItem>
             </NextLink>
-        </AccordionSummary>
-        {item.href === "" && item.id === Id ? (
+          </AccordionSummary>
+          {item.href === "" && item.id === Id ? (
             <AccordionDetails
-              className={`${
-                item.id !== Id
-                  ? "w-full inline-block transition-all-all pl-0 px-3 py-7px active delay-400 duration-500 ease-in-out transition-all transform "
-                  : "delay-150 deactive delay-400 duration-500 ease-in-out transition-all transform padding-left"
-              }`}
+              className={`${item.id !== Id
+                ? "w-full inline-block transition-all-all pl-0 px-3 py-7px active delay-400 duration-500 ease-in-out transition-all transform "
+                : "delay-150 deactive delay-400 duration-500 ease-in-out transition-all transform padding-left"
+                }`}
               initial={{ height: 0 }}
               animate={{ height: "60px" }}
               exit={{ height: 0 }}
             >
               {item.child.map((sub, index) => (
                 <>
-                <NextLink
-                      className={`${
-                        location === sub.href ? "text-primary-color" : "hover:text-primary-color"
+                  <NextLink
+                    className={`${location === sub.href ? "text-primary-color" : "hover:text-primary-color"
                       }`}
-                      href={sub.href}
-                    >
-                  <List
-                    component="li"
-                    className={`${
-                      location === sub.href ? "w-full flex items-center tracking-2 sub-li-active text-primary-color pl-0 px-3 py-10px text-base" : "w-full flex items-center tracking-2 text-custom-black pl-0 px-3 py-10px text-base hover:text-primary-color mr-2"
-                    }`}
-                    
-                    disablePadding
-                    key={sub.title}                    
+                    href={sub.href}
                   >
-                    <span>
-                      <i className={`${
-                      location === sub.href ? "text-lg text-primary-color mr-2" : " hover:text-primary-color mr-2"
-                    }`}>{sub.icon}</i>
-                    </span>
-                    <span
-                      className={`${
-                        location === sub.href ? "text-primary-color" : "hover:text-primary-color"
-                      }`}
-                      href={sub.href}
+                    <List
+                      component="li"
+                      className={`${location === sub.href ? "w-full flex items-center tracking-2 sub-li-active text-primary-color pl-0 px-3 py-10px text-base" : "w-full flex items-center tracking-2 text-custom-black pl-0 px-3 py-10px text-base hover:text-primary-color mr-2"
+                        }`}
+
+                      disablePadding
+                      key={sub.title}
                     >
-                      {sub.title}
-                    </span>
-                  </List>
+                      <span>
+                        <i className={`${location === sub.href ? "text-lg text-primary-color mr-2" : " hover:text-primary-color mr-2"
+                          }`}>{sub.icon}</i>
+                      </span>
+                      <span
+                        className={`${location === sub.href ? "text-primary-color" : "hover:text-primary-color"
+                          }`}
+                        href={sub.href}
+                      >
+                        {sub.title}
+                      </span>
+                    </List>
                   </NextLink>
                 </>
               ))}
@@ -225,18 +220,12 @@ if (paths.length >= 4) {
           ) : (
             <>
             </>
-          )}        
-      </Accordion>      
+          )}
+        </Accordion>
       ))}
 
-
-
-
-
-
-
-{Menuitems.map((item, index) => (
-  <List
+      {Menuitems.map((item, index) => (
+        <List
           className="Sidebar-menu hidden SidebarLink py-2px"
           component="li"
           disablePadding
@@ -251,9 +240,9 @@ if (paths.length >= 4) {
               selected={location === item.href}
               key={index}
               className={`div-item ${activeDivIndex === item.id ? 'border-l-4 active' : ''}`}
-              
+
             >
-              <ListItemIcon className={`${ location === item.href ? "text-black" : "text-custom-black" }`}>
+              <ListItemIcon className={`${location === item.href ? "text-black" : "text-custom-black"}`}>
                 {item.icon}
               </ListItemIcon>
 
@@ -264,23 +253,22 @@ if (paths.length >= 4) {
                 {item.title}
               </ListItemText>
               <ListItemIcon
-                className="transition ease-in-out delay-150 duration-300"                
+                className="transition ease-in-out delay-150 duration-300"
               >
                 {item.href === "" && item.id === Id
                   ? item.iconOpened
                   : item.child
-                  ? item.iconClosed
-                  : null}
+                    ? item.iconClosed
+                    : null}
               </ListItemIcon>
             </ListItem>
           </NextLink>
           {item.href === "" && item.id === Id ? (
             <DropdownLink
-              className={`${
-                item.id !== Id
-                  ? "w-full inline-block transition-all-all pl-0 px-3 py-7px active delay-400 duration-500 ease-in-out transition-all transform "
-                  : "delay-150 deactive delay-400 duration-500 ease-in-out transition-all transform padding-left"
-              }`}
+              className={`${item.id !== Id
+                ? "w-full inline-block transition-all-all pl-0 px-3 py-7px active delay-400 duration-500 ease-in-out transition-all transform "
+                : "delay-150 deactive delay-400 duration-500 ease-in-out transition-all transform padding-left"
+                }`}
               initial={{ height: 0 }}
               animate={{ height: "60px" }}
               exit={{ height: 0 }}
@@ -295,16 +283,14 @@ if (paths.length >= 4) {
                     item={item}
                   >
                     <span
-                    className={`${
-                      location === sub.href ? "text-lg text-primary-color mr-2" : "hover:text-primary-color mr-2"
-                    }`}
+                      className={`${location === sub.href ? "text-lg text-primary-color mr-2" : "hover:text-primary-color mr-2"
+                        }`}
                     >
                       <i className="text-custom-black">{sub.icon}</i>
                     </span>
                     <NextLink
-                      className={`${
-                        location === sub.href ? "text-primary-color" : "hover:text-primary-color"
-                      }`}
+                      className={`${location === sub.href ? "text-primary-color" : "hover:text-primary-color"
+                        }`}
                       href={sub.href}
                     >
                       {sub.title}
@@ -317,9 +303,7 @@ if (paths.length >= 4) {
             <></>
           )}
         </List>
-))}
-
-
+      ))}
     </Box>
   );
 };

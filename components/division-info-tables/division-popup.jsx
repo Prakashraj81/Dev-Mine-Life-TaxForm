@@ -52,7 +52,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
             if (OpenModalPopup) {
                 await GetHeirList();
                 if (ListTotalAmount !== "") {
-                    let amountUpdate = parseFloat(ListTotalAmount.toString().replace(/,/g, '').replace('.', ''));
+                    let amountUpdate = parseFloat(ListTotalAmount.toString().replace(/,/g, '').replace('.', '') || 0);
                     setAmountofMoney(amountUpdate);
                     setAmountShow(true);
 

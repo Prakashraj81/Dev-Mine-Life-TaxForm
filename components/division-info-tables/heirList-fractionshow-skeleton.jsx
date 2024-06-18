@@ -13,14 +13,14 @@ const HeirListFractionShowSkeleton = ({ HeirList, HeirSharingDetails, fractionBo
   }, []);
 
   const [shareAmountNumerator, setShareAmountNumerator] = useState(
-    HeirSharingDetails.reduce((acc, detail) => {
+    (HeirSharingDetails || []).reduce((acc, detail) => {
       acc[detail.heir_id] = detail.numerator || '';
       return acc;
     }, {})
   );
 
   const [shareAmountDenominator, setShareAmountDenominator] = useState(
-    HeirSharingDetails.reduce((acc, detail) => {
+    (HeirSharingDetails || []).reduce((acc, detail) => {
       acc[detail.heir_id] = detail.denominator || '';
       return acc;
     }, {})
@@ -44,7 +44,7 @@ const HeirListFractionShowSkeleton = ({ HeirList, HeirSharingDetails, fractionBo
 
   useEffect(() => {
     HeirList.forEach((heirlist, index) => {
-      HeirSharingDetails.filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
+      (HeirSharingDetails || []).filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
         .forEach((shareDetails) => {
           let value;
           value = shareAmountNumerator[shareDetails.heir_id];
@@ -84,7 +84,7 @@ const HeirListFractionShowSkeleton = ({ HeirList, HeirSharingDetails, fractionBo
                       <Typography paddingRight={1} component={"span"} fontSize={14}>{CalculatedAmounts[index] ? CalculatedAmounts[index].toLocaleString() : 0}</Typography>
                     </TableCell>
                     <TableCell className='w-20 division-table-padding' align='right'>
-                      {HeirSharingDetails.filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
+                      {(HeirSharingDetails || []).filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
                         .map((shareDetails) => (
                           <Box key={shareDetails.heir_id} className="text-right">
                             <div className="w-full inline-block">

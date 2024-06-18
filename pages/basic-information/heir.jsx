@@ -308,7 +308,7 @@ export default function Heir() {
             formData.append("is_legal_heir", is_legal_heir);
             if (formData !== null && auth_key !== null) {
                 try {
-                    setShowLoader(true);
+                    //setShowLoader(true);
                     let response = "";
                     if (HeirId === 0) {
                         response = await axios.post('https://minelife-api.azurewebsites.net/add_heir', formData);
@@ -321,15 +321,15 @@ export default function Heir() {
                     setShowLoader(false);
                 } catch (error) {
                     setShowLoader(false);
-                    console.error('Error:', error);
+                    if(error.response.data.error.message === "Heir Already Exist"){
+                        alert(error.response.data.error.message);
+                    }
                 }
             } else {
-                console.log("API not allowed");
                 setisSumbitDisabled(true);
             }
         }
         else {
-            console.log("API not allowed");
             setisSumbitDisabled(true);
         }
     };
@@ -347,7 +347,7 @@ export default function Heir() {
                 <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <Box className="page-heading">
                         <Typography component={"p"} className="text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">
-                            相続人 {propName}
+                            相続人 {HeirCount + 1}
                         </Typography>
                     </Box>
                 </Box>

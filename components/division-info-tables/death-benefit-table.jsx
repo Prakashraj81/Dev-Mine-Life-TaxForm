@@ -215,11 +215,10 @@ return (
                     <Table>
                       <TableHead className="table-head-2">
                           <TableRow>
-                            <TableCell className="border border-light-gray border-l" align="left"><span className="font-semibold">生命保険会社の名称</span></TableCell>
-                            <TableCell className="border border-light-gray border-l"><span className="font-semibold">受取年月日</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="right"><span className="font-semibold">受け取った金額</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="center"><span className="font-semibold text-red-300">分割情報入力</span></TableCell>
-                            <TableCell className="border border-light-gray border-l invisible"><span className="font-semibold">Column</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="left"><span>生命保険会社の名称</span></TableCell>
+                            <TableCell className="border border-light-gray border-l"><span>受取年月日</span></TableCell>
+                            <TableCell className="border border-light-gray border-l" align="right"><span>受け取った金額</span></TableCell>
+                            <TableCell className="border border-light-gray border-l w-15" align="center"><span className="text-red-300">分割情報入力</span></TableCell>
                           </TableRow>                          
                           {DeathBenefitList.map((list, index) => (
                             <React.Fragment key={list.id}>
@@ -241,10 +240,9 @@ return (
                                     {TableExpandOpen2[list.id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                                   </IconButton>
                                 </TableCell>
-                                <TableCell className="border border-light-gray border-l" align="center"></TableCell>
                               </TableRow>
                               <TableRow className="w-full">
-                                <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                                <TableCell className="border border-light-gray border-l" style={{ padding: 0 }} colSpan={10}>
                                     <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
                                       <Box>
                                           <Table>
@@ -259,7 +257,6 @@ return (
                                                   </>
                                                   ))}                  
                                                   <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-                                                  <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
                                               </TableRow>                    
                                             </TableHead>
                                                 <TableBody>
@@ -288,8 +285,7 @@ return (
                                                           )}
                                                         </React.Fragment>
                                                       ))}              
-                                                    <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
-                                                    <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                                    <TableCell className="border border-light-gray border-l w-15 cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
                                                   </TableRow>       
                                               </TableBody>
                                           </Table> 

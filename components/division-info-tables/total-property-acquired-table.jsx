@@ -86,7 +86,6 @@ export default function TotalPropertyAcquiredTable() {
           <TableHead className="table-head-50">
             <TableRow>
                 <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">取得した財産の合計</span></TableCell>
-                {/* <TableCell className="border border-light-gray border-l cursor-pointer" align="center" onClick={handleExpandFun}><span className="font-medium text-red-500">確認・入力</span></TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>                     
@@ -102,8 +101,7 @@ export default function TotalPropertyAcquiredTable() {
                                   <TableCell id={heir.id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
                                 </>
                                 ))}                  
-                                {/* <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell> */}
-                                <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
                             </TableRow>                    
                           </TableHead>
                               <TableBody>
@@ -113,8 +111,7 @@ export default function TotalPropertyAcquiredTable() {
                                       <TableCell id={heir_lists.id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>       
                                   </>
                                   ))}                   
-                                  {/* <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon className="cursor-pointer" onClick={handleModalOpen}/></TableCell> */}
-                                  <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                  <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
                                 </TableRow>       
                             </TableBody>
                         </Table> 

@@ -430,8 +430,8 @@ export default function divisionInformation() {
                                             <>
                                                 <CashSavingsTable heir_details_list={heir_details_list} />
                                                 <SecuritiesTable heir_details_list={heir_details_list} />
-                                                <BuildingsTable />
-                                                <LandTable />
+                                                <BuildingsTable heir_details_list={heir_details_list} />
+                                                <LandTable heir_details_list={heir_details_list} />
                                                 <HouseholdPropertyTable heir_details_list={heir_details_list} />
                                                 <DeathBenefitTable heir_details_list={heir_details_list} />
                                                 <DeathRetirementAllowanceTable heir_details_list={heir_details_list} />

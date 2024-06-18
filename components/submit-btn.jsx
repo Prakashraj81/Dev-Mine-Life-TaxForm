@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 
 export default function SubmitButton({ onSubmit, isSumbitDisabled }) {
     let [ShowLoader, setShowLoader] = useState(true);
@@ -20,15 +20,14 @@ export default function SubmitButton({ onSubmit, isSumbitDisabled }) {
                             color: 'primary.main',
                         },                        
                         borderRadius: '3px',
-                        paddingLeft: 3,
-                        paddingRight: 3,
+                        px: 3,
                         py: 1,
                         transition: 'all 0.3s ease',
                     }}
                 >
-                    <span className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                    <Typography component={"span"} className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
                         保存
-                    </span>
+                    </Typography>
                 </Button>
             </Box>
         </>

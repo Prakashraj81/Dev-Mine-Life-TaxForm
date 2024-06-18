@@ -28,13 +28,6 @@ export default function CashSavingsAdd() {
         { id: 8, value: 'その他', name: 'その他' },
     ];
 
-    let HeirList = [
-        { id: 1, name: "User", name1: "山田　太郎" },
-        { id: 2, name: "Shree", name1: "Shree" },
-        { id: 3, name: "Prakashraj", name1: "Prakashraj" },
-        { id: 4, name: "Gowtham", name1: "Gowtham" },
-    ];
-
     let [DepositType, setDepositType] = useState("");
     let [FinancialInstitutionName, setFinancialInstitutionName] = useState("");
     let [PostCode, setPostCode] = useState("");
@@ -43,10 +36,7 @@ export default function CashSavingsAdd() {
 
     let [ShowFinancialInstitutionName, setShowFinancialInstitutionName] = useState(false);
     let [ShowPostCode, setShowPostCode] = useState(false);
-    let [ShowAddress, setShowAddress] = useState(false);
-    let [UndecidedHeir, setUndecidedHeir] = useState("0");
-    let [totalPrice, settotalPrice] = useState("0");
-    let [boxValues, setBoxValues] = useState([]);
+    let [ShowAddress, setShowAddress] = useState(false);   
 
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
@@ -58,7 +48,6 @@ export default function CashSavingsAdd() {
 
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
-
 
     useEffect(() => {
         setShowFinancialInstitutionName(true);
@@ -74,17 +63,6 @@ export default function CashSavingsAdd() {
             GetCashSavingsDetails(depositId);
         }
     }, []);
-
-    //Clear function
-    function clearFunction() {
-        // setFinancialInstitutionName("");
-        // setPostCode("");
-        // setAddress("");
-        // setAmountofMoney(0);
-        // setUndecidedHeir(0);
-        // settotalPrice(0);
-    }
-
 
     //Load cash savings details    
     const GetCashSavingsDetails = async (depositId) => {
@@ -203,85 +181,6 @@ export default function CashSavingsAdd() {
         setisSumbitDisabled(false);
     }
 
-
-    function valueConvertFun(convertValue) {
-        if (convertValue === 0) {
-            convertValue = 0;
-            setAmountofMoneyError(true);
-            setisSumbitDisabled(true);
-        }
-        else {
-            convertValue = convertValue.replace(/,/g, '').replace('.', '');
-            convertValue = parseFloat(convertValue);
-            if (convertValue === 0) {
-                setAmountofMoneyError(true);
-                setisSumbitDisabled(true);
-            }
-            else {
-                setAmountofMoneyError(false);
-            }
-        }
-    }
-
-    //Box value calculation function    
-    function AmountToTotalCalculation(AmountofMoney) {
-        //Amount of money convert
-        if (AmountofMoney == 0 || AmountofMoney == "NaN") {
-            AmountofMoney = 0;
-        }
-        else {
-            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
-            AmountofMoney = parseFloat(AmountofMoney);
-        }
-        let totalBoxValues = boxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = AmountofMoney - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    }
-
-    //Footer box values and calculation
-    let handleBoxValueChange = (e, index) => {
-        let newValue = parseFloat(e.target.value);
-        if (isNaN(newValue)) {
-            newValue = 0;
-        }
-        const updatedBoxValues = [...boxValues];
-        updatedBoxValues[index] = newValue;
-        setBoxValues(updatedBoxValues);
-
-        //Amount of money convert
-        if (AmountofMoney == 0) {
-            AmountofMoney = 0;
-        }
-        else {
-            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
-            AmountofMoney = parseFloat(AmountofMoney);
-        }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = AmountofMoney - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    };
-
-
     //Submit insert and edit API function 
     const router = useRouter();
     let defaultValues = {};
@@ -291,9 +190,7 @@ export default function CashSavingsAdd() {
             FinancialInstitutionName: FinancialInstitutionName,
             PostCode: PostCode,
             Address: Address,
-            AmountofMoney: AmountofMoney,
-            UndecidedHeir: UndecidedHeir,
-            totalPrice: AmountofMoney,
+            AmountofMoney: AmountofMoney,            
         };
 
         //input Validation

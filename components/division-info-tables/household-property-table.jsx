@@ -191,21 +191,21 @@ return (
   </>
     <div className="py-0">
       <Table aria-label="collapsible table">
-          <TableHead className="table-head">
+          <TableHead className="table-head">              
               <TableRow>
-                  <TableCell className="" align="left"><span className="font-medium">家庭用財産</span></TableCell>
-                  <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
-                  <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
-                  <TableCell className="table-20" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-                  <TableCell className="cursor-pointer" align="right">
-                    <Box className="invisible inline-block">
-                      <HtmlTooltip>
-                        <QuestionMarkIcon style={{ fontSize: 18 }} className="mr-2 p-1 bg-warning-main rounded-lg text-black"/>                
-                      </HtmlTooltip>
-                    </Box>
-                    <span onClick={handleExpandFun} className="font-medium bg-blue-500 rounded-sm py-1 px-2 text-white">入力</span>
-                  </TableCell>
-              </TableRow>
+              <TableCell className="" align="left"><span className="font-medium">家庭用財産</span></TableCell>
+              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
+              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
+              <TableCell className="table-20" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+              <TableCell className="cursor-pointer" align="right">
+                <Box className="invisible inline-block">
+                  <HtmlTooltip>
+                    <QuestionMarkIcon style={{ fontSize: 18 }} className="mr-2 p-1 bg-warning-main rounded-lg text-black"/>                
+                  </HtmlTooltip>
+                </Box>
+                <span onClick={handleExpandFun} className="font-medium bg-blue-500 rounded-sm py-1 px-2 text-white">入力</span>
+              </TableCell>
+            </TableRow>
             </TableHead>
             <TableBody>                     
             <TableRow>
@@ -213,19 +213,16 @@ return (
                   <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                     <Box className="my-2"> 
                       <Table>
-                        <TableHead className="table-head-2">
+                        <TableHead className="table-head-2">                            
                             <TableRow>
-                              <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">財産の内容</span></TableCell>
-                              {/* <TableCell className="border border-light-gray border-l"><span className="font-medium">金融機関名</span></TableCell> */}
-                              <TableCell className="border border-light-gray border-l" align="right"><span className="font-medium">評価額</span></TableCell>
-                              <TableCell className="border border-light-gray border-l" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
-                              <TableCell className="border border-light-gray border-l invisible"><span className="font-medium">Column</span></TableCell>
-                            </TableRow>                     
+                          <TableCell className="border-light-gray border-t border-l" align="left"><span className="font-medium">財産の内容</span></TableCell>
+                          <TableCell className="border-light-gray border-t border-l"><span className="font-medium">評価額</span></TableCell>
+                          <TableCell className="border-light-gray border-t border-l border-r w-15" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
+                        </TableRow>                  
                             {HouseholdList.map((list, index) => (
                               <React.Fragment key={list.id}>
                                 <TableRow key={list.id} id={list.id} value={list.customer_id}>
                                   <TableCell className="border border-light-gray border-l">{list.property_details}</TableCell>
-                                  {/* <TableCell className="border border-light-gray border-l">{list.address}</TableCell>                            */}
                                   <TableCell className="border border-light-gray border-l w-20" align="right">
                                     {list.valuation.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span>
                                   </TableCell>
@@ -241,10 +238,9 @@ return (
                                       {TableExpandOpen2[list.id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                                     </IconButton>
                                   </TableCell>
-                                  <TableCell className="border border-light-gray border-l" align="center"></TableCell>
                                 </TableRow>
                                 <TableRow className="w-full">
-                                  <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                                  <TableCell className="border border-light-gray border-l" style={{ padding: 0 }} colSpan={10}>
                                       <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
                                         <Box>
                                             <Table>
@@ -258,8 +254,7 @@ return (
                                                       <TableCell id={heir.heir_id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>            
                                                     </>
                                                     ))}                  
-                                                    <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-                                                    <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                                    <TableCell className="border border-light-gray border-l w-15 bg-table-gray" align="center">入力</TableCell>
                                                 </TableRow>                    
                                               </TableHead>
                                                   <TableBody>
@@ -288,8 +283,7 @@ return (
                                                           )}
                                                         </React.Fragment>
                                                       ))}
-                                                      <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell>
-                                                      <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                                      <TableCell className="border border-light-gray border-l w-15 cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell>
                                                     </TableRow>
                                                 </TableBody>
                                             </Table> 

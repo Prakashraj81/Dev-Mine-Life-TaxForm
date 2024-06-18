@@ -297,7 +297,7 @@ export default function LivingDonationAdd() {
                 </Box>
                 <Box className="page-description py-8">                    
                     <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    以下の内容を入力して[保存]ボタンを押して下さい。の下に以下の文章を追加<br/>
+                    以下の内容を入力して[保存]ボタンを押して下さい。<br/>
                     <Typography component={"span"}>※精算課税制度の適用を受けていた場合は当システムでは作成できません。</Typography>
                     </Typography>
                 </Box>

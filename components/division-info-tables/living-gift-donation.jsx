@@ -198,18 +198,14 @@ export default function LivingDonationTable({ heir_details_list }) {
                 <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                   <Box>
                     <Table>
-                      <TableHead>
-                        {/* <TableRow>
-                          <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-medium">分割情報の入力</span></TableCell>
-                        </TableRow> */}
+                      <TableHead>                       
                         <TableRow>
                           {HeirList.map((heir) => (
                             <>
                               <TableCell id={heir.heir_id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>
                             </>
                           ))}
-                          <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-                          <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                          {/* <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell> */}
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -219,8 +215,7 @@ export default function LivingDonationTable({ heir_details_list }) {
                               <TableCell id={heir_lists.heir_id} className="border border-light-gray border-l" align="right">{heir_lists.amount}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
                             </>
                           ))}
-                          <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell>
-                          <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                          {/* <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell> */}
                         </TableRow>
                       </TableBody>
                     </Table>

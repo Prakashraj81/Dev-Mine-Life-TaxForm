@@ -218,8 +218,7 @@ return (
                             <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">財産の名称</span></TableCell>
                             <TableCell className="border border-light-gray border-l"><span className="font-medium">相手先</span></TableCell>
                             <TableCell className="border border-light-gray border-l" align="right"><span className="font-medium">評価額</span></TableCell>
-                            <TableCell className="border border-light-gray border-l" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
-                            <TableCell className="border border-light-gray border-l invisible"><span className="font-medium">Column</span></TableCell>
+                            <TableCell className="border border-light-gray border-l w-15" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
                           </TableRow>                   
                           {OthersPropertyList.map((list, index) => (
                             <React.Fragment key={list.id}>
@@ -241,10 +240,9 @@ return (
                                     {TableExpandOpen2[list.id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                                   </IconButton>
                                 </TableCell>
-                                <TableCell className="border border-light-gray border-l" align="center"></TableCell>
                               </TableRow>
                               <TableRow className="w-full">
-                                <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                                <TableCell className="border border-light-gray border-l" style={{ padding: 0 }} colSpan={10}>
                                     <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
                                       <Box>
                                           <Table>
@@ -259,7 +257,6 @@ return (
                                                   </>
                                                   ))}                  
                                                   <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-                                                  <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
                                               </TableRow>                    
                                             </TableHead>
                                                 <TableBody>
@@ -288,8 +285,7 @@ return (
                                                           )}
                                                         </React.Fragment>
                                                       ))}               
-                                                    <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
-                                                    <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                                    <TableCell className="border border-light-gray border-l w-15 cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
                                                   </TableRow>       
                                               </TableBody>
                                           </Table> 

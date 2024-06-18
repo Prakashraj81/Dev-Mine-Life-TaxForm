@@ -250,25 +250,24 @@ export default function CashSavingsTable({ heir_details_list }) {
                     <Table>
                       <TableHead className="table-head-2">
                         <TableRow>
-                          <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">預金の種類</span></TableCell>
-                          <TableCell className="border border-light-gray border-l"><span className="font-medium">金融機関名</span></TableCell>
-                          <TableCell className="border border-light-gray border-l" align="right"><span className="font-medium">金額</span></TableCell>
-                          <TableCell className="border border-light-gray border-l" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
-                          <TableCell className="border border-light-gray border-l invisible"><span className="font-medium">Column</span></TableCell>
+                          <TableCell className="border-light-gray border-t border-l" align="left"><span className="font-medium">預金の種類</span></TableCell>
+                          <TableCell className="border-light-gray border-t border-l"><span className="font-medium">金融機関名</span></TableCell>
+                          <TableCell className="border-light-gray border-t border-l" align="right"><span className="font-medium">金額</span></TableCell>
+                          <TableCell className="border-light-gray border-t border-l border-r" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
                         </TableRow>
                         {cashSavingsList.map((list, index) => (
                           <React.Fragment key={list.id}>
                             <TableRow key={list.id} id={list.id} value={list.customer_id}>
-                              <TableCell className="border border-light-gray border-l">{list.deposit_type}</TableCell>
+                              <TableCell className="border-light-gray border-l">{list.deposit_type}</TableCell>
                               {list.address ?
-                                <TableCell className="border border-light-gray border-l">{list.address}</TableCell>
+                                <TableCell className="border-light-gray border-l">{list.address}</TableCell>
                                 :
-                                <TableCell className="border border-light-gray border-l">{list.financial_institution_name}</TableCell>
+                                <TableCell className="border-light-gray border-l">{list.financial_institution_name}</TableCell>
                               }
-                              <TableCell className="border border-light-gray border-l w-20" align="right">
+                              <TableCell className=" border-light-gray border-l w-20" align="right">
                                 {list.amount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span>
                               </TableCell>
-                              <TableCell className="border border-light-gray border-l w-15" align="center">
+                              <TableCell className="border-light-gray border-l border-r w-15" align="center">
                                 <IconButton
                                   aria-label="expand row"
                                   size="small"
@@ -280,10 +279,9 @@ export default function CashSavingsTable({ heir_details_list }) {
                                   {TableExpandOpen2[list.id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                                 </IconButton>
                               </TableCell>
-                              <TableCell className="border border-light-gray border-l" align="center"></TableCell>
                             </TableRow>
                             <TableRow className="w-full">
-                              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                              <TableCell className="border-light-gray border-l border-r" style={{ padding: 0 }} colSpan={10}>
                                 <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
                                   <Box>
                                     <Table>
@@ -294,11 +292,10 @@ export default function CashSavingsTable({ heir_details_list }) {
                                         <TableRow>
                                           {HeirList.map((heir) => (
                                             <>
-                                              <TableCell id={heir.heir_id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>
+                                              <TableCell id={heir.heir_id} className="border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>
                                             </>
                                           ))}
-                                          <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-                                          <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                          <TableCell className="border-light-gray border-l border-r w-15 bg-table-gray" align="center">入力</TableCell>
                                         </TableRow>
                                       </TableHead>
                                       <TableBody>
@@ -327,8 +324,7 @@ export default function CashSavingsTable({ heir_details_list }) {
                                               )}
                                             </React.Fragment>
                                           ))}
-                                          <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell>
-                                          <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
+                                          <TableCell className="border-light-gray border-l border-r cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell>
                                         </TableRow>
                                       </TableBody>
                                     </Table>

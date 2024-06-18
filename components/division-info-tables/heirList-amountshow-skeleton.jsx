@@ -13,7 +13,7 @@ const HeirListAmountShowSkeleton = ({ HeirList, HeirSharingDetails, divisionBoxC
   }, []);
 
   const [shareAmounts, setShareAmounts] = useState(
-    HeirSharingDetails.reduce((acc, detail) => {
+    (HeirSharingDetails || []).reduce((acc, detail) => {
       acc[detail.heir_id] = detail.share_amount || '';
       return acc;
     }, {})
@@ -29,7 +29,7 @@ const HeirListAmountShowSkeleton = ({ HeirList, HeirSharingDetails, divisionBoxC
 
   useEffect(() => {
     HeirList.forEach((heirlist, index) => {
-      HeirSharingDetails.filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
+      (HeirSharingDetails || []).filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
         .forEach((shareDetails) => {
           const value = shareAmounts[shareDetails.heir_id];
           const mockEvent = { target: { value }, currentTarget: { id: shareDetails.heir_id } };
@@ -59,7 +59,7 @@ const HeirListAmountShowSkeleton = ({ HeirList, HeirSharingDetails, divisionBoxC
                   <Typography component={"span"} fontSize={14}>{heirlist.name}</Typography>
                 </TableCell>
                 <TableCell className='w-25 division-table-padding' align='right'>
-                  {HeirSharingDetails.filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
+                  {(HeirSharingDetails || []).filter(shareDetails => shareDetails.heir_id === heirlist.heir_id)
                     .map((shareDetails, i) => (
                       <TextField
                         key={i}

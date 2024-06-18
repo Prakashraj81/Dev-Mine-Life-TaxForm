@@ -101,19 +101,14 @@ export default function CashSavingsTable() {
     <DivisionPopup OpenModalPopup={OpenModalPopup} handleModalClose={handleModalClose}/>
     <div className="py-2">
       <Table aria-label="collapsible table">
-          <TableHead className="table-head1">
+          <TableHead className="table-head-55">
               <TableRow>
                   <TableCell className="border border-light-gray border-l" align="left"><span className="font-medium">贈与税額控除</span></TableCell>
-                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-medium">Column</span></TableCell>
-                  <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-medium">Column</span></TableCell>
-                  <TableCell className="table-20 border border-light-gray border-l" align="right">1500<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-                  <TableCell className="border border-light-gray border-l cursor-pointer" align="center">
-                    {/* <Box className="invisible inline-block">
-                      <HtmlTooltip>
-                        <QuestionMarkIcon style={{ fontSize: 18 }} className="mr-2 p-1 bg-warning-main rounded-lg text-black"/>                
-                      </HtmlTooltip>
-                    </Box> */}
-                    <span onClick={handleExpandFun} className="font-medium text-red-500">確認</span>
+                  {/* <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-medium">Column</span></TableCell> */}
+                  {/* <TableCell className="border border-light-gray border-l invisible" align="left"><span className="font-medium">Column</span></TableCell> */}
+                  <TableCell className="table-20 border border-light-gray border-l" align="right">0<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+                  <TableCell onClick={handleExpandFun} className="border border-light-gray border-l cursor-pointer" align="left">                    
+                    <span className="font-medium text-red-500">確認</span>
                   </TableCell>
               </TableRow>
             </TableHead>
@@ -132,7 +127,6 @@ export default function CashSavingsTable() {
                                 </>
                                 ))}                  
                                 <TableCell className="border border-light-gray border-l bg-table-gray" align="center">入力</TableCell>
-                                <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
                             </TableRow>                    
                           </TableHead>
                               <TableBody>
@@ -143,7 +137,6 @@ export default function CashSavingsTable() {
                                   </>
                                   ))}                   
                                   <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon className="cursor-pointer" onClick={handleModalOpen}/></TableCell>
-                                  <TableCell className="border border-light-gray border-l bg-table-gray invisible" align="center">Column</TableCell>
                                 </TableRow>       
                             </TableBody>
                         </Table> 
