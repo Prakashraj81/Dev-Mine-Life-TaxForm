@@ -495,6 +495,10 @@ export default function LandAdd() {
                                 <Box className="mt-5">
                                     <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
                                 </Box>
+                                <Box className="mt-5 steps-details">
+                                    <Typography fontSize={14} lineHeight={2} letterSpacing={1.8}><Typography letterSpacing={0} component={"span"}>Step３</Typography> 該当地が路線価が付された道路に接しておらず、倍率地域と記載された地域に位置する場合</Typography>
+                                    <Typography fontSize={14} lineHeight={2} letterSpacing={1.8} className="mt-1">⇒該当地は路線価地域の土地ではありません。「いいえ」を選択して倍率表を確認してください。</Typography>
+                                </Box>
                                 <Box className="mt-5">
                                     <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
                                 </Box>

@@ -85,14 +85,13 @@ export default function CalculatedTaxAmountEachPersons() {
         <Table aria-label="collapsible table">
           <TableHead sx={{background: "#e8918857", borderBottom: "1px solid #e89188"}} className="table-head-50">
             <TableRow>
-                <TableCell sx={{borderBottom: "1px solid #e89188"}} className="border-primary-color border border-l" align="left"><span className="font-medium">各人の算出税額</span></TableCell>
-                <TableCell sx={{borderBottom: "1px solid #e89188"}} className="border-primary-color border border-l cursor-pointer" align="left" onClick={handleExpandFun}><span className="font-medium text-red-500">確認・入力</span></TableCell>
+                <TableCell sx={{borderBottom: "1px solid #e89188"}} className="border-primary-color border border-l" align="left"><span className="font-medium">各人の算出税額</span></TableCell>                
             </TableRow>
           </TableHead>
           <TableBody>                     
             <TableRow>
               <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
-                  <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
+                  <Collapse in={true} timeout="auto" unmountOnExit>
                     <Box className="my-2">
                         <Table>
                           <TableHead>                                  
