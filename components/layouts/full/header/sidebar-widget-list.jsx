@@ -17,7 +17,7 @@ export default function SideBarWidgetList({ RecentSaveList }) {
   return (
     <>
       <Box className="sidebar-widget-list">
-        <Box className="sidebar-heading border-b">
+        <Box className="sidebar-heading w-full inline-block border-b">
           <Box className="flex justify-start items-center py-3 mx-5">
             <TextSnippetOutlinedIcon style={{ width: '24px', height: '24px' }}  className="text-custom-black"/>
             <Typography component={"span"} className="pl-2 text-base lg:text-xl xl:text-xl 2xl:text-xl tracking-2 font-medium">

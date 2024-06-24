@@ -24,10 +24,11 @@
 /* Initial hidden scrollbar styles */
 .sticky-scroll {
   position: sticky;
-  top: 0;
-  height: calc(100vh - 60px); /* Adjust height to fit your layout */
+  top: 120px;
+  height: calc(100vh - 60px); 
   overflow-y: auto;
   scrollbar-width: none; /* For Firefox */
+  transition: 0.3s ease;  
 }
 
 .sticky-scroll::-webkit-scrollbar {
@@ -36,7 +37,7 @@
 
 /* Show scrollbar on hover */
 .sticky-scroll:hover {
-  /* scrollbar-width: thin; */
+  scrollbar-width: thin;  
 }
 
 .sticky-scroll:hover::-webkit-scrollbar {
@@ -56,8 +57,19 @@
   background: #555; /* Color of the scrollbar thumb on hover */
 }
 
-
-
+.sidebar-heading {
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+  background: #fafbfb;
+  border-left: 1px solid #e5e7eb;
+}
+.sidebar-list{
+  position: relative;
+  top: 0px;
+  z-index: 0;
+  bottom: 0;
+}
 
 .Sidebar-menu > a > div {  
   border-radius: 5px !important;
