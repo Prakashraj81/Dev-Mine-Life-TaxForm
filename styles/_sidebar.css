@@ -20,6 +20,45 @@
   }
 }
 
+
+/* Initial hidden scrollbar styles */
+.sticky-scroll {
+  position: sticky;
+  top: 0;
+  height: calc(100vh - 60px); /* Adjust height to fit your layout */
+  overflow-y: auto;
+  scrollbar-width: none; /* For Firefox */
+}
+
+.sticky-scroll::-webkit-scrollbar {
+  width: 0; /* For Chrome, Safari, and Opera */
+}
+
+/* Show scrollbar on hover */
+.sticky-scroll:hover {
+  /* scrollbar-width: thin; */
+}
+
+.sticky-scroll:hover::-webkit-scrollbar {
+  width: 10px; /* Adjust the width as needed */
+}
+
+.sticky-scroll:hover::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background color of the scrollbar track */
+}
+
+.sticky-scroll:hover::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Optional: Make the scrollbar thumb rounded */
+}
+
+.sticky-scroll:hover::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the scrollbar thumb on hover */
+}
+
+
+
+
 .Sidebar-menu > a > div {  
   border-radius: 5px !important;
   transition-duration: 0.3s;
