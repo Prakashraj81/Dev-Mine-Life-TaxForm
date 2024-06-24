@@ -260,7 +260,7 @@ export default function ContactUs() {
                     <Box>
                         <Box className="checkbox-list pb-7">
                             <Typography component={"label"} className="text-base font-medium block">お問い合わせ・ご相談の種類<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></Typography>
-                            <Box className="checkbox-form-list block mt-5 rounded border border-border">
+                            <Box className="bg-custom-gray checkbox-form-list block mt-5 rounded border border-border">
                                 <FormGroup>
                                     <FormControlLabel className='margin-0 pl-2 list-item-first px-5 py-3 block border-b-border' control={<Checkbox id='ServiceInqiry' onChange={handleCheckboxChange} checked={ServiceInqiry} size='small' />} label="サービスに関するご相談・お申し込み" />
                                     <FormControlLabel className='margin-0 pl-2 list-item-first px-5 py-3 block border-b-border' control={<Checkbox id='InquiryPartnerships' onChange={handleCheckboxChange} checked={InquiryPartnerships} size='small' />} label="取材･提携に関するお問い合わせ" />
