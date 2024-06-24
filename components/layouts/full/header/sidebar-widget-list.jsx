@@ -45,7 +45,8 @@ export default function SideBarWidgetList({ RecentSaveList }) {
             let propertyActivity11 = lists.activity_message.includes('Property Details of Living Donation');
 
             let splitActivity = lists.activity_at.split('T');
-            let formattedDate = splitActivity[0];
+            let dateParts = splitActivity[0].split('-');
+            let formattedDate = `${dateParts[0]}/${dateParts[1]}/${dateParts[2]}`;
             let formattedTime = splitActivity[1];
             
             //Basic info page

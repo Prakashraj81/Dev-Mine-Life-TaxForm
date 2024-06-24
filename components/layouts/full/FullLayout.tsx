@@ -140,7 +140,7 @@ const FullLayout: React.FC<Props> = ({ children }) => {
                     </Box>
                   </Box>
                 </Box>
-                <Box className="w-20 hidden lg:inline-block xl:inline-block 2xl:inline-block float-left border-l">
+                <Box className="w-20 hidden lg:inline-block xl:inline-block 2xl:inline-block float-left border-l sticky-sidebar">
                   <SideBarWidgetList RecentSaveList={RecentSaveList} />
                 </Box>
               </Box>

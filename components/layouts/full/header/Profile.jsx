@@ -59,7 +59,7 @@ const Profile = () => {
   return (
     <>
       <Box>
-        <ul className="flex items-baseline space-x-24 nav-menu">
+        <ul className="flex items-baseline space-x-12 nav-menu">
           {/* <li className="hidden lg:block xl:block 2xl:block">
             <a
               className="text-black font-medium text-sm md:text-base lg:text-base xl:text-base 2xl:text-base"
@@ -77,12 +77,29 @@ const Profile = () => {
             </a>
           </li> */}
           <li className="hidden lg:block xl:block 2xl:block">
-            <Link
+            <Button
+              type="button"
+              component={Link}
               href="/pages/contact"
-              className="text-black font-medium text-sm md:text-base lg:text-base xl:text-base 2xl:text-base"
+              variant="contained"
+              sx={{
+                width: 'auto',
+                backgroundColor: 'primary.light',
+                color: 'primary.main',
+                '&:hover': {
+                  backgroundColor: 'primary.light',
+                  color: 'primary.main',
+                },
+                borderRadius: '3px',
+                px: 1.5,
+                py: 1,
+                transition: 'all 0.3s ease',
+              }}
             >
-              ご相談・お問い合わせ
-            </Link>
+              <Typography component={"span"} className="text-sm lg:text-base xl:text-base 2xl:text-base font-medium">
+                ご相談・お問い合わせ
+              </Typography>
+            </Button>
           </li>
           <li>
             <Button
@@ -106,16 +123,9 @@ const Profile = () => {
                   }}
                   onClick={handleClick2}
                 >
-                  <Avatar
-                    src="/images/profile/user-1.jpg"
-                    alt="image"
-                    sx={{
-                      width: 35,
-                      height: 35,
-                      maxWidth: 35,
-                      maxHeight: 35,
-                    }}
-                  />
+                  <Avatar sx={{ width: 32, height: 32, background: "#E89188", color: "#FFF" }}>
+                    山
+                  </Avatar>
                 </IconButton>
                 <Box
                   sx={{
@@ -128,9 +138,9 @@ const Profile = () => {
                 >
                   <Typography
                     className="text-black"
-                    variant="h5"
+                    variant="p"
                     fontWeight="400"
-                    sx={{ ml: 1 }}
+                    sx={{ ml: 0 }}
                   >
                     Hi,
                   </Typography>
@@ -168,7 +178,7 @@ const Profile = () => {
           }}
         >
 
-          <MenuItem>
+          {/* <MenuItem>
             <ListItemIcon>
               <AppRegistrationOutlinedIcon width={18} />
             </ListItemIcon>
@@ -179,7 +189,7 @@ const Profile = () => {
               <BeenhereOutlinedIcon width={18} />
             </ListItemIcon>
             <p className="text-sm">有料会員登録</p>
-          </MenuItem>
+          </MenuItem> */}
           <Box mt={1} py={1} px={2}>
             <Button
               href=""
