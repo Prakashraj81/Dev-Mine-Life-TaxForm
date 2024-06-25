@@ -80,7 +80,9 @@ const FullLayout: React.FC<Props> = ({ children }) => {
           setRecentSaveList([]);
         }
       } catch (error) {
-        console.log("Error", error);
+        if(error.response.status === 440 && error.response.data.error.message === "Session Expired. Please login again."){
+          setOpenAuthPopup(true);
+        }
       } finally {
         setLoading(false); // Hide loader
       }
