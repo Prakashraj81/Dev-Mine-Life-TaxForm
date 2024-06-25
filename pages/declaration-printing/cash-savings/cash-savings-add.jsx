@@ -104,7 +104,6 @@ export default function CashSavingsAdd() {
         let selectedId = Number(selectedOptions.id);
         setDepositType(selectedValue);
         setisSumbitDisabled(false);
-        clearFunction();
         if (selectedId === 1) {
             setDepositTypeError(false);
             setShowFinancialInstitutionName(false);
@@ -144,12 +143,10 @@ export default function CashSavingsAdd() {
         amount_of_money = amount_of_money.toLocaleString();
         if (amount_of_money === "NaN") {
             setAmountofMoney(0);
-            setUndecidedHeir(0);
         }
         else {
             setAmountofMoneyError(false);
             setAmountofMoney(amount_of_money);
-            setUndecidedHeir(amount_of_money);
         }
         setisSumbitDisabled(false);
         AmountToTotalCalculation(amount_of_money);
@@ -213,11 +210,7 @@ export default function CashSavingsAdd() {
             }
         }
 
-        if (defaultValues.AmountofMoney !== "" || defaultValues.AmountofMoney === 0) {
-            valueConvertFun(defaultValues.AmountofMoney);
-        }
-
-        if (defaultValues.UndecidedHeir < 0) {
+        if (defaultValues.AmountofMoney < 0) {
             setShowIncorrectError(true);
             isSumbitDisabled = true;
         }

@@ -59,6 +59,14 @@ const FullLayout: React.FC<Props> = ({ children }) => {
     }
   };
 
+  //Session expired authkey handle
+  const handleAuthKeyUpdate = () => {
+    const authKey = sessionStorage.getItem('auth_key');      
+    if (authKey === null) { 
+      setOpenAuthPopup(true);
+    }
+  };    
+  
   // Fetch the recent save list
   const GetRecentSaveList = async () => {
     let auth_key = atob(sessionStorage.getItem("auth_key"));
@@ -82,6 +90,7 @@ const FullLayout: React.FC<Props> = ({ children }) => {
   // Initial load
   useEffect(() => {
     determineActiveStep(router.pathname);
+    handleAuthKeyUpdate();
     GetRecentSaveList();
   }, []);
 
@@ -89,26 +98,16 @@ const FullLayout: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     const handleRouteChange = (url) => {
       determineActiveStep(url);
-      GetRecentSaveList();
+      handleAuthKeyUpdate();
+      GetRecentSaveList();      
     };
 
     router.events.on('routeChangeComplete', handleRouteChange);
     
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange);
-    };
+    };    
   }, [router]);
-
-  useEffect(() => {
-    const handleAuthKeyUpdate = () => {
-      const authKey = sessionStorage.getItem('auth_key');      
-      if (authKey === null) { 
-        setOpenAuthPopup(true);
-      }
-    };
-
-    handleAuthKeyUpdate();
-  }, []);
 
   const handleCloseAuthPopup = () => {
     setOpenAuthPopup(false);

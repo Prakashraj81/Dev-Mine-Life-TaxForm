@@ -27,22 +27,24 @@ export default function SideBarWidgetList({ RecentSaveList }) {
         </Box>
         <Box className="sidebar-list">
           {RecentSaveList.map((lists, index) => {
-            let divisionInfoActivity = lists.activity_message.includes('Split');
+            let divisionInfoActivity = lists.activity_description.includes('SPLIT');
 
-            let basicInfoActivity1 = lists.activity_message.startsWith('Decedent Details');
-            let basicInfoActivity2 = lists.activity_message.startsWith('Heir Details');
+            let basicInfoActivity1 = lists.activity_description.startsWith('DECEDENT_DETAILS');
+            let basicInfoActivity2 = lists.activity_description.startsWith('HEIR_DETAILS');
             
-            let propertyActivity1 = lists.activity_message.includes('Property Details of Cash Deposit');
-            let propertyActivity2 = lists.activity_message.includes('Property Details of Securities');
-            let propertyActivity3 = lists.activity_message.includes('Property Details of Building');
-            let propertyActivity4 = lists.activity_message.includes('Property Details of Land');
-            let propertyActivity5 = lists.activity_message.includes('Property Details of Household Details');
-            let propertyActivity6 = lists.activity_message.includes('Property Details of Death Benefit');
-            let propertyActivity7 = lists.activity_message.includes('Property Details of Death Retirement');
-            let propertyActivity8 = lists.activity_message.includes('Property Details of Other Property');
-            let propertyActivity9 = lists.activity_message.includes('Property Details of Debt');
-            let propertyActivity10 = lists.activity_message.includes('Property Details of Funeral Expenses');
-            let propertyActivity11 = lists.activity_message.includes('Property Details of Living Donation');
+            let propertyActivity1 = lists.activity_description.startsWith('PD_CASH_DEPOSIT');
+            let propertyActivity2 = lists.activity_description.startsWith('PD_SECURITIES');
+            let propertyActivity3 = lists.activity_description.startsWith('PD_BUILDINGS');
+            let propertyActivity4 = lists.activity_description.startsWith('PD_LAND');
+            let propertyActivity5 = lists.activity_description.startsWith('PD_HOUSEHOLD');
+            let propertyActivity6 = lists.activity_description.startsWith('PD_DEATH_BENEFIT');
+            let propertyActivity7 = lists.activity_description.startsWith('PD_DEATH_RETIREMENT');
+            let propertyActivity8 = lists.activity_description.startsWith('PD_OTHER_ASSETS');
+            let propertyActivity9 = lists.activity_description.startsWith('PD_DEBT');
+            let propertyActivity10 = lists.activity_description.startsWith('PD_FUNERAL_EXPENSES');
+            let propertyActivity11 = lists.activity_description.startsWith('PD_LIVING_DONATION');
+            
+            let propertyActivity12 = lists.activity_description.startsWith('PD_GIFT_DURING_LIFE');
 
             let splitActivity = lists.activity_at.split('T');
             let dateParts = splitActivity[0].split('-');
