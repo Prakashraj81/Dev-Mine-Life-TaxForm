@@ -578,14 +578,14 @@ export default function LandAdd() {
                                 <Typography component={"label"} className="form-label" id="demo-row-radio-buttons-group-label">土地の詳細の入力</Typography>
                             </Box>
                             <Box className="mt-5">
-                                <Typography component={"label"}>※当システムでは最も高い路線価が付されている土地を正面路線として自動的に評価額を計算しております。</Typography>
+                                <Typography component={"label"}>※当システムでは最も高い路線価が付されている土地を正面路線として自動的に評価額を計算しております。</Typography><br />
                                 <Typography component={"label"}>※角地準角地の違いについては、下記のリンクをご参照ください。</Typography>
                                 <Box className="mt-1 steps-details">
                                     <Typography fontSize={14} target="blank" lineHeight={2} letterSpacing={0} component={Link} href={"https://www.nta.go.jp/law/tsutatsu/kihon/sisan/hyoka_new/02/07.htm"} className="text-blue-600 mt-1">　https://www.nta.go.jp/law/tsutatsu/kihon/sisan/hyoka_new/02/07.htm</Typography>
                                 </Box>
                                 <Box className="mt-1 steps-details">
-                                <Typography component={"label"}>※奥行き価格補正、不整形地補正、地籍規模の大きな宅地の評価減等の補正の適用をご希望の場合は、</Typography>
-                                <Typography component={"label"}>　上部の「ご相談・お問い合わせ」からお問い合わせください。税理士による有料サポートにて対応いたします。</Typography>
+                                    <Typography component={"label"}>※奥行き価格補正、不整形地補正、地籍規模の大きな宅地の評価減等の補正の適用をご希望の場合は、</Typography>
+                                    <Typography component={"label"}>　上部の「ご相談・お問い合わせ」からお問い合わせください。税理士による有料サポートにて対応いたします。</Typography>
                                 </Box>
                             </Box>
                             <Box className="w-full flex items-center justify-between mt-3 mb-7">
@@ -746,7 +746,7 @@ export default function LandAdd() {
                         {ShowYesOption4 && (
                             <>
                                 <Box className="w-full inline-block">
-                                    <Box className="w-full mb-2"><Typography component={"label"}>区分所有補正率の入力</Typography></Box>
+                                    <Box className="w-full mb-2"><Typography component={"label"}>建物の入力時に自動計算された区分所有補正率を入力してください</Typography></Box>
                                     <Box className="w-full">
                                         <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                             <input

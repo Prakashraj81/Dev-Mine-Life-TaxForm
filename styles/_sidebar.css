@@ -194,10 +194,12 @@
   border-radius: 0 !important;  
 }
 
-.mui-style-77r4z8, .mui-style-1xnf6tr-MuiPaper-root-MuiAccordion-root, .mui-style-xmzdpb-MuiPaper-root-MuiAccordion-root.Mui-expanded, .mui-style-xmzdpb-MuiPaper-root-MuiAccordion-root, .mui-style-11f2y1l {
+.mui-style-77r4z8, .mui-style-1xnf6tr-MuiPaper-root-MuiAccordion-root, .mui-style-xmzdpb-MuiPaper-root-MuiAccordion-root.Mui-expanded, .mui-style-xmzdpb-MuiPaper-root-MuiAccordion-root, .mui-style-11f2y1l,
+.mui-style-1sk75vu-MuiPaper-root-MuiAccordion-root {
   box-shadow:none !important;  
 }
-.mui-style-77r4z8::before, .mui-style-1xnf6tr-MuiPaper-root-MuiAccordion-root::before, .mui-style-xmzdpb-MuiPaper-root-MuiAccordion-root:before, .mui-style-11f2y1l::before {
+.mui-style-77r4z8::before, .mui-style-1xnf6tr-MuiPaper-root-MuiAccordion-root::before, .mui-style-xmzdpb-MuiPaper-root-MuiAccordion-root:before, .mui-style-11f2y1l::before,
+.mui-style-1sk75vu-MuiPaper-root-MuiAccordion-root::before {
   opacity: 0 !important; 
 }
 .mui-style-1dgfu6o-MuiButtonBase-root-MuiListItem-root, .mui-style-q801yl, .accordion-div-item {

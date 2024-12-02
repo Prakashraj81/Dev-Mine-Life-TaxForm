@@ -99,12 +99,20 @@ export default function HouseAdd() {
             setBuildingNoImage(false);
             setShowYes(true);
             setShowNo(false);
+
+            setShowNoOption4(null);
+            setShowYesOption4(null);
+            setQuestionFour(null);
         }
         else {
             setBuildingYesImage(false);
             setBuildingNoImage(true);
             setShowYes(false);
             setShowNo(true);
+
+            setShowNoOption4(true);
+            setShowYesOption4(false);
+            setQuestionFour("No");
         }
     };
 
@@ -138,44 +146,11 @@ export default function HouseAdd() {
             setShowNoOption4(true);
             setShowYesOption4(false);
         }
-    }
-
-
-    const handleBoxValueChange = (e, index) => {
-        setBoxValues([0]);
-        let newValue = parseFloat(e.target.value);
-        let updatedBoxValues = [...boxValues];
-        updatedBoxValues[index] = isNaN(newValue) ? 0 : newValue;
-        updatedBoxValues = updatedBoxValues.map((value) => (value === undefined ? 0 : value));
-        setBoxValues(updatedBoxValues);
-
-        //Amount of money convert
-        if (AmountofMoney == 0) {
-            AmountofMoney = 0;
-        }
-        else {
-            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
-            AmountofMoney = parseFloat(AmountofMoney);
-        }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
-        totalBoxValues = isNaN(totalBoxValues) ? 0 : totalBoxValues;
-        let heirValue = AmountofMoney - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
     };
-
-
-
+    
     const inputHandlingFunction = () => {
 
-    }
-
+    };
 
     //Submit API function 
     const router = useRouter();
@@ -201,12 +176,10 @@ export default function HouseAdd() {
         // }
         //Api setup
         if (isSumbitDisabled !== true) {
-            console.log("API allowed");
             sessionStorage.setItem('DeathBenefit', JSON.stringify(defaultValues));
             router.push(`/declaration-printing/building`);
         }
         else {
-            console.log("API not allowed");
             setisSumbitDisabled(true);
         }
     };
@@ -438,7 +411,7 @@ export default function HouseAdd() {
 
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label flex items-center"><div className="circle-no">12</div>階数</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">12</div>総階数</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <input
@@ -451,24 +424,41 @@ export default function HouseAdd() {
                                 </div>
                             </div>
 
-                            <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
-                                <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">12</div>敷地権の種類</label>
+
+                            <div className="w-full flex items-center justify-between">
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label flex items-center"><div className="circle-no">13</div>敷地権の種類</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            id="TypesofSiteRightsYes"
+                                            onChange={inputHandlingFunction}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="w-full inline-block mt-2">
-                                    <input
-                                        type="text"
-                                        className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        id="TypesofSiteRightsYes"
-                                        onChange={inputHandlingFunction}
-                                    />
+
+                                <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
+                                    <div className="label w-full inline-block">
+                                        <label className="form-label flex items-center"><div className="circle-no">14</div>所在階</label>
+                                    </div>
+                                    <div className="w-full inline-block mt-2">
+                                        <input
+                                            type="text"
+                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            id="Level"
+                                            onChange={inputHandlingFunction}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            </div>                            
 
                             <div className="w-full inline-block mb-7">
                                 <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                     <div className="label w-full inline-block">
-                                        <label className="form-label flex items-center"><div className="circle-no">13</div>築年数</label>
+                                        <label className="form-label flex items-center"><div className="circle-no">15</div>築年数</label>
                                     </div>
                                     <div className="w-full inline-block mt-2">
                                         <JapaneseCalendar id={"AgeofConstruction"} DateValue={""} />
@@ -477,7 +467,7 @@ export default function HouseAdd() {
                             </div>
                             <div className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left mb-7">
                                 <div className="label w-full inline-block">
-                                    <label className="form-label flex items-center"><div className="circle-no">13</div>敷地権の割合</label>
+                                    <label className="form-label flex items-center"><div className="circle-no">16</div>敷地権の割合</label>
                                 </div>
                                 <div className="w-full inline-block mt-2">
                                     <div className="flex justify-between items-center">
