@@ -549,9 +549,13 @@ export default function LandAdd() {
                                     </Box>
                                 </Box>
 
+                                <Box className="label w-full inline-block">
+                                    <Typography component={"label"} className="form-label flex items-center">【固定資産税課税明細の情報の入力】</Typography>
+                                </Box>
+
                                 <Box className="mt-5">
                                     <img src="/screenshots/land-question-2.png" className="w-full" alt="image" height={500} width={200} />
-                                </Box>
+                                </Box>                                
 
                                 <Box className="w-full flex items-center justify-between pt-7 mb-7">
                                     <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
