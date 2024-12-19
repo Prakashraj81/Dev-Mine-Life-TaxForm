@@ -15,7 +15,7 @@ const shake = keyframes`
   100% { transform: translateX(0); }
 `;
 
-const JapaneseCalendar = ({ id, DateValue, inputHandlingFunction, textAlign, error }) => {
+const JapaneseCalendar = ({ id, DateValue, inputHandlingFunction, textAlign, error, setyear_build }) => {
   const [selectedDate, setSelectedDate] = useState(DateValue ? new Date(DateValue) : null);
   const [open, setOpen] = useState(false);
   const datePickerRef = useRef(null);
@@ -34,7 +34,7 @@ const JapaneseCalendar = ({ id, DateValue, inputHandlingFunction, textAlign, err
     const dateValue = new Date(date);
     const formattedDate = `${dateValue.getFullYear()}-${(dateValue.getMonth() + 1).toString().padStart(2, '0')}-${dateValue.getDate().toString().padStart(2, '0')}`;
     setSelectedDate(formattedDate);
-    inputHandlingFunction({ target: { value: formattedDate }, currentTarget: { id } });
+    setyear_build(formattedDate);
   };
 
   const handleIconClick = () => {

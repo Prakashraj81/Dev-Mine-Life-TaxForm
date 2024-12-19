@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Link from "next/link";
+import { useRouter } from 'next/router';
+import axios from "axios";
 import {
     Table,
     TableBody,
@@ -16,12 +18,118 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import FullLayout from '../../../components/layouts/full/FullLayout';
 import BackButtonIndex from "../../../components/back-btn-index";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import AddPageButton from "../../../components/add-page-btn";
+import DeleteModal from "../../../components/modal/delete-modal";
 
 export default function Land() {
-    let [List, setList] = useState([]);
+    const [landList, setlandList] = useState([]);
+    const [SnackbarOpen, setSnackbarOpen] = useState(false);
+    const [VariantSnackbar, setVariantSnackbar] = useState("success");
+    const [SnackbarMsg, setSnackbarMsg] = useState("");
+    const [DeleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [deleteTarget, setDeleteTarget] = useState(null);
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
+
+    useEffect(() => {
+        GetlandList();
+    }, []);
+
+
+    //Load cash savings list
+    const GetlandList = async () => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        if (auth_key !== null) {
+            const params = { auth_key: auth_key };
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/list_lands', { params });
+                const data = response.data; 
+                if (data && data.land_details) {
+                    setlandList(data.land_details);
+                } else {
+                    setlandList([]);
+                }
+            } catch (error) {
+                console.log("Error", error);
+                setlandList([]); 
+            }
+        }
+    };
+
+    //Delete admin user function
+    const handleDeleteUser = (event) => {
+        setDeleteModalOpen(!DeleteModalOpen);
+    };
+
+    const DeleteModalFunction = async (event) => {
+        let value = event.currentTarget.id;
+        const { auth_key, customerId, depositId, buttonValue, params } = deleteTarget;
+        if (value === "Yes") {
+            try {
+                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_lands', { params });
+                if (response.ok) {
+                    setVariantSnackbar("success");
+                    setSnackbarMsg(response.data.message);                    
+                    setSnackbarOpen(true);
+                    GetlandList();
+                }
+                else {
+                    setVariantSnackbar("error");
+                    setSnackbarMsg(response.data.message);
+                    setSnackbarOpen(true);
+                }
+            } catch (error) {
+                setVariantSnackbar("error");
+                setSnackbarMsg("Cash details not deleted");
+            }
+            setDeleteModalOpen(false);
+        }
+        else {
+            setDeleteModalOpen(false);
+        }
+    };
+
+    //Edit and Delete 
+    let router = useRouter();
+    const handleEdit_DeleteButtonClick = async (event) => {
+        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let customerId = Number(event.currentTarget.id);
+        let depositId = Number(event.currentTarget.name);
+        let buttonValue = event.currentTarget.value;
+        let params = { auth_key: auth_key, id: depositId };
+        if (customerId !== 0 && depositId !== 0 && buttonValue === "Delete") {
+            setDeleteTarget({ auth_key, customerId, depositId, buttonValue, params });
+            setDeleteModalOpen(true);
+        }
+        else {
+            router.push(`/declaration-printing/land/land-add?edit=${btoa(depositId)}`);
+        }
+    };
+
     return (
         <>
+        <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                        <Alert
+                            onClose={handleSnackbarClose}
+                            severity={VariantSnackbar}
+                            variant="filled"
+                            sx={{ width: '100%', color: "#FFF" }}
+                        >
+                            {SnackbarMsg}
+                        </Alert>
+                    </Snackbar>
+        
+                    {DeleteModalOpen && (
+                        <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
+                    )}
+        
             <Box className="house-wrapper">
                 <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <Box className="page-heading">
@@ -39,14 +147,14 @@ export default function Land() {
                 <Box className="cash-list py-3">
                     <Table aria-label="land table">
                         <TableBody>
-                            {List.map((list, index) => (
+                            {landList.map((list, index) => (
                                 <TableRow key={index} className="border border-light-gray">
                                     <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>
-                                        {list.address ? list.address : list.financial_institution_name}
+                                        {list.location_and_lot_number}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>{list.deposit_type}</TableCell>
+                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>{list.land_area}</TableCell>
                                     <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
-                                        {list.amount.toLocaleString()}
+                                        {list.appraisal_value.toLocaleString()}
                                     </TableCell>
                                     <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
                                         <Box className="flex justify-end items-end">

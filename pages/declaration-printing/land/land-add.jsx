@@ -1,7 +1,7 @@
-"use client";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import axios from "axios";
 import { useRouter } from 'next/router';
 import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
@@ -37,14 +37,14 @@ export default function LandAdd() {
     let [ShowTableFive, setShowTableFive] = useState(false);
     let [DisabledRadioValue, setDisabledRadioValue] = useState('1');
 
-    let [QuestionOne, setQuestionOne] = useState("");
+
     let [ShowQuestionYes, setShowQuestionYes] = useState(false);
     let [ShowQuestionNo, setShowQuestionNo] = useState(false);
 
     let [QuestionTwo, setQuestionTwo] = useState("");
     let [QuestionTwoImageYes, setQuestionTwoImageYes] = useState(false);
     let [QuestionTwoImageNo, setQuestionTwoImageNo] = useState(false);
-    let [QuestionTwoImageBoth, setQuestionTwoImageBoth] = useState(true);
+    const [QuestionTwoImageBoth, setQuestionTwoImageBoth] = useState(true);
 
     let [QuestionThree, setQuestionThree] = useState("");
     let [ShowYesOption3, setShowYesOption3] = useState(false);
@@ -74,9 +74,45 @@ export default function LandAdd() {
     let [AmountofMoney, setAmountofMoney] = useState(0);
     let [UndecidedHeir, setUndecidedHeir] = useState(0);
     let [totalPrice, settotalPrice] = useState(0);
-    let [boxValues, setBoxValues] = useState([]); let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    let [boxValues, setBoxValues] = useState([]);
+    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
     let [ShowLoader, setShowLoader] = useState(false);
+
+    const [is_room_in_condominium, setis_room_in_condominium] = useState(null);
+    const [location_and_lot_number, setlocation_and_lot_number] = useState("");
+    const [ground_grain, setground_grain] = useState("");
+    const [land_area, setland_area] = useState(0);
+    const [land_use, setland_use] = useState(0);
+    const [type_of_site_rights, settype_of_site_rights] = useState("");
+    const [percentage_of_site_rights, setpercentage_of_site_rights] = useState(0);
+    const [is_owned_by_decedent, setis_owned_by_decedent] = useState(null);
+    const [details, setdetails] = useState("");
+    const [road_price_1, setroad_price_1] = useState(0);
+    const [regional_distinction_1, setregional_distinction_1] = useState("");
+    const [corner_semi_corner_1, setcorner_semi_corner_1] = useState("");
+
+    const [road_price_2, setroad_price_2] = useState(0);
+    const [regional_distinction_2, setregional_distinction_2] = useState("");
+    const [corner_semi_corner_2, setcorner_semi_corner_2] = useState("");
+
+    const [road_price_3, setroad_price_3] = useState(0);
+    const [regional_distinction_3, setregional_distinction_3] = useState("");
+    const [corner_semi_corner_3, setcorner_semi_corner_3] = useState("");
+
+    const [road_price_4, setroad_price_4] = useState(0);
+    const [regional_distinction_4, setregional_distinction_4] = useState("");
+    const [corner_semi_corner_4, setcorner_semi_corner_4] = useState("");
+
+    const [is_co_owners_in_property, setis_co_owners_in_property] = useState(null);
+    const [co_owner_share_percentage_numerator, setco_owner_share_percentage_numerator] = useState(0);
+    const [co_owner_share_percentage_denominator, setco_owner_share_percentage_denominator] = useState(0);
+    const [appraisal_value, setappraisal_value] = useState(0);
+    const [is_land_with_3_or_more_floors, setis_land_with_3_or_more_floors] = useState(null);
+    const [condominium_correction_rate, setcondominium_correction_rate] = useState(0);
+
+    const [appraisal_value_error, setappraisal_value_error] = useState(false);
+    const [condominium_correction_rate_error, setcondominium_correction_rate_error] = useState(false);
 
     //Input keypress
     let handleKeyPress = (e) => {
@@ -90,61 +126,24 @@ export default function LandAdd() {
 
     const handleQuestionOne = (event) => {
         let radioValue = event.target.value;
-        setQuestionOne(radioValue);
-        if (radioValue === "Yes") {
-            setLandYesImage(true);
-            setLandNoImage(false);
-            setShowQuestionYes(true);
-            setShowQuestionNo(false);
-        }
-        else {
-            setLandYesImage(false);
-            setLandNoImage(true);
-            setShowQuestionYes(false);
-            setShowQuestionNo(true);
-        }
-    }
+        setis_room_in_condominium(Number(radioValue));
+    };
 
     const handleQuestionTwo = (event) => {
         let radioValue = event.target.value;
-        setQuestionTwo(radioValue);
-        if (radioValue === "Yes") {
-            setQuestionTwoImageYes(true);
-            setQuestionTwoImageNo(false);
-            setQuestionTwoImageBoth(false);
-        }
-        else {
-            setQuestionTwoImageNo(true);
-            setQuestionTwoImageYes(false);
-            setQuestionTwoImageBoth(false);
-        }
-    }
+        setis_owned_by_decedent(Number(radioValue));
+        setQuestionTwoImageBoth(false);
+    };
 
     const handleQuestionThree = () => {
         let radioValue = event.target.value;
-        setQuestionThree(radioValue);
-        if (radioValue === "Yes") {
-            setShowYesOption3(true);
-            setShowNoOption3(false);
-        }
-        else {
-            setShowNoOption3(true);
-            setShowYesOption3(false);
-        }
-    }
+        setis_co_owners_in_property(Number(radioValue));
+    };
 
     const handleQuestionFour = () => {
         let radioValue = event.target.value;
-        setQuestionFour(radioValue);
-        if (radioValue === "Yes") {
-            setShowYesOption4(true);
-            setShowNoOption4(false);
-        }
-        else {
-            setShowNoOption4(true);
-            setShowYesOption4(false);
-        }
-    }
+        setis_land_with_3_or_more_floors(Number(radioValue));
+    };
 
     //Disabled deduction radio button
     const handleDisabledRadio = (event) => {
@@ -212,68 +211,157 @@ export default function LandAdd() {
         }
     };
 
-
-    const handleBoxValueChange = (e, index) => {
-        setBoxValues([0]);
-        let newValue = parseFloat(e.target.value);
-        let updatedBoxValues = [...boxValues];
-        updatedBoxValues[index] = isNaN(newValue) ? 0 : newValue;
-        updatedBoxValues = updatedBoxValues.map((value) => (value === undefined ? 0 : value));
-        setBoxValues(updatedBoxValues);
-
-        //Amount of money convert
-        if (AmountofMoney == 0) {
-            AmountofMoney = 0;
+    const inputHandlingFunction = (event) => {
+        let inputValue = event.target.value;
+        let inputId = event.currentTarget.id;
+        if(inputId === "location_and_lot_number"){
+            setlocation_and_lot_number(inputValue);
         }
-        else {
-            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
-            AmountofMoney = parseFloat(AmountofMoney);
+        else if(inputId === "ground_grain"){
+            setground_grain(inputValue);
         }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
-        totalBoxValues = isNaN(totalBoxValues) ? 0 : totalBoxValues;
-        let heirValue = AmountofMoney - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
+        else if(inputId === "land_area"){
+            setland_area(inputValue);
         }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
+        else if(inputId === "land_use"){
+            setland_use(inputValue);
+        }
+        else if(inputId === "type_of_site_rights"){
+            settype_of_site_rights(inputValue);
+        }
+        else if(inputId === "percentage_of_site_rights"){
+            setpercentage_of_site_rights(inputValue);
+        }
+        else if(inputId === "v"){
+            setdetails(inputValue);
+        }
+        else if(inputId === "road_price_1"){
+            setroad_price_1(inputValue);
+        }
+        else if(inputId === "regional_distinction_1"){
+            setregional_distinction_1(inputValue);
+        }
+        else if(inputId === "corner_semi_corner_1"){
+            setcorner_semi_corner_1(inputValue);
+        }
+        else if(inputId === "road_price_2"){
+            setroad_price_2(inputValue);
+        }
+        else if(inputId === "regional_distinction_2"){
+            setregional_distinction_2(inputValue);
+        }
+        else if(inputId === "corner_semi_corner_2"){
+            setcorner_semi_corner_2(inputValue);
+        }
+        else if(inputId === "road_price_3"){
+            setroad_price_3(inputValue);
+        }
+        else if(inputId === "regional_distinction_3"){
+            setregional_distinction_3(inputValue);
+        }
+        else if(inputId === "corner_semi_corner_3"){
+            setcorner_semi_corner_3(inputValue);
+        }
+        else if(inputId === "road_price_4"){
+            setroad_price_4(inputValue);
+        }
+        else if(inputId === "regional_distinction_4"){
+            setregional_distinction_4(inputValue);
+        }
+        else if(inputId === "corner_semi_corner_4"){
+            setcorner_semi_corner_4(inputValue);
+        }
+        else if(inputId === "co_owner_share_percentage_numerator"){
+            setco_owner_share_percentage_numerator(inputValue);
+        }
+        else if(inputId === "co_owner_share_percentage_denominator"){
+            setco_owner_share_percentage_denominator(inputValue);
+        }
+        else if(inputId === "appraisal_value"){
+            setappraisal_value(inputValue);
+        }
+        else if(inputId === "condominium_correction_rate"){
+            setcondominium_correction_rate(inputValue);
+        }
+        else if(inputId === "location_and_lot_number"){
+            setlocation_and_lot_number(inputValue);
         }
     };
+    
 
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
-    const onSubmit = () => {
-        // defaultValues = {
-        //     NameofLifeInsurance: NameofLifeInsurance,
-        //     PostCode: PostCode,
-        //     Address: Address,
-        //     Valuation: Valuation,
-        //     UndecidedHeir: UndecidedHeir,
-        //     TotalPrice: Valuation,
-        // };
+    const onSubmit = async() => {        
+        if (appraisal_value <= 0) {
+            setappraisal_value_error(true);
+            setisSumbitDisabled(true);
+        }        
 
-        // //input Validation
-        // if (defaultValues.NameofLifeInsurance === "") {
-        //     setNameofLifeInsuranceError(true);
-        //     isSumbitDisabled = true;
-        // }
-        // if (defaultValues.Address === "") {
-        //     setAddressError(true);
-        //     isSumbitDisabled = true;
-        // }
-        //Api setup
-        if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            sessionStorage.setItem('Land', JSON.stringify(defaultValues));
-            router.push(`/declaration-printing/land`);
+        const auth_key = atob(sessionStorage.getItem("auth_key"));
+        if (!isSumbitDisabled && auth_key) {
+            let response = "";
+            let landId = 0;
+            let url = router.asPath;
+            let searchParams = new URLSearchParams(url.split('?')[1]);
+            searchParams = searchParams.get("edit");
+            if (searchParams !== null) {
+                landId = Number(atob(searchParams));
+            }
+            const formData = new FormData();
+            formData.append("auth_key", auth_key);
+            formData.append("is_room_in_condominium", is_room_in_condominium === null ? 0 : is_room_in_condominium);
+            formData.append("location_and_lot_number", location_and_lot_number);
+            formData.append("ground_grain", ground_grain);
+            formData.append("land_area", land_area);
+            formData.append("land_use", land_use);
+            formData.append("type_of_site_rights", type_of_site_rights);
+            formData.append("percentage_of_site_rights", percentage_of_site_rights);
+            formData.append("land_area", land_area);
+            formData.append("land_use", land_use);
+            formData.append("is_owned_by_decedent", is_owned_by_decedent === null ? 0 : is_owned_by_decedent);
+            formData.append("details", details);
+
+            formData.append("road_price_1", road_price_1);
+            formData.append("regional_distinction_1", regional_distinction_1);
+            formData.append("corner_semi_corner_1", corner_semi_corner_1);
+
+            formData.append("road_price_2", road_price_2);
+            formData.append("regional_distinction_2", regional_distinction_2);
+            formData.append("corner_semi_corner_2", corner_semi_corner_2);
+
+            formData.append("road_price_3", road_price_3);
+            formData.append("regional_distinction_3", regional_distinction_3);
+            formData.append("corner_semi_corner_3", corner_semi_corner_3);
+
+            formData.append("road_price_4", road_price_4);
+            formData.append("regional_distinction_4", regional_distinction_4);
+            formData.append("corner_semi_corner_4", corner_semi_corner_4);
+
+            formData.append("is_co_owners_in_property", is_co_owners_in_property === null ? 0 : is_co_owners_in_property);
+            formData.append("co_owner_share_percentage_numerator", co_owner_share_percentage_numerator);
+            formData.append("co_owner_share_percentage_denominator", co_owner_share_percentage_denominator);
+            formData.append("appraisal_value", appraisal_value);            
+            formData.append("is_land_with_3_or_more_floors", is_land_with_3_or_more_floors === null ? 0 : is_land_with_3_or_more_floors);
+            formData.append("condominium_correction_rate", condominium_correction_rate);
+            try {
+                if (landId === 0) {
+                    response = await axios.post('https://minelife-api.azurewebsites.net/add_lands', formData);
+                }
+                else {
+                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_lands', formData);
+                }
+                if (response.status === 200) {
+                    router.push(`/declaration-printing/land`);
+                }
+            } catch (error) {
+                console.log('Error:', error);
+            }
         }
         else {
-            console.log("API not allowed");
             setisSumbitDisabled(true);
-        }
+            setShowLoader(false);
+        }       
     };
 
 
@@ -304,14 +392,14 @@ export default function LandAdd() {
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
                             name="row-radio-buttons-group"
-                            value={QuestionOne}
+                            value={is_room_in_condominium}
                         >
-                            <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionOne} label="はい" sx={{
+                            <FormControlLabel value="1" control={<Radio />} onChange={handleQuestionOne} label="はい" sx={{
                                 '& .MuiSvgIcon-root': {
                                     fontSize: 16,
                                 },
                             }} />
-                            <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionOne} label="いいえ" sx={{
+                            <FormControlLabel value="0" control={<Radio />} onChange={handleQuestionOne} label="いいえ" sx={{
                                 '& .MuiSvgIcon-root': {
                                     fontSize: 16,
                                 },
@@ -319,16 +407,17 @@ export default function LandAdd() {
                         </RadioGroup>
                     </FormControl>
 
-                    <Box className="w-full inline-block mb-7">
-                        {LandYesImage && (
+                    <Box className="w-full inline-block">
+                        {is_room_in_condominium === 1 ?
                             <img src="/screenshots/land-yes.png" className="w-full" alt="image" height={500} width={200} />
-                        )}
-                        {LandNoImage && (
-                            <img src="/screenshots/land-no.png" className="w-full" alt="image" height={500} width={200} />
-                        )}
+                            : is_room_in_condominium === 0 ?
+                                <img src="/screenshots/land-no.png" className="w-full" alt="image" height={500} width={200} />
+                                :
+                                <></>
+                        }
                     </Box>
 
-                    {ShowQuestionYes && (
+                    {is_room_in_condominium === 1 ?
                         <>
                             <Box className="w-full flex items-center justify-between mb-7">
                                 <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
@@ -338,6 +427,9 @@ export default function LandAdd() {
                                     <Box className="w-full inline-block mt-2">
                                         <input
                                             type="text"
+                                            id="location_and_lot_number"
+                                            value={location_and_lot_number}
+                                            onChange={inputHandlingFunction}
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         />
                                     </Box>
@@ -350,6 +442,9 @@ export default function LandAdd() {
                                     <Box className="w-full inline-block mt-2">
                                         <input
                                             type="text"
+                                            id="ground_grain"
+                                            value={ground_grain}
+                                            onChange={inputHandlingFunction}
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         />
                                     </Box>
@@ -364,6 +459,9 @@ export default function LandAdd() {
                                     <Box className="w-full inline-block mt-2 relative">
                                         <input
                                             type="text"
+                                            id="land_area"
+                                            value={land_area}
+                                            onChange={inputHandlingFunction}
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         />
                                         <AreaIcon />
@@ -377,6 +475,9 @@ export default function LandAdd() {
                                     <Box className="w-full inline-block mt-2">
                                         <input
                                             type="text"
+                                            id="land_use"
+                                            value={land_use}
+                                            onChange={inputHandlingFunction}
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         />
                                     </Box>
@@ -391,86 +492,102 @@ export default function LandAdd() {
                                     <Box className="w-full inline-block mt-2">
                                         <input
                                             type="text"
+                                            id="type_of_site_rights"
+                                            value={type_of_site_rights}
+                                            onChange={inputHandlingFunction}
                                             className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         />
                                     </Box>
                                 </Box>
                             </Box>
                         </>
-                    )}
-                    {ShowQuestionNo && (
-                        <>
-                            <Box className="w-full flex items-center justify-between mb-7">
-                                <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <Box className="label w-full inline-block">
-                                        <Typography component={"label"} className="form-label flex items-center"><Box className="circle-no">1</Box>所在</Typography>
+                        : is_room_in_condominium === 0 ?
+                            <>
+                                <Box className="w-full flex items-center justify-between mb-7">
+                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                        <Box className="label w-full inline-block">
+                                            <Typography component={"label"} className="form-label flex items-center"><Box className="circle-no">1</Box>所在</Typography>
+                                        </Box>
+                                        <Box className="w-full inline-block mt-2">
+                                            <input
+                                                type="text"
+                                                id="location_and_lot_number"
+                                                value={location_and_lot_number}
+                                                onChange={inputHandlingFunction}
+                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            />
+                                        </Box>
                                     </Box>
-                                    <Box className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
+
+                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                        <Box className="label w-full inline-block">
+                                            <Typography component={"label"} className="form-label flex items-center"><Box className="circle-no">2</Box>地番</Typography>
+                                        </Box>
+                                        <Box className="w-full inline-block mt-2">
+                                            <input
+                                                type="text"
+                                                id="land_use"
+                                                value={land_use}
+                                                onChange={inputHandlingFunction}
+                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            />
+                                        </Box>
                                     </Box>
                                 </Box>
 
-                                <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <Box className="label w-full inline-block">
-                                        <Typography component={"label"} className="form-label flex items-center"><Box className="circle-no">2</Box>地番</Typography>
+                                <Box className="w-full flex items-center justify-between mb-7">
+                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                        <Box className="label w-full inline-block">
+                                            <Typography component={"label"} className="form-label flex items-center"><Box className="circle-no">3</Box>地目</Typography>
+                                        </Box>
+                                        <Box className="w-full inline-block mt-2">
+                                            <input
+                                                type="text"
+                                                id="land_area"
+                                                value={land_area}
+                                                onChange={inputHandlingFunction}
+                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            />
+                                        </Box>
                                     </Box>
-                                    <Box className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
+
+                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                        <Box className="label w-full inline-block">
+                                            <Typography component={"label"} className="form-label flex items-center"><Box className="circle-no">4</Box>地積 ㎡</Typography>
+                                        </Box>
+                                        <Box className="w-full inline-block mt-2 relative">
+                                            <input
+                                                type="text"
+                                                id="type_of_site_rights"
+                                                value={type_of_site_rights}
+                                                onChange={inputHandlingFunction}
+                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                            />
+                                            <AreaIcon />
+                                        </Box>
                                     </Box>
                                 </Box>
-                            </Box>
-
-                            <Box className="w-full flex items-center justify-between mb-7">
-                                <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <Box className="label w-full inline-block">
-                                        <Typography component={"label"} className="form-label flex items-center"><Box className="circle-no">3</Box>地目</Typography>
-                                    </Box>
-                                    <Box className="w-full inline-block mt-2">
-                                        <input
-                                            type="text"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                    </Box>
-                                </Box>
-
-                                <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                    <Box className="label w-full inline-block">
-                                        <Typography component={"label"} className="form-label flex items-center"><Box className="circle-no">4</Box>地積 ㎡</Typography>
-                                    </Box>
-                                    <Box className="w-full inline-block mt-2 relative">
-                                        <input
-                                            type="text"
-                                            className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                        />
-                                        <AreaIcon />
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </>
-                    )}
+                            </>
+                            :
+                            <></>
+                    }
 
 
-                    <Box className="mt-5">
+                    <Box className="mt-2">
                         <FormControl>
                             <Typography component={"label"} className="form-label text-lg" id="demo-row-radio-buttons-group-label">2. 被相続人が所有されていた不動産は路線価地域の土地でしょうか。</Typography>
                             <RadioGroup
                                 row
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
-                                value={QuestionTwo}
+                                value={is_owned_by_decedent}
                             >
-                                <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionTwo} label="はい" sx={{
+                                <FormControlLabel value="1" control={<Radio />} onChange={handleQuestionTwo} label="はい" sx={{
                                     '& .MuiSvgIcon-root': {
                                         fontSize: 16,
                                     },
                                 }} />
-                                <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionTwo} label="いいえ" sx={{
+                                <FormControlLabel value="0" control={<Radio />} onChange={handleQuestionTwo} label="いいえ" sx={{
                                     '& .MuiSvgIcon-root': {
                                         fontSize: 16,
                                     },
@@ -505,7 +622,8 @@ export default function LandAdd() {
 
                             </>
                         )}
-                        {QuestionTwoImageYes && (
+
+                        {is_owned_by_decedent === 1 ?
                             <>
                                 <Box className="mt-5">
                                     <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
@@ -521,62 +639,66 @@ export default function LandAdd() {
                                     <img src="/screenshots/land-second-yes-1.png" className="w-full" alt="image" height={500} width={200} />
                                 </Box>
                             </>
-                        )}
-                        {QuestionTwoImageNo && (
-                            <>
-                                <Box className="mt-5">
-                                    <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
-                                </Box>
-                                <Box className="mt-5">
-                                    <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
-                                </Box>
-                                <Box className="mt-5">
-                                    <img src="/screenshots/land-second-no-2.png" className="w-full bg-white" alt="image" height={500} width={200} />
-                                </Box>
+                            : is_owned_by_decedent === 0 ?
+                                <>
+                                    <Box className="mt-5">
+                                        <img src="/screenshots/land-second-no.png" className="w-full" alt="image" height={500} width={200} />
+                                    </Box>
+                                    <Box className="mt-5">
+                                        <img src="/screenshots/land-second-no-1.png" className="w-full" alt="image" height={500} width={200} />
+                                    </Box>
+                                    <Box className="mt-5">
+                                        <img src="/screenshots/land-second-no-2.png" className="w-full bg-white" alt="image" height={500} width={200} />
+                                    </Box>
 
-                                <Box className="w-full flex items-center justify-between pt-7 mb-7">
-                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                        <Box className="label w-full inline-block">
-                                            <Typography component={"label"} className="form-label flex items-center">倍率</Typography>
-                                        </Box>
-                                        <Box className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="倍率"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            />
+                                    <Box className="w-full flex items-center justify-between pt-7 mb-7">
+                                        <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                            <Box className="label w-full inline-block">
+                                                <Typography component={"label"} className="form-label flex items-center">倍率</Typography>
+                                            </Box>
+                                            <Box className="w-full inline-block mt-2">
+                                                <input
+                                                    type="text"
+                                                    id="details"
+                                                    value={details}
+                                                    onChange={inputHandlingFunction}
+                                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                />
+                                            </Box>
                                         </Box>
                                     </Box>
-                                </Box>
 
-                                <Box className="label w-full inline-block">
-                                    <Typography component={"label"} className="form-label flex items-center">【固定資産税課税明細の情報の入力】</Typography>
-                                </Box>
+                                    <Box className="label w-full inline-block">
+                                        <Typography component={"label"} className="form-label flex items-center">【固定資産税課税明細の情報の入力】</Typography>
+                                    </Box>
 
-                                <Box className="mt-5">
-                                    <img src="/screenshots/land-question-2.png" className="w-full" alt="image" height={500} width={200} />
-                                </Box>                                
+                                    <Box className="mt-5">
+                                        <img src="/screenshots/land-question-2.png" className="w-full" alt="image" height={500} width={200} />
+                                    </Box>
 
-                                <Box className="w-full flex items-center justify-between pt-7 mb-7">
-                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                        <Box className="label w-full inline-block">
-                                            <Typography component={"label"} className="form-label flex items-center">上図の赤枠部分を入力してください。</Typography>
-                                        </Box>
-                                        <Box className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="上図の赤枠部分を入力してください。"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            />
+                                    <Box className="w-full flex items-center justify-between pt-7 mb-7">
+                                        <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
+                                            <Box className="label w-full inline-block">
+                                                <Typography component={"label"} className="form-label flex items-center">上図の赤枠部分を入力してください。</Typography>
+                                            </Box>
+                                            <Box className="w-full inline-block mt-2">
+                                                <input
+                                                    type="text"
+                                                    id="details"
+                                                    value={details}
+                                                    onChange={inputHandlingFunction}
+                                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
+                                                />
+                                            </Box>
                                         </Box>
                                     </Box>
-                                </Box>
-                            </>
-                        )}
+                                </>
+                                :
+                                <></>
+                        }
                     </Box>
 
-
-                    {QuestionTwoImageYes && (
+                    {is_owned_by_decedent === 1 ?
                         <>
                             <Box className="bg-custom-light mt-10 py-3 px-5 w-full inline-block">
                                 <Typography component={"label"} className="form-label" id="demo-row-radio-buttons-group-label">土地の詳細の入力</Typography>
@@ -654,25 +776,26 @@ export default function LandAdd() {
                             <Box className="w-full inline-block py-5">
                                 <Box classsName="table-columns">
                                     {ShowTableOne && (
-                                        <TableOne />
+                                        <TableOne road_price_1={road_price_1} setroad_price_1={setroad_price_1} regional_distinction_1={regional_distinction_1} setregional_distinction_1={setregional_distinction_1} corner_semi_corner_1={corner_semi_corner_1} setcorner_semi_corner_1={setcorner_semi_corner_1} />
                                     )}
                                     {ShowTableTwo && (
-                                        <TableTwo />
+                                        <TableTwo road_price_2={road_price_2} setroad_price_2={setroad_price_2} regional_distinction_2={regional_distinction_2} setregional_distinction_2={setregional_distinction_2} corner_semi_corner_3={corner_semi_corner_2} setcorner_semi_corner_2={setcorner_semi_corner_2}  />
                                     )}
                                     {ShowTableThree && (
-                                        <TableThree />
+                                        <TableThree road_price_3={road_price_3} setroad_price_3={setroad_price_3} regional_distinction_3={regional_distinction_3} setregional_distinction_3={setregional_distinction_3} corner_semi_corner_3={corner_semi_corner_3} setcorner_semi_corner_3={setcorner_semi_corner_3}  />
                                     )}
                                     {ShowTableFour && (
-                                        <TableFour />
+                                        <TableFour road_price_4={road_price_4} setroad_price_4={setroad_price_4} regional_distinction_4={regional_distinction_4} setregional_distinction_4={setregional_distinction_4} corner_semi_corner_4={corner_semi_corner_4} setcorner_semi_corner_4={setcorner_semi_corner_4}  />
                                     )}
                                     {ShowTableFive && (
-                                        <TableFive />
+                                        <TableFive road_price_4={road_price_4} setroad_price_4={setroad_price_4} regional_distinction_4={regional_distinction_4} setregional_distinction_4={setregional_distinction_4} corner_semi_corner_4={corner_semi_corner_4} setcorner_semi_corner_4={setcorner_semi_corner_4}  />
                                     )}
                                 </Box>
                             </Box>
                         </>
-                    )}
-
+                        :
+                        <></>
+                    }
 
                     <Box className="mb-7">
                         <FormControl>
@@ -681,21 +804,21 @@ export default function LandAdd() {
                                 row
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
-                                value={QuestionThree}
+                                value={is_co_owners_in_property}
                             >
-                                <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionThree} label="はい" sx={{
+                                <FormControlLabel value="1" control={<Radio />} onChange={handleQuestionThree} label="はい" sx={{
                                     '& .MuiSvgIcon-root': {
                                         fontSize: 16,
                                     },
                                 }} />
-                                <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionThree} label="いいえ" sx={{
+                                <FormControlLabel value="0" control={<Radio />} onChange={handleQuestionThree} label="いいえ" sx={{
                                     '& .MuiSvgIcon-root': {
                                         fontSize: 16,
                                     },
                                 }} />
                             </RadioGroup>
                         </FormControl>
-                        {ShowYesOption3 && (
+                        {is_co_owners_in_property === 1 ?
                             <>
                                 <Box className="w-full block items-center justify-between mb-7">
                                     <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
@@ -706,6 +829,9 @@ export default function LandAdd() {
                                             <Box className="flex justify-between items-center">
                                                 <Box><input
                                                     type="text"
+                                                    id="co_owner_share_percentage_numerator"
+                                                    value={co_owner_share_percentage_numerator}
+                                                    onChange={inputHandlingFunction}
                                                     className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                                 /></Box>
                                                 <Box>
@@ -713,6 +839,9 @@ export default function LandAdd() {
                                                 </Box>
                                                 <Box><input
                                                     type="text"
+                                                    id="co_owner_share_percentage_denominator"
+                                                    value={co_owner_share_percentage_denominator}
+                                                    onChange={inputHandlingFunction}
                                                     className="text-right form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                                 /></Box>
                                             </Box>
@@ -720,10 +849,9 @@ export default function LandAdd() {
                                     </Box>
                                 </Box>
                             </>
-                        )}
-                        {ShowNoOption3 && (
+                            :
                             <></>
-                        )}
+                        }
                     </Box>
 
                     <Box className="mb-7">
@@ -733,21 +861,21 @@ export default function LandAdd() {
                                 row
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
-                                value={QuestionFour}
+                                value={is_land_with_3_or_more_floors}
                             >
-                                <FormControlLabel value="Yes" control={<Radio />} onChange={handleQuestionFour} label="はい" sx={{
+                                <FormControlLabel value="1" control={<Radio />} onChange={handleQuestionFour} label="はい" sx={{
                                     '& .MuiSvgIcon-root': {
                                         fontSize: 16,
                                     },
                                 }} />
-                                <FormControlLabel value="No" control={<Radio />} onChange={handleQuestionFour} label="いいえ" sx={{
+                                <FormControlLabel value="0" control={<Radio />} onChange={handleQuestionFour} label="いいえ" sx={{
                                     '& .MuiSvgIcon-root': {
                                         fontSize: 16,
                                     },
                                 }} />
                             </RadioGroup>
                         </FormControl>
-                        {ShowYesOption4 && (
+                        {is_land_with_3_or_more_floors === 1 ?
                             <>
                                 <Box className="w-full inline-block">
                                     <Box className="w-full mb-2"><Typography component={"label"}>建物の入力時に自動計算された区分所有補正率を入力してください</Typography></Box>
@@ -755,17 +883,21 @@ export default function LandAdd() {
                                         <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                             <input
                                                 type="text"
-                                                id="sectionalOwnershipRates"
+                                                id="appraisal_value"
+                                                value={appraisal_value}
+                                                onChange={inputHandlingFunction}
                                                 className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             />
+                                            {appraisal_value_error && (
+                                                <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                            )}
                                         </Box>
                                     </Box>
                                 </Box>
                             </>
-                        )}
-                        {ShowNoOption4 && (
+                            :
                             <></>
-                        )}
+                        }
                     </Box>
 
                     <Box className="w-full inline-block">
@@ -779,14 +911,14 @@ export default function LandAdd() {
                                 <input
                                     type="text"
                                     id="Valuation"
-                                    // value={Valuation}
-                                    // onChange={ValuationKeyPress}
-                                    // onKeyPress={handleKeyPress}
+                                    value={condominium_correction_rate}
+                                    onChange={inputHandlingFunction}
+                                    onKeyPress={handleKeyPress}
                                     className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
-                                {/* {ValuationError && (
-                                        <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
-                                    )} */}
+                                {condominium_correction_rate_error && (
+                                    <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
+                                )}
                             </Box>
                         </Box>
                     </Box>

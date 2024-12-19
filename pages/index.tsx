@@ -29,9 +29,7 @@ export default function Index({ preview }) {
         <>
           <FullLayout>
             <PageContainer title="Dashboard" description="Dashboard">
-              <Box>
-                <BasicInformation />
-              </Box>
+              <BasicInformation />
             </PageContainer>
           </FullLayout>
         </>
