@@ -58,20 +58,19 @@ const style = {
 
 export default function BuildingsTable({ heir_details_list }) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
-  let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});
-  let [OpenModalPopup, setOpenModalPopup] = React.useState(false);
-
-  let [ApiCallRoute, setApiCallRoute] = useState("Buildings");
+  let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});    
   let [HeirList, setHeirList] = useState([]);
   let [HeirDetailsList, setHeirDetailsList] = useState([]);
   let [HeirId, setHeirId] = useState(0);
   let [PropertyId, setPropertyId] = useState(0);
   let [TotalAmount, setTotalAmount] = useState(0);
   let [ListTotalAmount, setListTotalAmount] = useState(0);
-  let [BuildingsList, setBuildingsList] = useState([]);
-  const [HeirSharingDetails, setHeirSharingDetails] = useState([]);
-  let [SnackbarOpen, setSnackbarOpen] = useState(false);
-  let [SnackbarMsg, setSnackbarMsg] = useState("Buildings split details saved successfully.");
+  const [ApiCallRoute, setApiCallRoute] = useState("buildings");
+  const [BuildingsList, setBuildingsList] = useState([]);
+  const [HeirSharingDetails, setHeirSharingDetails] = useState([]);  
+  const [OpenModalPopup, setOpenModalPopup] = React.useState(false);
+  const [SnackbarOpen, setSnackbarOpen] = useState(false);
+  const [SnackbarMsg, setSnackbarMsg] = useState("Buildings split details saved successfully.");
 
   useEffect(() => {
     setHeirList(heir_details_list);
