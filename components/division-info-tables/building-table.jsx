@@ -81,21 +81,22 @@ export default function BuildingsTable({ heir_details_list }) {
 
   //Load Heir sharing details
   const GetHeirSharingDetails = async (Id) => {
+    let data;
     let auth_key = atob(sessionStorage.getItem("auth_key"));
     const params = { auth_key: auth_key, id: Id };
     if (!auth_key && !Id) {
       return;
     }
-
     try {
-      const response = await fetch(`https://minelife-api.azurewebsites.net/get_buildings?auth_key=${params.auth_key}&id=${params.depositId}`);
+      const response = await fetch(`https://minelife-api.azurewebsites.net/get_buildings?auth_key=${params.auth_key}&id=${params.id}`);
+      data = await response.json();
+      if (!response.ok) throw new Error(data);
+
       if (response.ok) {
-        setHeirSharingDetails(response.data.heir_sharing_details);
-      }
-      else {
-        setHeirSharingDetails([]);
-      }
+        setHeirSharingDetails(data.heir_sharing_details);
+      }      
     } catch (error) {
+      setHeirSharingDetails([]);
       console.log("Error", error);
     }
   }
@@ -115,7 +116,7 @@ export default function BuildingsTable({ heir_details_list }) {
       if (response.ok) {
         TotalAmount = 0;
         setBuildingsList(data?.buildings_details);
-        {data?.buildings_details.map((list) => {
+        {data?.buildings_details?.map((list) => {
             if (list.appraisal_value !== 0) {
               TotalAmount = TotalAmount + list.appraisal_value;
               setTotalAmount(TotalAmount);
@@ -227,11 +228,11 @@ export default function BuildingsTable({ heir_details_list }) {
                           <React.Fragment key={list.id}>
                             <TableRow key={list.id} id={list.id} value={list.customer_id}>
                               <TableCell className="border-light-gray border-l">{list.location}</TableCell>
-                              <TableCell className="border-light-gray border-l">{list.floor_area}</TableCell>
-                              <TableCell className="border-light-gray border-l w-20" align="right">
+                              <TableCell className="border-light-gray border-l">{list.location_and_lot_number}</TableCell>
+                              <TableCell className=" border-light-gray border-l w-20" align="right">
                                 {list.appraisal_value.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span>
                               </TableCell>
-                              <TableCell className="border border-light-gray border-l w-15" align="center">
+                              <TableCell className="border-light-gray border-l border-r w-15" align="center">
                                 <IconButton
                                   aria-label="expand row"
                                   size="small"
@@ -245,7 +246,7 @@ export default function BuildingsTable({ heir_details_list }) {
                               </TableCell>
                             </TableRow>
                             <TableRow className="w-full">
-                              <TableCell className="border border-light-gray border-l" style={{ padding: 0 }} colSpan={10}>
+                              <TableCell className="border-light-gray border-l border-r" style={{ padding: 0 }} colSpan={10}>
                                 <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
                                   <Box>
                                     <Table>
@@ -256,10 +257,10 @@ export default function BuildingsTable({ heir_details_list }) {
                                         <TableRow>
                                           {HeirList.map((heir) => (
                                             <>
-                                              <TableCell id={heir.heir_id} className="border border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>
+                                              <TableCell id={heir.heir_id} className="border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>
                                             </>
                                           ))}
-                                          <TableCell className="border border-light-gray border-l w-15 bg-table-gray" align="center">入力</TableCell>
+                                          <TableCell className="border-light-gray border-l border-r w-15 bg-table-gray" align="center">入力</TableCell>
                                         </TableRow>
                                       </TableHead>
                                       <TableBody>
@@ -288,7 +289,7 @@ export default function BuildingsTable({ heir_details_list }) {
                                               )}
                                             </React.Fragment>
                                           ))}
-                                          <TableCell className="border border-light-gray border-l cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell>
+                                          <TableCell className="border-light-gray border-l border-r cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell>
                                         </TableRow>
                                       </TableBody>
                                     </Table>
