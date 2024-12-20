@@ -73,7 +73,7 @@ export default function BuildingsTable({ heir_details_list }) {
   let [SnackbarOpen, setSnackbarOpen] = useState(false);
   let [SnackbarMsg, setSnackbarMsg] = useState("Buildings split details saved successfully.");
 
-  useEffect(() => {    
+  useEffect(() => {
     setHeirList(heir_details_list);
     setHeirDetailsList(heir_details_list);
     GetBuildingsList();
@@ -102,31 +102,33 @@ export default function BuildingsTable({ heir_details_list }) {
 
   //Load cash savings list
   const GetBuildingsList = async () => {
-    let auth_key = atob(sessionStorage.getItem("auth_key"));
-    const params = { auth_key: auth_key };
-    if (auth_key) {
-      try {
-        const response = await fetch(`https://minelife-api.azurewebsites.net/list_buildings?auth_key=${params.auth_key}`);
-        if (response.ok) {
-          TotalAmount = 0;
-          setBuildingsList(response.data.Buildings_details);
-          {response.data.Buildings_details.map((list) => {
-              if (list.amount !== 0) {
-                TotalAmount = TotalAmount + list.amount;
-                setTotalAmount(TotalAmount);
-              }
-            })
-          };
-        }
-        else {
-          setBuildingsList([]);
-        }
-      } catch (error) {
-        console.log("Error", error);
+    let data;
+    const auth_key = atob(sessionStorage.getItem("auth_key"));
+    if (!auth_key) {
+      return;
+    }
+    try {
+      const response = await fetch(`https://minelife-api.azurewebsites.net/list_buildings?auth_key=${auth_key}`);
+      data = await response.json();
+      if (!response.ok) throw new Error(data);
+
+      if (response.ok) {
+        TotalAmount = 0;
+        setBuildingsList(data?.buildings_details);
+        {data?.buildings_details.map((list) => {
+            if (list.appraisal_value !== 0) {
+              TotalAmount = TotalAmount + list.appraisal_value;
+              setTotalAmount(TotalAmount);
+            }
+          })
+        };
       }
+    } catch (error) {
+      setBuildingsList([]);
+      setTotalAmount(0);
+      console.log("Error", error);
     }
   };
-
 
   //Modal popup open and close function
   const handleSnackbarClose = (event, reason) => {
@@ -224,10 +226,10 @@ export default function BuildingsTable({ heir_details_list }) {
                         {BuildingsList.map((list, index) => (
                           <React.Fragment key={list.id}>
                             <TableRow key={list.id} id={list.id} value={list.customer_id}>
-                              <TableCell className="border-light-gray border-l">{list.name_and_issues}</TableCell>
-                              <TableCell className="border-light-gray border-l">{list.unit_details}</TableCell>
+                              <TableCell className="border-light-gray border-l">{list.location}</TableCell>
+                              <TableCell className="border-light-gray border-l">{list.floor_area}</TableCell>
                               <TableCell className="border-light-gray border-l w-20" align="right">
-                                {list.amount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span>
+                                {list.appraisal_value.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span>
                               </TableCell>
                               <TableCell className="border border-light-gray border-l w-15" align="center">
                                 <IconButton
@@ -235,7 +237,7 @@ export default function BuildingsTable({ heir_details_list }) {
                                   size="small"
                                   id={list.id}
                                   name={list.customer_id}
-                                  value={list.amount.toLocaleString()}
+                                  value={list.appraisal_value.toLocaleString()}
                                   onClick={handleExpandFun2}
                                 >
                                   {TableExpandOpen2[list.id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
