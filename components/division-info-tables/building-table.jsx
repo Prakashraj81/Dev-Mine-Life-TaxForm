@@ -60,15 +60,15 @@ export default function BuildingsTable({ heir_details_list }) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
   let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});    
   let [HeirList, setHeirList] = useState([]);
+  let [HeirSharingDetails, setHeirSharingDetails] = useState([]);  
   let [HeirDetailsList, setHeirDetailsList] = useState([]);
   let [HeirId, setHeirId] = useState(0);
   let [PropertyId, setPropertyId] = useState(0);
   let [TotalAmount, setTotalAmount] = useState(0);
   let [ListTotalAmount, setListTotalAmount] = useState(0);
   const [ApiCallRoute, setApiCallRoute] = useState("buildings");
-  const [BuildingsList, setBuildingsList] = useState([]);
-  const [HeirSharingDetails, setHeirSharingDetails] = useState([]);  
-  const [OpenModalPopup, setOpenModalPopup] = React.useState(false);
+  const [BuildingsList, setBuildingsList] = useState([]);  
+  const [OpenModalPopup, setOpenModalPopup] = useState(false);
   const [SnackbarOpen, setSnackbarOpen] = useState(false);
   const [SnackbarMsg, setSnackbarMsg] = useState("Buildings split details saved successfully.");
 
@@ -83,7 +83,7 @@ export default function BuildingsTable({ heir_details_list }) {
     let data;
     let auth_key = atob(sessionStorage.getItem("auth_key"));
     const params = { auth_key: auth_key, id: Id };
-    if (!auth_key && !Id) {
+    if (!auth_key) {
       return;
     }
     try {
@@ -139,18 +139,22 @@ export default function BuildingsTable({ heir_details_list }) {
   };
 
   const handleModalOpen = (event) => {
+    setHeirDetailsList(HeirSharingDetails);
+    setListTotalAmount(ListTotalAmount);
+    setPropertyId(PropertyId);
     setOpenModalPopup(true);
-  }
+  };
+  
   const handleModalClose = () => {
     setOpenModalPopup(false);
-    GetHeirSharingDetails(PropertyId);
-  }
-
+    GetHeirSharingDetails(PropertyId);      
+  };
+  
   //Table row expand function
   const handleExpandFun = () => {
     setTableExpandOpen(!TableExpandOpen);
     setTableExpandOpen2(false);
-  }
+  };
 
   //Table row expand function-2
   const handleExpandFun2 = (event) => {

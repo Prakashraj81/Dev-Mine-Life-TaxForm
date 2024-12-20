@@ -51,7 +51,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
         const updateAmounts = async () => {
             if (OpenModalPopup) {
                 await GetHeirList();
-                if (ListTotalAmount !== "") {
+                if (ListTotalAmount) {
                     let amountUpdate = parseFloat(ListTotalAmount.toString().replace(/,/g, '').replace('.', '') || 0);
                     setAmountofMoney(amountUpdate);
                     setAmountShow(true);
@@ -133,7 +133,8 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
     };
 
     const divisionBoxCalculation = (e, index) => {
-        let newValue = e.target.value.replace(/,/g, '');
+        //let newValue = e.target.value.replace(/,/g, '');
+        let newValue = e.target.value;
         newValue = parseFloat(newValue);
         let updatedBoxValues = [...BoxValues];
         updatedBoxValues[index] = isNaN(newValue) ? 0 : newValue;

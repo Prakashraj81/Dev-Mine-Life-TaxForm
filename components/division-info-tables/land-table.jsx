@@ -53,95 +53,125 @@ const style = {
 };
 
 
-export default function LandTable({heir_details_list}) {  
+export default function LandTable({ heir_details_list }) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
   let [TableExpandOpen1, setTableExpandOpen1] = React.useState(false);
-  let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
+  let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});
   let [TableExpandOpenInput, setTableExpandOpenInput] = React.useState(false);
-  let [OpenModalPopup, setOpenModalPopup] = React.useState(false); 
-    
-  let [ApiCallRoute, setApiCallRoute] = useState("Land");
+  let [OpenModalPopup, setOpenModalPopup] = React.useState(false);
   let [HeirList, setHeirList] = useState([]);
   let [HeirDetailsList, setHeirDetailsList] = useState([]);
   let [HeirId, setHeirId] = useState(0);
   let [PropertyId, setPropertyId] = useState(0);
-  let [TotalAmount, setTotalAmount] = useState(0); 
-  let [ListTotalAmount, setListTotalAmount] = useState(0); 
-  let [LandList, setLandList] = useState([]);
-  let [HeirSharingDetails, setHeirSharingDetails] = useState([]);
-  let [SnackbarOpen, setSnackbarOpen] = useState(false);
-  let [SnackbarMsg, setSnackbarMsg] = useState("Land split details saved successfully.");  
+  let [TotalAmount, setTotalAmount] = useState(0);
+  let [ListTotalAmount, setListTotalAmount] = useState(0);
+  const [ApiCallRoute, setApiCallRoute] = useState("lands");
+  const [LandList, setLandList] = useState([]);
+  const [HeirSharingDetails, setHeirSharingDetails] = useState([]);
+  const [SnackbarOpen, setSnackbarOpen] = useState(false);
+  const [SnackbarMsg, setSnackbarMsg] = useState("Land split details saved successfully.");
 
   useEffect(() => {
-    //GetLandList();
+    GetLandList();
     setHeirList(heir_details_list);
     setHeirDetailsList(heir_details_list);
-}, []);  
+  }, []);
 
-//Load Heir sharing details
-const GetHeirSharingDetails = async (Id) => {
-  let auth_key = atob(sessionStorage.getItem("auth_key"));
-  const params = { auth_key: auth_key, id: Id };
-  if (auth_key !== null && Id !== 0) {
+  //Load Heir sharing details
+  const GetHeirSharingDetails = async (Id) => {
+    let data;
+    const auth_key = atob(sessionStorage.getItem("auth_key"));
+    if (!auth_key) {
+      return;
+    }
     try {
-      const response = await axios.get('https://minelife-api.azurewebsites.net/get_Land', { params });
-      if (response.status === 200) {
-        setHeirSharingDetails(response.data.heir_sharing_details);          
-      }
-      else {
-        setHeirSharingDetails([]);
+      const response = await fetch(`https://minelife-api.azurewebsites.net/get_land_details?auth_key=${auth_key}&id=${Id}`);
+      data = await response.json();
+      if (!response.ok) throw new Error(data);
+
+      if (response.ok) {
+        setHeirSharingDetails(data?.heir_sharing_details);
       }
     } catch (error) {
+      setHeirSharingDetails([]);
       console.log("Error", error);
     }
   }
-}
 
-//Load cash savings list
-const GetLandList = async()=>{
-  let auth_key = atob(sessionStorage.getItem("auth_key"));
-  const params = { auth_key: auth_key };
-  if(auth_key !== null){
-      try{
-          const response = await axios.get('https://minelife-api.azurewebsites.net/list_Land', {params});
-          if(response.status === 200){
-              TotalAmount = 0;
-              setLandList(response.data.Land_details);
-              {response.data.Land_details.map((list) => {
-                if(list.amount !== 0){
-                  TotalAmount = TotalAmount + list.amount;
-                  setTotalAmount(TotalAmount);
-                }
-              })};
-          }
-          else{
-              setLandList([]);
-          }
-      }catch(error){
-          console.log("Errro", error);
+  //Load cash savings list
+  const GetLandList = async () => {
+    let data;
+    const auth_key = atob(sessionStorage.getItem("auth_key"));
+    if (!auth_key) {
+      return;
+    }
+    try {
+      const response = await fetch(`https://minelife-api.azurewebsites.net/list_lands?auth_key=${auth_key}`);
+      data = await response.json();
+      if (!response.ok) throw new Error(data);
+
+      if (response.ok) {
+        TotalAmount = 0;
+        setLandList(data?.land_details);
+        {
+          data?.land_details?.map((list) => {
+            if (list.appraisal_value !== 0) {
+              TotalAmount = TotalAmount + list.appraisal_value;
+              setTotalAmount(TotalAmount);
+            }
+          })
+        };
       }
-  }        
-}
+    } catch (error) {
+      setLandList([]);
+      console.log("Error", error);
+    }
+  };
 
   //Modal popup open and close function
   const handleModalOpen = (event) => {
+    setHeirDetailsList(HeirSharingDetails);
+    setListTotalAmount(ListTotalAmount);
+    setPropertyId(PropertyId);
     setOpenModalPopup(true);
-  }
+  };
+  
   const handleModalClose = () => {
     setOpenModalPopup(false);
-  }
-
+    GetHeirSharingDetails(PropertyId);      
+  }; 
+  
   //Table row expand function
   const handleExpandFun = () => {
     setTableExpandOpen(!TableExpandOpen);
     setTableExpandOpen1(false);
     setTableExpandOpen2(false);
-  }
+  };
 
   //Table row expand function-2
-  const handleExpandFun2 = () => {
-    setTableExpandOpen2(!TableExpandOpen2);
-  }
+  const handleExpandFun2 = (event) => {
+    const iconClickId = Number(event.currentTarget.id);
+    const customerId = Number(event.currentTarget.name);
+    const ListTotalAmount = event.currentTarget.value;
+
+    setListTotalAmount(ListTotalAmount);
+    setPropertyId(iconClickId);
+
+    // Reset all expand states to false and then open the current one
+    setTableExpandOpen2((prevExpandState) => {
+      const newExpandState = Object.keys(prevExpandState).reduce((acc, key) => {
+        acc[key] = false;
+        return acc;
+      }, {});
+      newExpandState[iconClickId] = !prevExpandState[iconClickId];
+      return newExpandState;
+    });
+
+    if (!TableExpandOpen2[iconClickId]) {
+      HeirList = heir_details_list;
+      GetHeirSharingDetails(iconClickId);
+    }
+  };
 
   const handleRadioScale = (event) => {
     let radioValue = event.target.value;
@@ -157,7 +187,7 @@ const GetLandList = async()=>{
 
   return (
     <>
-      <DivisionPopup OpenModalPopup={OpenModalPopup} handleModalClose={handleModalClose} />
+      <DivisionPopup OpenModalPopup={OpenModalPopup} HeirSharingDetails={HeirSharingDetails} ListTotalAmount={ListTotalAmount} PropertyId={PropertyId} ApiCallRoute={ApiCallRoute} handleModalClose={handleModalClose} />
       <div className="py-0">
         <Table aria-label="collapsible table">
           <TableHead className="table-head">
@@ -165,7 +195,7 @@ const GetLandList = async()=>{
               <TableCell className="" align="left"><span className="font-medium">土地</span></TableCell>
               <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
               <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
-              <TableCell className="table-20" align="right">0<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+              <TableCell className="table-20" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
               <TableCell className="cursor-pointer" align="right">
                 <Box className="invisible inline-block">
                   <HtmlTooltip>
@@ -240,23 +270,88 @@ const GetLandList = async()=>{
                           <TableCell className="border border-light-gray border-l bg-table-gray" align="center">地積</TableCell>
                           <TableCell className="border border-light-gray border-l bg-table-gray" align="center">評価額</TableCell>
                           <TableCell className="border border-light-gray border-l bg-table-gray" align="center">分割情報入力</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text" /></TableCell>
-                          <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text" /></TableCell>
-                          <TableCell className="border border-light-gray border-l p-0" align="center"><input className="border p-0 border-light-gray focus:outline-none" type="text" /></TableCell>
-                          <TableCell className="border border-light-gray border-l w-15" align="center">
-                            <IconButton
-                              aria-label="expand row"
-                              size="small"
-                              onClick={handleExpandFun2}
-                            >
-                              {TableExpandOpen2 ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
+                        </TableRow>                       
 
-                        <TableRow className="w-full">
+
+                        {LandList.map((list, index) => (
+                          <React.Fragment key={list.id}>
+                            <TableRow key={list.id} id={list.id} value={list.customer_id}>
+                              <TableCell className="border border-light-gray border-l p-0" align="center">{list.location_and_lot_number}</TableCell>
+                              <TableCell className="border border-light-gray border-l p-0" align="center">{list.land_area}</TableCell>
+                              <TableCell className="border border-light-gray border-l p-0" align="center">{list.appraisal_value.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+                              <TableCell className="border border-light-gray border-l w-15" align="center">
+                                <IconButton                              
+                                  aria-label="expand row"
+                                  size="small"
+                                  id={list.id}
+                                  name={list.customer_id}
+                                  value={list.appraisal_value.toLocaleString()}
+                                  onClick={handleExpandFun2}
+                                >
+                                  {TableExpandOpen2[list.id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                </IconButton>
+                              </TableCell>                              
+                            </TableRow>
+
+
+                            <TableRow className="w-full">
+                              <TableCell className="border-light-gray border-l border-r" style={{ padding: 0 }} colSpan={10}>
+                                <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
+                                  <Box>
+                                    <Table>
+                                      <TableHead>
+                                        <TableRow>
+                                          <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-medium">分割情報の入力</span></TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                          {HeirList.map((heir) => (
+                                            <>
+                                              <TableCell id={heir.heir_id} className="border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>
+                                            </>
+                                          ))}
+                                          <TableCell className="border-light-gray border-l border-r w-15 bg-table-gray" align="center">入力</TableCell>
+                                        </TableRow>
+                                      </TableHead>
+                                      <TableBody>
+                                      <TableRow>
+                                          {HeirSharingDetails.map((heir_lists) => (
+                                            <React.Fragment key={heir_lists.heir_id}>
+                                              {heir_lists.numerator == 0 && heir_lists.denominator == 0 ? (
+                                                <TableCell
+                                                  id={heir_lists.heir_id}
+                                                  className="border border-light-gray border-l"
+                                                  align="right"
+                                                >
+                                                  {heir_lists.share_amount.toLocaleString()}
+                                                  <span className="inline-block float-right border-l text-right border-light-gray pl-1">
+                                                    円
+                                                  </span>
+                                                </TableCell>
+                                              ) : (
+                                                <TableCell
+                                                  id={heir_lists.heir_id}
+                                                  className="border border-light-gray border-l"
+                                                  align="right"
+                                                >
+                                                  {heir_lists.numerator}/{heir_lists.denominator}
+                                                </TableCell>
+                                              )}
+                                            </React.Fragment>
+                                          ))}
+                                          <TableCell className="border-light-gray border-l border-r cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell>
+                                        </TableRow>
+                                      </TableBody>
+                                    </Table>
+                                  </Box>
+                                </Collapse>
+                              </TableCell>
+                            </TableRow>
+                          </React.Fragment>
+                        ))}
+
+
+
+                        {/* <TableRow className="w-full">
                           <TableCell className="border border-light-gray border-l" style={{ padding: 0 }} colSpan={10}>
                             <Collapse in={TableExpandOpen2} timeout="auto" unmountOnExit>
                               <Box>
@@ -288,7 +383,7 @@ const GetLandList = async()=>{
                               </Box>
                             </Collapse>
                           </TableCell>
-                        </TableRow>
+                        </TableRow> */}
                       </TableBody>
                     </Table>
                   </Box>
