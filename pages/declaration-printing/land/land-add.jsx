@@ -364,6 +364,62 @@ export default function LandAdd() {
         }       
     };
 
+    useEffect(() => {        
+        let depositId = 0;
+        let url = router.asPath;
+        let searchParams = new URLSearchParams(url.split('?')[1]);
+        searchParams = searchParams.get("edit");
+        if (searchParams) {
+            depositId = Number(atob(searchParams));
+            GetLandDetails(depositId);
+        }
+    }, []);
+
+    //Load land details    
+    const GetLandDetails = async (depositId) => {
+        let data;
+        const auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key, id: depositId };
+        if (auth_key !== null && depositId !== 0) {
+            try {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/get_land_details?auth_key=${params.auth_key}&id=${params.id}`);
+                data = await response.json();
+
+                if (!response.ok) throw new Error(data);
+
+                if (data) {
+                    setis_room_in_condominium(data.land_details.is_room_in_condominium === 'Yes' ? 1 : 0);
+                    setlocation_and_lot_number(data.land_details.location_and_lot_number);
+                    setground_grain(data.land_details.ground_grain);
+                    setland_area(data.land_details.land_area);
+                    settype_of_site_rights(data.land_details.type_of_site_rights);
+                    setpercentage_of_site_rights(data.land_details.percentage_of_site_rights);
+                    setis_owned_by_decedent(data.land_details.is_owned_by_decedent);
+                    setland_details(data.land_details.land_details);
+                    // sethouse_number(data.land_details.house_number);
+                    // setkinds(data.land_details.kinds);
+                    // setstructure_2(data.land_details.structure_2);
+                    // setfloor_area_2(data.land_details.floor_area_2);
+                    // settype_of_site_rights(data.land_details.type_of_site_rights);
+                    // setsite_rights_numerator(data.land_details.site_rights_numerator);
+                    // setsite_rights_denominator(data.land_details.site_rights_denominator);
+                    // setsite_rights_ratio(data.land_details.site_rights_ratio);
+                    // setis_property_tax_details_available(data.land_details.is_property_tax_details_available === 'Yes' ? 1 : 0);
+                    // setproperty_tax_details_location(data.land_details.property_tax_details_location);
+                    // setproperty_tax_details_house_number(data.land_details.property_tax_details_house_number);
+                    // setproperty_tax_details_type(data.land_details.property_tax_details_type);
+                    // setproperty_tax_details_price(data.land_details.property_tax_details_price);
+                    // setis_co_owners_in_property(data.land_details.is_co_owners_in_property === 'Yes' ? 1 : 0);
+                    // setco_owner_share_percentage_numerator(data.land_details.co_owner_share_percentage_numerator);
+                    // setco_owner_share_percentage_denominator(data.land_details.co_owner_share_percentage_denominator);
+                    // setco_owner_share_percentage_ratio(data.land_details.co_owner_share_percentage_ratio);
+                    // setappraisal_value(data.land_details.appraisal_value);
+                }                
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }        
+    };
 
     return (
         <>

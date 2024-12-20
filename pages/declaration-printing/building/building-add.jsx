@@ -1,8 +1,6 @@
-"use client";
-import Link from "next/link";
 import React, { useState } from "react";
+import Link from "next/link";
 import { useRouter } from 'next/router';
-import axios from "axios";
 import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../../components/back-btn";
@@ -76,22 +74,24 @@ export default function HouseAdd() {
         let url = router.asPath;
         let searchParams = new URLSearchParams(url.split('?')[1]);
         searchParams = searchParams.get("edit");
-        if (searchParams !== null) {
+        if (searchParams) {
             depositId = Number(atob(searchParams));
             GetBuildingDetails(depositId);
         }
     }, []);
 
-    //Load cash savings details    
+    //Load building details    
     const GetBuildingDetails = async (depositId) => {
         let data;
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        const auth_key = atob(sessionStorage.getItem("auth_key"));
         const params = { auth_key: auth_key, id: depositId };
         if (auth_key !== null && depositId !== 0) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_cash_deposit', { params });
+                const response = await fetch(`https://minelife-api.azurewebsites.net/get_buildings?auth_key=${params.auth_key}&id=${params.id}`);
                 data = await response.json();
-                if (!response.ok) throw new Error('Failed to fetch data');
+
+                if (!response.ok) throw new Error(data);
+
                 if (data) {
                     setis_room_in_condominium(data.buildings_details.is_room_in_condominium === 'Yes' ? 1 : 0);
                     setlocation(data.buildings_details.location);
@@ -238,6 +238,7 @@ export default function HouseAdd() {
 
         const auth_key = atob(sessionStorage.getItem("auth_key"));
         if (!isSumbitDisabled && auth_key) {
+            let data;
             let response = "";
             let buildingId = 0;
             let url = router.asPath;
@@ -280,12 +281,21 @@ export default function HouseAdd() {
             formData.append("appraisal_value", appraisal_value);            
             try {
                 if (buildingId === 0) {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/add_buildings', formData);
+                    response = await fetch('https://minelife-api.azurewebsites.net/add_buildings', {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
                 else {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_buildings', formData);
+                    response = await fetch('https://minelife-api.azurewebsites.net/edit_buildings', {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
-                if (response.status === 200) {
+                data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
                     router.push(`/declaration-printing/building`);
                 }
             } catch (error) {

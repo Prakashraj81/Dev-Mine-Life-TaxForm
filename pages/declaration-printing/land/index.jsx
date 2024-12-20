@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/router';
-import axios from "axios";
 import {
     Table,
     TableBody,
@@ -43,23 +42,22 @@ export default function Land() {
     }, []);
 
 
-    //Load cash savings list
+    //Load cash savings list    
     const GetlandList = async () => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
-        if (auth_key !== null) {
-            const params = { auth_key: auth_key };
-            try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_lands', { params });
-                const data = response.data; 
-                if (data && data.land_details) {
-                    setlandList(data.land_details);
-                } else {
-                    setlandList([]);
-                }
-            } catch (error) {
-                console.log("Error", error);
-                setlandList([]); 
+        let data;
+        try {
+            const authKey = atob(sessionStorage.getItem("auth_key"));
+            if (!authKey) {
+                return;
             }
+            const response = await fetch(`https://minelife-api.azurewebsites.net/list_lands?auth_key=${authKey}`);
+            data = await response.json();
+            if (!response.ok) {
+                throw new Error(data);
+            }
+            setlandList(data.land_details);
+        } catch (error) {
+            setlandList([]);
         }
     };
 
@@ -71,14 +69,15 @@ export default function Land() {
     const DeleteModalFunction = async (event) => {
         let value = event.currentTarget.id;
         const { auth_key, customerId, depositId, buttonValue, params } = deleteTarget;
+        setDeleteModalOpen(false);
         if (value === "Yes") {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_lands', { params });
+                const response = await fetch(`https://minelife-api.azurewebsites.net/delete_lands?auth_key=${auth_key}&id=${depositId}`);
                 if (response.ok) {
+                    await GetlandList();
                     setVariantSnackbar("success");
-                    setSnackbarMsg(response.data.message);                    
+                    setSnackbarMsg(response.data.message);
                     setSnackbarOpen(true);
-                    GetlandList();
                 }
                 else {
                     setVariantSnackbar("error");
@@ -89,10 +88,6 @@ export default function Land() {
                 setVariantSnackbar("error");
                 setSnackbarMsg("Cash details not deleted");
             }
-            setDeleteModalOpen(false);
-        }
-        else {
-            setDeleteModalOpen(false);
         }
     };
 
@@ -115,21 +110,21 @@ export default function Land() {
 
     return (
         <>
-        <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-                        <Alert
-                            onClose={handleSnackbarClose}
-                            severity={VariantSnackbar}
-                            variant="filled"
-                            sx={{ width: '100%', color: "#FFF" }}
-                        >
-                            {SnackbarMsg}
-                        </Alert>
-                    </Snackbar>
-        
-                    {DeleteModalOpen && (
-                        <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
-                    )}
-        
+            <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                <Alert
+                    onClose={handleSnackbarClose}
+                    severity={VariantSnackbar}
+                    variant="filled"
+                    sx={{ width: '100%', color: "#FFF" }}
+                >
+                    {SnackbarMsg}
+                </Alert>
+            </Snackbar>
+
+            {DeleteModalOpen && (
+                <DeleteModal DeleteModalOpen={DeleteModalOpen} DeleteModalFunction={DeleteModalFunction} />
+            )}
+
             <Box className="house-wrapper">
                 <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
                     <Box className="page-heading">
