@@ -235,7 +235,7 @@ export default function LandAdd() {
         else if(inputId === "percentage_of_site_rights"){
             setpercentage_of_site_rights(inputValue);
         }
-        else if(inputId === "v"){
+        else if(inputId === "details"){
             setdetails(inputValue);
         }
         else if(inputId === "road_price_1"){
@@ -339,9 +339,9 @@ export default function LandAdd() {
             formData.append("regional_distinction_3", regional_distinction_3);
             formData.append("corner_semi_corner_3", corner_semi_corner_3);
 
-            formData.append("road_price_4", road_price_4);
-            formData.append("regional_distinction_4", regional_distinction_4);
-            formData.append("corner_semi_corner_4", corner_semi_corner_4);
+            // formData.append("road_price_4", road_price_4);
+            // formData.append("regional_distinction_4", regional_distinction_4);
+            // formData.append("corner_semi_corner_4", corner_semi_corner_4);
 
             formData.append("is_co_owners_in_property", is_co_owners_in_property === null ? 0 : is_co_owners_in_property);
             formData.append("co_owner_share_percentage_numerator", co_owner_share_percentage_numerator);
@@ -401,7 +401,7 @@ export default function LandAdd() {
 
                 if (!response.ok) throw new Error(data);
 
-                if (data) {
+                if (data && data.land_details) {
                     setis_room_in_condominium(data.land_details.is_room_in_condominium === 'Yes' ? 1 : 0);
                     setlocation_and_lot_number(data.land_details.location_and_lot_number);
                     setground_grain(data.land_details.ground_grain);

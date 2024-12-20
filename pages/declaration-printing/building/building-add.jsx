@@ -67,64 +67,7 @@ export default function HouseAdd() {
         if (!numericRegex.test(keyValue)) {
             e.preventDefault();
         }
-    };
-
-    useEffect(() => {        
-        let depositId = 0;
-        let url = router.asPath;
-        let searchParams = new URLSearchParams(url.split('?')[1]);
-        searchParams = searchParams.get("edit");
-        if (searchParams) {
-            depositId = Number(atob(searchParams));
-            GetBuildingDetails(depositId);
-        }
-    }, []);
-
-    //Load building details    
-    const GetBuildingDetails = async (depositId) => {
-        let data;
-        const auth_key = atob(sessionStorage.getItem("auth_key"));
-        const params = { auth_key: auth_key, id: depositId };
-        if (auth_key !== null && depositId !== 0) {
-            try {
-                const response = await fetch(`https://minelife-api.azurewebsites.net/get_buildings?auth_key=${params.auth_key}&id=${params.id}`);
-                data = await response.json();
-
-                if (!response.ok) throw new Error(data);
-
-                if (data) {
-                    setis_room_in_condominium(data.buildings_details.is_room_in_condominium === 'Yes' ? 1 : 0);
-                    setlocation(data.buildings_details.location);
-                    setbuilding_name(data.buildings_details.building_name);
-                    setstructure_1(data.buildings_details.structure_1);
-                    setfloor_area(data.buildings_details.floor_area);
-                    setlocation_and_lot_number(data.buildings_details.location_and_lot_number);
-                    setground_grain(data.buildings_details.ground_grain);
-                    setland_area(data.buildings_details.land_area);
-                    sethouse_number(data.buildings_details.house_number);
-                    setkinds(data.buildings_details.kinds);
-                    setstructure_2(data.buildings_details.structure_2);
-                    setfloor_area_2(data.buildings_details.floor_area_2);
-                    settype_of_site_rights(data.buildings_details.type_of_site_rights);
-                    setsite_rights_numerator(data.buildings_details.site_rights_numerator);
-                    setsite_rights_denominator(data.buildings_details.site_rights_denominator);
-                    setsite_rights_ratio(data.buildings_details.site_rights_ratio);
-                    setis_property_tax_details_available(data.buildings_details.is_property_tax_details_available === 'Yes' ? 1 : 0);
-                    setproperty_tax_details_location(data.buildings_details.property_tax_details_location);
-                    setproperty_tax_details_house_number(data.buildings_details.property_tax_details_house_number);
-                    setproperty_tax_details_type(data.buildings_details.property_tax_details_type);
-                    setproperty_tax_details_price(data.buildings_details.property_tax_details_price);
-                    setis_co_owners_in_property(data.buildings_details.is_co_owners_in_property === 'Yes' ? 1 : 0);
-                    setco_owner_share_percentage_numerator(data.buildings_details.co_owner_share_percentage_numerator);
-                    setco_owner_share_percentage_denominator(data.buildings_details.co_owner_share_percentage_denominator);
-                    setco_owner_share_percentage_ratio(data.buildings_details.co_owner_share_percentage_ratio);
-                    setappraisal_value(data.buildings_details.appraisal_value);
-                }                
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }        
-    };
+    };    
 
     //Radio button
     const handleRadio = (event) => {
@@ -306,6 +249,64 @@ export default function HouseAdd() {
             setisSumbitDisabled(true);
             setShowLoader(false);
         }       
+    };
+
+    useEffect(() => {        
+        let depositId = 0;
+        let url = router.asPath;
+        let searchParams = new URLSearchParams(url.split('?')[1]);
+        searchParams = searchParams.get("edit");
+        if (searchParams) {
+            depositId = Number(atob(searchParams));
+            GetBuildingDetails(depositId);
+        }
+    }, []);
+
+    //Load building details    
+    const GetBuildingDetails = async (depositId) => {
+        let data;
+        const auth_key = atob(sessionStorage.getItem("auth_key"));
+        const params = { auth_key: auth_key, id: depositId };
+        if (!auth_key && !depositId) {
+            return;
+        }        
+        try {
+            const response = await fetch(`https://minelife-api.azurewebsites.net/get_buildings?auth_key=${params.auth_key}&id=${params.id}`);
+            data = await response.json();
+
+            if (!response.ok) throw new Error(data);
+
+            if (data && data.buildings_details) {
+                setis_room_in_condominium(data.buildings_details.is_room_in_condominium === 'Yes' ? 1 : 0);
+                setlocation(data.buildings_details.location);
+                setbuilding_name(data.buildings_details.building_name);
+                setstructure_1(data.buildings_details.structure_1);
+                setfloor_area(data.buildings_details.floor_area);
+                setlocation_and_lot_number(data.buildings_details.location_and_lot_number);
+                setground_grain(data.buildings_details.ground_grain);
+                setland_area(data.buildings_details.land_area);
+                sethouse_number(data.buildings_details.house_number);
+                setkinds(data.buildings_details.kinds);
+                setstructure_2(data.buildings_details.structure_2);
+                setfloor_area_2(data.buildings_details.floor_area_2);
+                settype_of_site_rights(data.buildings_details.type_of_site_rights);
+                setsite_rights_numerator(data.buildings_details.site_rights_numerator);
+                setsite_rights_denominator(data.buildings_details.site_rights_denominator);
+                setsite_rights_ratio(data.buildings_details.site_rights_ratio);
+                setis_property_tax_details_available(data.buildings_details.is_property_tax_details_available === 'Yes' ? 1 : 0);
+                setproperty_tax_details_location(data.buildings_details.property_tax_details_location);
+                setproperty_tax_details_house_number(data.buildings_details.property_tax_details_house_number);
+                setproperty_tax_details_type(data.buildings_details.property_tax_details_type);
+                setproperty_tax_details_price(data.buildings_details.property_tax_details_price);
+                setis_co_owners_in_property(data.buildings_details.is_co_owners_in_property === 'Yes' ? 1 : 0);
+                setco_owner_share_percentage_numerator(data.buildings_details.co_owner_share_percentage_numerator);
+                setco_owner_share_percentage_denominator(data.buildings_details.co_owner_share_percentage_denominator);
+                setco_owner_share_percentage_ratio(data.buildings_details.co_owner_share_percentage_ratio);
+                setappraisal_value(data.buildings_details.appraisal_value);
+            }                
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (
