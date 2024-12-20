@@ -132,7 +132,7 @@ export default function CashSavingsAdd() {
         setPostCode(digit_value);
         setIsValid(isValidInput);
         setisSumbitDisabled(false);
-    }
+    };   
 
     //Amount input calculation function
     const AmountofMoneyKeyPress = (e) => {
@@ -147,9 +147,8 @@ export default function CashSavingsAdd() {
             setAmountofMoneyError(false);
             setAmountofMoney(amount_of_money);
         }
-        setisSumbitDisabled(false);
-        AmountToTotalCalculation(amount_of_money);
-    }
+        setisSumbitDisabled(false);        
+    };
 
 
     //Input keypress

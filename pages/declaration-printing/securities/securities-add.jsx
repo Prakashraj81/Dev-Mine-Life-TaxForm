@@ -383,7 +383,7 @@ export default function SecuritiesAdd() {
             setShowIncorrectError(false);
             setUndecidedHeir(heirValue.toLocaleString());
         }
-    }
+    };
 
 
     function valueConvertFun(convertValue) {

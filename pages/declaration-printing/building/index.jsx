@@ -14,6 +14,7 @@ import {
     Button,
     Typography
 } from '@mui/material';
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
@@ -24,12 +25,12 @@ import AddPageButton from "../../../components/add-page-btn";
 import DeleteModal from "../../../components/modal/delete-modal";
 
 export default function House() {
-    let [buildingList, setbuildingList] = useState([]);
-    let [SnackbarOpen, setSnackbarOpen] = useState(false);
-    let [VariantSnackbar, setVariantSnackbar] = useState("success");
-    let [SnackbarMsg, setSnackbarMsg] = useState("");
-    let [DeleteModalOpen, setDeleteModalOpen] = useState(false);
-    let [deleteTarget, setDeleteTarget] = useState(null);
+    const [buildingList, setbuildingList] = useState([]);
+    const [SnackbarOpen, setSnackbarOpen] = useState(false);
+    const [VariantSnackbar, setVariantSnackbar] = useState("success");
+    const [SnackbarMsg, setSnackbarMsg] = useState("");
+    const [DeleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [deleteTarget, setDeleteTarget] = useState(null);
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -58,13 +59,11 @@ export default function House() {
             if (!response.ok) throw new Error(data);
 
             if (response.ok) {
-                setbuildingList(response.data.buildings_details);
-            }
-            else {
-                setbuildingList([]);
-            }
+                setbuildingList(data.buildings_details);
+            }            
         } catch (error) {
             console.log("Error", error);
+            setbuildingList([]);
         }
     }
 
@@ -106,11 +105,11 @@ export default function House() {
     //Edit and Delete 
     let router = useRouter();
     const handleEdit_DeleteButtonClick = async (event) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
-        let customerId = Number(event.currentTarget.id);
-        let depositId = Number(event.currentTarget.name);
-        let buttonValue = event.currentTarget.value;
-        let params = { auth_key: auth_key, id: depositId };
+        const auth_key = atob(sessionStorage.getItem("auth_key"));
+        const customerId = Number(event.currentTarget.id);
+        const depositId = Number(event.currentTarget.name);
+        const buttonValue = event.currentTarget.value;
+        const params = { auth_key: auth_key, id: depositId };
         if (customerId !== 0 && depositId !== 0 && buttonValue === "Delete") {
             setDeleteTarget({ auth_key, customerId, depositId, buttonValue, params });
             setDeleteModalOpen(true);
@@ -157,11 +156,11 @@ export default function House() {
                             {buildingList.map((list, index) => (
                                 <TableRow key={index} className="border border-light-gray">
                                     <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>
-                                        {list.address ? list.address : list.financial_institution_name}
+                                        {list.location}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>{list.deposit_type}</TableCell>
+                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>{list.floor_area}</TableCell>
                                     <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
-                                        {list.amount.toLocaleString()}
+                                        {list.appraisal_value.toLocaleString()}
                                     </TableCell>
                                     <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
                                         <Box className="flex justify-end items-end">

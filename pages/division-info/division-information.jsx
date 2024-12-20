@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useRouter } from 'next/router';
 import Link from "next/link";
@@ -47,9 +46,6 @@ import PostcodeIcon from "../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../components/loader/backdrop-loader';
 import AreaIcon from "../../components/inputbox-icon/textbox-area-icon";
 
-// Axios for API calls
-import axios from "axios";
-
 //Tables import
 import CashSavingsTable from "../../components/division-info-tables/cash-savings-table";
 import SecuritiesTable from "../../components/division-info-tables/securities-table";
@@ -74,56 +70,37 @@ import ConfirmationSuccessiveInheritance from "../../components/division-info-ta
 import DeclaredTaxAmount from "../../components/division-info-tables/declared-tax-amount";
 
 export default function divisionInformation() {
-    let DepositList = [];
-    let [ResidentialLandType, setResidentialLandType] = useState("");
-    let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
-    let [ShowLoader, setShowLoader] = useState(false);
-
-    //Table show hide state    
-    let [GiftDuringLifeTable, setGiftDuringLifeTable] = useState(true);
-    let [ShowSuccessiveInheritance, setShowSuccessiveInheritance] = useState(false);
-    let [ShowSuccessiveInput, setShowSuccessiveInput] = useState(false);
-    let [heir_details_list, setheir_details_list] = useState([]);
-    let [Flag, setFlag] = useState(0);
+    const [ResidentialLandType, setResidentialLandType] = useState("");
+    const [isSumbitDisabled, setisSumbitDisabled] = useState(false);
+    const [ShowLoader, setShowLoader] = useState(false);
+    const [GiftDuringLifeTable, setGiftDuringLifeTable] = useState(true);
+    const [ShowSuccessiveInheritance, setShowSuccessiveInheritance] = useState(false);
+    const [ShowSuccessiveInput, setShowSuccessiveInput] = useState(false);    
+    const [Flag, setFlag] = useState(0);
     const [loading, setLoading] = useState(true);
-
-    // Simulate loading effect using useEffect
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 2000); // Adjust the timeout as needed
-        return () => clearTimeout(timer);
-    }, []);
+    const [heir_details_list, setheir_details_list] = useState([]);
+    
 
     //Load heir details list
     const GetHeirList = async () => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
-        const params = { auth_key: auth_key };
-        if (auth_key !== null) {
-            try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', { params });
-                if (response.status === 200) {
-                    heir_details_list = response.data.heir_list;
-                    setheir_details_list(response.data.heir_list);
-                    console.log("heir_details_list_API: ", heir_details_list);
-                    if (heir_details_list.length !== 0) {
-                        Flag = 1;
-                        setFlag(1);
-                    }
-                    else {
-                        Flag = 0;
-                        setFlag(0);
-                    }
-                }
-                else {
-                    setheir_details_list([]);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-        else {
-            //Logout();
+        let data;
+        const auth_key = atob(sessionStorage.getItem("auth_key"));
+        if (!auth_key) {
+            return;
+        }        
+        try {
+            const response = await fetch(`https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
+            data = await response.json();
+            if (!response.ok) throw new Error(data);
+
+            if (response.ok) {
+                await setheir_details_list(data.heir_list);
+                await setFlag(1);
+            }            
+        } catch (error) {
+            await setFlag(0);
+            await setheir_details_list([]);
+            console.error('Error:', error);
         }
     };
 
@@ -131,31 +108,18 @@ export default function divisionInformation() {
         GetHeirList();
     }, []);
 
+    // Simulate loading effect using useEffect
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+        return () => clearTimeout(timer);
+    }, []);
+
     const handleResidentialLandType = (event) => {
         setResidentialLandType(event.target.value);
     };
-
-    const inputHandlingFunction = (event) => {
-
-    }
-
-    // Table values
-    let [cashSavingsList, setcashSavingsList] = useState([]);
-    let totalValuation = 0;
-    useEffect(() => {
-        let sessionValue = sessionStorage.getItem('cashSavings');
-        var tempArray = [];
-        tempArray[0] = JSON.parse(sessionValue);
-        if (tempArray[0] !== null) {
-            setcashSavingsList(tempArray);
-        }
-        else {
-            setcashSavingsList([]);
-        }
-    }, []);
-
-
-
+    
     const handleRadioScale = (event) => {
         let radioValue = event.target.value;
         if (radioValue === "Yes") {
@@ -171,32 +135,13 @@ export default function divisionInformation() {
         setShowSuccessiveInput(!ShowSuccessiveInput);
     }
 
+    const inputHandlingFunction = (event) => {
 
-
-    //Submit API function 
-    const router = useRouter();
-    let defaultValues = {};
-    const onSubmit = () => {
-        defaultValues = {
-            ResidentialLandType: ResidentialLandType,
-        };
-
-        //input Validation
-        if (defaultValues.ResidentialLandType === "") {
-            isSumbitDisabled = false;
-        }
-        //Api setup
-        if (isSumbitDisabled !== true) {
-            console.log("API allowed");
-            //sessionStorage.setItem('ExceptionsResidentialLand', JSON.stringify(defaultValues));
-            //router.push(`/gift-various/exceptions-residential-land`);      
-        }
-        else {
-            console.log("API not allowed");
-            setisSumbitDisabled(true);
-        }
     };
 
+    const onSubmit = () => {
+
+    };
 
     return (
         <>
@@ -242,168 +187,7 @@ export default function divisionInformation() {
                         </RadioGroup>
                     </FormControl>
                 </Box>
-
-                {ShowSuccessiveInheritance && (
-                    <>
-                        <Box>
-                            <Box className="w-full inline-block items-center justify-between mb-7">
-                                <Box className="w-full inline-block float-left">
-                                    <Box className="label w-full inline-block">
-                                        <Typography component={"label"} htmlFor="Deposit" className="form-label">
-                                            小規模宅地の特例を適用する土地
-                                        </Typography>
-                                    </Box>
-                                    <Box className="w-full inline-block mt-2">
-                                        <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2' onChange={handleResidentialLandType}>
-                                            <option value='' id='0'></option>
-                                            {DepositList.map((option) => (
-                                                <option key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </Box>
-
-                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left pt-7">
-                                        <Box className="label w-full inline-block">
-                                            <Typography component={"label"} className="form-label flex items-center">適用面積</Typography>
-                                        </Box>
-                                        <Box className="w-full inline-block mt-2 relative">
-                                            <input
-                                                type="text"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                id="FloorAreaOneYes"
-                                                onChange={inputHandlingFunction}
-                                            />
-                                            <AreaIcon />
-                                        </Box>
-                                    </Box>
-                                </Box>
-                            </Box>
-
-                            <Box className="w-full inline-block text-left mb-7">
-                                <Typography component={"p"} className="float-left pr-7 text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-xl text-black text-left font-medium">相似相続控除</Typography>
-                                <button onClick={AddSuccessiveInput} className="float-left text-base text-white bg-primary-color rounded-sm hover:bg-primary-color px-1 py-1 tracking-2">
-                                    {ShowSuccessiveInput ? <RemoveIcon className="text-white" /> : <AddIcon className="text-white" />}
-                                    {ShowSuccessiveInput ? "隠れる" : "追加する"}
-                                </button>
-                            </Box>
-                        </Box>
-                    </>
-                )}
-
-                {ShowSuccessiveInput && (
-                    <>
-                        <Box className="py-3">
-                            <form action="#" method="POST">
-                                <Box className="w-full flex items-center justify-between mb-7">
-                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                        <Box className="user-details">
-                                            <Box className="label w-full inline-block">
-                                                <Typography component={"label"} htmlFor="NameofDecedent" className="form-label">
-                                                    前相続の被相続人氏名<i className="text-red-500">*</i>
-                                                </Typography>
-                                            </Box>
-                                            <Box className="w-full inline-block mt-2">
-                                                <input
-                                                    type="text"
-                                                    id="NameofDecedent"
-                                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                />
-                                            </Box>
-                                        </Box>
-                                    </Box>
-
-                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                        <Box className="label w-full inline-block">
-                                            <Typography component={"label"} htmlFor="RelationshipDecedent" className="form-label">
-                                                今回の被相続人と前回の被相続人の続柄
-                                            </Typography>
-                                        </Box>
-                                        <Box className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="RelationshipDecedent"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            />
-                                        </Box>
-                                    </Box>
-                                </Box>
-
-
-                                <Box className="w-full flex items-center justify-between mb-7">
-                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                        <Box className="user-details">
-                                            <Box className="label w-full inline-block">
-                                                <Typography component={"label"} htmlFor="OccurrenceDate" className="form-label">
-                                                    前相続の発生日<i className="text-red-500">*</i>
-                                                </Typography>
-                                            </Box>
-                                            <Box className="w-full inline-block mt-2">
-                                                <input
-                                                    type="date"
-                                                    id="OccurrenceDate"
-                                                    className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                                />
-                                            </Box>
-                                        </Box>
-                                    </Box>
-
-                                    <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
-                                        <Box className="label w-full inline-block">
-                                            <Typography component={"label"} htmlFor="AmountGiftType" className="form-label">
-                                                相続税申告書の提出先
-                                            </Typography>
-                                        </Box>
-                                        <Box className="w-full inline-block mt-2">
-                                            <select className='form-control w-full bg-custom-gray focus:outline-none rounded h-12 px-2'>
-                                                <option value=''></option>
-                                            </select>
-                                        </Box>
-                                    </Box>
-                                </Box>
-
-                                <Box className="w-full block items-center justify-between mb-7">
-                                    <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                        <Box className="label w-full inline-block">
-                                            <Typography component={"label"} htmlFor="AssetValue" className="w-full inline-block mt-1 form-label">
-                                                今回の被相続人が前相続において取得した財
-                                            </Typography>
-                                            <Typography component={"label"} htmlFor="AssetValue" className="w-full inline-block mt-1 form-label">
-                                                産額（相続時精算課税適用財産含む）
-                                            </Typography>
-                                        </Box>
-                                        <Box className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="AssetValue"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            />
-                                        </Box>
-                                    </Box>
-                                </Box>
-
-
-                                <Box className="w-full block items-center justify-between mb-7">
-                                    <Box className="user-details w-full lg:w-48 xl:w-48 2xl:w-48 block">
-                                        <Box className="label w-full inline-block">
-                                            <Typography component={"label"} htmlFor="InheritanceTax" className="w-full inline-block mt-1 form-label">
-                                                前相続で今回の被相続人が支払った相続税額
-                                            </Typography>
-                                        </Box>
-                                        <Box className="w-full inline-block mt-2">
-                                            <input
-                                                type="text"
-                                                id="InheritanceTax"
-                                                className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
-                                            />
-                                        </Box>
-                                    </Box>
-                                </Box>
-                            </form>
-                        </Box>
-                    </>
-                )}
+                
 
                 <Box className="w-full inline-block">
                     <form className="hidden1" action="#" method="POST">
@@ -411,7 +195,6 @@ export default function divisionInformation() {
                             <Box>
                                 {Flag === 1 && heir_details_list.length !== 0 && (
                                     <>
-
                                         {loading ? (
                                             // Render skeleton loader for each list item
                                             Array.from({ length: 20 }, (_, index) => (
