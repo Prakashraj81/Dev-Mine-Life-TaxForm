@@ -114,6 +114,10 @@ export default function LandAdd() {
     const [appraisal_value_error, setappraisal_value_error] = useState(false);
     const [condominium_correction_rate_error, setcondominium_correction_rate_error] = useState(false);
 
+    const [land_details, setland_details] = useState("");
+    const [magnification, setmagnification] = useState("");
+    const [magnification_red_frame_details, setmagnification_red_frame_details] = useState("");
+
     //Input keypress
     let handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
