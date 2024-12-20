@@ -314,6 +314,7 @@ export default function LandAdd() {
             }
             const formData = new FormData();
             formData.append("auth_key", auth_key);
+            formData.append("id", landId !== 0 ? landId : 0);
             formData.append("is_room_in_condominium", is_room_in_condominium === null ? 0 : is_room_in_condominium);
             formData.append("location_and_lot_number", location_and_lot_number);
             formData.append("ground_grain", ground_grain);
@@ -948,12 +949,13 @@ export default function LandAdd() {
                                         <Box className="w-full lg:w-48 xl:w-48 2xl:w-48 inline-block float-left">
                                             <input
                                                 type="text"
-                                                id="appraisal_value"
-                                                value={appraisal_value}
+                                                id="condominium_correction_rate"
+                                                value={condominium_correction_rate}
                                                 onChange={inputHandlingFunction}
+                                                onKeyPress={handleKeyPress}
                                                 className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                             />
-                                            {appraisal_value_error && (
+                                            {condominium_correction_rate_error && (
                                                 <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                             )}
                                         </Box>
@@ -975,13 +977,13 @@ export default function LandAdd() {
                             <Box className="w-full inline-block mt-2">
                                 <input
                                     type="text"
-                                    id="Valuation"
-                                    value={condominium_correction_rate}
+                                    id="appraisal_value"
+                                    value={appraisal_value}
                                     onChange={inputHandlingFunction}
                                     onKeyPress={handleKeyPress}
                                     className="form-control text-right w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                 />
-                                {condominium_correction_rate_error && (
+                                {appraisal_value_error && (
                                     <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                 )}
                             </Box>
