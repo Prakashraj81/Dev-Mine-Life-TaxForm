@@ -396,24 +396,29 @@ export default function LandAdd() {
                     setpercentage_of_site_rights(data.land_details.percentage_of_site_rights);
                     setis_owned_by_decedent(data.land_details.is_owned_by_decedent);
                     setland_details(data.land_details.land_details);
-                    // sethouse_number(data.land_details.house_number);
-                    // setkinds(data.land_details.kinds);
-                    // setstructure_2(data.land_details.structure_2);
-                    // setfloor_area_2(data.land_details.floor_area_2);
-                    // settype_of_site_rights(data.land_details.type_of_site_rights);
-                    // setsite_rights_numerator(data.land_details.site_rights_numerator);
-                    // setsite_rights_denominator(data.land_details.site_rights_denominator);
-                    // setsite_rights_ratio(data.land_details.site_rights_ratio);
-                    // setis_property_tax_details_available(data.land_details.is_property_tax_details_available === 'Yes' ? 1 : 0);
-                    // setproperty_tax_details_location(data.land_details.property_tax_details_location);
-                    // setproperty_tax_details_house_number(data.land_details.property_tax_details_house_number);
-                    // setproperty_tax_details_type(data.land_details.property_tax_details_type);
-                    // setproperty_tax_details_price(data.land_details.property_tax_details_price);
-                    // setis_co_owners_in_property(data.land_details.is_co_owners_in_property === 'Yes' ? 1 : 0);
-                    // setco_owner_share_percentage_numerator(data.land_details.co_owner_share_percentage_numerator);
-                    // setco_owner_share_percentage_denominator(data.land_details.co_owner_share_percentage_denominator);
-                    // setco_owner_share_percentage_ratio(data.land_details.co_owner_share_percentage_ratio);
-                    // setappraisal_value(data.land_details.appraisal_value);
+                    setroad_price_1(data.land_details.road_price_1);
+                    setregional_distinction_1(data.land_details.regional_distinction_1);
+                    setcorner_semi_corner_1(data.land_details.corner_semi_corner_1);
+
+                    setroad_price_2(data.land_details.road_price_2);
+                    setregional_distinction_2(data.land_details.regional_distinction_1);
+                    setcorner_semi_corner_2(data.land_details.corner_semi_corner_2);
+                    
+                    setroad_price_3(data.land_details.road_price_3);
+                    setregional_distinction_3(data.land_details.regional_distinction_3);
+                    setcorner_semi_corner_3(data.land_details.corner_semi_corner_3);
+
+                    setroad_price_4(data.land_details.road_price_4);
+                    setregional_distinction_4(data.land_details.regional_distinction_4);
+                    setcorner_semi_corner_4(data.land_details.corner_semi_corner_4);                  
+                    
+                    setmagnification(data.land_details.magnification);
+                    setmagnification_red_frame_details(data.land_details.magnification_red_frame_details);
+                    setis_co_owners_in_property(data.land_details.is_co_owners_in_property === 'Yes' ? 1 : 0);
+
+                    setco_owner_share_percentage_numerator(data.land_details.co_owner_share_percentage_numerator);
+                    setco_owner_share_percentage_denominator(data.land_details.co_owner_share_percentage_denominator);
+                    setappraisal_value(data.land_details.appraisal_value);                    
                 }                
             } catch (error) {
                 console.error('Error:', error);
