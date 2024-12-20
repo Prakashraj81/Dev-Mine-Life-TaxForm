@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import axios from "axios";
 import { useRouter } from 'next/router';
 import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
@@ -304,6 +303,7 @@ export default function LandAdd() {
 
         const auth_key = atob(sessionStorage.getItem("auth_key"));
         if (!isSumbitDisabled && auth_key) {
+            let data;
             let response = "";
             let landId = 0;
             let url = router.asPath;
@@ -351,12 +351,21 @@ export default function LandAdd() {
             formData.append("condominium_correction_rate", condominium_correction_rate);
             try {
                 if (landId === 0) {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/add_lands', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/add_lands`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
                 else {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_lands', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/edit_lands`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
-                if (response.status === 200) {
+                data = await response.json();
+                if (!response.ok) throw new Error(data);
+                
+                if (response.ok) {
                     router.push(`/declaration-printing/land`);
                 }
             } catch (error) {

@@ -67,26 +67,26 @@ export default function Land() {
     };
 
     const DeleteModalFunction = async (event) => {
+        let data;
         let value = event.currentTarget.id;
         const { auth_key, customerId, depositId, buttonValue, params } = deleteTarget;
         setDeleteModalOpen(false);
         if (value === "Yes") {
             try {
                 const response = await fetch(`https://minelife-api.azurewebsites.net/delete_lands?auth_key=${auth_key}&id=${depositId}`);
+                data = await response.json();
+                if (!response.ok) throw new Error(data);
+
                 if (response.ok) {
                     await GetlandList();
                     setVariantSnackbar("success");
                     setSnackbarMsg(response.data.message);
                     setSnackbarOpen(true);
-                }
-                else {
-                    setVariantSnackbar("error");
-                    setSnackbarMsg(response.data.message);
-                    setSnackbarOpen(true);
-                }
+                }                
             } catch (error) {
                 setVariantSnackbar("error");
-                setSnackbarMsg("Cash details not deleted");
+                setSnackbarMsg(data.error.message);
+                setSnackbarOpen(true);
             }
         }
     };

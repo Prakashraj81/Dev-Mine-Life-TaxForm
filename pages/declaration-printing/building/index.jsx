@@ -45,20 +45,26 @@ export default function House() {
 
     //Load cash savings list
     const GetBuildingList = async () => {
+        let data;
         let auth_key = atob(sessionStorage.getItem("auth_key"));
         const params = { auth_key: auth_key };
-        if (auth_key !== null) {
-            try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_buildings', { params });
-                if (response.status === 200) {
-                    setbuildingList(response.data.buildings_details);
-                }
-                else {
-                    setbuildingList([]);
-                }
-            } catch (error) {
-                console.log("Error", error);
+        if (!auth_key) {
+            console.log("Auth key error");
+            return;
+        }
+        try {
+            const response = await fetch(`https://minelife-api.azurewebsites.net/list_buildings?auth_key=${params.auth_key}`);
+            data = await response.json();
+            if (!response.ok) throw new Error(data);
+
+            if (response.ok) {
+                setbuildingList(response.data.buildings_details);
             }
+            else {
+                setbuildingList([]);
+            }
+        } catch (error) {
+            console.log("Error", error);
         }
     }
 
@@ -68,31 +74,33 @@ export default function House() {
     };
 
     const DeleteModalFunction = async (event) => {
+        let data;
         let value = event.currentTarget.id;
         const { auth_key, customerId, depositId, buttonValue, params } = deleteTarget;
+        setDeleteModalOpen(false);
         if (value === "Yes") {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_buildings', { params });
-                if (response.status === 200) {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/delete_buildings?auth_key=${auth_key}&id=${depositId}`);
+                data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    await GetBuildingList();
                     setVariantSnackbar("success");
-                    setSnackbarMsg(response.data.message);
-                    GetBuildingList();
+                    setSnackbarMsg(data.message);                    
                     setSnackbarOpen(true);
                 }
                 else {
                     setVariantSnackbar("error");
-                    setSnackbarMsg(response.data.message);
+                    setSnackbarMsg(data.error.message);
                     setSnackbarOpen(true);
                 }
             } catch (error) {
                 setVariantSnackbar("error");
-                setSnackbarMsg("Cash details not deleted");
-            }
-            setDeleteModalOpen(false);
-        }
-        else {
-            setDeleteModalOpen(false);
-        }
+                setSnackbarMsg(data.error.message);
+                setSnackbarOpen(true);
+            }            
+        }        
     };
 
     //Edit and Delete 
