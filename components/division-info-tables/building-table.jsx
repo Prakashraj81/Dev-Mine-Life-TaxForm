@@ -81,7 +81,7 @@ export default function BuildingsTable({ heir_details_list }) {
   //Load Heir sharing details
   const GetHeirSharingDetails = async (Id) => {
     let data;
-    let auth_key = atob(sessionStorage.getItem("auth_key"));
+    let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
     const params = { auth_key: auth_key, id: Id };
     if (!auth_key) {
       return;
@@ -103,7 +103,7 @@ export default function BuildingsTable({ heir_details_list }) {
   //Load cash savings list
   const GetBuildingsList = async () => {
     let data;
-    const auth_key = atob(sessionStorage.getItem("auth_key"));
+    const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
     if (!auth_key) {
       return;
     }

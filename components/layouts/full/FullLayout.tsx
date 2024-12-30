@@ -61,7 +61,7 @@ const FullLayout: React.FC<Props> = ({ children }) => {
 
   //Session expired authkey handle
   const handleAuthKeyUpdate = () => {
-    const authKey = sessionStorage.getItem('auth_key');      
+    const authKey = localStorage.getItem("mine_life_auth_key");      
     if (authKey === null) { 
       setOpenAuthPopup(true);
     }
@@ -69,7 +69,7 @@ const FullLayout: React.FC<Props> = ({ children }) => {
   
   // Fetch the recent save list
   const GetRecentSaveList = async () => {
-    let auth_key = atob(sessionStorage.getItem("auth_key"));
+    let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
     const params = { auth_key: auth_key };
     if (auth_key !== null) {
       try {

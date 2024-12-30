@@ -202,7 +202,7 @@ export default function Heir() {
         let searchParams = new URLSearchParams(url.split('?')[1]);
         let editId = searchParams.get("editId");
         HeirId = Number(atob(editId));
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key };
         if (auth_key !== null) {
             try {
@@ -291,7 +291,7 @@ export default function Heir() {
 
         //Api setup
         if (isSumbitDisabled !== true) {
-            let auth_key = atob(sessionStorage.getItem("auth_key"));
+            let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
             const formData = new FormData();
             formData.append("auth_key", auth_key);
             formData.append("id", HeirId);

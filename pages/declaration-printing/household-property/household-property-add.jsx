@@ -46,7 +46,7 @@ export default function HouseholdPropertyAdd() {
 
     //Load cash savings details    
     const GetHouseHoldDetails = async (houseHoldId) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key, id: houseHoldId };
         if (auth_key !== null && houseHoldId !== 0) {
             try {
@@ -148,7 +148,7 @@ export default function HouseholdPropertyAdd() {
             isSumbitDisabled = true;
         }
         //Api setup
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let houseHoldId = 0;

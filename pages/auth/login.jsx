@@ -76,8 +76,8 @@ export default function Login(props) {
         if (response.status === 200) {
           let encode_auth_key = btoa(response.data.auth_key);
           let encode_login = btoa(response.data.is_authenticated);
-          sessionStorage.setItem('auth_key', encode_auth_key);
-          sessionStorage.setItem('user_login', encode_login);
+          localStorage.setItem('mine_life_auth_key', encode_auth_key);
+          localStorage.setItem('user_login', encode_login);
           setLoginError(false);
           setShowLoader(false);
           router.push(`/basic-information`);

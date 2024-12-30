@@ -68,7 +68,7 @@ export default function DeclarationPrinting() {
     let [auth_key, setauth_key] = useState("");
 
 const TargetBlankClick = (event) => {
-    auth_key = atob(sessionStorage.getItem("auth_key"));
+    auth_key = atob(localStorage.getItem("mine_life_auth_key"));
     setauth_key(auth_key);
     let tableHeading = event.currentTarget.id;
     if(tableHeading == "第1表"){

@@ -83,7 +83,7 @@ export default function DebtTable({heir_details_list}) {
 
 //Load Heir sharing details
 const GetHeirSharingDetails = async (Id) => {
-  let auth_key = atob(sessionStorage.getItem("auth_key"));
+  let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
   const params = { auth_key: auth_key, id: Id };
   if (auth_key !== null && Id !== 0) {
     try {
@@ -102,7 +102,7 @@ const GetHeirSharingDetails = async (Id) => {
 
 //Load debt list
 const GetDebtList = async()=>{
-  let auth_key = atob(sessionStorage.getItem("auth_key"));
+  let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
   const params = { auth_key: auth_key };
   if(auth_key !== null){
       try{

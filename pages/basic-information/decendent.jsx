@@ -241,7 +241,7 @@ export default function Decendent() {
         //Api setup
         if (isSumbitDisabled !== true) {
             setShowLoader(true);
-            let auth_key = atob(sessionStorage.getItem("auth_key"));
+            let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
             const formData = new FormData();
             formData.append("auth_key", auth_key);
             formData.append("decedent_id", Id);
@@ -289,7 +289,7 @@ export default function Decendent() {
 
     //Load decendent details list
     const GetDecendentList = async () => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key };
         if (auth_key !== null) {
             try {

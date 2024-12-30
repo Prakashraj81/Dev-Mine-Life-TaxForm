@@ -46,7 +46,7 @@ export default function DeathRetirementAllowance() {
 
     //Load cash savings list
     const GetDeathRetirementList = async () => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key };
         if (auth_key !== null) {
             try {
@@ -95,7 +95,7 @@ export default function DeathRetirementAllowance() {
     //Edit and Delete 
     let router = useRouter();
     const handleEdit_DeleteButtonClick = async (event) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         let customerId = Number(event.currentTarget.id);
         let deathRetirementId = Number(event.currentTarget.name);
         let buttonValue = event.currentTarget.value;

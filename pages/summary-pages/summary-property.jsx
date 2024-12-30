@@ -254,7 +254,7 @@ export default function SummaryProperty() {
 
 
     useEffect(() => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         let params = { auth_key: auth_key };
         GetCashSavingsList(auth_key, params);
         GetSecuritiesList(auth_key, params);

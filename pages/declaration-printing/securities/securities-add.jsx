@@ -156,7 +156,7 @@ export default function SecuritiesAdd() {
 
     //Load cash savings details    
     const GetSecuritiesDetails = async (securityId) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key, id: securityId };
         if (auth_key !== null && securityId !== 0) {
             try {
@@ -454,7 +454,7 @@ export default function SecuritiesAdd() {
         }
 
         //Api setup
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let securityId = 0;

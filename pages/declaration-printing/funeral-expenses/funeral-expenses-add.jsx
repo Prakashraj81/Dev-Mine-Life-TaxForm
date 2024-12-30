@@ -52,7 +52,7 @@ export default function FuneralExpensesAdd() {
 
     //Load cash savings details    
     const GetFuneralExpensesList = async (funeralExpensesId) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key, id: funeralExpensesId };
         if (auth_key !== null && funeralExpensesId !== 0) {
             try {
@@ -205,7 +205,7 @@ export default function FuneralExpensesAdd() {
         
 
         //Api setup
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let funeralExpensesId = 0;

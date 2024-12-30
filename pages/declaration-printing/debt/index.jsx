@@ -46,7 +46,7 @@ export default function Debt() {
 
     //Load cash savings list
     const GetDebtList = async () => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key };
         if (auth_key !== null) {
             try {
@@ -95,7 +95,7 @@ export default function Debt() {
     //Edit and Delete 
     let router = useRouter();
     const handleEdit_DeleteButtonClick = async (event) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         let customerId = Number(event.currentTarget.id);
         let debtId = Number(event.currentTarget.name);
         let buttonValue = event.currentTarget.value;

@@ -65,7 +65,7 @@ export default function CashSavingsAdd() {
 
     //Load cash savings details    
     const GetCashSavingsDetails = async (depositId) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key, id: depositId };
         if (auth_key !== null && depositId !== 0) {
             try {
@@ -214,7 +214,7 @@ export default function CashSavingsAdd() {
         }
 
         //Api setup
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let depositId = 0;

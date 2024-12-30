@@ -80,7 +80,7 @@ export default function LandTable({ heir_details_list }) {
   //Load Heir sharing details
   const GetHeirSharingDetails = async (Id) => {
     let data;
-    const auth_key = atob(sessionStorage.getItem("auth_key"));
+    const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
     if (!auth_key) {
       return;
     }
@@ -101,7 +101,7 @@ export default function LandTable({ heir_details_list }) {
   //Load cash savings list
   const GetLandList = async () => {
     let data;
-    const auth_key = atob(sessionStorage.getItem("auth_key"));
+    const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
     if (!auth_key) {
       return;
     }

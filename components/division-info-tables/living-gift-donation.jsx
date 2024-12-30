@@ -97,7 +97,7 @@ export default function LivingDonationTable({ heir_details_list }) {
 
   //Load cash savings list
   const GetLivingDonationList = async () => {
-    let auth_key = atob(sessionStorage.getItem("auth_key"));
+    let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
     const params = { auth_key: auth_key };
     if (auth_key !== null) {
       try {

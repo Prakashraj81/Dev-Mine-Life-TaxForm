@@ -29,19 +29,16 @@ const Profile = () => {
   const router = useRouter();
   const FunctionLogOut = async () => {
     try {
-      let auth_key = atob(sessionStorage.getItem("auth_key"));
+      let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
       let formData = new FormData();
-      formData.append('auth_key', auth_key);
+      formData.append("auth_key", auth_key);
       if (auth_key !== null) {
         const response = await axios.post('https://minelife-api.azurewebsites.net/user_logout', formData);
         if (response.status === 200) {
-          sessionStorage.clear();
-          localStorage.clear();
+          localStorage.removeItem("mine_life_auth_key");
+          localStorage.removeItem("user_login");
           router.push(`/auth/login`);
-        }
-        else {
-          console.log("Please contact vendor");
-        }
+        }        
       }
       else {
         console.log("Invalid auth key");

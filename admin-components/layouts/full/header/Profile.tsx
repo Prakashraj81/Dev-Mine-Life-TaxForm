@@ -46,7 +46,7 @@ const Profile = () => {
     try{
       let admin_auth_key = atob(sessionStorage.getItem("admin_auth_key"));
       let formData = new FormData();
-      formData.append('auth_key', admin_auth_key);
+      formData.append("auth_key", admin_auth_key);
       if(admin_auth_key !== null){
         const response = await axios.post('https://minelife-api.azurewebsites.net/admin/logout', formData);
         if(response.status === 200){

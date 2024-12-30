@@ -75,7 +75,7 @@ export default function OtherPropertyAdd() {
 
     //Load other property details    
     const GetOtherPropertyDetails = async (OtherPropertyId) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key, id: OtherPropertyId };
         if (auth_key !== null && OtherPropertyId !== 0) {
             try {
@@ -349,7 +349,7 @@ export default function OtherPropertyAdd() {
             }
         }
         //Api setup
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let OtherPropertyId = 0;

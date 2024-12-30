@@ -46,7 +46,7 @@ export default function BasicInformation() {
 
     //Load decendent details list
     const GetDecendentList = async () => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key };
         try {
             const response = await axios.get('https://minelife-api.azurewebsites.net/decedent_detail', { params });
@@ -64,7 +64,7 @@ export default function BasicInformation() {
 
     //Load heir details list
     const GetHeirList = async () => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key };
         if (auth_key !== null) {
             try {
@@ -136,7 +136,7 @@ export default function BasicInformation() {
 
     //Edit and Delete         
     const handleEdit_DeleteButtonClick = async (event) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         let heirId = Number(event.currentTarget.id);
         let buttonValue = event.currentTarget.value;
         let params = { auth_key: auth_key, id: heirId };

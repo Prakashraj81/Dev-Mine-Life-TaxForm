@@ -58,7 +58,7 @@ export default function LivingDonationAdd() {
 
     //Load heir details list
     const GetHeirList = async () => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key };
         if (auth_key !== null) {
             try {
@@ -81,7 +81,7 @@ export default function LivingDonationAdd() {
 
     //Load living donation details 
     const GetLivingDonationDetails = async (LivingDonationId) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key, id: LivingDonationId };
         if (auth_key !== null && LivingDonationId !== 0) {
             try {
@@ -235,7 +235,7 @@ export default function LivingDonationAdd() {
             isSumbitDisabled = true;
         }
         //Api setup
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let LivingDonationId = 0;

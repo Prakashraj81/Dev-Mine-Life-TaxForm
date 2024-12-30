@@ -85,7 +85,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
     }, [OpenModalPopup, ListTotalAmount, HeirSharingDetails]);
 
     const GetHeirList = async () => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key };
         if (auth_key !== null) {
             try {
@@ -233,7 +233,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
 
     //Save api
     const onSubmit = async () => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null && PropertyId !== 0) {
             const formData = new FormData();
             formData.append("auth_key", auth_key);

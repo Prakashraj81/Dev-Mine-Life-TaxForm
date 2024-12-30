@@ -179,7 +179,7 @@ export default function HouseAdd() {
             setisSumbitDisabled(true);
         }        
 
-        const auth_key = atob(sessionStorage.getItem("auth_key"));
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (!isSumbitDisabled && auth_key) {
             let data;
             let response = "";
@@ -265,7 +265,7 @@ export default function HouseAdd() {
     //Load building details    
     const GetBuildingDetails = async (depositId) => {
         let data;
-        const auth_key = atob(sessionStorage.getItem("auth_key"));
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key, id: depositId };
         if (!auth_key && !depositId) {
             return;

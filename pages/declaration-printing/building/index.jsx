@@ -47,7 +47,7 @@ export default function House() {
     //Load cash savings list
     const GetBuildingList = async () => {
         let data;
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key };
         if (!auth_key) {
             console.log("Auth key error");
@@ -105,7 +105,7 @@ export default function House() {
     //Edit and Delete 
     let router = useRouter();
     const handleEdit_DeleteButtonClick = async (event) => {
-        const auth_key = atob(sessionStorage.getItem("auth_key"));
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const customerId = Number(event.currentTarget.id);
         const depositId = Number(event.currentTarget.name);
         const buttonValue = event.currentTarget.value;

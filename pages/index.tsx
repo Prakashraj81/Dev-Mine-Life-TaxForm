@@ -14,7 +14,7 @@ export default function Index({ preview }) {
   let value;
   useEffect(() => {
     let Loginvalue = sessionStorage.getItem('user_login');
-    let auth_key = sessionStorage.getItem('auth_key');
+    let auth_key = localStorage.getItem("mine_life_auth_key");
     if(Loginvalue !== null && auth_key !== null){
       value = atob(Loginvalue);   
       setAuthkey(1);

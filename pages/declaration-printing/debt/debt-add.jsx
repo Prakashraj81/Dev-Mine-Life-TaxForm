@@ -73,7 +73,7 @@ export default function DebtAdd() {
 
     //Load cash savings details    
     const GetDebtDetails = async (debtId) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key, id: debtId };
         if (auth_key !== null && debtId !== 0) {
             try {
@@ -311,7 +311,7 @@ export default function DebtAdd() {
             isSumbitDisabled = true;
         }
         //Api setup
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let debtId = 0;

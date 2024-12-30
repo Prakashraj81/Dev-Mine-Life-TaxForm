@@ -84,7 +84,7 @@ export default function divisionInformation() {
     //Load heir details list
     const GetHeirList = async () => {
         let data;
-        const auth_key = atob(sessionStorage.getItem("auth_key"));
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (!auth_key) {
             return;
         }        

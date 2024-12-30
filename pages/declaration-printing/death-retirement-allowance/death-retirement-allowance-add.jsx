@@ -53,7 +53,7 @@ export default function DeathRetirementAllowanceAdd() {
 
     //Load heir details list
     const GetHeirList = async () => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key };
         if (auth_key !== null) {
             try {
@@ -75,7 +75,7 @@ export default function DeathRetirementAllowanceAdd() {
 
     //Load cash savings details    
     const GetDeathRetirementList = async (deathRetirementId) => {
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         const params = { auth_key: auth_key, id: deathRetirementId };
         if (auth_key !== null && deathRetirementId !== 0) {
             try {
@@ -204,7 +204,7 @@ export default function DeathRetirementAllowanceAdd() {
         }
 
         //Api setup
-        let auth_key = atob(sessionStorage.getItem("auth_key"));
+        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (isSumbitDisabled !== true && auth_key !== null) {
             let response = "";
             let deathRetirementId = 0;
