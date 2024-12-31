@@ -47,8 +47,11 @@ export default function BasicInformation() {
         const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         try {
             const response = await fetch(`https://minelife-api.azurewebsites.net/decedent_detail?auth_key=${auth_key}`);
-            if (response.status === 200) {
-                setDecendentList(response.data);
+            const data = await response.json();
+            if (!response.ok) throw new Error(data);
+
+            if (response.ok) {
+                setDecendentList(data);
             }
             else {
                 setDecendentList([]);
@@ -66,9 +69,12 @@ export default function BasicInformation() {
         if (auth_key !== null) {
             try {
                 const response = await fetch(`https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
-                if (response.status === 200) {
-                    setHeirListLenth(response.data.heir_list.length || 0);
-                    setHeirList(response.data.heir_list || []);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    setHeirListLenth(data.heir_list.length || 0);
+                    setHeirList(data.heir_list || []);
                 }
                 else {
                     setHeirList([]);
@@ -77,7 +83,7 @@ export default function BasicInformation() {
                 console.error('Error:', error);
                 setHeirList([]);
             }
-        }        
+        }
     };
 
 
@@ -88,9 +94,6 @@ export default function BasicInformation() {
         let ValueId = Number(id);
         if (ValueId !== 0) {
             router.push(`/basic-information/decendent?Id=${btoa(ValueId)}`);
-        }
-        else {
-            //router.push("/auth/login");
         }
     }
 
@@ -107,7 +110,7 @@ export default function BasicInformation() {
         if (value === "Yes") {
             try {
                 const response = await fetch(`https://minelife-api.azurewebsites.net/delete_heir?auth_key=${auth_key}&id=${heirId}`);
-                if (response.status === 200) {
+                if (response.ok) {
                     setSnackbarOpen(true);
                     setSnackbarMsg("success");
                     GetHeirList();
@@ -186,20 +189,20 @@ export default function BasicInformation() {
                             <Table aria-label="decedent table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell sx={{paddingLeft: 0}}>氏名</TableCell>
+                                        <TableCell sx={{ paddingLeft: 0 }}>氏名</TableCell>
                                         <TableCell>お亡くなりになった日</TableCell>
                                         <TableCell align="right">アクション</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     <TableRow className="border-b">
-                                        <TableCell sx={{paddingLeft: 0}}>
+                                        <TableCell sx={{ paddingLeft: 0 }}>
                                             <Typography>{DecendentList.name}</Typography>
                                         </TableCell>
                                         <TableCell>
                                             <Typography>{DecendentList.date_of_death}</Typography>
                                         </TableCell>
-                                        <TableCell  sx={{paddingRight: 0}}>
+                                        <TableCell sx={{ paddingRight: 0 }}>
                                             <Box className="flex justify-end">
                                                 <Button
                                                     onClick={EditDecendent}
@@ -238,18 +241,18 @@ export default function BasicInformation() {
                             <Table className="w-full" aria-label="heir list table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell sx={{paddingLeft: 0}}>氏名</TableCell>
+                                        <TableCell sx={{ paddingLeft: 0 }}>氏名</TableCell>
                                         <TableCell>続柄</TableCell>
                                         <TableCell></TableCell>
                                         <TableCell>割合</TableCell>
-                                        <TableCell  sx={{paddingRight: 0}} align="right">アクション</TableCell>
+                                        <TableCell sx={{ paddingRight: 0 }} align="right">アクション</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {HeirList.map((list, index) => (
                                         <React.Fragment key={index}>
                                             <TableRow className="border-b">
-                                                <TableCell sx={{paddingLeft: 0}} align="left">
+                                                <TableCell sx={{ paddingLeft: 0 }} align="left">
                                                     <Typography fontSize={16}>{list.name}</Typography>
                                                 </TableCell>
                                                 <TableCell align="left">
@@ -259,59 +262,59 @@ export default function BasicInformation() {
                                                 <TableCell align="left">
                                                     <Typography fontSize={16}>{HeirListLenth ? `1/${HeirListLenth}` : "1/1_"}</Typography>
                                                 </TableCell>
-                                                <TableCell sx={{paddingRight: 0}}>
+                                                <TableCell sx={{ paddingRight: 0 }}>
                                                     <Box className="flex justify-end items-end">
                                                         <Box>
-                                                        <Button
-                                                            onClick={handleEdit_DeleteButtonClick}
-                                                            id={list.heir_id}
-                                                            value="Edit"
-                                                            sx={{
-                                                                minWidth: 'auto',
-                                                                backgroundColor: 'info.main',
-                                                                color: 'white',
-                                                                '&:hover': {
-                                                                    backgroundColor: 'info.light',
-                                                                    color: 'info.main',
-                                                                    '& .MuiSvgIcon-root': {
+                                                            <Button
+                                                                onClick={handleEdit_DeleteButtonClick}
+                                                                id={list.heir_id}
+                                                                value="Edit"
+                                                                sx={{
+                                                                    minWidth: 'auto',
+                                                                    backgroundColor: 'info.main',
+                                                                    color: 'white',
+                                                                    '&:hover': {
+                                                                        backgroundColor: 'info.light',
                                                                         color: 'info.main',
+                                                                        '& .MuiSvgIcon-root': {
+                                                                            color: 'info.main',
+                                                                        },
                                                                     },
-                                                                },
-                                                                borderRadius: '3px',
-                                                                paddingLeft: 0.7,
-                                                                paddingRight: 0.7,
-                                                                py: 0.6,
-                                                                transition: 'all 0.7s ease',
-                                                            }}
-                                                        >
-                                                            <EditNoteOutlinedIcon />
-                                                        </Button>
+                                                                    borderRadius: '3px',
+                                                                    paddingLeft: 0.7,
+                                                                    paddingRight: 0.7,
+                                                                    py: 0.6,
+                                                                    transition: 'all 0.7s ease',
+                                                                }}
+                                                            >
+                                                                <EditNoteOutlinedIcon />
+                                                            </Button>
                                                         </Box>
                                                         <Box className="pl-5">
-                                                        <Button
-                                                            onClick={handleEdit_DeleteButtonClick}
-                                                            id={list.heir_id}
-                                                            value="Delete"
-                                                            sx={{
-                                                                minWidth: 'auto',
-                                                                backgroundColor: 'error.main',
-                                                                color: 'white',
-                                                                '&:hover': {
-                                                                    backgroundColor: 'error.light',
-                                                                    color: 'error.main',
-                                                                    '& .MuiSvgIcon-root': {
+                                                            <Button
+                                                                onClick={handleEdit_DeleteButtonClick}
+                                                                id={list.heir_id}
+                                                                value="Delete"
+                                                                sx={{
+                                                                    minWidth: 'auto',
+                                                                    backgroundColor: 'error.main',
+                                                                    color: 'white',
+                                                                    '&:hover': {
+                                                                        backgroundColor: 'error.light',
                                                                         color: 'error.main',
+                                                                        '& .MuiSvgIcon-root': {
+                                                                            color: 'error.main',
+                                                                        },
                                                                     },
-                                                                },
-                                                                borderRadius: '3px',
-                                                                paddingLeft: 0.7,
-                                                                paddingRight: 0.7,
-                                                                py: 0.6,
-                                                                transition: 'all 0.7s ease',
-                                                            }}
-                                                        >
-                                                            <HighlightOffOutlinedIcon />
-                                                        </Button>
+                                                                    borderRadius: '3px',
+                                                                    paddingLeft: 0.7,
+                                                                    paddingRight: 0.7,
+                                                                    py: 0.6,
+                                                                    transition: 'all 0.7s ease',
+                                                                }}
+                                                            >
+                                                                <HighlightOffOutlinedIcon />
+                                                            </Button>
                                                         </Box>
                                                     </Box>
                                                 </TableCell>

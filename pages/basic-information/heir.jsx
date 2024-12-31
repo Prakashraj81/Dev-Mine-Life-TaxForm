@@ -165,20 +165,23 @@ export default function Heir() {
         if (auth_key !== null) {
             try {
                 const response = await fetch(`https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
-                if (response.status === 200) {
-                    setHeirCount(response.data.heir_list.length);
-                    for (let i = 0; i < response.data.heir_list.length; i++) {
-                        if (response.data.heir_list[i].heir_id === HeirId) {
-                            setHeirId(response.data.heir_list[i].heir_id);
-                            setName(response.data.heir_list[i].name);
-                            setFurigana(response.data.heir_list[i].furigana);
-                            setDateofBirth(response.data.heir_list[i].date_of_birth);
-                            setPostCode(response.data.heir_list[i].postal_code);
-                            setTelephoneNumber(response.data.heir_list[i].phone);
-                            setAddress(response.data.heir_list[i].address);
-                            setProfession(response.data.heir_list[i].profession);
-                            setRelationshipWithDecedent(response.data.heir_list[i].relationship_with_decedent);
-                            setDisabledRadioValue(response.data.heir_list[i].disabled_deduction);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    setHeirCount(data.heir_list.length);
+                    for (let i = 0; i < data.heir_list.length; i++) {
+                        if (data.heir_list[i].heir_id === HeirId) {
+                            setHeirId(data.heir_list[i].heir_id);
+                            setName(data.heir_list[i].name);
+                            setFurigana(data.heir_list[i].furigana);
+                            setDateofBirth(data.heir_list[i].date_of_birth);
+                            setPostCode(data.heir_list[i].postal_code);
+                            setTelephoneNumber(data.heir_list[i].phone);
+                            setAddress(data.heir_list[i].address);
+                            setProfession(data.heir_list[i].profession);
+                            setRelationshipWithDecedent(data.heir_list[i].relationship_with_decedent);
+                            setDisabledRadioValue(data.heir_list[i].disabled_deduction);
                         }
                     }
                 }
@@ -187,6 +190,7 @@ export default function Heir() {
                 }
             } catch (error) {
                 console.error('Error:', error);
+                setHeirCount(0);
             }
         }        
     };

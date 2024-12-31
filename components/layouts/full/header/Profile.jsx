@@ -1,5 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import {
@@ -14,6 +13,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
+  const [userName, setUserName] = useState(null);
   const handleClick2 = (event) => {
     setAnchorEl2(event.currentTarget);
   };
@@ -21,10 +21,14 @@ const Profile = () => {
     setAnchorEl2(null);
   };
 
+  useEffect (() => {
+    setUserName(atob(localStorage.getItem("user_login_name")));
+  }, [userName]);
+
   const router = useRouter();
   const FunctionLogOut = async () => {
     try {
-      let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
+      const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
       let formData = new FormData();
       formData.append("auth_key", auth_key);
       if (auth_key !== null) {
@@ -36,18 +40,11 @@ const Profile = () => {
         if (response.status === 200) {
           localStorage.removeItem("mine_life_auth_key");
           localStorage.removeItem("user_login");
-          router.push(`/auth/login`);
+          localStorage.removeItem("user_login_name");
+          await router.push(`/auth/login`);
         }        
       }
-      else {
-        console.log("Invalid auth key");
-      }
-    } catch (error) {
-      if (error.response.status === 440 && error.response.data.error.message === "Session Expired. Please login again.") {
-        sessionStorage.clear();
-        localStorage.clear();
-        router.push(`/auth/login`);
-      }
+    } catch (error) {      
       console.error('Error:', error);
     }
   }
@@ -120,7 +117,7 @@ const Profile = () => {
                   onClick={handleClick2}
                 >
                   <Avatar sx={{ width: 32, height: 32, background: "#E89188", color: "#FFF" }}>
-                    山
+                    {userName ? userName[0] : ''}
                   </Avatar>
                 </IconButton>
                 <Box
@@ -145,9 +142,10 @@ const Profile = () => {
                     className="text-black"
                     sx={{
                       ml: 1,
+                      fontSize: 12
                     }}
                   >
-                    山田　太郎
+                    {userName}
                   </Typography>
                   <KeyboardArrowDownIcon width="20" height="20" />
                 </Box>

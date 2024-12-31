@@ -58,44 +58,36 @@ export default function Login() {
       setPasswordError(true);
       isSumbitDisabled = true;
     }
-
+    let data;
     const formData = new FormData();
     formData.append('email', defaultValues.UserName);
     formData.append('password', defaultValues.Password);
 
     //Api setup
-    if (isSumbitDisabled !== true) {
+    if (!isSumbitDisabled) {
       try {
         const response = await fetch(`https://minelife-api.azurewebsites.net/user_login`, {
           method: 'POST',
           body: formData
         });
-        if (response.status === 200) {
-          let encode_auth_key = btoa(response.data.auth_key);
-          let encode_login = btoa(response.data.is_authenticated);
+        data = await response.json();
+        if(!response.ok) throw new Error(data);
+        
+        if (response.ok) {
+          let encode_auth_key = btoa(data.auth_key);
+          let encode_login = btoa(data.is_authenticated);
+          let encode_login_name = btoa(data.user_full_name);
           localStorage.setItem('mine_life_auth_key', encode_auth_key);
           localStorage.setItem('user_login', encode_login);
+          localStorage.setItem('user_login_name', encode_login_name);
           setLoginError(false);
           setShowLoader(false);
-          router.push(`/basic-information`);
-        }
-        else {
-          setLoginError(true);
-          setShowLoader(false);
-        }
+          await router.push(`/basic-information`);
+        }        
       } catch (error) {
-        if (error.code === 'ERR_NETWORK') {
-          setAlertMessage("Server error.");
-          setLoginError(true);
-        }
-        else if (error.response.data.error.code === 'InternalServerError') {
-          setAlertMessage("Internal server error.");
-          setLoginError(true);
-        }
-        else if (error.response.data.error.message === "Authentication Failure") {
-          setAlertMessage("IDまたはパスワードが違います");
-          setLoginError(true);
-        }
+        console.log("error", error);
+        setAlertMessage(error.data.error.message || "IDまたはパスワードが違います");
+        setLoginError(true);
         setShowLoader(false);
       }
     }
