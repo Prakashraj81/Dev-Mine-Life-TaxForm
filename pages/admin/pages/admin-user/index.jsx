@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   Typography,
   Box,
@@ -14,7 +13,7 @@ import {
   TablePagination,
   Tooltip,
 } from "@mui/material";
-import { IconEye, IconCirclePlus, IconTrashX, IconEdit  } from "@tabler/icons-react";
+import { IconCirclePlus, IconTrashX, IconEdit  } from "@tabler/icons-react";
 import FullLayout from "../../../../admin-components/layouts/full/FullLayout";
 import theme from "../../../../admin-components/theme";
 import DashboardCard from "../../../../admin-components/shared/DashboardCard";
@@ -38,13 +37,15 @@ useEffect(() => {
 
 //Load users list
 const GetAdminUsersList = async()=>{
-    let auth_key = atob(sessionStorage.getItem("admin_auth_key"));
-    const params = { auth_key: auth_key };
+    const auth_key = atob(sessionStorage.getItem("admin_auth_key"));
     if(auth_key !== null){
         try{
-            const response = await axios.get('https://minelife-api.azurewebsites.net/admin/list_admin', {params});
-            if(response.status === 200){
-                setAdminUsersList(response.data.admin_details);
+            const response = await fetch(`https://minelife-api.azurewebsites.net/admin/list_admin?auth_key=${auth_key}`);
+            const data = await response.json();
+            if (!response.ok) throw new Error(data);
+
+            if(response.ok){
+                setAdminUsersList(data.admin_details);
             }
             else{
                 setAdminUsersList([]);
@@ -71,9 +72,10 @@ const GetAdminUsersList = async()=>{
     } 
 
   //Delete admin user function
-  const handleDeleteUser = (event) => {
+  const handleDeleteUser = () => {
     setDeleteModalOpen(!DeleteModalOpen);
-  }
+  };
+  
   const DeleteModalFunction = (event) => {
     let value = event.currentTarget.id;
     let rowId = "ModalId";

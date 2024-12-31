@@ -1,15 +1,10 @@
-"use client";
-import Link from "next/link";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from 'next/router';
-import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import HeirListBox from "../../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../../components/inputbox-icon/custom-input";
@@ -25,7 +20,6 @@ export default function FuneralExpensesAdd() {
 
     let [UndecidedHeir, setUndecidedHeir] = useState("0");
     let [TotalPrice, setTotalPrice] = useState("0");
-    let [boxValues, setBoxValues] = useState([]);
 
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
@@ -52,27 +46,23 @@ export default function FuneralExpensesAdd() {
 
     //Load cash savings details    
     const GetFuneralExpensesList = async (funeralExpensesId) => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key, id: funeralExpensesId };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null && funeralExpensesId !== 0) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_funeral_expenses_details', { params });
-                if (response.status === 200) {
-                    setFeePayeeName(response.data.funeral_expenses_details.payee_name);
-                    setPostCode(response.data.funeral_expenses_details.postal_code);
-                    setAddress(response.data.funeral_expenses_details.address);
-                    setDatePaid(response.data.funeral_expenses_details.date_of_paid);
-                    setAmountPaid(response.data.funeral_expenses_details.amount.toLocaleString());
-                }
-                else {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/get_funeral_expenses_details?auth_key=${auth_key}&id=${funeralExpensesId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
 
+                if (response.status === 200) {
+                    setFeePayeeName(data.funeral_expenses_details.payee_name);
+                    setPostCode(data.funeral_expenses_details.postal_code);
+                    setAddress(data.funeral_expenses_details.address);
+                    setDatePaid(data.funeral_expenses_details.date_of_paid);
+                    setAmountPaid(data.funeral_expenses_details.amount.toLocaleString());
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
-        else {
-            //Logout();
         }
     };
 
@@ -138,38 +128,6 @@ export default function FuneralExpensesAdd() {
             setDatePaidError(false);
         }
         setisSumbitDisabled(false);
-    }
-
-    //Footer box values and calculation
-    let handleBoxValueChange = (e, index) => {
-        let newValue = parseFloat(e.target.value);
-        if (isNaN(newValue)) {
-            newValue = 0;
-        }
-        const updatedBoxValues = [...boxValues];
-        updatedBoxValues[index] = newValue;
-        setBoxValues(updatedBoxValues);
-
-        //Amount of money convert
-        if (AmountPaid === 0) {
-            AmountPaid = 0;
-        }
-        else {
-            AmountPaid = parseFloat(AmountPaid.replace(/,/g, '').replace('.', ''));
-        }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = AmountPaid - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
     };
 
     //Submit API function 
@@ -226,12 +184,18 @@ export default function FuneralExpensesAdd() {
             formData.append("paid_amount", parseFloat(AmountPaid));
             try {
                 if (funeralExpensesId === 0) {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/add_funeral_expenses', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/add_funeral_expenses`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
                 else {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_funeral_expenses', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/edit_funeral_expenses`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
-                if (response.status === 200) {
+                if (response.ok) {
                     router.push(`/declaration-printing/funeral-expenses`);
                 }
             } catch (error) {
@@ -241,7 +205,6 @@ export default function FuneralExpensesAdd() {
         else {
             setisSumbitDisabled(true);
             setShowLoader(false);
-            //Logout();
         }
     };
 

@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+/* eslint-disable react/jsx-key */
+/* eslint-disable react/prop-types */
+import React from "react";
 import Link from "next/link";
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import {
   Typography,
   Box,
-  Chip,
-  Button,
 } from "@mui/material";
-import { blue } from "@mui/material/colors";
 
 export default function SideBarWidgetList({ RecentSaveList }) {
 
@@ -26,7 +24,7 @@ export default function SideBarWidgetList({ RecentSaveList }) {
           </Box>
         </Box>
         <Box className="sidebar-list">
-          {RecentSaveList.map((lists, index) => {
+          {RecentSaveList.map((lists) => {
             let divisionInfoActivity = lists.activity_description.includes('SPLIT');
 
             let basicInfoActivity1 = lists.activity_description.startsWith('DECEDENT_DETAILS');
@@ -44,7 +42,7 @@ export default function SideBarWidgetList({ RecentSaveList }) {
             let propertyActivity10 = lists.activity_description.startsWith('PD_FUNERAL_EXPENSES');
             let propertyActivity11 = lists.activity_description.startsWith('PD_LIVING_DONATION');
             
-            let propertyActivity12 = lists.activity_description.startsWith('PD_GIFT_DURING_LIFE');
+            //let propertyActivity12 = lists.activity_description.startsWith('PD_GIFT_DURING_LIFE');
 
             let splitActivity = lists.activity_at.split('T');
             let dateParts = splitActivity[0].split('-');

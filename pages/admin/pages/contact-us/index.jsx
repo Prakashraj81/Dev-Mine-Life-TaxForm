@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   Typography,
   Box,
@@ -8,12 +7,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Chip,
-  Button,
   TablePagination,
   Tooltip,
 } from "@mui/material";
-import { IconEye, IconCirclePlus, IconTrashX } from "@tabler/icons-react";
+import { IconEye, IconTrashX } from "@tabler/icons-react";
 import FullLayout from "../../../../admin-components/layouts/full/FullLayout";
 import DashboardCard from "../../../../admin-components/shared/DashboardCard";
 import EnquiryViewModal from '../../../../admin-components/modal/enquiry-view-modal';
@@ -27,8 +24,6 @@ export default function ContactUs() {
   let [OpenModalPopup, setOpenModalPopup] = useState(false);
   let [EnquiryData, setEnquiryData] = useState([]);
   let [AdminContactList, setAdminContactList] = useState([]);
-  let [Message, setMessage] = useState("");
-
   let [ShowLoader, setShowLoader] = useState(false);
   let [ShowAlert, setShowAlert] = useState(false);
   let [AlertMessage, setAlertMessage] = useState("");
@@ -47,13 +42,15 @@ export default function ContactUs() {
 
   //Load users list
   const GetAdminContactUsList = async () => {
-    let auth_key = atob(sessionStorage.getItem("admin_auth_key"));
-    const params = { auth_key: auth_key };
+    const auth_key = atob(sessionStorage.getItem("admin_auth_key"));
     if (auth_key !== null) {
       try {
-        const response = await axios.get('https://minelife-api.azurewebsites.net/admin/list_contact_us', { params });
-        if (response.status === 200) {
-          setAdminContactList(response.data.contact_us_details);
+        const response = await fetch(`https://minelife-api.azurewebsites.net/admin/list_contact_us?auth_key=${auth_key}`);
+        const data = await response.json();
+        if (!response.ok) throw new Error(data);
+
+        if (response.ok) {
+          setAdminContactList(data.contact_us_details);
         }
         else {
           setAdminContactList([]);
@@ -66,13 +63,15 @@ export default function ContactUs() {
 
   //Modal popup open and close function
   const handleModalOpen = async (id) => {
-    let auth_key = atob(sessionStorage.getItem("admin_auth_key"));
+    const auth_key = atob(sessionStorage.getItem("admin_auth_key"));
     if (id !== null && auth_key !== null) {
-      const params = { auth_key: auth_key, detail_id: id };
       try {
-        const response = await axios.get('https://minelife-api.azurewebsites.net/admin/get_contact_us_details_by_id', { params });
+        const response = await fetch(`https://minelife-api.azurewebsites.net/admin/get_contact_us_details_by_id?auth_key=${auth_key}&id=${id}`);
+        const data = await response.json();
+        if (!response.ok) throw new Error(data);
+
         if (response.status === 200) {
-          setEnquiryData(response.data.contact_us_details);
+          setEnquiryData(data.contact_us_details);
           setOpenModalPopup(true);
         }
         else {
@@ -85,6 +84,7 @@ export default function ContactUs() {
     setOpenModalPopup(true);
   }
   const handleModalClose = async (paramsData) => {
+    let data;
     setOpenModalPopup(false);
     setOpenModalPopup(true);
     let auth_key = atob(sessionStorage.getItem("admin_auth_key"));
@@ -94,12 +94,18 @@ export default function ContactUs() {
       formData.append("detail_id", paramsData.detail_id);
       formData.append("messsage", paramsData.Message);
       try {
-        let response = await axios.post('https://minelife-api.azurewebsites.net/admin/reply_contact_us_details_by_id', formData);
-        if (response.status === 200) {   
+        const response = await fetch('https://minelife-api.azurewebsites.net/admin/reply_contact_us_details_by_id', {
+          method: 'POST',
+          body: formData
+        });
+        data = await response.json();
+        if (!response.ok) throw new Error(data);
+
+        if (response.ok) {   
           setOpenModalPopup(false);       
           setShowLoader(false);
           setAlertVariant("success");
-          setAlertMessage(response.data.message);
+          setAlertMessage(data.message);
           setShowAlert(true);
         }
         else{

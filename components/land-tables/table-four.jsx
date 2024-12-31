@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import React from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,7 +11,6 @@ import Paper from '@mui/material/Paper';
 export default function TableFour({ inputHandlingFunction, road_price_1, regional_distinction_1, corner_semi_corner_1, road_price_2, regional_distinction_2, corner_semi_corner_2, road_price_3, regional_distinction_3, corner_semi_corner_3 }) {
 
     const handleInputChange = (event) => {
-        let inputId = event.currentTarget.id;
         inputHandlingFunction(event);
     };
 

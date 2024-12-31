@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import Link from "next/link";
 import Logo from "./layouts/full/shared/logo/Logo";
 import Navbar from "./Navbar/Navbar";

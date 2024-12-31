@@ -1,28 +1,27 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DivisionPopup from './division-popup';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import PropTypes from 'prop-types';
 
 const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -41,18 +40,6 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 }));
 
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-};
-
-
 export default function LandTable({ heir_details_list }) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
   let [TableExpandOpen1, setTableExpandOpen1] = React.useState(false);
@@ -61,7 +48,6 @@ export default function LandTable({ heir_details_list }) {
   let [OpenModalPopup, setOpenModalPopup] = React.useState(false);
   let [HeirList, setHeirList] = useState([]);
   let [HeirDetailsList, setHeirDetailsList] = useState([]);
-  let [HeirId, setHeirId] = useState(0);
   let [PropertyId, setPropertyId] = useState(0);
   let [TotalAmount, setTotalAmount] = useState(0);
   let [ListTotalAmount, setListTotalAmount] = useState(0);
@@ -113,8 +99,7 @@ export default function LandTable({ heir_details_list }) {
       if (response.ok) {
         TotalAmount = 0;
         setLandList(data?.land_details);
-        {
-          data?.land_details?.map((list) => {
+        {data?.land_details?.map((list) => {
             if (list.appraisal_value !== 0) {
               TotalAmount = TotalAmount + list.appraisal_value;
               setTotalAmount(TotalAmount);
@@ -129,7 +114,15 @@ export default function LandTable({ heir_details_list }) {
   };
 
   //Modal popup open and close function
-  const handleModalOpen = (event) => {
+const handleSnackbarClose = (event, reason) => {
+  if (reason === 'clickaway') {
+    return;
+  }    
+  setSnackbarOpen(false);
+};
+
+  //Modal popup open and close function
+  const handleModalOpen = () => {
     setHeirDetailsList(HeirSharingDetails);
     setListTotalAmount(ListTotalAmount);
     setPropertyId(PropertyId);
@@ -151,7 +144,6 @@ export default function LandTable({ heir_details_list }) {
   //Table row expand function-2
   const handleExpandFun2 = (event) => {
     const iconClickId = Number(event.currentTarget.id);
-    const customerId = Number(event.currentTarget.name);
     const ListTotalAmount = event.currentTarget.value;
 
     setListTotalAmount(ListTotalAmount);
@@ -188,6 +180,19 @@ export default function LandTable({ heir_details_list }) {
   return (
     <>
       <DivisionPopup OpenModalPopup={OpenModalPopup} HeirSharingDetails={HeirSharingDetails} ListTotalAmount={ListTotalAmount} PropertyId={PropertyId} ApiCallRoute={ApiCallRoute} handleModalClose={handleModalClose} />
+       <>
+          <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+              <Alert
+              onClose={handleSnackbarClose}
+              severity={SnackbarMsg}
+              variant="filled"
+              sx={{ width: '100%', color: "#FFF" }}
+              >
+              {SnackbarMsg}
+              </Alert>
+          </Snackbar>
+        </>
+
       <div className="py-0">
         <Table aria-label="collapsible table">
           <TableHead className="table-head">
@@ -273,7 +278,7 @@ export default function LandTable({ heir_details_list }) {
                         </TableRow>                       
 
 
-                        {LandList.map((list, index) => (
+                        {LandList.map((list) => (
                           <React.Fragment key={list.id}>
                             <TableRow key={list.id} id={list.id} value={list.customer_id}>
                               <TableCell className="border border-light-gray border-l p-0" align="center">{list.location_and_lot_number}</TableCell>
@@ -396,3 +401,13 @@ export default function LandTable({ heir_details_list }) {
     </>
   );
 }
+
+// Add PropTypes validation
+LandTable.propTypes = {
+  heir_details_list: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      benefitAmount: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+};

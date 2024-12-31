@@ -1,5 +1,8 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { Stepper, Step, StepLabel } from '@mui/material';
 
 // Step titles
 const labels = ['基礎情報の入力', '財産の入力', '分割情報、小規模宅地等の特例の入力', '申告書の印刷'];

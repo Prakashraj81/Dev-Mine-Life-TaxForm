@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from 'next/router';
 import {
     Table,
     TableBody,
     TableCell,
-    TableContainer,
-    TableHead,
     TableRow,
-    Paper,
     Box,
     Button,
     Typography
@@ -57,19 +53,15 @@ export default function Land() {
             }
             setlandList(data.land_details);
         } catch (error) {
+            console.log("Errro", error);
             setlandList([]);
         }
-    };
-
-    //Delete admin user function
-    const handleDeleteUser = (event) => {
-        setDeleteModalOpen(!DeleteModalOpen);
     };
 
     const DeleteModalFunction = async (event) => {
         let data;
         let value = event.currentTarget.id;
-        const { auth_key, customerId, depositId, buttonValue, params } = deleteTarget;
+        const { auth_key, depositId } = deleteTarget;
         setDeleteModalOpen(false);
         if (value === "Yes") {
             try {
@@ -80,10 +72,11 @@ export default function Land() {
                 if (response.ok) {
                     await GetlandList();
                     setVariantSnackbar("success");
-                    setSnackbarMsg(response.data.message);
+                    setSnackbarMsg(data.message);
                     setSnackbarOpen(true);
                 }                
             } catch (error) {
+                console.log("Errro", error);
                 setVariantSnackbar("error");
                 setSnackbarMsg(data.error.message);
                 setSnackbarOpen(true);

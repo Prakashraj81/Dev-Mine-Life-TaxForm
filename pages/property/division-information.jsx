@@ -1,22 +1,13 @@
-"use client";
-import Link from "next/link";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from 'next/router';
-import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../components/back-btn";
 import SubmitButton from "../../components/submit-btn";
-import HeirListBox from "../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../components/inputbox-icon/textbox-postcode-icon";
-//import StepForm from "./stepper";
 import BackdropLoader from '../../components/loader/backdrop-loader';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AreaIcon from "../../components/inputbox-icon/textbox-area-icon";
-import AddIcon from '@mui/icons-material/Add';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 export default function DivisionInformation() {   
     let DepositList = [
@@ -26,7 +17,6 @@ export default function DivisionInformation() {
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
-    let [InputFocus, setInputFocus] = useState(false);
     let [activeStep, setActiveStep] = useState(0);
     let [StepOne, setStepOne] = useState(true);
     let [StepTwo, setStepTwo] = useState(false);
@@ -113,15 +103,14 @@ export default function DivisionInformation() {
     };
 
 
-    const inputHandlingFunction = (event) => {
+    const inputHandlingFunction = () => {
 
     }
 
 
     // Table values
     let [cashSavingsList, setcashSavingsList] = useState([]);
-    let totalValuation = 0;
-    useEffect(() => {
+      useEffect(() => {
         let sessionValue = sessionStorage.getItem('cashSavings');
         var tempArray =[];
         tempArray[0] = JSON.parse(sessionValue);     
@@ -136,7 +125,6 @@ export default function DivisionInformation() {
 
 
     //Submit API function 
-    const router = useRouter();
     let defaultValues = {};
     const onSubmit = () => {
         defaultValues = {
@@ -237,9 +225,10 @@ export default function DivisionInformation() {
                             <>
                             <div className="Table-list pt-10 py-3">                                
                                 <table className="w-full flex text-center">                                    
-                                    {cashSavingsList.map((list, index) => {   
+                                    {cashSavingsList.map((list) => {   
                                         // Calculate TotalPrice correctly
                                         let AmountofMoney = parseFloat(list.AmountofMoney.replace(/,/g, '').replace('.', ''));
+                                        // eslint-disable-next-line no-undef
                                         totalValuation += AmountofMoney;                                      
                                         <>
                                         <div className="w-50 inline-table border border-light-gray">

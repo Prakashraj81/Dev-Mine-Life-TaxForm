@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import { Select, MenuItem, FormControl } from '@mui/material';
 import { keyframes } from "@mui/system";
@@ -11,7 +12,7 @@ const shake = keyframes`
   100% { transform: translateX(0); }
 `;
 
-export default function CustomDropdownInput({ id, lists, onChange, value, error }) {
+export default function CustomDropdownInput({ lists, onChange, value, error }) {
   return (
     <>
       <FormControl className='mt-5 px-3 py-3' sx={{ width: " 100% " }}>

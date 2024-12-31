@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
 import React from "react";
-import { TextField, Box } from "@mui/material";
+import { TextField } from "@mui/material";
 import { keyframes } from "@mui/system";
 
 // Define the shake keyframes

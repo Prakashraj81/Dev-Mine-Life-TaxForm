@@ -1,33 +1,19 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import EditNoteIcon from '@mui/icons-material/EditNote';
 import DivisionPopup from './division-popup';
-import axios from "axios";
-import { useRouter } from 'next/router';
-import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import PropTypes from 'prop-types';
 
 const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -45,18 +31,6 @@ const HtmlTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-};
-
-
 export default function LivingDonationTable({ heir_details_list }) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
   let [TableExpandOpen1, setTableExpandOpen1] = React.useState(false);
@@ -65,7 +39,6 @@ export default function LivingDonationTable({ heir_details_list }) {
   let [ApiCallRoute, setApiCallRoute] = useState("");
   //let [HeirList, setHeirList] = useState([]);
   let [HeirDetailsList, setHeirDetailsList] = useState([]);
-  let [HeirId, setHeirId] = useState(0);
   let [PropertyId, setPropertyId] = useState(0);
   let [TotalAmount, setTotalAmount] = useState(0);
   let [ListTotalAmount, setListTotalAmount] = useState(0);
@@ -80,15 +53,7 @@ export default function LivingDonationTable({ heir_details_list }) {
     { id: 4, name: "Dhinesh", value: "", value_1: "Cash_3", total: 700 },
     { id: 5, name: "Nisar", value: "", value_1: "Cash_3", total: 1800 },
   ];
-  let HeirLists = [
-    { id: 1, amount: 300 },
-    { id: 2, amount: 150 },
-    { id: 3, amount: 1000 },
-    { id: 4, amount: 1800 },
-    { id: 5, amount: 1800 },
-  ];
-
-
+ 
   useEffect(() => {
     GetLivingDonationList();
     //setHeirList(heir_details_list);
@@ -101,8 +66,11 @@ export default function LivingDonationTable({ heir_details_list }) {
     const params = { auth_key: auth_key };
     if (auth_key !== null) {
       try {
-        const response = await axios.get('https://minelife-api.azurewebsites.net/', { params });
-        if (response.status === 200) {
+        const response = await fetch(`https://minelife-api.azurewebsites.net/`, { params });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data);
+        
+        if (response.ok) {
           setTotalAmount(0);
           // setLivingDonationList(response.data.funeral_expenses_details);
           // {response.data.funeral_expenses_details.map((list) => {
@@ -130,9 +98,6 @@ export default function LivingDonationTable({ heir_details_list }) {
     setSnackbarOpen(false);
   };
 
-  const handleModalOpen = (event) => {
-    setOpenModalPopup(true);
-  }
   const handleModalClose = () => {
     setOpenModalPopup(false);
   }
@@ -141,21 +106,6 @@ export default function LivingDonationTable({ heir_details_list }) {
   const handleExpandFun = () => {
     setTableExpandOpen(!TableExpandOpen);
     setTableExpandOpen1(false);
-  }
-
-  //Table row expand function-2
-  const handleExpandFun2 = (event) => {
-    const iconClickId = Number(event.currentTarget.id);
-    const customerId = Number(event.currentTarget.name);
-    ListTotalAmount = event.currentTarget.value;
-    setListTotalAmount(ListTotalAmount);
-    setPropertyId(iconClickId);
-
-    setTableExpandOpen1(!TableExpandOpen1);
-
-    if (!TableExpandOpen1[iconClickId]) {
-      HeirList = heir_details_list;
-    }
   }
 
   return (
@@ -229,3 +179,13 @@ export default function LivingDonationTable({ heir_details_list }) {
     </>
   );
 }
+
+// Add PropTypes validation
+LivingDonationTable.propTypes = {
+  heir_details_list: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      benefitAmount: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+};

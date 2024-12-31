@@ -1,23 +1,16 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { Grid, Box, Card, Typography, Button } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
-import { InputAdornment, IconButton, Input, FormControl } from '@mui/material';
-import TextField from '@mui/material/TextField';
-import { Margin, Visibility, VisibilityOff } from '@mui/icons-material';
+import { InputAdornment, IconButton } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import CustomTextField from '../../../admin-components/forms/theme-elements/CustomTextField';
-import BlankLayout from '../../../admin-components/layouts/blank/BlankLayout';
 import PageContainer from '../../../admin-components/container/PageContainer';
 import Logo from '../../../admin-components/layouts/full/shared/logo/Logo';
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import PasswordResetModal from '../../../admin-components/modal/reset-password-modal';
-import { tr } from 'date-fns/locale';
-import { set } from 'date-fns';
 
 const ForgetPassword = () => {
     let [Email, setEmail] = useState("");
@@ -78,9 +71,8 @@ const ForgetPassword = () => {
         const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
         if (emailRegex.test(Email)) {
             try {
-                const params = { email: Email };
-                const response = await axios.get('https://minelife-api.azurewebsites.net/admin/check_admin_email', { params });
-                if (response.status === 200) {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/admin/check_admin_email?email=${Email}`);
+                if (response.ok) {
                     setEmailError(false);
                     setIsValid(true);
                     setShowLoader(false);
@@ -108,9 +100,8 @@ const ForgetPassword = () => {
 
     const forgetPassword = async (Email) => {
         try {
-            const params = { email: Email };
-            const response = await axios.get('https://minelife-api.azurewebsites.net/admin/forgot_password', { params });
-            if (response.status === 200) {
+            const response = await fetch(`https://minelife-api.azurewebsites.net/admin/forgot_password?email=${Email}`);
+            if (response.ok) {
                 setEmailError(false);
                 setIsValid(false);
                 setShowPasswordInputs(true);
@@ -163,8 +154,11 @@ const ForgetPassword = () => {
                 formData.append('new_password', NewPassword);
                 formData.append('pwd_code', OTP);
                 try{
-                    const response = await axios.post('https://minelife-api.azurewebsites.net/admin/reset_password', formData);
-                    if(response.status === 200){
+                    const response = await fetch('https://minelife-api.azurewebsites.net/admin/reset_password', {
+                        method: 'POST',
+                        body: formData
+                      });
+                    if(response.ok){
                         setShowLoader(false);
                         setShowResetPasswordModal(true);
                     }

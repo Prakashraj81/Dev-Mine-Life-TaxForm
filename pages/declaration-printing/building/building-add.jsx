@@ -1,29 +1,20 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from 'next/router';
-import { List, ListItem, ListItemText, ListItemIcon, Divider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import HeirListBox from "../../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
-import FloorIcon from "../../../components/inputbox-icon/textbox-floor-icon";
 import AreaIcon from "../../../components/inputbox-icon/textbox-area-icon";
 import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import { set } from "date-fns";
 
 export default function HouseAdd() {
     const [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     const [ShowLoader, setShowLoader] = useState(false);
-
     const [is_room_in_condominium, setis_room_in_condominium] = useState(null);
     const [is_co_owners_in_property, setis_co_owners_in_property] = useState(null);
     const [is_property_tax_building_with_3_or_more_floors, setis_property_tax_building_with_3_or_more_floors] = useState(null);
@@ -273,7 +264,6 @@ export default function HouseAdd() {
         try {
             const response = await fetch(`https://minelife-api.azurewebsites.net/get_buildings?auth_key=${params.auth_key}&id=${params.id}`);
             data = await response.json();
-
             if (!response.ok) throw new Error(data);
 
             if (data && data.buildings_details) {
@@ -290,10 +280,10 @@ export default function HouseAdd() {
                 setstructure_2(data.buildings_details.structure_2);
                 setfloor_area_2(data.buildings_details.floor_area_2);
                 settype_of_site_rights(data.buildings_details.type_of_site_rights);
-                setsite_rights_numerator(data.buildings_details.site_rights_numerator);
-                setsite_rights_denominator(data.buildings_details.site_rights_denominator);
-                setsite_rights_ratio(data.buildings_details.site_rights_ratio);
-                setis_property_tax_details_available(data.buildings_details.is_property_tax_details_available === 'Yes' ? 1 : 0);
+                // setsite_rights_numerator(data.buildings_details.site_rights_numerator);
+                // setsite_rights_denominator(data.buildings_details.site_rights_denominator);
+                // setsite_rights_ratio(data.buildings_details.site_rights_ratio);
+                // setis_property_tax_details_available(data.buildings_details.is_property_tax_details_available === 'Yes' ? 1 : 0);
                 setproperty_tax_details_location(data.buildings_details.property_tax_details_location);
                 setproperty_tax_details_house_number(data.buildings_details.property_tax_details_house_number);
                 setproperty_tax_details_type(data.buildings_details.property_tax_details_type);
@@ -301,7 +291,7 @@ export default function HouseAdd() {
                 setis_co_owners_in_property(data.buildings_details.is_co_owners_in_property === 'Yes' ? 1 : 0);
                 setco_owner_share_percentage_numerator(data.buildings_details.co_owner_share_percentage_numerator);
                 setco_owner_share_percentage_denominator(data.buildings_details.co_owner_share_percentage_denominator);
-                setco_owner_share_percentage_ratio(data.buildings_details.co_owner_share_percentage_ratio);
+                //setco_owner_share_percentage_ratio(data.buildings_details.co_owner_share_percentage_ratio);
                 setappraisal_value(data.buildings_details.appraisal_value);
             }                
         } catch (error) {

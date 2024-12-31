@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import { Box, Typography, Table, TableBody, TableCell, TableRow, TextField } from '@mui/material';

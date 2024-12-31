@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Box, Button, Typography } from '@mui/material';
 import Link from "next/link";
 import AddIcon from '@mui/icons-material/Add';
 
+// eslint-disable-next-line react/prop-types
 export default function AddPageButton({ pageLink }) {
     return (
         <>

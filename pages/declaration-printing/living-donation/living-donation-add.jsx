@@ -1,17 +1,11 @@
-"use client";
-import Link from "next/link";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from 'next/router';
-import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import HeirListBox from "../../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
-import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
 import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../../components/inputbox-icon/custom-input";
 import CustomAmountInput from "../../../components/inputbox-icon/custom-amount-input";
@@ -48,7 +42,7 @@ export default function LivingDonationAdd() {
         let url = router.asPath;
         let searchParams = new URLSearchParams(url.split('?')[1]);
         searchParams = searchParams.get("edit");
-        if (searchParams !== null) {
+        if (searchParams !== null) {             
             LivingDonationId = Number(atob(searchParams));
             //GetLivingDonationDetails(LivingDonationId);
         }
@@ -58,13 +52,15 @@ export default function LivingDonationAdd() {
 
     //Load heir details list
     const GetHeirList = async () => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', { params });
-                if (response.status === 200) {
-                    setHeirList(response.data.heir_list || []);
+                const response = await fetch(`'https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    setHeirList(data.heir_list || []);
                 }
                 else {
                     setHeirList([]);
@@ -72,34 +68,6 @@ export default function LivingDonationAdd() {
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
-        else {
-            //Logout();
-        }
-    };
-
-
-    //Load living donation details 
-    const GetLivingDonationDetails = async (LivingDonationId) => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key, id: LivingDonationId };
-        if (auth_key !== null && LivingDonationId !== 0) {
-            try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_other_assets_details', { params });
-                if (response.status === 200) {
-                    setPropertyName(response.data.other_assets_details.property_name);
-                    setOtherParty(response.data.other_assets_details.other_party);
-                    setValuation(response.data.other_assets_details.valuation.toLocaleString());
-                }
-                else {
-
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-        else {
-            //Logout();
         }
     };
 
@@ -154,18 +122,7 @@ export default function LivingDonationAdd() {
         setShowIncorrectError(false);
         let inputId = event.currentTarget.id;
         let inputValue = event.target.value;
-        if (inputId === "PropertyName") {
-            setPropertyName(inputValue);
-            setPropertyNameError(false);
-        }
-        else if (inputId === "OtherParty") {
-            setOtherParty(inputValue);
-        }
-        else if (inputId === "DateofAcquisition") {
-            setDateofAcquisition(inputValue);
-            setDateofAcquisitionError(false);
-        }
-        else if (inputId === "DonatedPropertyType") {
+        if (inputId === "DonatedPropertyType") {
             setDonatedPropertyType(inputValue);
             setDonatedPropertyTypeError(false);
         }
@@ -183,12 +140,6 @@ export default function LivingDonationAdd() {
             setDonatedPropertyAmountTax(inputValue);
             setDonatedPropertyAmountTaxError(false);
         }
-        else if (inputId === "DonatedPropertyAmount") {
-            //If amount enter is 0 value it's needs to be accepted
-            setDonatedPropertyAmount(inputValue);
-            setDonatedPropertyAmountError(false);
-        }
-
         setisSumbitDisabled(false);
     }
 
@@ -274,7 +225,6 @@ export default function LivingDonationAdd() {
         else {
             setisSumbitDisabled(true);
             setShowLoader(false);
-            //Logout();
         }
     };
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
     Typography,
     Box,
@@ -10,7 +9,6 @@ import {
     TableHead,
     TableRow,
     Chip,
-    Button,
     TablePagination,
     Tooltip,
 } from "@mui/material";
@@ -18,12 +16,11 @@ import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import theme from "../../../../admin-components/theme";
 import FullLayout from "../../../../admin-components/layouts/full/FullLayout";
 import DashboardCard from "../../../../admin-components/shared/DashboardCard";
-import { IconEye, IconCirclePlus, IconTrashX, IconX } from "@tabler/icons-react";
+import { IconEye, IconX } from "@tabler/icons-react";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -73,13 +70,15 @@ export default function Users() {
 
     //Load users list
     const GetUsersList = async()=>{
-        let auth_key = atob(sessionStorage.getItem("admin_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(sessionStorage.getItem("admin_auth_key"));
         if(auth_key !== null){
             try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/admin/list_users', {params});
-                if(response.status === 200){
-                    setUsersList(response.data.user_details);
+                const response = await fetch(`https://minelife-api.azurewebsites.net/admin/list_users?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if(response.ok){
+                    setUsersList(data.user_details);
                 }
                 else{
                     setUsersList([]);

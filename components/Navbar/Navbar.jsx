@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import React, {useState} from "react";
 import Link from 'next/link';
 import MenuIcon from '@mui/icons-material/Menu';

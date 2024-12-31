@@ -1,32 +1,23 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DivisionPopup from './division-popup';
-import { useRouter } from 'next/router';
-import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import PropTypes from 'prop-types';
 
 const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -44,25 +35,12 @@ const HtmlTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-};
-
-
 export default function BuildingsTable({ heir_details_list }) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
   let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});    
   let [HeirList, setHeirList] = useState([]);
   let [HeirSharingDetails, setHeirSharingDetails] = useState([]);  
   let [HeirDetailsList, setHeirDetailsList] = useState([]);
-  let [HeirId, setHeirId] = useState(0);
   let [PropertyId, setPropertyId] = useState(0);
   let [TotalAmount, setTotalAmount] = useState(0);
   let [ListTotalAmount, setListTotalAmount] = useState(0);
@@ -138,7 +116,7 @@ export default function BuildingsTable({ heir_details_list }) {
     setSnackbarOpen(false);
   };
 
-  const handleModalOpen = (event) => {
+  const handleModalOpen = () => {
     setHeirDetailsList(HeirSharingDetails);
     setListTotalAmount(ListTotalAmount);
     setPropertyId(PropertyId);
@@ -159,7 +137,6 @@ export default function BuildingsTable({ heir_details_list }) {
   //Table row expand function-2
   const handleExpandFun2 = (event) => {
     const iconClickId = Number(event.currentTarget.id);
-    const customerId = Number(event.currentTarget.name);
     const ListTotalAmount = event.currentTarget.value;
 
     setListTotalAmount(ListTotalAmount);
@@ -227,7 +204,7 @@ export default function BuildingsTable({ heir_details_list }) {
                           <TableCell className="border-light-gray border-l border-t" align="right"><span className="font-medium">金額</span></TableCell>
                           <TableCell className="border-light-gray border-l border-t border-r" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
                         </TableRow>
-                        {BuildingsList.map((list, index) => (
+                        {BuildingsList.map((list) => (
                           <React.Fragment key={list.id}>
                             <TableRow key={list.id} id={list.id} value={list.customer_id}>
                               <TableCell className="border-light-gray border-l">{list.location}</TableCell>
@@ -314,3 +291,13 @@ export default function BuildingsTable({ heir_details_list }) {
     </>
   );
 }
+
+// Add PropTypes validation
+BuildingsTable.propTypes = {
+  heir_details_list: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      benefitAmount: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+};

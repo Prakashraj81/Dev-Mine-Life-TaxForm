@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import PhoneIcon from '@mui/icons-material/Phone';
 import Header from '../../components/header';
 import Footer from '../../components/footer';
@@ -9,7 +8,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { Box, Button, Typography, Select, MenuItem, InputLabel, FormHelperText } from '@mui/material';
+import { Box, Button, Typography, Select, MenuItem } from '@mui/material';
 import BackdropLoader from '../../components/loader/backdrop-loader';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -188,8 +187,11 @@ export default function ContactUs() {
             formData.append("address", Address);
             formData.append("inquiry_details", Inquiry);
             try {
-                let response = await axios.post('https://minelife-api.azurewebsites.net/contact_us', formData);
-                if (response.status === 200) {
+                const response = await fetch('https://minelife-api.azurewebsites.net/contact_us', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (response.ok) {
                     setShowLoader(false);
                     setServiceInqiry(false);
                     setInquiryPartnerships(false);
@@ -340,22 +342,22 @@ export default function ContactUs() {
                         <Box className="hidden checkbox-list pb-7">
                             <Typography component={"label"} className="text-base font-medium block">ご都合の良い時間帯<span className="required text-primary-color border border-primary-color rounded-sm text-xs px-1 py-0">必須</span></Typography>
                             <Box className="checkbox-form-list block mt-5 rounded border border-border">
-                                <span class="list-item-first px-5 py-3 block border-b-border hover:bg-custom-light-1">
+                                <span className="list-item-first px-5 py-3 block border-b-border hover:bg-custom-light-1">
                                     <Typography component={"label"}>
                                         <input type="checkbox" checked={true} onChange={handleCheckboxChange} value="午前中（9:00〜12:00）" />
-                                        <span class="list-item-label ml-3 text-sm">午前中（9:00〜12:00）</span>
+                                        <span className="list-item-label ml-3 text-sm">午前中（9:00〜12:00）</span>
                                     </Typography>
                                 </span>
-                                <span class="list-item-first px-5 py-3 block border-b-border hover:bg-custom-light-1">
+                                <span className="list-item-first px-5 py-3 block border-b-border hover:bg-custom-light-1">
                                     <Typography component={"label"}>
                                         <input type="checkbox" checked={true} onChange={handleCheckboxChange} value="午後（13:00〜17:00）" />
-                                        <span class="list-item-label ml-3 text-sm">午後（13:00〜17:00）</span>
+                                        <span className="list-item-label ml-3 text-sm">午後（13:00〜17:00）</span>
                                     </Typography>
                                 </span>
-                                <span class="list-item-first px-5 py-3 block border-b-border hover:bg-custom-light-1">
+                                <span className="list-item-first px-5 py-3 block border-b-border hover:bg-custom-light-1">
                                     <Typography component={"label"}>
                                         <input type="checkbox" checked={true} onChange={handleCheckboxChange} value="夕方（17:00〜）" />
-                                        <span class="list-item-label ml-3 text-sm">夕方（17:00〜）</span>
+                                        <span className="list-item-label ml-3 text-sm">夕方（17:00〜）</span>
                                     </Typography>
                                 </span>
                             </Box>

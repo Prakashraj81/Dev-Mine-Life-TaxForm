@@ -1,15 +1,10 @@
-"use client";
-import Link from "next/link";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from 'next/router';
-import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import HeirListBox from "../../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import CustomInput from "../../../components/inputbox-icon/custom-input";
 import CustomPostalcodeInput from "../../../components/inputbox-icon/custom-postalcode-input";
@@ -46,26 +41,22 @@ export default function HouseholdPropertyAdd() {
 
     //Load cash savings details    
     const GetHouseHoldDetails = async (houseHoldId) => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key, id: houseHoldId };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null && houseHoldId !== 0) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_household_details', { params });
-                if (response.status === 200) {
-                    setPropertyContent(response.data.household_details.property_details);
-                    setPostCode(response.data.household_details.postal_code);
-                    setAddress(response.data.household_details.address);
-                    setValuation(response.data.household_details.valuation.toLocaleString());
-                }
-                else {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/get_household_details?auth_key=${auth_key}&id=${houseHoldId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
 
+                if (response.ok) {
+                    setPropertyContent(data.household_details.property_details);
+                    setPostCode(data.household_details.postal_code);
+                    setAddress(data.household_details.address);
+                    setValuation(data.household_details.valuation.toLocaleString());
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
-        else {
-            //Logout();
         }
     };
 
@@ -168,12 +159,18 @@ export default function HouseholdPropertyAdd() {
             formData.append("valuation", parseFloat(Valuation));
             try {
                 if (houseHoldId === 0) {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/add_household', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/add_household`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
                 else {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_household', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/edit_household`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
-                if (response.status === 200) {
+                if (response.ok) {
                     router.push(`/declaration-printing/household-property`);
                 }
             } catch (error) {
@@ -183,7 +180,6 @@ export default function HouseholdPropertyAdd() {
         else {
             setisSumbitDisabled(true);
             setShowLoader(false);
-            //Logout();
         }
     };
 

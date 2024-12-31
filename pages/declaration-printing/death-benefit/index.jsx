@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import {
     Table,
     TableBody,
     TableCell,
-    TableContainer,
-    TableHead,
     TableRow,
-    Paper,
     Box,
     Button,
     Typography
@@ -16,7 +12,6 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import axios from "axios";
 import { useRouter } from 'next/router';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -45,29 +40,32 @@ export default function DeathBenefit() {
 
     //Load cash savings list
     const GetDeathBenifitList = async () => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_death_benefit', { params });
-                if (response.status === 200) {
-                    setDeathBenifitList(response.data.death_benefits_details);
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_death_benefit?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    setDeathBenifitList(data.death_benefits_details);
                 }
                 else {
                     setDeathBenifitList([]);
                 }
             } catch (error) {
                 console.log("Errro", error);
+                setDeathBenifitList([]);
             }
         }
     }
 
     const DeleteModalFunction = async (event) => {
         let value = event.currentTarget.id;
-        const { auth_key, customerId, deathBenifitId, buttonValue, params } = deleteTarget;
+        const { auth_key, deathBenifitId } = deleteTarget;
         if (value === "Yes") {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_death_benefit', { params });
+                const response = await fetch(`https://minelife-api.azurewebsites.net/delete_death_benefit?auth_key=${auth_key}&id=${deathBenifitId}`);
                 if (response.status === 200) {
                     setVariantSnackbar("success");
                     setSnackbarMsg(response.data.message);
@@ -81,6 +79,7 @@ export default function DeathBenefit() {
                     setSnackbarOpen(true);
                 }
             } catch (error) {
+                console.log("Errro", error);
                 setVariantSnackbar("error");
                 setSnackbarMsg("Death benefit details not deleted");
             }

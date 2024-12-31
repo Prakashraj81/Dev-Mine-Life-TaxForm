@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import React from "react";
 import { Box, Button, Typography } from '@mui/material';
 
 export default function SubmitButton({ onSubmit, isSumbitDisabled }) {
-    let [ShowLoader, setShowLoader] = useState(true);
     return (
         <>
             <Box>

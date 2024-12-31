@@ -1,25 +1,17 @@
 import React, { useState, useEffect } from "react";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import PropTypes from 'prop-types';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Fade from '@mui/material/Fade';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import EditNoteIcon from '@mui/icons-material/EditNote';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import axios from "axios";
 import HeirListAmountShowSkeleton from './heirList-amountshow-skeleton';
 import HeirListFractionShowSkeleton from './heirList-fractionshow-skeleton';
+import PropTypes from 'prop-types';
 
 const style = {
     position: 'absolute',
@@ -72,11 +64,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
                                 setSelectedValue('Fraction');
                             }
                         });
-                    } else {
-                        console.log('HeirSharingDetails is not defined or not an array.');
                     }
-                } else {
-                    console.log('ListTotalAmount is not defined.');
                 }
             }
         };
@@ -85,13 +73,15 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
     }, [OpenModalPopup, ListTotalAmount, HeirSharingDetails]);
 
     const GetHeirList = async () => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', { params });
-                if (response.status === 200) {
-                    const heirListData = response.data.heir_list || [];
+                const response = await fetch(`https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    const heirListData = data.heir_list || [];
                     setHeirList(heirListData);
                     setHeirListArray(heirListData.map(() => ({ fractionBoxValue1: 0, fractionBoxValue2: 0 })));
                 } else {
@@ -185,7 +175,7 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
     };
 
     //Fraction box calculation (Box-2)
-    const fractionBoxCalculation_2 = (e, index) => {
+    const fractionBoxCalculation_2 = async(e, index) => {
         let id = e.currentTarget.id;
         let denominator = parseFloat(e.target.value) || 0;
         let updatedHeirListArray = [...HeirListArray];
@@ -200,11 +190,11 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
         }
         setheir_sharing([...heir_sharing]);
 
-        recalculateTotalAmount(updatedHeirListArray);
+        await recalculateTotalAmount(updatedHeirListArray);
     };
 
     //Fraction box calculation (Both)
-    const recalculateTotalAmount = (HeirListArray) => {
+    const recalculateTotalAmount = async(HeirListArray) => {
         let dividedAmount = 0;
         let undecidedHeirAmount = parseFloat(AmountofMoney.toString().replace(/,/g, '').replace('.', ''));
         let calculatedAmounts = {};
@@ -241,8 +231,8 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
             formData.append("heir_sharing", JSON.stringify(heir_sharing));
             if (formData !== null) {
                 try {
-                    const response = await axios.post(`https://minelife-api.azurewebsites.net/split_${ApiCallRoute}_by_heirs`, formData);
-                    if (response.status === 200) {
+                    const response = await fetch(`https://minelife-api.azurewebsites.net/split_${ApiCallRoute}_by_heirs`, formData);
+                    if (response.ok) {
                         handleModalClose();
                     } else {
                         handleModalClose();
@@ -382,3 +372,18 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
         </>
     );
 }
+
+// Define prop types
+DivisionPopup.propTypes = {
+    OpenModalPopup: PropTypes.bool.isRequired, // Boolean to show/hide modal
+    HeirSharingDetails: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        shareAmount: PropTypes.number.isRequired,
+      })
+    ).isRequired, // Array of objects with name and shareAmount
+    ListTotalAmount: PropTypes.number.isRequired, // Total amount as a number
+    PropertyId: PropTypes.string.isRequired, // Property ID as a string
+    ApiCallRoute: PropTypes.string.isRequired, // API route as a string
+    handleModalClose: PropTypes.func.isRequired, // Function to handle modal close
+  };

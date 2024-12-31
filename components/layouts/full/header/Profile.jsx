@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from 'axios';
+/* eslint-disable no-irregular-whitespace */
+import React, { useState } from "react";
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import {
@@ -9,13 +9,8 @@ import {
   Button,
   IconButton,
   Typography,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
 } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
-import BeenhereOutlinedIcon from '@mui/icons-material/BeenhereOutlined';
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
@@ -33,7 +28,11 @@ const Profile = () => {
       let formData = new FormData();
       formData.append("auth_key", auth_key);
       if (auth_key !== null) {
-        const response = await axios.post('https://minelife-api.azurewebsites.net/user_logout', formData);
+        const response = await fetch('https://minelife-api.azurewebsites.net/user_logout', {
+          method: 'POST',
+          body: formData
+        });
+
         if (response.status === 200) {
           localStorage.removeItem("mine_life_auth_key");
           localStorage.removeItem("user_login");

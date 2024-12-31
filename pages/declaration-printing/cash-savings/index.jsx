@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import {
     Table,
     TableBody,
     TableCell,
-    TableContainer,
-    TableHead,
     TableRow,
-    Paper,
     Box,
     Button,
     Typography
@@ -16,8 +12,6 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import CashSavingsAdd from "./cash-savings-add";
-import axios from "axios";
 import { useRouter } from 'next/router';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -46,47 +40,49 @@ export default function CashSavings() {
 
     //Load cash savings list
     const GetCashSavingsList = async () => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_cash_deposit', { params });
-                if (response.status === 200) {
-                    setcashSavingsList(response.data.cash_deposit_details);
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_cash_deposit?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    setcashSavingsList(data.cash_deposit_details);
                 }
                 else {
                     setcashSavingsList([]);
                 }
             } catch (error) {
                 console.log("Error", error);
+                setcashSavingsList([]);
             }
         }
     }
 
-    //Delete admin user function
-    const handleDeleteUser = (event) => {
-        setDeleteModalOpen(!DeleteModalOpen);
-    }
-
     const DeleteModalFunction = async (event) => {
         let value = event.currentTarget.id;
-        const { auth_key, customerId, depositId, buttonValue, params } = deleteTarget;
+        const { auth_key, depositId } = deleteTarget;
         if (value === "Yes") {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_cash_deposit', { params });
-                if (response.status === 200) {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/delete_cash_deposit?auth_key=${auth_key}&id=${depositId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
                     setVariantSnackbar("success");
-                    setSnackbarMsg(response.data.message);
+                    setSnackbarMsg(data.message);
                     GetCashSavingsList();
                     setSnackbarOpen(true);
                 }
                 else {
                     setVariantSnackbar("error");
-                    setSnackbarMsg(response.data.message);
+                    setSnackbarMsg(data.message);
                     GetCashSavingsList([]);
                     setSnackbarOpen(true);
                 }
             } catch (error) {
+                console.log("Error", error);
                 setVariantSnackbar("error");
                 setSnackbarMsg("Cash details not deleted");
             }

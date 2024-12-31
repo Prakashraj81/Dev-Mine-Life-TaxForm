@@ -1,17 +1,12 @@
-import Link from "next/link";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from 'next/router';
-import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import HeirListBox from "../../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import PrintIcon from '@mui/icons-material/Print';
 import CustomInput from "../../../components/inputbox-icon/custom-input";
 import CustomDropdownInput from "../../../components/inputbox-icon/custom-dropdown";
 
@@ -65,35 +60,31 @@ export default function CashSavingsAdd() {
 
     //Load cash savings details    
     const GetCashSavingsDetails = async (depositId) => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key, id: depositId };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null && depositId !== 0) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_cash_deposit', { params });
-                if (response.status === 200) {
-                    setDepositType(response.data.cash_deposit_details.deposit_type);
-                    setAmountofMoney(response.data.cash_deposit_details.amount.toLocaleString());
-                    if (response.data.cash_deposit_details.financial_institution_name !== "") {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/get_cash_deposit?auth_key=${auth_key}&id=${depositId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    setDepositType(data.cash_deposit_details.deposit_type);
+                    setAmountofMoney(data.cash_deposit_details.amount.toLocaleString());
+                    if (data.cash_deposit_details.financial_institution_name !== "") {
                         setShowPostCode(false);
                         setShowAddress(false);
-                        setFinancialInstitutionName(response.data.cash_deposit_details.financial_institution_name);
+                        setFinancialInstitutionName(data.cash_deposit_details.financial_institution_name);
                     }
                     else {
-                        setShowPostCode(response.data.cash_deposit_details.postal_code);
-                        setShowAddress(response.data.cash_deposit_details.address);
+                        setShowPostCode(data.cash_deposit_details.postal_code);
+                        setShowAddress(data.cash_deposit_details.address);
                         setFinancialInstitutionName(false);
                     }
-                }
-                else {
-
-                }
+                }                
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
-        else {
-            //Logout();
-        }
+        }        
     };
 
     //Deposit type dropdown
@@ -235,12 +226,18 @@ export default function CashSavingsAdd() {
             formData.append("amount", parseFloat(AmountofMoney));
             try {
                 if (depositId === 0) {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/add_cash_deposit', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/add_cash_deposit`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
                 else {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_cash_deposit', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/edit_cash_deposit`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
-                if (response.status === 200) {
+                if (response.ok) {
                     router.push(`/declaration-printing/cash-savings`);
                 }
             } catch (error) {
@@ -250,7 +247,6 @@ export default function CashSavingsAdd() {
         else {
             setisSumbitDisabled(true);
             setShowLoader(false);
-            //Logout();
         }
     };
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import BlankLayout from '../../../admin-components/layouts/blank/BlankLayout';
+/* eslint-disable no-unused-vars */
+import React, { useState } from "react";
 import PageContainer from '../../../admin-components/container/PageContainer';
 import Logo from '../../../admin-components/layouts/full/shared/logo/Logo';
 import {
@@ -7,23 +7,15 @@ import {
   Box,
   Card,
   Typography,
-  FormControl,
-  FormGroup,
-  FormControlLabel,
   Button,
   Stack,
   Alert,
-  Backdrop,
-  Checkbox,
-  Input,
   InputAdornment,
   IconButton,
 } from "@mui/material";
 import Link from "next/link";
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import CircularProgress from '@mui/material/CircularProgress';
 import CustomTextField from '../../../admin-components/forms/theme-elements/CustomTextField';
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 
@@ -61,15 +53,17 @@ const AdminLogin = () => {
     const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
     if (emailRegex.test(Email)) {
         try {
-            const params = { email: Email };
-            const response = await axios.get('https://minelife-api.azurewebsites.net/admin/check_admin_email', { params });
-            if (response.status === 200 && response.data.message === "Admin Not Exist") {
+            const response = await fetch(`https://minelife-api.azurewebsites.net/admin/check_admin_email?email=${Email}`);
+            const data = await response.json();
+            if (!response.ok) throw new Error(data);
+
+            if (response.ok) {
                 setUserNameError(false);
                 setcheckValidEmail(true);
                 setisSumbitDisabled(true);
                 isSumbitDisabled = true;
             }
-            else if (response.status === 208 && response.data.error.message === "Admin Already Exist") {
+            else if (response.status === 208 && data.error.message === "Admin Already Exist") {
                 setUserNameError(false);
                 setcheckValidEmail(false);
                 setisSumbitDisabled(false);
@@ -121,8 +115,11 @@ const AdminLogin = () => {
       formData.append('email', defaultValues.UserName);
       formData.append('password', defaultValues.Password);
       try {
-        const response = await axios.post('https://minelife-api.azurewebsites.net/admin/login', formData);
-        if (response.status === 200 && response.data.is_authenticated === true) {
+        const response = await fetch('https://minelife-api.azurewebsites.net/admin/login', {
+          method: 'POST',
+          body: formData
+        });
+        if (response.status.ok) {
           let encode_auth_key = btoa(response.data.auth_key);
           let encode_login = btoa(response.data.is_authenticated);
           //let encode_name = btoa(response.data.is_authenticated);

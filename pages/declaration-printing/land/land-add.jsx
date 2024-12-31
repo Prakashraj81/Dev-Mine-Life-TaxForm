@@ -1,21 +1,19 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-irregular-whitespace */
+import React, { useState, useEffect, Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from 'next/router';
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import HeirListBox from "../../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import AreaIcon from "../../../components/inputbox-icon/textbox-area-icon";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import TableOne from '../../../components/land-tables/table-one';
 import TableTwo from '../../../components/land-tables/table-two';
 import TableThree from '../../../components/land-tables/table-three';
@@ -34,47 +32,7 @@ export default function LandAdd() {
     let [ShowTableThree, setShowTableThree] = useState(false);
     let [ShowTableFour, setShowTableFour] = useState(false);
     let [ShowTableFive, setShowTableFive] = useState(false);
-    let [DisabledRadioValue, setDisabledRadioValue] = useState('1');
-
-
-    let [ShowQuestionYes, setShowQuestionYes] = useState(false);
-    let [ShowQuestionNo, setShowQuestionNo] = useState(false);
-
-    let [QuestionTwo, setQuestionTwo] = useState("");
-    let [QuestionTwoImageYes, setQuestionTwoImageYes] = useState(false);
-    let [QuestionTwoImageNo, setQuestionTwoImageNo] = useState(false);
     const [QuestionTwoImageBoth, setQuestionTwoImageBoth] = useState(true);
-
-    let [QuestionThree, setQuestionThree] = useState("");
-    let [ShowYesOption3, setShowYesOption3] = useState(false);
-    let [ShowNoOption3, setShowNoOption3] = useState(false);
-
-    let [QuestionFour, setQuestionFour] = useState("");
-    let [ShowYesOption4, setShowYesOption4] = useState(false);
-    let [ShowNoOption4, setShowNoOption4] = useState(false);
-
-    //Input items
-    let [LocationLotNumberYes, setLocationLotNumberYes] = useState("");
-    let [GroundGrainYes, setGroundGrainYes] = useState("");
-    let [LandAreaYes, setLandAreaYes] = useState("");
-    let [TypesofSiteRightsYes, setTypesofSiteRightsYes] = useState("");
-    let [PercentageofSiteRightsYes, setPercentageofSiteRightsYes] = useState("");
-
-    let [LocationNo, setLocationNo] = useState("");
-    let [LotNumberNo, setLotNumberNo] = useState("");
-    let [GroundGrainNo, setGroundGrainNo] = useState("");
-    let [LandAreaNo, setLandAreaNo] = useState("");
-
-    let [SharePercentage, setSharePercentage] = useState("");
-
-    let [LandYesImage, setLandYesImage] = useState(false);
-    let [LandNoImage, setLandNoImage] = useState(false);
-
-    let [AmountofMoney, setAmountofMoney] = useState(0);
-    let [UndecidedHeir, setUndecidedHeir] = useState(0);
-    let [totalPrice, settotalPrice] = useState(0);
-    let [boxValues, setBoxValues] = useState([]);    
-    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
     let [ShowLoader, setShowLoader] = useState(false);
 
     const [isSumbitDisabled, setIsSumbitDisabled] = useState(false);
@@ -291,16 +249,12 @@ export default function LandAdd() {
         else if(inputId === "condominium_correction_rate"){
             setcondominium_correction_rate(inputValue);
             setcondominium_correction_rate_error(false);
-        }
-        else if(inputId === "location_and_lot_number"){
-            setlocation_and_lot_number(inputValue);
-        }
+        }        
     };
     
 
     //Submit API function 
     const router = useRouter();
-    let defaultValues = {};
     const onSubmit = async() => {        
         if (appraisal_value <= 0) {            
             setIsSumbitDisabled(true);

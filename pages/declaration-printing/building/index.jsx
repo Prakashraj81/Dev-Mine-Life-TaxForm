@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from 'next/router';
-import axios from "axios";
 import {
     Table,
     TableBody,
     TableCell,
-    TableContainer,
-    TableHead,
     TableRow,
-    Paper,
     Box,
     Button,
     Typography
 } from '@mui/material';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
@@ -65,17 +59,12 @@ export default function House() {
             console.log("Error", error);
             setbuildingList([]);
         }
-    }
-
-    //Delete admin user function
-    const handleDeleteUser = (event) => {
-        setDeleteModalOpen(!DeleteModalOpen);
     };
 
     const DeleteModalFunction = async (event) => {
         let data;
         let value = event.currentTarget.id;
-        const { auth_key, customerId, depositId, buttonValue, params } = deleteTarget;
+        const { auth_key, depositId } = deleteTarget;
         setDeleteModalOpen(false);
         if (value === "Yes") {
             try {
@@ -96,7 +85,7 @@ export default function House() {
                 }
             } catch (error) {
                 setVariantSnackbar("error");
-                setSnackbarMsg(data.error.message);
+                setSnackbarMsg(error.error.message);
                 setSnackbarOpen(true);
             }            
         }        

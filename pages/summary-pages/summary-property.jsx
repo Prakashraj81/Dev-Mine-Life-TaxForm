@@ -1,16 +1,15 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-key */
+/* eslint-disable react/react-in-jsx-scope */
 import Link from "next/link";
-import { useState, useEffect, Fragment, Controller } from "react";
+import { useState, useEffect, Fragment } from "react";
 import BackButton from "../../components/back-btn";
 import FullLayout from '../../components/layouts/full/FullLayout';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
-import { list } from "postcss";
-import axios from "axios";
 import Skeleton from '@mui/material/Skeleton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Box, Button, Typography } from '@mui/material';
 
@@ -18,8 +17,6 @@ export default function SummaryProperty() {
     let [Flag, setFlag] = useState(0);
     let [CashTotalAmount, setCashTotalAmount] = useState(0);
     let [SecuritiesTotalAmount, setSecuritiesTotalAmount] = useState(0);
-    // let [CashTotalAmount, setCashTotalAmount] = useState(0);
-    // let [CashTotalAmount, setCashTotalAmount] = useState(0);
     let [HouseHoldPropertyTotalAmount, setHouseHoldPropertyTotalAmount] = useState(0);
     let [DeathBenifitTotalAmount, setDeathBenifitTotalAmount] = useState(0);
     let [DeathRetirementTotalAmount, setDeathRetirementTotalAmount] = useState(0);
@@ -37,13 +34,15 @@ export default function SummaryProperty() {
     }, []);
 
     //Load cash savings list
-    const GetCashSavingsList = async (auth_key, params) => {
+    const GetCashSavingsList = async (auth_key) => {
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_cash_deposit', { params });
-                if (response.status === 200) {
-                    {
-                        response.data.cash_deposit_details.map((list) => {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_cash_deposit?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    {data.cash_deposit_details.map((list) => {
                             if (list.amount !== 0) {
                                 CashTotalAmount = CashTotalAmount + list.amount;
                                 setCashTotalAmount(CashTotalAmount);
@@ -64,13 +63,15 @@ export default function SummaryProperty() {
     }
 
     //Load cash savings list
-    const GetSecuritiesList = async (auth_key, params) => {
+    const GetSecuritiesList = async (auth_key) => {
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_securities', { params });
-                if (response.status === 200) {
-                    {
-                        response.data.securities_details.map((list) => {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_securities?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    {data.securities_details.map((list) => {
                             if (list.amount !== 0) {
                                 SecuritiesTotalAmount = SecuritiesTotalAmount + list.amount;
                                 setSecuritiesTotalAmount(SecuritiesTotalAmount);
@@ -91,13 +92,15 @@ export default function SummaryProperty() {
     }
 
     //Load cash savings list
-    const GetHouseholdList = async (auth_key, params) => {
+    const GetHouseholdList = async (auth_key) => {
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_household', { params });
-                if (response.status === 200) {
-                    {
-                        response.data.household_details.map((list) => {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_household?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+                
+                if (response.ok) {
+                    {data.household_details.map((list) => {
                             if (list.valuation !== 0) {
                                 HouseHoldPropertyTotalAmount = HouseHoldPropertyTotalAmount + list.valuation;
                                 setHouseHoldPropertyTotalAmount(HouseHoldPropertyTotalAmount);
@@ -118,13 +121,15 @@ export default function SummaryProperty() {
     }
 
     //Load cash savings list
-    const GetDeathBenefitList = async (auth_key, params) => {
+    const GetDeathBenefitList = async (auth_key) => {
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_death_benefit', { params });
-                if (response.status === 200) {
-                    {
-                        response.data.death_benefits_details.map((list) => {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_death_benefit?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    {data.death_benefits_details.map((list) => {
                             if (list.amount !== 0) {
                                 DeathBenifitTotalAmount = DeathBenifitTotalAmount + list.amount;
                                 setDeathBenifitTotalAmount(DeathBenifitTotalAmount);
@@ -145,13 +150,15 @@ export default function SummaryProperty() {
     }
 
     //Load cash savings list
-    const GetDeathRetirementList = async (auth_key, params) => {
+    const GetDeathRetirementList = async (auth_key) => {
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_death_retirement', { params });
-                if (response.status === 200) {
-                    {
-                        response.data.death_retirements_details.map((list) => {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_death_retirement?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+                
+                if (response.ok) {
+                    {data.death_retirements_details.map((list) => {
                             if (list.amount !== 0) {
                                 DeathRetirementTotalAmount = DeathRetirementTotalAmount + list.amount;
                                 setDeathRetirementTotalAmount(DeathRetirementTotalAmount);
@@ -172,13 +179,15 @@ export default function SummaryProperty() {
     }
 
     //Load cash savings list
-    const GetOthersPropertyList = async (auth_key, params) => {
+    const GetOthersPropertyList = async (auth_key) => {
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_other_assets', { params });
-                if (response.status === 200) {
-                    {
-                        response.data.other_assets_details.map((list) => {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_other_assets?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    {data.other_assets_details.map((list) => {
                             if (list.valuation !== 0) {
                                 OthersPropertyTotalAmount = OthersPropertyTotalAmount + list.valuation;
                                 setOthersPropertyTotalAmount(OthersPropertyTotalAmount);
@@ -199,13 +208,15 @@ export default function SummaryProperty() {
     }
 
     //Load debt list
-    const GetDebtList = async (auth_key, params) => {
+    const GetDebtList = async (auth_key) => {
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_debts', { params });
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_debts?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
                 if (response.status === 200) {
-                    {
-                        response.data.debts_details.map((list) => {
+                    {data.debts_details.map((list) => {
                             if (list.amount !== 0) {
                                 DebtTotalAmount = DebtTotalAmount + list.amount;
                                 setDebtTotalAmount(DebtTotalAmount);
@@ -226,13 +237,15 @@ export default function SummaryProperty() {
     }
 
     //Load funeral expenses list
-    const GetFuneralExpensesList = async (auth_key, params) => {
+    const GetFuneralExpensesList = async (auth_key) => {
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_funeral_expenses', { params });
-                if (response.status === 200) {
-                    {
-                        response.data.funeral_expenses_details.map((list) => {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_funeral_expenses?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+                
+                if (response.ok) {
+                    {data.funeral_expenses_details.map((list) => {
                             if (list.amount !== 0) {
                                 FuneralExpensesTotalAmount = FuneralExpensesTotalAmount + list.amount;
                                 setFuneralExpensesTotalAmount(FuneralExpensesTotalAmount);
@@ -373,7 +386,7 @@ export default function SummaryProperty() {
                         <>
                             <Table className="text-left summary-table">
                                 <TableBody>
-                                    {tableList.map((list, index) => (
+                                    {tableList.map((list) => (
                                         <TableRow className="border border-l-0 border-r-0" id={list.id}>
                                             <TableCell className="w-full font-medium"><span className="font-medium">{list.heading}</span></TableCell>
                                             <TableCell align="right" className="font-medium"><span className="font-medium">{list.amount.toLocaleString()}</span></TableCell>

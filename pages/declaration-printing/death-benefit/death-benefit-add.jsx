@@ -1,21 +1,15 @@
-"use client";
-import Link from "next/link";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from 'next/router';
-import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import HeirListBox from "../../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../../components/inputbox-icon/custom-input";
 import CustomPostalcodeInput from "../../../components/inputbox-icon/custom-postalcode-input";
 import CustomDropdownInput from "../../../components/inputbox-icon/custom-dropdown";
-import { set } from "date-fns";
 
 export default function DeathBenefitAdd() {
 
@@ -27,11 +21,6 @@ export default function DeathBenefitAdd() {
     let [DateofReceipt, setDateofReceipt] = useState("");
     let [Valuation, setValuation] = useState("0");
     let [HeirListType, setHeirListType] = useState("");
-
-    let [UndecidedHeir, setUndecidedHeir] = useState("0");
-    let [TotalPrice, setTotalPrice] = useState("0");
-    let [boxValues, setBoxValues] = useState([]);
-
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     let [ShowIncorrectError, setShowIncorrectError] = useState(false);
@@ -59,11 +48,10 @@ export default function DeathBenefitAdd() {
 
     //Load heir details list
     const GetHeirList = async() => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if(auth_key !== null){
             try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', {params});
+                const response = await fetch(`https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
                 if(response.status === 200){
                     setHeirList(response.data.heir_list || []);
                 }
@@ -72,20 +60,17 @@ export default function DeathBenefitAdd() {
                 }
             }catch (error){
                 console.error('Error:', error);
+                setHeirList([]);
             }
-        }  
-        else{
-            //Logout();
-        }      
+        }          
     };
     
     //Load cash savings details    
     const GetDeathBenifitDetails = async(deathBenifitId) => {       
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = {auth_key: auth_key, id: deathBenifitId };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if(auth_key !== null && deathBenifitId !== 0){
             try{
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_death_benefit_details', {params});
+                const response = await fetch(`https://minelife-api.azurewebsites.net/get_death_benefit_details?auth_key=${auth_key}&id=${deathBenifitId}`);
                 if(response.status === 200){                    
                     setNameofLifeInsurance(response.data.death_benefits_details.name_of_life_insurance); 
                     setPostCode(response.data.death_benefits_details.postal_code);
@@ -93,17 +78,11 @@ export default function DeathBenefitAdd() {
                     setDateofReceipt(response.data.death_benefits_details.receipt_date);   
                     setHeirId(response.data.death_benefits_details.person_being_photographed);                
                     setValuation(response.data.death_benefits_details.amount.toLocaleString());                                                      
-                }
-                else{
-
-                }
+                }                
             }catch (error){
                 console.error('Error:', error);
             }
-        }  
-        else{
-            //Logout();
-        }      
+        }          
     };
 
     const handleChangeHeir = (event) => {
@@ -228,10 +207,16 @@ export default function DeathBenefitAdd() {
             formData.append("amount_received", parseFloat(Valuation));
             try{
                 if(deathBenifitId === 0){
-                    response = await axios.post('https://minelife-api.azurewebsites.net/add_death_benefit', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/add_death_benefit`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
                 else{
-                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_death_benefit', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/edit_death_benefit`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }               
                 if(response.status === 200){
                     router.push(`/declaration-printing/death-benefit`); 
@@ -243,7 +228,6 @@ export default function DeathBenefitAdd() {
         else {
             setisSumbitDisabled(true);
             setShowLoader(false);
-            //Logout();
         }        
     };
 

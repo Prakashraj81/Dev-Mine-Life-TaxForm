@@ -1,11 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { InputAdornment, IconButton, Input, FormControl, Button, Box, Typography } from '@mui/material';
+import { InputAdornment, IconButton, Button, Box, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
@@ -14,7 +13,7 @@ import CustomPhoneInput from "../../components/inputbox-icon/custom-phone-input"
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
 import BackdropLoader from "../../components/loader/backdrop-loader";
 
-export default function Register(props) {
+export default function Register() {
   let [Name, setName] = useState("");
   let [PhoneNo, setPhoneNo] = useState("");
   let [Email, setEmail] = useState("");
@@ -30,8 +29,6 @@ export default function Register(props) {
   let [PasswordError, setPasswordError] = useState(false);
   let [ConfirmPasswordError, setConfirmPasswordError] = useState(false);
   let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
-  let [SuccessToast, setSuccessToast] = useState(false);
-  let [ErrorToast, setErrorToast] = useState(false);
   let [showPassword, setShowPassword] = useState(false);
 
   //Password hide / show
@@ -112,15 +109,10 @@ export default function Register(props) {
     formData.append('email', Email);
     formData.append('password', Password);
 
-    const params = {
-      email: Email
-    };
-
     //User email check Api
     if (isSumbitDisabled !== true) {
       try {
-        const params = { email: Email };
-        const response = await axios.get('https://minelife-api.azurewebsites.net/check_user_email', { params });
+        const response = await fetch(`https://minelife-api.azurewebsites.net/check_user_email?email=${Email}`);
         if (response.status === 200) {
           await register_user(formData);
         }
@@ -147,7 +139,10 @@ export default function Register(props) {
   const register_user = async (formData) => {
     if (formData !== null) {
       try {
-        const response = await axios.post('https://minelife-api.azurewebsites.net/register_user', formData);
+        const response = await fetch(`https://minelife-api.azurewebsites.net/register_user`, {
+          method: 'POST',
+          body: formData
+        });
         if (response.status === 200) {
           setRegisterError(false);
           setShowLoader(false);
@@ -155,7 +150,6 @@ export default function Register(props) {
           //router.push(`/auth/login`);
         }
         else {
-          setLoginError(true);
           setShowLoader(false);
         }
       } catch (error) {

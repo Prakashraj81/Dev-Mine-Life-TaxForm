@@ -1,20 +1,11 @@
-"use client";
-import Link from "next/link";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from 'next/router';
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import HeirListBox from "../../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
-import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
-import InfoIcon from '@mui/icons-material/Info';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import PrintIcon from '@mui/icons-material/Print';
-import axios from "axios";
 import CustomInput from "../../../components/inputbox-icon/custom-input";
 import CustomDropdownInput from "../../../components/inputbox-icon/custom-dropdown";
 
@@ -31,13 +22,6 @@ export default function SecuritiesAdd() {
         // { id: 6, value: '社債', label: '社債' },
         // { id: 7, value: '証券投資信託の受益証券', label: '証券投資信託の受益証券' },
         // { id: 8, value: '貸付信託の受益証券', label: '貸付信託の受益証券' },
-    ];
-
-    let UnitDetailsList = [
-        { id: 9, value: 'MRF', label: 'MRF' },
-        { id: 10, value: '外貨建てMMF', label: '外貨建てMMF' },
-        { id: 11, value: '一般的な投資信託', label: '一般的な投資信託' },
-        { id: 12, value: '上場投資信託', label: '上場投資信託' },
     ];
 
     let UnitsList = [
@@ -65,7 +49,6 @@ export default function SecuritiesAdd() {
     let [showFinancialInstitutionName, setshowFinancialInstitutionName] = useState(false);
     let [showQuantityPrice, setshowQuantityPrice] = useState(false);
     let [showNameSecurities, setshowNameSecurities] = useState(true);
-    let [EquityBoxidendmethod, setEquityBoxidendmethod] = useState(false);
     let [showUnitDetails, setshowUnitDetails] = useState(false);
     let [showMoneyOrderQuantity, setshowMoneyOrderQuantity] = useState(false);
     let [showReducationAmount, setshowReducationAmount] = useState(false);
@@ -119,22 +102,7 @@ export default function SecuritiesAdd() {
         else {
             setShowOtherFreeInput(false);
         }
-    }
-
-    const UnitDetailsDropdownChange = (event) => {
-        let selectedValue = event.target.value;
-        let selectedOptions = UnitDetailsList.find(option => option.value === selectedValue);
-        selectId = Number(selectedOptions.id);
-        setUnitDetails(selectedValue);
-        if (selectId !== 0) {
-            setUnitDetailsError(false);
-            handleInputChange(selectId);
-        }
-        else {
-            setUnitDetailsError(true);
-        }
-    }
-
+    };
 
     useEffect(() => {
         setshowNameSecurities(true);
@@ -156,29 +124,25 @@ export default function SecuritiesAdd() {
 
     //Load cash savings details    
     const GetSecuritiesDetails = async (securityId) => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key, id: securityId };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null && securityId !== 0) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_securities', { params });
-                if (response.status === 200) {
-                    setSecuritiesType(response.data.securities_details.securities_type);
-                    setNameofSecurities(response.data.securities_details.name_and_brand);
-                    setFinancialInstitutionName(response.data.securities_details.financial_institution_name);
-                    setUnitDetails(response.data.securities_details.unit_details);
-                    setUnitPrice(response.data.securities_details.unit_1_details);
-                    setQuantity(response.data.securities_details.quantity);
-                    setAmountofMoney(response.data.securities_details.amount.toLocaleString());
-                }
-                else {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/get_securities?auth_key=${auth_key}&id=${securityId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
 
+                if (response.ok) {
+                    setSecuritiesType(data.securities_details.securities_type);
+                    setNameofSecurities(data.securities_details.name_and_brand);
+                    setFinancialInstitutionName(data.securities_details.financial_institution_name);
+                    setUnitDetails(data.securities_details.unit_details);
+                    setUnitPrice(data.securities_details.unit_1_details);
+                    setQuantity(data.securities_details.quantity);
+                    setAmountofMoney(data.securities_details.amount.toLocaleString());
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
-        else {
-            //Logout();
         }
     };
 
@@ -282,47 +246,6 @@ export default function SecuritiesAdd() {
         AmountToTotalCalculation(amount_of_money);
     }
 
-    const MoneyOrderKeyPress = (e) => {
-        let money_order = Number(e.target.value);
-        setMoneyOrder(money_order);
-        setisSumbitDisabled(false);
-    }
-
-    const ReductionAmountKeyPress = (e) => {
-        let reduction_amount = Number(e.target.value);
-        var previousAmountofmoney = (10 / 100) * Quantity;
-        setReductionAmount(reduction_amount);
-        if (reduction_amount > 0) {
-            var amount = previousAmountofmoney;
-            amount = amount - reduction_amount;
-            setAmountofMoney(amount.toLocaleString());
-            setUndecidedHeir(amount.toLocaleString());
-            AmountToTotalCalculation(amount.toLocaleString());
-        }
-        else {
-            amount = previousAmountofmoney - reduction_amount;
-            setAmountofMoney(amount.toLocaleString());
-            setUndecidedHeir(amount.toLocaleString());
-            AmountToTotalCalculation(amount.toLocaleString());
-            setReductionAmount(0);
-        }
-        setisSumbitDisabled(false);
-    }
-
-    const MoneyOrderQuantityKeyPress = (e) => {
-        let money_Quantity = Number(e.target.value);
-        setQuantity(money_Quantity);
-        if (money_Quantity >= 10) {
-            var percentage = (10 / 100) * money_Quantity;
-            setAmountofMoney(percentage.toLocaleString());
-        }
-        else {
-            setAmountofMoney(0);
-        }
-        setisSumbitDisabled(false);
-    }
-
-
     const handleKeyPress = (e) => {
         const keyCode = e.keyCode || e.which;
         const keyValue = String.fromCharCode(keyCode);
@@ -331,11 +254,6 @@ export default function SecuritiesAdd() {
             e.preventDefault();
         }
     };
-
-    const UnitPriceKeyPress = (e) => {
-        let unit_price = parseFloat(e.target.value);
-        setUnitPrice(unit_price);
-    }
 
     const QuantityKeyPress = (e) => {
         let unit_price = parseFloat(e.target.value);
@@ -477,12 +395,18 @@ export default function SecuritiesAdd() {
             formData.append("amount", parseFloat(AmountofMoney));
             try {
                 if (securityId === 0) {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/add_securities', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/add_securities`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
                 else {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_securities', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/edit_securities`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
-                if (response.status === 200) {
+                if (response.ok) {
                     router.push(`/declaration-printing/securities`);
                 }
             } catch (error) {
@@ -493,7 +417,6 @@ export default function SecuritiesAdd() {
             console.log("API not allowed");
             setisSumbitDisabled(true);
             setShowLoader(false);
-            //Logout();
         }
     };
 

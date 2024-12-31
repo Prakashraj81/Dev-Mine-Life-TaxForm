@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import React, { useState } from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,7 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-export default function TableOne({inputHandlingFunction, road_price_1, regional_distinction_1, corner_semi_corner_1, road_price_2, regional_distinction_2, corner_semi_corner_2}) {
+export default function TableOne({inputHandlingFunction, road_price_1, regional_distinction_1}) {
     const [inputValue, setInputValue] = useState('');
 
     const handleInputChange = (event) => {

@@ -1,17 +1,11 @@
-"use client";
-import Link from "next/link";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from 'next/router';
-import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import HeirListBox from "../../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
-import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
 import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../../components/inputbox-icon/custom-input";
 import CustomPostalcodeInput from "../../../components/inputbox-icon/custom-postalcode-input";
@@ -36,7 +30,6 @@ export default function DebtAdd() {
     let [DebtPaymentDeadline, setDebtPaymentDeadline] = useState("");
     let [AmountofMoney, setAmountofMoney] = useState("0");
     let [UndecidedHeir, setUndecidedHeir] = useState("0");
-    let [TotalPrice, setTotalPrice] = useState("0");
     let [boxValues, setBoxValues] = useState([]);
 
     let [ShowNameDebt, setShowNameDebt] = useState(false);
@@ -51,7 +44,6 @@ export default function DebtAdd() {
     let [NameofDebtError, setNameofDebtError] = useState(false);
     let [CauseofUnpaidBalanceError, setCauseofUnpaidBalanceError] = useState(false);
     let [AddressError, setAddressError] = useState(false);
-    let [ShowObligationDateDebtPaymentDeadlineError, setShowObligationDateDebtPaymentDeadlineError] = useState(false);
     let [ObligationDateError, setObligationDateError] = useState(false);
     let [AmountofMoneyError, setAmountofMoneyError] = useState(false);
 
@@ -73,29 +65,25 @@ export default function DebtAdd() {
 
     //Load cash savings details    
     const GetDebtDetails = async (debtId) => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key, id: debtId };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null && debtId !== 0) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_debt_details', { params });
-                if (response.status === 200) {
-                    setNameofDebt(response.data.debt_details.name);
-                    setOtherParty(response.data.debt_details.other_party);
-                    setPostCode(response.data.debt_details.postal_code);
-                    setAddress(response.data.debt_details.address);
-                    setObligationDate(response.data.debt_details.obligation_date);
-                    setDebtPaymentDeadline(response.data.debt_details.payment_deadline);
-                    setAmountofMoney(response.data.debt_details.amount.toLocaleString());
-                }
-                else {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/get_debt_details?auth_key=${auth_key}&id=${debtId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
 
+                if (response.ok) {
+                    setNameofDebt(data.debt_details.name);
+                    setOtherParty(data.debt_details.other_party);
+                    setPostCode(data.debt_details.postal_code);
+                    setAddress(data.debt_details.address);
+                    setObligationDate(data.debt_details.obligation_date);
+                    setDebtPaymentDeadline(data.debt_details.payment_deadline);
+                    setAmountofMoney(data.debt_details.amount.toLocaleString());
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
-        else {
-            //Logout();
         }
     };
 
@@ -131,14 +119,6 @@ export default function DebtAdd() {
         setShowAddress(true);
         setShowObligationDateDebtPaymentDeadline(true);
     }, []);
-
-    const handleDebitType = (event) => {
-        let selectedValue = event.target.value;
-        let selectedOptions = DebtList.find(option => option.value === selectedValue);
-        let selectedId = Number(selectedOptions.id);
-        setDebtType(selectedValue);
-        setisSumbitDisabled(false);
-    };
 
     //Amount input calculation function
     const AmountofMoneyKeyPress = (e) => {
@@ -213,65 +193,6 @@ export default function DebtAdd() {
         setisSumbitDisabled(false);
     }
 
-    //Box value calculation function    
-    function AmountToTotalCalculation(AmountofMoney) {
-        //Amount of money convert
-        if (AmountofMoney == 0 || AmountofMoney == "NaN") {
-            AmountofMoney = 0;
-        }
-        else {
-            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
-            AmountofMoney = parseFloat(AmountofMoney);
-        }
-        let totalBoxValues = boxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = AmountofMoney - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    }
-
-    //Footer box values and calculation
-    let handleBoxValueChange = (e, index) => {
-        let newValue = parseFloat(e.target.value);
-        if (isNaN(newValue)) {
-            newValue = 0;
-        }
-        const updatedBoxValues = [...boxValues];
-        updatedBoxValues[index] = newValue;
-        setBoxValues(updatedBoxValues);
-
-        //Amount of money convert
-        if (AmountofMoney == 0) {
-            AmountofMoney = 0;
-        }
-        else {
-            AmountofMoney = AmountofMoney.replace(/,/g, '').replace('.', '');
-            AmountofMoney = parseFloat(AmountofMoney);
-        }
-        let totalBoxValues = updatedBoxValues.reduce((total, value) => total + value, 0);
-        if (isNaN(totalBoxValues)) {
-            totalBoxValues = 0;
-        }
-        let heirValue = AmountofMoney - totalBoxValues;
-        if (heirValue < 0) {
-            setUndecidedHeir(heirValue.toLocaleString());
-            setShowIncorrectError(true);
-        }
-        else {
-            setShowIncorrectError(false);
-            setUndecidedHeir(heirValue.toLocaleString());
-        }
-    };
-
-
     //Submit API function 
     const router = useRouter();
     let defaultValues = {};
@@ -334,12 +255,18 @@ export default function DebtAdd() {
             formData.append("amount", parseFloat(AmountofMoney));
             try {
                 if (debtId === 0) {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/add_debt', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/add_debt`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
                 else {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_debt', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/edit_debt`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
-                if (response.status === 200) {
+                if (response.ok) {
                     router.push(`/declaration-printing/debt`);
                 }
             } catch (error) {
@@ -349,7 +276,6 @@ export default function DebtAdd() {
         else {
             setisSumbitDisabled(true);
             setShowLoader(false);
-            //Logout();
         }
     };
 

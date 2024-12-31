@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-key */
+import React, { useState } from "react";
 import NextLink from "next/link";
-import PropTypes from "prop-types";
 import {
   Box,
-  Drawer,
-  useMediaQuery,
   List,
-  Link,
-  Button,
-  Typography,
   ListItem,
-  Collapse,
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
@@ -18,11 +13,9 @@ import Menuitems from "./MenuItems";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import BackdropLoader from "../../../loader/backdrop-loader";
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const SidebarItems = () => {
   let curl = useRouter();
@@ -118,12 +111,6 @@ const SidebarItems = () => {
     }
   `;
 
-  const IconAnimate = styled(motion.span)`
-    font-size: 18px;
-    &:hover {
-      cursor: pointer;
-    }
-  `;
 
   // const [isMenuOpen, setMenuOpen] = useState(false);
 
@@ -186,7 +173,7 @@ const SidebarItems = () => {
               animate={{ height: "60px" }}
               exit={{ height: 0 }}
             >
-              {item.child.map((sub, index) => (
+              {item.child.map((sub) => (
                 <>
                   <NextLink
                     className={`${location === sub.href ? "text-primary-color" : "hover:text-primary-color"
@@ -273,7 +260,7 @@ const SidebarItems = () => {
               animate={{ height: "60px" }}
               exit={{ height: 0 }}
             >
-              {item.child.map((sub, index) => (
+              {item.child.map((sub) => (
                 <>
                   <List
                     component="li"

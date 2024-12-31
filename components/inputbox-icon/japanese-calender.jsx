@@ -1,10 +1,11 @@
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from 'react';
 import DatePicker, { registerLocale, setDefaultLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ja } from 'date-fns/locale';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { keyframes } from "@mui/system";
-import { css } from '@emotion/react';
 
 // Define the shake keyframes
 const shake = keyframes`

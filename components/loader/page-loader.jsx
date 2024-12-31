@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import { Box, Backdrop, CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 const PageLoader = ({ loading }) => {
   return (

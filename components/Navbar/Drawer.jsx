@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react";
+/* eslint-disable react/prop-types */
+import React from "react";
 import CloseIcon from '@mui/icons-material/Close';
-import Link from "next/link";
 import Image from 'next/image';
 
 

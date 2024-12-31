@@ -1,14 +1,9 @@
-"use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
-import { InputAdornment, IconButton, Input, FormControl, Button, Box, Typography } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import { InputAdornment, IconButton, Button, Box, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
@@ -16,10 +11,9 @@ import BlankLayout from '../../components/layouts/blank/BlankLayout';
 import BackdropLoader from '../../components/loader/backdrop-loader';
 import CustomInput from "../../components/inputbox-icon/custom-input";
 
-export default function Login(props) {
+export default function Login() {
   let [UserName, setUserName] = useState("");
   let [Password, setPassword] = useState("");
-
   let [isValidEmail, setisValidEmail] = useState(true);
   let [LoginError, setLoginError] = useState(false);
   let [ShowLoader, setShowLoader] = useState(false);
@@ -65,14 +59,17 @@ export default function Login(props) {
       isSumbitDisabled = true;
     }
 
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('email', defaultValues.UserName);
     formData.append('password', defaultValues.Password);
 
     //Api setup
     if (isSumbitDisabled !== true) {
       try {
-        const response = await axios.post('https://minelife-api.azurewebsites.net/user_login', formData);
+        const response = await fetch(`https://minelife-api.azurewebsites.net/user_login`, {
+          method: 'POST',
+          body: formData
+        });
         if (response.status === 200) {
           let encode_auth_key = btoa(response.data.auth_key);
           let encode_login = btoa(response.data.is_authenticated);

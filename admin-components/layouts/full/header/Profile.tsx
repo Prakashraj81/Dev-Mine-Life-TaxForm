@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import Link from "next/link";
-import axios from "axios";
 import {
   Avatar,
   Box,
@@ -43,13 +42,20 @@ const Profile = () => {
 
   const router = useRouter();  
   const AdminLogOut = async () => {   
+    let data;
     try{
       let admin_auth_key = atob(sessionStorage.getItem("admin_auth_key"));
       let formData = new FormData();
       formData.append("auth_key", admin_auth_key);
       if(admin_auth_key !== null){
-        const response = await axios.post('https://minelife-api.azurewebsites.net/admin/logout', formData);
-        if(response.status === 200){
+        const response = await fetch(`https://minelife-api.azurewebsites.net/admin/logout`, {
+          method: 'POST',
+          body: formData
+        });
+        data = await response.json();
+        if (!response.ok) throw new Error(data);
+
+        if(response.ok){
           sessionStorage.clear();
           localStorage.clear();
           router.push(`/admin/auth/login`);
@@ -62,7 +68,7 @@ const Profile = () => {
         console.log("Invalid auth key");
       }     
     } catch (error){      
-      if(error.response.status === 440 && error.response.data.error.message === "Session Expired. Please login again."){
+      if(data.error.message === "Session Expired. Please login again."){
           sessionStorage.clear();
           localStorage.clear();
           router.push(`/admin/auth/login`);

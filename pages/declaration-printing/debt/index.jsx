@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import {
     Table,
     TableBody,
     TableCell,
-    TableContainer,
-    TableHead,
     TableRow,
-    Paper,
     Box,
     Button,
     Typography
 } from '@mui/material';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import axios from "axios";
 import { useRouter } from 'next/router';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -46,13 +40,15 @@ export default function Debt() {
 
     //Load cash savings list
     const GetDebtList = async () => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_debts', { params });
-                if (response.status === 200) {
-                    setDebtList(response.data.debts_details);
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_debts?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    setDebtList(data.debts_details);
                 }
                 else {
                     setDebtList([]);
@@ -65,23 +61,27 @@ export default function Debt() {
 
     const DeleteModalFunction = async (event) => {
         let value = event.currentTarget.id;
-        const { auth_key, customerId, debtId, buttonValue, params } = deleteTarget;
+        const { auth_key, debtId } = deleteTarget;
         if (value === "Yes") {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_debt', { params });
-                if (response.status === 200) {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/delete_debt?auth_key=${auth_key}&id=${debtId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
                     setVariantSnackbar("success");
-                    setSnackbarMsg(response.data.message);
+                    setSnackbarMsg(data.message);
                     GetDebtList();
                     setSnackbarOpen(true);
                 }
                 else {
                     setVariantSnackbar("error");
-                    setSnackbarMsg(response.data.message);
+                    setSnackbarMsg(data.message);
                     GetDebtList([]);
                     setSnackbarOpen(true);
                 }
             } catch (error) {
+                console.log("Errro", error);
                 setVariantSnackbar("error");
                 setSnackbarMsg("Death retirement details not deleted");
             }

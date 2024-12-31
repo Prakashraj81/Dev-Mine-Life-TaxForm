@@ -1,53 +1,16 @@
-"use client";
-import Link from "next/link";
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
-import axios from "axios";
-import {
-    List,
-    ListItem,
-    ListItemText,
-    ListItemIcon,
-    Box,
-    Stepper,
-    Step,
-    StepLabel,
-    StepButton,
-    Button,
-    Typography,
-    Radio,
-    RadioGroup,
-    FormControlLabel,
-    FormControl,
-    FormLabel,
-} from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import {Box, Typography } from '@mui/material';
 import BackButton from "../../components/back-btn";
 import SubmitButton from "../../components/submit-btn";
-import HeirListBox from "../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../components/layouts/full/FullLayout';
 import BackdropLoader from '../../components/loader/backdrop-loader';
 import JapaneseCalendar from "../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../components/inputbox-icon/custom-input";
 import CustomPostalcodeInput from "../../components/inputbox-icon/custom-postalcode-input";
-import CustomPhoneInput from "../../components/inputbox-icon/custom-phone-input";
 
 export default function Decendent() {
-
-    const ProfessionList = [
-        { value: '公務員', label: '公務員' },
-        { value: '会社役員', label: '会社役員' },
-        { value: '会社員（正社員）', label: '会社員（正社員）' },
-        { value: '会社員（契約社員/派遣社員）', label: '会社員（契約社員/派遣社員）' },
-        { value: '自営業/自由業', label: '自営業/自由業' },
-        { value: '学生', label: '学生' },
-        { value: 'パート/アルバイト', label: 'パート/アルバイト' },
-        { value: '主婦', label: '主婦' },
-        { value: 'その他', label: 'その他' },
-        { value: 'なし', label: 'なし' },
-    ];
-
     let [Id, setId] = useState(0);
     let [Name, setName] = useState("");
     let [Furigana, setFurigana] = useState("");
@@ -58,48 +21,20 @@ export default function Decendent() {
     let [DateofDeath, setDateofDeath] = useState("");
     let [Profession, setProfession] = useState("");
     let [WheretoSubmitReturn, setWheretoSubmitReturn] = useState("");
-    let [isErrorVisible, setErrorVisible] = useState(false);
     let [DecendentList, setDecendentList] = useState([]);
 
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
-    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
     let [NameError, setNameError] = useState(false);
     let [KatakanaError, setKatakanaError] = useState(false);
     let [FuriganaError, setFuriganaError] = useState(false);
     let [DateofBirthError, setDateofBirthError] = useState(false);
     let [DateofDeathError, setDateofDeathError] = useState(false);
     let [InheritanceBoxisionCompletionDateError, setInheritanceBoxisionCompletionDateError] = useState(false);
-    let [isClearable, setIsClearable] = useState(true);
 
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
 
-
-    //Disabled deduction radio button
-    const handleDisabledRadio = (event) => {
-        setDisabledRadioValue(event.target.value);
-    };
-
-    //Legal heir radio button
-    const handleLegalHeirRadio = (event) => {
-        let radioValue = event.target.value;
-        setLegalHeirRadioValue(radioValue);
-        if (radioValue === "Yes") {
-            setShowDisabledDeduction(true);
-        }
-        else {
-            setShowDisabledDeduction(false);
-        }
-    };
-
-    const handleProfessionType = (event) => {
-        let selectedValue = event.target.value;
-        let selectedOptions = ProfessionList.find(option => option.value === selectedValue);
-        let selectedId = Number(selectedOptions.id);
-        setProfession(selectedValue);
-        setisSumbitDisabled(false);
-    };
 
     //Postal code 7 digit limit function
     const [isValid, setIsValid] = useState(true);
@@ -120,17 +55,6 @@ export default function Decendent() {
         const numericRegex = /^[0-9\b]+$/;
         if (!numericRegex.test(keyValue)) {
             e.preventDefault();
-        }
-    };
-
-    function validateForm(name) {
-        var name = document.forms["myForm"]["name"].value;
-        var pattern = /([\u4e00-\u9faf]+|[あ-ん]+|[ア-ン]+)+((\s|　)([\u4e00-\u9faf]+|[‌​あ-ん]+|[ア-ン]+)+)+/i;
-        if (pattern.test(name) == false) {
-            return false;
-        }
-        else {
-            return true;
         }
     };
 
@@ -185,11 +109,6 @@ export default function Decendent() {
             setAddress(inputValue);
         }
         setisSumbitDisabled(false);
-    }
-
-
-    const goToPreviousPage = () => {
-        router.back(); // This navigates to the previous page
     };
 
 
@@ -256,11 +175,17 @@ export default function Decendent() {
             formData.append("declaration_location", WheretoSubmitReturn);
             if (formData !== null && auth_key !== null) {
                 try {
-                    var response = "";
+                    let response = "";
                     if (Id !== 0) {
-                        response = await axios.post('https://minelife-api.azurewebsites.net/edit_decedent', formData);
+                        response = await fetch(`https://minelife-api.azurewebsites.net/edit_decedent`, {
+                            method: 'POST',
+                            body: formData
+                        });
                     } else {
-                        response = await axios.post('https://minelife-api.azurewebsites.net/add_decedent', formData);
+                        response = await fetch(`https://minelife-api.azurewebsites.net/add_decedent`, {
+                            method: 'POST',
+                            body: formData
+                        });
                     }
                     if (response.status === 200) {
                         setShowLoader(false);
@@ -289,11 +214,10 @@ export default function Decendent() {
 
     //Load decendent details list
     const GetDecendentList = async () => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/decedent_detail', { params });
+                const response = await fetch(`https://minelife-api.azurewebsites.net/decedent_detail?auth_key${auth_key}`);
                 if (response.status === 200) {
                     setDecendentList(response.data);
                     //setId(response.data.decedent_id);

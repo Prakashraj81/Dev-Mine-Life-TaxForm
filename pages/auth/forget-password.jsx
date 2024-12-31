@@ -1,10 +1,8 @@
-import React, { useState, useEffect, Fragment } from "react";
-import Link from "next/link";
-import axios from 'axios';
+/* eslint-disable no-unused-vars */
+import React, { useState, Fragment } from "react";
 import { useRouter } from 'next/router';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import Backdrop from '@mui/material/Backdrop';
 import { Box, Button, Typography } from '@mui/material';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
@@ -14,7 +12,6 @@ import CustomInput from "../../components/inputbox-icon/custom-input";
 
 export default function ForgetPassword() {
   let [ForgetPasswordEmail, setForgetPasswordEmail] = useState("");
-  let [Otp, setOtp] = useState("");
   let [isValidEmail, setisValidEmail] = useState(true);
   let [ShowLoader, setShowLoader] = useState(false);
   let [ForgetPasswordEmailError, setForgetPasswordEmailError] = useState(false);
@@ -26,17 +23,11 @@ export default function ForgetPassword() {
     setForgetPasswordEmail(inputVal);
   }
 
-  const handleOtpInput = (event) => {
-    let inputVal = event.target.value;
-    setOtp(inputVal);
-  }
-
   const onSubmit = async () => {
     if (ForgetPasswordEmail !== "") {
       try {
         setShowLoader(true);
-        const params = { email: ForgetPasswordEmail };
-        const response = await axios.get('https://minelife-api.azurewebsites.net/check_user_email', { params });
+        const response = await fetch(`https://minelife-api.azurewebsites.net/check_user_email?email=${ForgetPasswordEmail}`);
         if (response.status !== 200) {
           setForgetPasswordEmailError(false);
           await forgetpwd_user();
@@ -61,8 +52,7 @@ export default function ForgetPassword() {
   const router = useRouter();
   const forgetpwd_user = async () => {
     try {
-      const params = { email: ForgetPasswordEmail };
-      const response = await axios.get('https://minelife-api.azurewebsites.net/forgot_password', { params });
+      const response = await fetch(`https://minelife-api.azurewebsites.net/forgot_password?email=${ForgetPasswordEmail}`);
       if (response.status === 200) {
         router.push(`/auth/reset-password?email=${btoa(ForgetPasswordEmail)}`);
       }

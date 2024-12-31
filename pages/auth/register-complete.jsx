@@ -1,15 +1,9 @@
-import React, { useState, useEffect, Fragment } from "react";
-import Link from "next/link";
-import axios from 'axios';
+import React, { Fragment } from "react";
 import { useRouter } from 'next/router';
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
-import Backdrop from '@mui/material/Backdrop';
 import { Box, Button, Typography } from '@mui/material';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import BlankLayout from '../../components/layouts/blank/BlankLayout';
-import BackdropLoader from '../../components/loader/backdrop-loader';
 
 export default function RegisterComplete() {
     const router = useRouter(); 

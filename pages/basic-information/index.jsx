@@ -1,6 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import axios from "axios";
 import { useRouter } from 'next/router';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import AddIcon from '@mui/icons-material/Add';
@@ -13,10 +13,8 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableContainer,
     TableHead,
     TableRow,
-    Paper,
     Box,
     Button,
     Typography
@@ -46,10 +44,9 @@ export default function BasicInformation() {
 
     //Load decendent details list
     const GetDecendentList = async () => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         try {
-            const response = await axios.get('https://minelife-api.azurewebsites.net/decedent_detail', { params });
+            const response = await fetch(`https://minelife-api.azurewebsites.net/decedent_detail?auth_key=${auth_key}`);
             if (response.status === 200) {
                 setDecendentList(response.data);
             }
@@ -58,17 +55,17 @@ export default function BasicInformation() {
             }
         } catch (error) {
             console.error('Error:', error);
+            setDecendentList([]);
         }
     };
 
 
     //Load heir details list
     const GetHeirList = async () => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', { params });
+                const response = await fetch(`https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
                 if (response.status === 200) {
                     setHeirListLenth(response.data.heir_list.length || 0);
                     setHeirList(response.data.heir_list || []);
@@ -78,11 +75,9 @@ export default function BasicInformation() {
                 }
             } catch (error) {
                 console.error('Error:', error);
+                setHeirList([]);
             }
-        }
-        else {
-            //Logout();
-        }
+        }        
     };
 
 
@@ -111,7 +106,7 @@ export default function BasicInformation() {
         const { auth_key, heirId, buttonValue, params } = deleteTarget;
         if (value === "Yes") {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_heir', { params });
+                const response = await fetch(`https://minelife-api.azurewebsites.net/delete_heir?auth_key=${auth_key}&id=${heirId}`);
                 if (response.status === 200) {
                     setSnackbarOpen(true);
                     setSnackbarMsg("success");

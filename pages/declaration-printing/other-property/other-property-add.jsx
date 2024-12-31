@@ -1,29 +1,15 @@
-"use client";
-import Link from "next/link";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from 'next/router';
-import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import HeirListBox from "../../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
-import UnitPriceIcon from "../../../components/inputbox-icon/textbox-unitprice-icon";
 import CustomInput from "../../../components/inputbox-icon/custom-input";
 import CustomAmountInput from "../../../components/inputbox-icon/custom-amount-input";
 
 export default function OtherPropertyAdd() {
-    let PropertyList = [
-        { id: 1, value: 'その他', label: 'その他' },
-        { id: 2, value: '立木', label: '立木' },
-        { id: 3, value: '代償財産', label: '代償財産' },
-        { id: 4, value: '管理残額（教育資金）', label: '管理残額（教育資金）' },
-        { id: 5, value: '管理残額（結婚・子育て資金）', label: '管理残額（結婚・子育て資金）' },
-    ];
-
     let [Property, setProperty] = useState("");
     let [PropertyName, setPropertyName] = useState("");
     let [OtherParty, setOtherParty] = useState("");
@@ -41,12 +27,10 @@ export default function OtherPropertyAdd() {
     let [ShowAddress, setShowAddress] = useState(false);
     let [ShowUnitPriceQuantity, setShowUnitPriceQuantity] = useState(false);
     let [ShowReductionRate, setShowReductionRate] = useState(false);
-    let [ShowValuationDisabled, setShowValuationDisabled] = useState(false);
     let [ShowContent, setShowContent] = useState(false);
     let [ShowCompensatoryProperty, setShowCompensatoryProperty] = useState(false);
 
     let [UndecidedHeir, setUndecidedHeir] = useState("0");
-    let [TotalPrice, setTotalPrice] = useState("0");
     let [boxValues, setBoxValues] = useState([]);
 
     //Error state and button disabled
@@ -75,18 +59,17 @@ export default function OtherPropertyAdd() {
 
     //Load other property details    
     const GetOtherPropertyDetails = async (OtherPropertyId) => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key, id: OtherPropertyId };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null && OtherPropertyId !== 0) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_other_assets_details', { params });
-                if (response.status === 200) {
-                    setPropertyName(response.data.other_assets_details.property_name);
-                    setOtherParty(response.data.other_assets_details.other_party);
-                    setValuation(response.data.other_assets_details.valuation.toLocaleString());
-                }
-                else {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/get_other_assets_details?auth_key=${auth_key}?id=${OtherPropertyId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
 
+                if (response.ok) {
+                    setPropertyName(data.other_assets_details.property_name);
+                    setOtherParty(data.other_assets_details.other_party);
+                    setValuation(data.other_assets_details.valuation.toLocaleString());
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -108,81 +91,6 @@ export default function OtherPropertyAdd() {
         }
         setPostCode(digit_value);
         setIsValid(isValidInput);
-    }
-
-
-    const handlePropertyType = (event) => {
-        let selectedValue = event.target.value;
-        let selectedOptions = PropertyList.find(option => option.value === selectedValue);
-        let selectedId = Number(selectedOptions.id);
-        setProperty(selectedValue);
-        setisSumbitDisabled(false);
-        if (selectedId === 1) {
-            setShowContent(false);
-            setShowCompensatoryProperty(false);
-            setShowValuationDisabled(false);
-            setShowDateofAcquisition(false);
-            setShowReductionRate(false);
-            setShowPostCode(true);
-            setShowAddress(true);
-            setShowUnitPriceQuantity(true);
-            setShowValuation(true);
-        }
-        else if (selectedId === 2) {
-            setShowContent(false);
-            setShowCompensatoryProperty(false);
-            setShowValuationDisabled(false);
-            setShowDateofAcquisition(false);
-            setShowReductionRate(true);
-            setShowPostCode(true);
-            setShowAddress(true);
-            setShowUnitPriceQuantity(true);
-            setShowValuation(true);
-        }
-        else if (selectedId === 3) {
-            setShowContent(false);
-            setShowDateofAcquisition(false);
-            setShowReductionRate(false);
-            setShowPostCode(false);
-            setShowAddress(false);
-            setShowUnitPriceQuantity(false);
-            setShowValuation(true);
-            setShowValuationDisabled(true);
-            setShowCompensatoryProperty(true);
-        }
-        else if (selectedId === 4) {
-            setShowCompensatoryProperty(false);
-            setShowValuationDisabled(false);
-            setShowReductionRate(false);
-            setShowUnitPriceQuantity(false);
-            setShowValuation(true);
-            setShowContent(true);
-            setShowDateofAcquisition(true);
-            setShowPostCode(true);
-            setShowAddress(true);
-        }
-        else if (selectedId === 5) {
-            setShowCompensatoryProperty(false);
-            setShowValuationDisabled(false);
-            setShowReductionRate(false);
-            setShowUnitPriceQuantity(false);
-            setShowValuation(true);
-            setShowContent(false);
-            setShowDateofAcquisition(true);
-            setShowPostCode(true);
-            setShowAddress(true);
-        }
-        else {
-            setShowContent(false);
-            setShowCompensatoryProperty(false);
-            setShowValuationDisabled(false);
-            setShowDateofAcquisition(false);
-            setShowReductionRate(false);
-            setShowPostCode(false);
-            setShowAddress(false);
-            setShowUnitPriceQuantity(false);
-            setShowValuation(true);
-        }
     };
 
     const handleKeyPress = (e) => {
@@ -197,20 +105,16 @@ export default function OtherPropertyAdd() {
     const ReductionRateKeyPress = (e) => {
         let reduction_amount = Number(e.target.value);
         var previousAmountofmoney = (10 / 100) * Quantity;
-        setReductionAmount(reduction_amount);
         if (reduction_amount > 0) {
             var amount = previousAmountofmoney;
             amount = amount - reduction_amount;
             setValuation(amount.toLocaleString());
             setUndecidedHeir(amount.toLocaleString());
-            AmountToTotalCalculation(amount.toLocaleString());
         }
         else {
             amount = previousAmountofmoney - reduction_amount;
             setValuation(amount.toLocaleString());
             setUndecidedHeir(amount.toLocaleString());
-            AmountToTotalCalculation(amount.toLocaleString());
-            setReductionAmount(0);
         }
         setisSumbitDisabled(false);
     }
@@ -368,12 +272,18 @@ export default function OtherPropertyAdd() {
             formData.append("valuation", parseFloat(Valuation));
             try {
                 if (OtherPropertyId === 0) {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/add_other_assets', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/add_other_assets`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
                 else {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_other_assets', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/edit_other_assets`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
-                if (response.status === 200) {
+                if (response.ok) {
                     router.push(`/declaration-printing/other-property`);
                 }
             } catch (error) {
@@ -383,7 +293,6 @@ export default function OtherPropertyAdd() {
         else {
             setisSumbitDisabled(true);
             setShowLoader(false);
-            //Logout();
         }
     };
 
@@ -557,7 +466,7 @@ export default function OtherPropertyAdd() {
                                         className="form-control w-full bg-custom-gray focus:outline-none rounded h-12 pl-3"
                                         onChange={ReductionRateKeyPress}
                                         onKeyPress={handleKeyPress}
-                                        autocomplete="off"
+                                        autoComplete="off"
                                     />
                                     {ReductionRateError && (
                                         <Typography component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>

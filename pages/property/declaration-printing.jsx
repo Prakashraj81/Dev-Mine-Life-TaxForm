@@ -1,11 +1,11 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-key */
 "use client";
-import React, { useState, useEffect, useRef, Fragment, Controller } from "react";
-import Link from "next/link";
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import React, { useState, Fragment } from "react";
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../components/back-btn";
 import FullLayout from '../../components/layouts/full/FullLayout';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import axios from 'axios';
 
 const tableList = [
     {
@@ -63,8 +63,6 @@ const tableList = [
 
 export default function DeclarationPrinting() {   
     let [ApiRoute, setApiRoute] = useState("");
-    let [ApiResponse, setApiResponse] = useState("");
-    let [ApiClassName, setApiClassName] = useState("");
     let [auth_key, setauth_key] = useState("");
 
 const TargetBlankClick = (event) => {
@@ -89,16 +87,10 @@ const TargetBlankClick = (event) => {
     else if(tableHeading == "第14表"){
         ApiRoute = "generate_table_14_pdf";
     }
-    else{
-
-    }
     if(ApiRoute !== ""){
         const url = `https://minelife-api.azurewebsites.net/${ApiRoute}?auth_key=${auth_key}`;
         window.open(url, '_blank');
-    }    
-    else{
-
-    }
+    } 
 };
 
     return (
@@ -124,7 +116,7 @@ const TargetBlankClick = (event) => {
                     </Box>
                     <table className="text-left table">
                         <tbody>
-                        {tableList.map((list, index) => {
+                        {tableList.map((list) => {
                             return (
                                 <tr className="border-t w-full" id={list.id}>
                                     <td className={list.class ? "line-through w-50 py-5" : "w-50 py-5"}>{list.heading}</td>

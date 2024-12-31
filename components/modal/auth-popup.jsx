@@ -1,9 +1,9 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, Typography, Box } from '@mui/material';
 import { useRouter } from 'next/router';
-import { Padding } from '@mui/icons-material';
 
-const AuthKeyPopup = ({ open, handleCloseAuthPopup }) => {
+const AuthKeyPopup = ({ open }) => {
     const router = useRouter();
 
     const handleLoginRedirect = () => {

@@ -1,14 +1,10 @@
-import Link from "next/link";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from 'next/router';
-import axios from "axios";
-import { List, ListItem, ListItemText, ListItemIcon, Boxider, Box, Stepper, Step, StepLabel, StepButton, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BackButton from "../../../components/back-btn";
 import SubmitButton from "../../../components/submit-btn";
-import HeirListBox from "../../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../../components/inputbox-icon/custom-input";
@@ -53,13 +49,15 @@ export default function DeathRetirementAllowanceAdd() {
 
     //Load heir details list
     const GetHeirList = async () => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', { params });
-                if (response.status === 200) {
-                    setHeirList(response.data.heir_list || []);
+                const response = await fetch(`https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    setHeirList(data.heir_list || []);
                 }
                 else {
                     setHeirList([]);
@@ -68,36 +66,28 @@ export default function DeathRetirementAllowanceAdd() {
                 console.error('Error:', error);
             }
         }
-        else {
-            //Logout();
-        }
     };
 
     //Load cash savings details    
     const GetDeathRetirementList = async (deathRetirementId) => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key, id: deathRetirementId };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null && deathRetirementId !== 0) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/get_death_retirement_details', { params });
-                if (response.status === 200) {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/get_death_retirement_details?auth_key=${auth_key}&id=${deathRetirementId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
                     setNameoftheCompany(response.data.death_retirements_details.name_of_work_company);
                     setPostCode(response.data.death_retirements_details.postal_code);
                     setAddress(response.data.death_retirements_details.address);
-                    //setNameofRetirementAllowance();
                     setDateofReceipt(response.data.death_retirements_details.receipt_date);
                     setHeirId(response.data.death_retirements_details.person_being_photographed);
                     setAmountReceived(response.data.death_retirements_details.amount.toLocaleString());
                 }
-                else {
-
-                }
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
-        else {
-            //Logout();
         }
     };
 
@@ -227,12 +217,18 @@ export default function DeathRetirementAllowanceAdd() {
             formData.append("amount_received", parseFloat(AmountReceived));
             try {
                 if (deathRetirementId === 0) {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/add_death_retirement', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/add_death_retirement`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
                 else {
-                    response = await axios.post('https://minelife-api.azurewebsites.net/edit_death_retirement', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/edit_death_retirement`, {
+                        method: 'POST',
+                        body: formData
+                    });
                 }
-                if (response.status === 200) {
+                if (response.ok) {
                     router.push(`/declaration-printing/death-retirement-allowance`);
                 }
             } catch (error) {
@@ -242,7 +238,6 @@ export default function DeathRetirementAllowanceAdd() {
         else {
             setisSumbitDisabled(true);
             setShowLoader(false);
-            //Logout();
         }
     };
 

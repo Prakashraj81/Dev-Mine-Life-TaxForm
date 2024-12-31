@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import {
     Table,
     TableBody,
     TableCell,
-    TableContainer,
-    TableHead,
     TableRow,
-    Paper,
     Box,
     Button,
     Typography
@@ -16,7 +12,6 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import axios from "axios";
 import { useRouter } from 'next/router';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -45,13 +40,15 @@ export default function HouseholdProperty() {
 
     //Load cash savings list
     const GetHouseHoldPropertyList = async () => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_household', { params });
-                if (response.status === 200) {
-                    sethouseHoldPropertyList(response.data.household_details);
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_household?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    sethouseHoldPropertyList(data.household_details);
                 }
                 else {
                     sethouseHoldPropertyList([]);
@@ -65,13 +62,16 @@ export default function HouseholdProperty() {
 
     const DeleteModalFunction = async (event) => {
         let value = event.currentTarget.id;
-        const { auth_key, customerId, houseHoldId, buttonValue, params } = deleteTarget;
+        const { auth_key, houseHoldId } = deleteTarget;
         if (value === "Yes") {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_household', { params });
-                if (response.status === 200) {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/delete_household?auth_key=${auth_key}&id=${houseHoldId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
                     setVariantSnackbar("success");
-                    setSnackbarMsg(response.data.message);
+                    setSnackbarMsg(data.message);
                     GetHouseHoldPropertyList();
                     setSnackbarOpen(true);
                 }
@@ -82,6 +82,7 @@ export default function HouseholdProperty() {
                     setSnackbarOpen(true);
                 }
             } catch (error) {
+                console.log("Errro", error);
                 setVariantSnackbar("error");
                 setSnackbarMsg("Death retirement details not deleted");
             }

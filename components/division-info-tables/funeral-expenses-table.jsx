@@ -1,33 +1,23 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DivisionPopup from './division-popup';
-import axios from "axios";
-import { useRouter } from 'next/router';
-import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import PropTypes from 'prop-types';
 
 const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -44,29 +34,15 @@ const HtmlTooltip = styled(({ className, ...props }) => (
     padding: '15px 20px',
   },
 }));
-  
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 600,
-    bgcolor: 'background.paper',  
-    boxShadow: 24,
-    p: 4,
-};
-
 
 export default function FuneralExpensesTable({heir_details_list}) {
   let [TableExpandOpen, setTableExpandOpen] = React.useState(false);
-  //let [TableExpandOpen2, setTableExpandOpen2] = React.useState(false);
   let [TableExpandOpen2, setTableExpandOpen2] = React.useState({});
   let [OpenModalPopup, setOpenModalPopup] = React.useState(false); 
     
   let [ApiCallRoute, setApiCallRoute] = useState("funeral_expenses");
   let [HeirList, setHeirList] = useState([]);
   let [HeirDetailsList, setHeirDetailsList] = useState([]);
-  let [HeirId, setHeirId] = useState(0);
   let [PropertyId, setPropertyId] = useState(0);
   let [TotalAmount, setTotalAmount] = useState(0); 
   let [ListTotalAmount, setListTotalAmount] = useState(0); 
@@ -83,13 +59,15 @@ export default function FuneralExpensesTable({heir_details_list}) {
 
 //Load Heir sharing details
 const GetHeirSharingDetails = async (Id) => {
-  let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-  const params = { auth_key: auth_key, id: Id };
+  const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
   if (auth_key !== null && Id !== 0) {
     try {
-      const response = await axios.get('https://minelife-api.azurewebsites.net/get_funeral_expenses_details', { params });
-      if (response.status === 200) {
-        setHeirSharingDetails(response.data.heir_sharing_details);          
+      const response = await fetch(`https://minelife-api.azurewebsites.net/get_funeral_expenses_details?auth_key=${auth_key}&id=${Id}`);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data);
+
+      if (response.ok) {
+        setHeirSharingDetails(data.heir_sharing_details);          
       }
       else {
         setHeirSharingDetails([]);
@@ -103,15 +81,17 @@ const GetHeirSharingDetails = async (Id) => {
 
 //Load cash savings list
 const GetFuneralExpensesList = async()=>{
-  let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-  const params = { auth_key: auth_key };
+  const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
   if(auth_key !== null){
       try{
-          const response = await axios.get('https://minelife-api.azurewebsites.net/list_funeral_expenses', {params});
-          if(response.status === 200){
+          const response = await fetch(`https://minelife-api.azurewebsites.net/list_funeral_expenses?auth_key=${auth_key}`);
+          const data = await response.json();
+          if (!response.ok) throw new Error(data);
+
+          if(response.ok){
             TotalAmount = 0;
-            setFuneralExpensesList(response.data.funeral_expenses_details);
-            {response.data.funeral_expenses_details.map((list) => {
+            setFuneralExpensesList(data.funeral_expenses_details);
+            {data.funeral_expenses_details.map((list) => {
               if(list.amount !== 0){
                 TotalAmount = TotalAmount + list.amount;
                 setTotalAmount(TotalAmount);
@@ -123,6 +103,7 @@ const GetFuneralExpensesList = async()=>{
           }
       }catch(error){
           console.log("Errro", error);
+          setFuneralExpensesList([]);
       }
   }        
 }
@@ -136,7 +117,7 @@ const handleSnackbarClose = (event, reason) => {
   setSnackbarOpen(false);
 };
 
-const handleModalOpen =(event)=>{         
+const handleModalOpen = () => {         
   setOpenModalPopup(true);       
 }    
 const handleModalClose =()=>{ 
@@ -153,7 +134,6 @@ const handleExpandFun =()=>{
 //Table row expand function-2
 const handleExpandFun2 = (event) => {
   const iconClickId = Number(event.currentTarget.id);
-  const customerId = Number(event.currentTarget.name);
   const ListTotalAmount = event.currentTarget.value;
 
   setListTotalAmount(ListTotalAmount);
@@ -221,7 +201,7 @@ return (
                               <TableCell className="border border-light-gray border-l" align="right"><span className="font-medium">金額</span></TableCell>
                               <TableCell className="border border-light-gray border-l w-15" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
                             </TableRow>                                           
-                            {FuneralExpensesList.map((list, index) => (
+                            {FuneralExpensesList.map((list) => (
                               <React.Fragment key={list.id}>
                                 <TableRow key={list.id} id={list.id} value={list.customer_id}>
                                   <TableCell className="border border-light-gray border-l">{list.payee_name}</TableCell>
@@ -308,3 +288,13 @@ return (
     </>
   );
 }
+
+// Add PropTypes validation
+FuneralExpensesTable.propTypes = {
+  heir_details_list: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      benefitAmount: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+};

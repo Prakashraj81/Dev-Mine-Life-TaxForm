@@ -1,50 +1,26 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
-import { useRouter } from 'next/router';
-import Link from "next/link";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, Fragment } from "react";
 
 // Material-UI Components
-import {
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
+import {  
   Box,
-  Stepper,
-  Step,
-  StepLabel,
-  StepButton,
-  Button,
   Typography,
   Radio,
   RadioGroup,
   FormControlLabel,
   FormControl,
-  FormLabel,
   Skeleton,
   Table,
-  TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow
 } from '@mui/material';
 
-// Material-UI Icons
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-
 // Custom Components
 import BackButton from "../../components/back-btn";
 import SubmitButton from "../../components/submit-btn";
-import HeirListBox from "../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../components/loader/backdrop-loader';
-import AreaIcon from "../../components/inputbox-icon/textbox-area-icon";
 
 //Tables import
 import CashSavingsTable from "../../components/division-info-tables/cash-savings-table";
@@ -59,7 +35,6 @@ import OthersPropertyTable from "../../components/division-info-tables/other-pro
 import TotalPropertyAcquiredTable from "../../components/division-info-tables/total-property-acquired-table";
 import FuneralExpensesTable from "../../components/division-info-tables/funeral-expenses-table";
 import GiftduringLifeTable from "../../components/division-info-tables/giftduring-life-table";
-import CollapsibleTable from "../../components/division-info-tables/test";
 import LivingDonationTable from "../../components/division-info-tables/living-gift-donation";
 import CalculatedTaxAmountEachPersons from "../../components/division-info-tables/calculated-tax-amount-each-persons";
 import AdditionInheritanceTaxAmount from "../../components/division-info-tables/addition-inheritance-tax-amount";
@@ -73,7 +48,6 @@ export default function divisionInformation() {
     const [ResidentialLandType, setResidentialLandType] = useState("");
     const [isSumbitDisabled, setisSumbitDisabled] = useState(false);
     const [ShowLoader, setShowLoader] = useState(false);
-    const [GiftDuringLifeTable, setGiftDuringLifeTable] = useState(true);
     const [ShowSuccessiveInheritance, setShowSuccessiveInheritance] = useState(false);
     const [ShowSuccessiveInput, setShowSuccessiveInput] = useState(false);    
     const [Flag, setFlag] = useState(0);
@@ -222,16 +196,16 @@ export default function divisionInformation() {
                                                 <DebtTable heir_details_list={heir_details_list} />
                                                 <FuneralExpensesTable heir_details_list={heir_details_list} />
 
-                                                <TotalPropertyAcquiredTable />
-                                                <LivingDonationTable />
-                                                <CalculatedTaxAmountEachPersons />
-                                                <AdditionInheritanceTaxAmount />
-                                                <GiftduringLifeTable />
-                                                <SpouseTaxReduction />
-                                                <ConfirmationDeductionMinors />
-                                                <ConfirmationDeductionPersons />
-                                                <ConfirmationSuccessiveInheritance />
-                                                <DeclaredTaxAmount />
+                                                <TotalPropertyAcquiredTable heir_details_list={heir_details_list} />
+                                                <LivingDonationTable heir_details_list={heir_details_list} />
+                                                <CalculatedTaxAmountEachPersons heir_details_list={heir_details_list} />
+                                                <AdditionInheritanceTaxAmount heir_details_list={heir_details_list} />
+                                                <GiftduringLifeTable heir_details_list={heir_details_list} />
+                                                <SpouseTaxReduction heir_details_list={heir_details_list} />
+                                                <ConfirmationDeductionMinors heir_details_list={heir_details_list} />
+                                                <ConfirmationDeductionPersons heir_details_list={heir_details_list} />
+                                                <ConfirmationSuccessiveInheritance heir_details_list={heir_details_list} />
+                                                <DeclaredTaxAmount heir_details_list={heir_details_list} />
                                             </>
                                         )}
                                     </>

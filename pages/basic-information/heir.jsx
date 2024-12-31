@@ -1,37 +1,21 @@
-"use client";
+/* eslint-disable no-unused-vars */
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
-import axios from "axios";
-import {
-    List,
-    ListItem,
-    ListItemText,
-    ListItemIcon,
-    Box,
-    Stepper,
-    Step,
-    StepLabel,
-    StepButton,
-    Button,
+import {    
+    Box,    
     Typography,
     Radio,
     RadioGroup,
     FormControlLabel,
-    FormControl,
-    FormLabel,
+    FormControl,    
     Select,
     MenuItem,
-    InputLabel,
     OutlinedInput,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import BackButton from "../../components/back-btn";
 import SubmitButton from "../../components/submit-btn";
-import HeirListBox from "../../components/heir-list-box/heir-list-box";
-import IncorrectError from "../../components/heir-list-box/incorrect-error";
 import FullLayout from '../../components/layouts/full/FullLayout';
-import PostcodeIcon from "../../components/inputbox-icon/textbox-postcode-icon";
 import BackdropLoader from '../../components/loader/backdrop-loader';
 import JapaneseCalendar from "../../components/inputbox-icon/japanese-calender";
 import CustomInput from "../../components/inputbox-icon/custom-input";
@@ -50,28 +34,12 @@ const shake = keyframes`
 
 export default function Heir() {
     let router = useRouter();
-    let propName = router.query.heirNo;
-
-    let ProfessionList = [
-        { id: 1, value: '公務員', label: '公務員' },
-        { id: 2, value: '会社役員', label: '会社役員' },
-        { id: 3, value: '会社員（正社員）', label: '会社員（正社員）' },
-        { id: 4, value: '会社員（契約社員/派遣社員）', label: '会社員（契約社員/派遣社員）' },
-        { id: 5, value: '自営業/自由業', label: '自営業/自由業' },
-        { id: 6, value: '学生', label: '学生' },
-        { id: 7, value: 'パート/アルバイト', label: 'パート/アルバイト' },
-        { id: 8, value: '主婦', label: '主婦' },
-        { id: 9, value: 'その他', label: 'その他' },
-        { id: 10, value: 'なし', label: 'なし' },
-    ];
-
     let [HeirId, setHeirId] = useState(0);
     let [Name, setName] = useState("");
     let [Furigana, setFurigana] = useState("");
     let [DateofBirth, setDateofBirth] = useState("");
     let [PostCode, setPostCode] = useState("");
     let [InheritanceBoxisionCompletionDate, setInheritanceBoxisionCompletionDate] = useState("");
-    let [DateofDeath, setDateofDeath] = useState("");
     let [Profession, setProfession] = useState("");
     let [RelationshipWithDecedent, setRelationshipWithDecedent] = useState("");
     let [Address, setAddress] = useState("");
@@ -79,17 +47,8 @@ export default function Heir() {
     let [HeirCount, setHeirCount] = useState(0);
     let [WhereTaxReturn, setWhereTaxReturn] = useState("");
 
-    //Input hide and show states
-    let [ShowName, setShowName] = useState(false);
-    let [ShowPostCode, setShowPostCode] = useState(false);
-    let [ShowAddress, setShowAddress] = useState(false);
-    let [UndecidedHeir, setUndecidedHeir] = useState("0");
-    let [totalPrice, settotalPrice] = useState("0");
-    let [boxValues, setBoxValues] = useState([]);
-
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
-    let [ShowIncorrectError, setShowIncorrectError] = useState(false);
     let [NameError, setNameError] = useState(false);
     let [KatakanaError, setKatakanaError] = useState(false);
     let [FuriganaError, setFuriganaError] = useState(false);
@@ -202,11 +161,10 @@ export default function Heir() {
         let searchParams = new URLSearchParams(url.split('?')[1]);
         let editId = searchParams.get("editId");
         HeirId = Number(atob(editId));
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/heir_details', { params });
+                const response = await fetch(`https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
                 if (response.status === 200) {
                     setHeirCount(response.data.heir_list.length);
                     for (let i = 0; i < response.data.heir_list.length; i++) {
@@ -230,10 +188,7 @@ export default function Heir() {
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
-        else {
-            //Logout();
-        }
+        }        
     };
 
 
@@ -241,7 +196,6 @@ export default function Heir() {
     //Submit API function     
     let defaultValues = {};
     const onSubmit = async () => {
-        //Id = Number(atob(router.query.Id));
         defaultValues = {
             HeirId: HeirId,
             Name: Name,
@@ -304,16 +258,21 @@ export default function Heir() {
             formData.append("profession", Profession);
             formData.append("relationship_with_decedent", RelationshipWithDecedent);
             formData.append("disabled_deduction", DisabledRadioValue);
-            //formData.append("TaxAdditionAmount", TaxAdditionAmount);
             formData.append("is_legal_heir", is_legal_heir);
             if (formData !== null && auth_key !== null) {
                 try {
                     //setShowLoader(true);
                     let response = "";
                     if (HeirId === 0) {
-                        response = await axios.post('https://minelife-api.azurewebsites.net/add_heir', formData);
+                        response = await fetch(`https://minelife-api.azurewebsites.net/add_heir`, {
+                            method: 'POST',
+                            body: formData
+                        });
                     } else {
-                        response = await axios.post('https://minelife-api.azurewebsites.net/edit_heir', formData);
+                        response = await fetch(`https://minelife-api.azurewebsites.net/edit_heir`, {
+                            method: 'POST',
+                            body: formData
+                        });
                     }
                     if (response.status === 200) {
                         router.push(`/basic-information`);
@@ -574,6 +533,7 @@ export default function Heir() {
                                 <span className="text-gray text-2xl">/</span>
                                 <input
                                     type="text"
+                                    // eslint-disable-next-line no-constant-condition
                                     value={"1" ? HeirCount + 1 : "_ _"}
                                     disabled
                                     className="form-control text-left w-10 bg-custom-gray focus:outline-none rounded h-12 pl-3"

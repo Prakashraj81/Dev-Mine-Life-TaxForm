@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import React, { useEffect } from "react";
 import theme from "../../components/theme";
 import FullLayout from "../../components/layouts/full/FullLayout";
-import BlankLayout from "../../components/layouts/blank/BlankLayout";
 import {
     Typography,
     Box,
-    Grid,
     Table,
     TableBody,
     TableCell,
@@ -14,11 +11,10 @@ import {
     TableRow,
     Chip,
     Button,
-    TablePagination,
     Tooltip,
 } from "@mui/material";
 import DashboardCard from "../../components/shared/DashboardCard";
-import { IconEyeEdit, IconCirclePlus, IconTrashX } from "@tabler/icons-react";
+import { IconEyeEdit, IconCirclePlus } from "@tabler/icons-react";
 
 const products = [
     // {

@@ -1,10 +1,10 @@
+/* eslint-disable react/jsx-key */
 import Link from "next/link";
-import { useState, Fragment, Controller } from "react";
+import React, { Fragment } from "react";
 import BackButton from "../../components/back-btn";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FullLayout from '../../components/layouts/full/FullLayout';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { list } from "postcss";
 
 const tableList = [
     // {
@@ -17,7 +17,7 @@ const tableList = [
     {
         id: 2,
         heading: "生前贈与",
-        amount: 22800,
+        amount: 22800,         
         icon: <ModeEditIcon className="text-white" />,
         path: "/gift-various/gifts-taxation",
     },
@@ -64,7 +64,7 @@ export default function SummaryGiftVarious() {
                 <div className="summary-tables-wrapper max-w-screen-md mx-auto">
                     <table className="text-left table">
                         <tbody>
-                            {tableList.map((list, index) => (
+                            {tableList.map((list) => (
                                 <tr className="border-t" id={list.id}>
                                     <th className="w-full py-5 font-medium">{list.heading}</th>
                                     <td className="text-right">{list.amount.toLocaleString()}</td>

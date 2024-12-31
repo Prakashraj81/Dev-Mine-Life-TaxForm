@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import {
     Table,
     TableBody,
     TableCell,
-    TableContainer,
-    TableHead,
     TableRow,
-    Paper,
     Box,
     Button,
     Typography
@@ -16,7 +12,6 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import BackButtonIndex from "../../../components/back-btn-index";
 import FullLayout from '../../../components/layouts/full/FullLayout';
-import axios from "axios";
 import { useRouter } from 'next/router';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -45,13 +40,15 @@ export default function FuneralExpenses() {
 
     //Load cash savings list
     const GetFuneralExpensesList = async () => {
-        let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        const params = { auth_key: auth_key };
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/list_funeral_expenses', { params });
-                if (response.status === 200) {
-                    setFuneralExpensesList(response.data.funeral_expenses_details);
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_funeral_expenses?auth_key=${auth_key}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    setFuneralExpensesList(data.funeral_expenses_details);
                 }
                 else {
                     setFuneralExpensesList([]);
@@ -64,13 +61,16 @@ export default function FuneralExpenses() {
 
     const DeleteModalFunction = async (event) => {
         let value = event.currentTarget.id;
-        const { auth_key, customerId, funeralExpensesId, buttonValue, params } = deleteTarget;
+        const { auth_key, funeralExpensesId } = deleteTarget;
         if (value === "Yes") {
             try {
-                const response = await axios.get('https://minelife-api.azurewebsites.net/delete_funeral_expenses', { params });
-                if (response.status === 200) {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/delete_funeral_expenses?auth_key=${auth_key}&id=${funeralExpensesId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
                     setVariantSnackbar("success");
-                    setSnackbarMsg(response.data.message);
+                    setSnackbarMsg(data.message);
                     GetFuneralExpensesList();
                     setSnackbarOpen(true);
                 }
@@ -81,6 +81,7 @@ export default function FuneralExpenses() {
                     setSnackbarOpen(true);
                 }
             } catch (error) {
+                console.log("Errro", error);
                 setVariantSnackbar("error");
                 setSnackbarMsg("Death retirement details not deleted");
             }

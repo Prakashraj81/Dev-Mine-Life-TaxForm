@@ -1,7 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 import components from "./ComponentOverRide";
 import shadows from "./Shadows";
-import typography from "./Typoraphy";
 
 // Create a theme instance.
 const theme = createTheme({
@@ -81,7 +80,6 @@ const theme = createTheme({
   },
   components,
   shadows,
-  typography,
 });
 
 export default theme;

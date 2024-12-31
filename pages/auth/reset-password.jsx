@@ -1,13 +1,10 @@
-import React, { useState, useEffect, Fragment } from "react";
-import Link from "next/link";
-import axios from 'axios';
+/* eslint-disable no-unused-vars */
+import React, { useState, Fragment } from "react";
 import { useRouter } from 'next/router';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import Backdrop from '@mui/material/Backdrop';
 import { Box, Button, Typography } from '@mui/material';
-import { InputAdornment, IconButton, Input, FormControl } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import { InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
@@ -97,7 +94,11 @@ export default function OtpVerification() {
         formData.append('email', Email);
         formData.append('new_password', new_password);
         formData.append('pwd_code', pwd_code);
-        const response = await axios.post('https://minelife-api.azurewebsites.net/reset_password', formData);
+
+        const response = await fetch(`https://minelife-api.azurewebsites.net/reset_password`, {
+          method: 'POST',
+          body: formData
+        });
         if (response.status === 200) {
           setShowLoader(false);
           router.push('/auth/register-complete');
