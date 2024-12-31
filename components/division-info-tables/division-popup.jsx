@@ -12,6 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import HeirListAmountShowSkeleton from './heirList-amountshow-skeleton';
 import HeirListFractionShowSkeleton from './heirList-fractionshow-skeleton';
 import PropTypes from 'prop-types';
+import { data } from "autoprefixer";
 
 const style = {
     position: 'absolute',
@@ -231,7 +232,13 @@ export default function DivisionPopup({ OpenModalPopup, HeirSharingDetails, List
             formData.append("heir_sharing", JSON.stringify(heir_sharing));
             if (formData !== null) {
                 try {
-                    const response = await fetch(`https://minelife-api.azurewebsites.net/split_${ApiCallRoute}_by_heirs`, formData);
+                    const response = await fetch(`https://minelife-api.azurewebsites.net/split_${ApiCallRoute}_by_heirs`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+                    if(!response.ok) throw new Error(data);
+
                     if (response.ok) {
                         handleModalClose();
                     } else {
