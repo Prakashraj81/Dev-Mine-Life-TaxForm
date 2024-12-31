@@ -43,7 +43,7 @@ export default function DeathRetirementAllowance() {
         const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await fetch(`https://minelife-api.azurewebsites.net/list_death_retirement`);
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_death_retirement?auth_key=${auth_key}`);
                 const data = await response.json();
                 if (!response.ok) throw new Error(data);
 
@@ -60,30 +60,25 @@ export default function DeathRetirementAllowance() {
     }
 
     const DeleteModalFunction = async (event) => {
+        let data;
         let value = event.currentTarget.id;
         const { auth_key, deathRetirementId } = deleteTarget;
         if (value === "Yes") {
             try {
                 const response = await fetch(`https://minelife-api.azurewebsites.net/delete_death_retirement?auth_key=${auth_key}&id=${deathRetirementId}`);
-                const data = await response.json();
+                data = await response.json();
                 if (!response.ok) throw new Error(data);
 
                 if (response.ok) {
                     setVariantSnackbar("success");
-                    setSnackbarMsg(response.data.message);
+                    setSnackbarMsg(data.message);
                     GetDeathRetirementList();
-                    setSnackbarOpen(true);
-                }
-                else {
-                    setVariantSnackbar("error");
-                    setSnackbarMsg(response.data.message);
-                    GetDeathRetirementList([]);
                     setSnackbarOpen(true);
                 }
             } catch (error) {
                 console.log("Errro", error);
                 setVariantSnackbar("error");
-                setSnackbarMsg("Death retirement details not deleted");
+                setSnackbarMsg(data.error.message);
             }
             setDeleteModalOpen(false);
         }

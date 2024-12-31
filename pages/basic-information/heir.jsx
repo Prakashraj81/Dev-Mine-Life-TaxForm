@@ -249,6 +249,8 @@ export default function Heir() {
 
         //Api setup
         if (isSumbitDisabled !== true) {
+            let data;
+            let response = "";
             let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
             const formData = new FormData();
             formData.append("auth_key", auth_key);
@@ -264,9 +266,7 @@ export default function Heir() {
             formData.append("disabled_deduction", DisabledRadioValue);
             formData.append("is_legal_heir", is_legal_heir);
             if (formData !== null && auth_key !== null) {
-                try {
-                    //setShowLoader(true);
-                    let response = "";
+                try {                    
                     if (HeirId === 0) {
                         response = await fetch(`https://minelife-api.azurewebsites.net/add_heir`, {
                             method: 'POST',
@@ -278,15 +278,15 @@ export default function Heir() {
                             body: formData
                         });
                     }
-                    if (response.status === 200) {
-                        router.push(`/basic-information`);
+                    data = await response.json();
+                    if (!response.ok) throw new Error(data);
+
+                    if (response.ok) {
+                        await router.push(`/basic-information`);
                     }
                     setShowLoader(false);
                 } catch (error) {
-                    setShowLoader(false);
-                    if(error.response.data.error.message === "Heir Already Exist"){
-                        alert(error.response.data.error.message);
-                    }
+                    setShowLoader(false);                    
                 }
             } else {
                 setisSumbitDisabled(true);

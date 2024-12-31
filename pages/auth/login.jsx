@@ -86,9 +86,9 @@ export default function Login() {
         }        
       } catch (error) {
         console.log("error", error);
-        setAlertMessage(error.data.error.message || "IDまたはパスワードが違います");
-        setLoginError(true);
         setShowLoader(false);
+        setAlertMessage(data?.error.message || "IDまたはパスワードが違います");
+        setLoginError(true);        
       }
     }
     else {

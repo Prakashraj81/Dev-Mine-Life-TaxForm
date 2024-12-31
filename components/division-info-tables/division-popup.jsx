@@ -12,7 +12,6 @@ import FormControl from '@mui/material/FormControl';
 import HeirListAmountShowSkeleton from './heirList-amountshow-skeleton';
 import HeirListFractionShowSkeleton from './heirList-fractionshow-skeleton';
 import PropTypes from 'prop-types';
-import { data } from "autoprefixer";
 
 const style = {
     position: 'absolute',

@@ -47,7 +47,7 @@ export default function BasicInformation() {
         const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         try {
             const response = await fetch(`https://minelife-api.azurewebsites.net/decedent_detail?auth_key=${auth_key}`);
-            const data = await response.json();
+            const data = await response?.json();
             if (!response.ok) throw new Error(data);
 
             if (response.ok) {

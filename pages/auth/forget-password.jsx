@@ -28,7 +28,7 @@ export default function ForgetPassword() {
       try {
         setShowLoader(true);
         const response = await fetch(`https://minelife-api.azurewebsites.net/check_user_email?email=${ForgetPasswordEmail}`);
-        if (response.status !== 200) {
+        if (response.ok) {
           setForgetPasswordEmailError(false);
           await forgetpwd_user();
         }
@@ -51,20 +51,24 @@ export default function ForgetPassword() {
 
   const router = useRouter();
   const forgetpwd_user = async () => {
+    let data;
     try {
       const response = await fetch(`https://minelife-api.azurewebsites.net/forgot_password?email=${ForgetPasswordEmail}`);
-      if (response.status === 200) {
-        router.push(`/auth/reset-password?email=${btoa(ForgetPasswordEmail)}`);
+      data = await response.json();
+      if(!response.ok) throw new Error(data);
+
+      if (response.ok) {
+        console.log("Success", data?.message);
+        await router.push(`/auth/reset-password?email=${btoa(ForgetPasswordEmail)}`);
       }
       else {
         setShowLoader(false);
         setEmailCheckError(true);
       }
     } catch (error) {
-      console.log("User not created.");
+      console.log("Error", data?.error.message);
       setShowLoader(false);
       setEmailCheckError(true);
-      console.error('Error:', error);
     }
   }
 

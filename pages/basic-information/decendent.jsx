@@ -189,7 +189,7 @@ export default function Decendent() {
                     }
                     if (response.status === 200) {
                         setShowLoader(false);
-                        router.push(`/basic-information`);
+                        await router.push(`/basic-information`);
                     }
                 } catch (error) {
                     setShowLoader(false);
@@ -243,6 +243,12 @@ export default function Decendent() {
     };
 
 
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
 
 
     return (
@@ -251,6 +257,17 @@ export default function Decendent() {
                 {ShowLoader && (
                     <BackdropLoader ShowLoader={ShowLoader} />
                 )}
+
+                <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                                    <Alert
+                                        onClose={handleSnackbarClose}
+                                        severity={VariantSnackbar}
+                                        variant="filled"
+                                        sx={{ width: '100%', color: "#FFF" }}
+                                    >
+                                        {SnackbarMsg}
+                                    </Alert>
+                                </Snackbar>
             </>
             <Box className="basic-information-wrapper">
                 <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">

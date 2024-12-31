@@ -52,8 +52,11 @@ export default function DeathBenefitAdd() {
         if(auth_key !== null){
             try{
                 const response = await fetch(`https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
-                if(response.status === 200){
-                    setHeirList(response.data.heir_list || []);
+                const data = await response.json();
+                if(!response.ok) throw new Error(data);
+
+                if(response.ok){
+                    setHeirList(data.heir_list || []);
                 }
                 else{
                     setHeirList([]);
@@ -71,13 +74,16 @@ export default function DeathBenefitAdd() {
         if(auth_key !== null && deathBenifitId !== 0){
             try{
                 const response = await fetch(`https://minelife-api.azurewebsites.net/get_death_benefit_details?auth_key=${auth_key}&id=${deathBenifitId}`);
-                if(response.status === 200){                    
-                    setNameofLifeInsurance(response.data.death_benefits_details.name_of_life_insurance); 
-                    setPostCode(response.data.death_benefits_details.postal_code);
-                    setAddress(response.data.death_benefits_details.address);  
-                    setDateofReceipt(response.data.death_benefits_details.receipt_date);   
-                    setHeirId(response.data.death_benefits_details.person_being_photographed);                
-                    setValuation(response.data.death_benefits_details.amount.toLocaleString());                                                      
+                const data = await response.json();
+                if(!response.ok) throw new Error(data);
+
+                if(response.ok){                    
+                    setNameofLifeInsurance(data.death_benefits_details.name_of_life_insurance); 
+                    setPostCode(data.death_benefits_details.postal_code);
+                    setAddress(data.death_benefits_details.address);  
+                    setDateofReceipt(data.death_benefits_details.receipt_date);   
+                    setHeirId(data.death_benefits_details.person_being_photographed);                
+                    setValuation(data.death_benefits_details.amount.toLocaleString());                                                      
                 }                
             }catch (error){
                 console.error('Error:', error);

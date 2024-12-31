@@ -9,6 +9,8 @@ import FullLayout from '../../../components/layouts/full/FullLayout';
 import BackdropLoader from '../../../components/loader/backdrop-loader';
 import CustomInput from "../../../components/inputbox-icon/custom-input";
 import CustomDropdownInput from "../../../components/inputbox-icon/custom-dropdown";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export default function CashSavingsAdd() {
     let DepositList = [
@@ -22,6 +24,10 @@ export default function CashSavingsAdd() {
         { id: 8, value: 'その他', name: 'その他' },
     ];
 
+    let [SnackbarOpen, setSnackbarOpen] = useState(false);
+    let [VariantSnackbar, setVariantSnackbar] = useState("success");
+    let [SnackbarMsg, setSnackbarMsg] = useState("");
+
     let [DepositType, setDepositType] = useState("");
     let [FinancialInstitutionName, setFinancialInstitutionName] = useState("");
     let [PostCode, setPostCode] = useState("");
@@ -30,7 +36,7 @@ export default function CashSavingsAdd() {
 
     let [ShowFinancialInstitutionName, setShowFinancialInstitutionName] = useState(false);
     let [ShowPostCode, setShowPostCode] = useState(false);
-    let [ShowAddress, setShowAddress] = useState(false);   
+    let [ShowAddress, setShowAddress] = useState(false);
 
     //Error state and button disabled
     let [isSumbitDisabled, setisSumbitDisabled] = useState(false);
@@ -80,11 +86,11 @@ export default function CashSavingsAdd() {
                         setShowAddress(data.cash_deposit_details.address);
                         setFinancialInstitutionName(false);
                     }
-                }                
+                }
             } catch (error) {
                 console.error('Error:', error);
             }
-        }        
+        }
     };
 
     //Deposit type dropdown
@@ -123,7 +129,7 @@ export default function CashSavingsAdd() {
         setPostCode(digit_value);
         setIsValid(isValidInput);
         setisSumbitDisabled(false);
-    };   
+    };
 
     //Amount input calculation function
     const AmountofMoneyKeyPress = (e) => {
@@ -138,7 +144,7 @@ export default function CashSavingsAdd() {
             setAmountofMoneyError(false);
             setAmountofMoney(amount_of_money);
         }
-        setisSumbitDisabled(false);        
+        setisSumbitDisabled(false);
     };
 
 
@@ -176,7 +182,7 @@ export default function CashSavingsAdd() {
             FinancialInstitutionName: FinancialInstitutionName,
             PostCode: PostCode,
             Address: Address,
-            AmountofMoney: AmountofMoney,            
+            AmountofMoney: AmountofMoney,
         };
 
         //input Validation
@@ -207,6 +213,7 @@ export default function CashSavingsAdd() {
         //Api setup
         let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (isSumbitDisabled !== true && auth_key !== null) {
+            let data;
             let response = "";
             let depositId = 0;
             let url = router.asPath;
@@ -237,11 +244,18 @@ export default function CashSavingsAdd() {
                         body: formData
                     });
                 }
+                data = await response.json();
                 if (response.ok) {
-                    router.push(`/declaration-printing/cash-savings`);
+                    setVariantSnackbar("success");
+                    setSnackbarMsg(data.message);
+                    setSnackbarOpen(true);
+                    //router.push(`/declaration-printing/cash-savings`);
                 }
             } catch (error) {
                 console.log('Error:', error);
+                setVariantSnackbar("error");
+                setSnackbarMsg(data.error.message);
+                setSnackbarOpen(true);
             }
         }
         else {
@@ -250,12 +264,30 @@ export default function CashSavingsAdd() {
         }
     };
 
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
+
     return (
         <>
             <>
                 {ShowLoader && (
                     <BackdropLoader ShowLoader={ShowLoader} />
                 )}
+
+                <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                    <Alert
+                        onClose={handleSnackbarClose}
+                        severity={VariantSnackbar}
+                        variant="filled"
+                        sx={{ width: '100%', color: "#FFF" }}
+                    >
+                        {SnackbarMsg}
+                    </Alert>
+                </Snackbar>
             </>
             <Box className="cash-savings-wrapper">
                 <Box className="bg-custom-light rounded-sm px-8 h-14 flex items-center">
@@ -279,8 +311,8 @@ export default function CashSavingsAdd() {
                                         預金の種類<i className="text-red-500">*</i>
                                     </Typography>
                                 </Box>
-                                <Box className="w-full inline-block mt-2">                                    
-                                    <CustomDropdownInput id={DepositType} lists={DepositList} onChange={handleDepositType} value={DepositType} error={DepositTypeError}/>
+                                <Box className="w-full inline-block mt-2">
+                                    <CustomDropdownInput id={DepositType} lists={DepositList} onChange={handleDepositType} value={DepositType} error={DepositTypeError} />
                                     {DepositTypeError && (
                                         <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>
                                     )}
@@ -323,7 +355,7 @@ export default function CashSavingsAdd() {
                                             住所<i className="text-red-500">*</i>
                                         </Typography>
                                     </Box>
-                                    <Box className="w-full inline-block mt-2">                                        
+                                    <Box className="w-full inline-block mt-2">
                                         <CustomInput type={"text"} id={"Address"} onChange={inputHandlingFunction} value={Address} error={AddressError} />
                                         {AddressError && (
                                             <Typography fontSize={14} component={"p"} className="text-red-500" role="alert">この項目は必須です</Typography>

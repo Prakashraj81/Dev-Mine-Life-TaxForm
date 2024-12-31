@@ -61,27 +61,25 @@ export default function DeathBenefit() {
     }
 
     const DeleteModalFunction = async (event) => {
+        let data;
         let value = event.currentTarget.id;
         const { auth_key, deathBenifitId } = deleteTarget;
         if (value === "Yes") {
             try {
                 const response = await fetch(`https://minelife-api.azurewebsites.net/delete_death_benefit?auth_key=${auth_key}&id=${deathBenifitId}`);
-                if (response.status === 200) {
+                data = await response.json();
+                if(!response.ok) throw new Error(data);
+
+                if (response.ok) {
                     setVariantSnackbar("success");
-                    setSnackbarMsg(response.data.message);
+                    setSnackbarMsg(data.message);
                     GetDeathBenifitList();
-                    setSnackbarOpen(true);
-                }
-                else {
-                    setVariantSnackbar("error");
-                    setSnackbarMsg(response.data.message);
-                    GetDeathBenifitList([]);
                     setSnackbarOpen(true);
                 }
             } catch (error) {
                 console.log("Errro", error);
                 setVariantSnackbar("error");
-                setSnackbarMsg("Death benefit details not deleted");
+                setSnackbarMsg(data.error.message);
             }
             setDeleteModalOpen(false);
         }

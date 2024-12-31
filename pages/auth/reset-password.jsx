@@ -63,7 +63,8 @@ export default function OtpVerification() {
 
 
   let router = useRouter();
-  const onSubmit = async () => {    
+  const onSubmit = async () => {  
+    let data;  
     if (new_password === "") {
       setnew_password_error(true);
       isSumbitDisabled = true;
@@ -99,7 +100,10 @@ export default function OtpVerification() {
           method: 'POST',
           body: formData
         });
-        if (response.status === 200) {
+        data = await response.json();
+        if(!response.ok) throw new Error(data);
+
+        if (response.ok) {
           setShowLoader(false);
           router.push('/auth/register-complete');
         }
@@ -108,7 +112,7 @@ export default function OtpVerification() {
         }
       } catch (error) {
         setShowLoader(false);
-        console.error('Error:', error);
+        console.error('Error:', data.error.message);
       }
     }
   };
