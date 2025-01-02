@@ -144,14 +144,14 @@ export default function House() {
                         <TableBody>
                             {buildingList.map((list, index) => (
                                 <TableRow key={index} className="border border-light-gray">
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>
+                                    <TableCell sx={{ width: 400, padding: '8px', border: '1px solid lightgray' }}>
                                         {list.location}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>{list.floor_area}</TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                    <TableCell sx={{ width: 250, padding: '8px', border: '1px solid lightgray' }}>{list.floor_area}</TableCell>
+                                    <TableCell sx={{ width: 150, padding: '8px', border: '1px solid lightgray' }} align="right">
                                         {list.appraisal_value.toLocaleString()}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                    <TableCell sx={{ width: 120, padding: '8px', border: '1px solid lightgray' }} align="right">
                                         <Box className="flex justify-end items-end">
                                             <Box>
                                                 <Button

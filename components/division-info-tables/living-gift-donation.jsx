@@ -127,11 +127,11 @@ export default function LivingDonationTable({ heir_details_list }) {
         <Table aria-label="collapsible table">
           <TableHead className="table-head">
             <TableRow>
-              <TableCell className="" align="left"><span className="font-medium">生前贈与</span></TableCell>
-              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
-              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
-              <TableCell className="" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-              <TableCell className="cursor-pointer" align="right">
+              <TableCell className="" align="left" sx={{border: 'none'}}><span className="font-medium">生前贈与</span></TableCell>
+              <TableCell className="invisible" align="left" sx={{border: 'none'}}><span className="font-medium">Column</span></TableCell>
+              <TableCell className="invisible" align="left" sx={{border: 'none'}}><span className="font-medium">Column</span></TableCell>
+              <TableCell className="" align="right" sx={{border: 'none'}}>{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+              <TableCell className="cursor-pointer" align="right" sx={{border: 'none'}}>
                 <Box className="invisible inline-block">
                   <HtmlTooltip>
                     <QuestionMarkIcon style={{ fontSize: 18 }} className="mr-2 p-1 bg-warning-main rounded-lg text-black" />
@@ -144,7 +144,7 @@ export default function LivingDonationTable({ heir_details_list }) {
           <TableBody>
 
             <TableRow>
-              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+              <TableCell className="" style={{ paddingBottom: 0, paddingTop: 0, padding: '0'}} colSpan={10}>
                 <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                   <Box>
                     <Table>

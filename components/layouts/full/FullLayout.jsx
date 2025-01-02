@@ -67,20 +67,21 @@ const FullLayout = ({ children }) => {
   
   // Fetch the recent save list
   const GetRecentSaveList = async () => {
+    let data;
     const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
     if (auth_key !== null) {
       try {
         const response = await fetch(`https://minelife-api.azurewebsites.net/get_user_activities?auth_key=${auth_key}`);
-        const data = await response.json();
+        data = await response.json();
         if (!response.ok) throw new Error(data);
 
         if (response.ok) {
-          setRecentSaveList(data.user_actrivities_details);
+          setRecentSaveList(data?.user_actrivities_details);
         } else {
           setRecentSaveList([]);
         }
       } catch (error) {
-        if(error.response.status === 440 && error.response.data.error.message === "Session Expired. Please login again."){
+        if(data.error.message === "Session Expired. Please login again."){
           setOpenAuthPopup(true);
         }
       } finally {

@@ -24,7 +24,7 @@ export default function SideBarWidgetList({ RecentSaveList }) {
           </Box>
         </Box>
         <Box className="sidebar-list">
-          {RecentSaveList.map((lists) => {
+          {RecentSaveList?.map((lists) => {
             let divisionInfoActivity = lists.activity_description.includes('SPLIT');
 
             let basicInfoActivity1 = lists.activity_description.startsWith('DECEDENT_DETAILS');

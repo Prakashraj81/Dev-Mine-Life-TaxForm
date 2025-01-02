@@ -217,18 +217,21 @@ export default function Decendent() {
         const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await fetch(`https://minelife-api.azurewebsites.net/decedent_detail?auth_key${auth_key}`);
-                if (response.status === 200) {
-                    setDecendentList(response.data);
+                const response = await fetch(`https://minelife-api.azurewebsites.net/decedent_detail?auth_key=${auth_key}`);
+                const data = await response.json();
+                if(!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    setDecendentList(data);
                     //setId(response.data.decedent_id);
-                    setName(response.data.name);
-                    setFurigana(response.data.furigana);
-                    setDateofBirth(response.data.date_of_birth);
-                    setPostCode(response.data.postal_code);
-                    setAddress(response.data.address);
-                    setProfession(response.data.profession);
-                    setDateofDeath(response.data.date_of_death);
-                    setWheretoSubmitReturn(response.data.declaration_location);
+                    setName(data.name);
+                    setFurigana(data.furigana);
+                    setDateofBirth(data.date_of_birth);
+                    setPostCode(data.postal_code);
+                    setAddress(data.address);
+                    setProfession(data.profession);
+                    setDateofDeath(data.date_of_death);
+                    setWheretoSubmitReturn(data.declaration_location);
                 }
                 else {
                     setDecendentList([]);
@@ -236,9 +239,6 @@ export default function Decendent() {
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
-        else {
-            //Logout();
         }
     };
 

@@ -10,6 +10,8 @@ import JapaneseCalendar from "../../../components/inputbox-icon/japanese-calende
 import CustomInput from "../../../components/inputbox-icon/custom-input";
 import CustomAmountInput from "../../../components/inputbox-icon/custom-amount-input";
 import CustomDropdownInput from "../../../components/inputbox-icon/custom-dropdown";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export default function LivingDonationAdd() {
     let [HeirList, setHeirList] = useState([]);
@@ -34,6 +36,10 @@ export default function LivingDonationAdd() {
     let [DonatedPropertyAmountTaxError, setDonatedPropertyAmountTaxError] = useState(false);
     let [WhereTaxReturnError, setWhereTaxReturnError] = useState(false);
 
+    let [SnackbarOpen, setSnackbarOpen] = useState(false);
+    let [VariantSnackbar, setVariantSnackbar] = useState("success");
+    let [SnackbarMsg, setSnackbarMsg] = useState("");
+
     // Proceed to next step
     let [ShowLoader, setShowLoader] = useState(false);
 
@@ -55,7 +61,7 @@ export default function LivingDonationAdd() {
         const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await fetch(`'https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
+                const response = await fetch(`https://minelife-api.azurewebsites.net/heir_details?auth_key=${auth_key}`);
                 const data = await response.json();
                 if (!response.ok) throw new Error(data);
 
@@ -126,6 +132,10 @@ export default function LivingDonationAdd() {
             setDonatedPropertyType(inputValue);
             setDonatedPropertyTypeError(false);
         }
+        else if (inputId === "DateOfDonation") {
+            setDateOfDonation(inputValue);
+            setDateOfDonationError(false);
+        }
         else if (inputId === "DonatedPropertyDetail") {
             setDonatedPropertyDetail(inputValue);
             setDonatedPropertyDetailError(false);
@@ -140,6 +150,11 @@ export default function LivingDonationAdd() {
             setDonatedPropertyAmountTax(inputValue);
             setDonatedPropertyAmountTaxError(false);
         }
+        else if (inputId === "WhereTaxReturn") {
+            //If amount enter is 0 value it's needs to be accepted
+            setWhereTaxReturn(inputValue);
+            setWhereTaxReturnError(false);
+        }
         setisSumbitDisabled(false);
     }
 
@@ -150,17 +165,17 @@ export default function LivingDonationAdd() {
     let defaultValues = {};
     const onSubmit = async () => {
         defaultValues = {
-            NameofthePerson: NameofthePerson,
-            DateOfDonation: DateOfDonation,
-            DonatedPropertyType: DonatedPropertyType,
-            DonatedPropertyDetail: DonatedPropertyDetail,
-            DonatedPropertyAmount: DonatedPropertyAmount,
-            DonatedPropertyAmountTax: DonatedPropertyAmountTax,
-            WhereTaxReturn: WhereTaxReturn
+            gift_recipient: HeirId,
+            date_of_donation: DateOfDonation,
+            gift_type: DonatedPropertyType,
+            details_of_gift_property: DonatedPropertyDetail,
+            amount_donated: DonatedPropertyAmount,
+            amount_on_gift_tax_paid: DonatedPropertyAmountTax,            
+            where_to_submit_tax_return: WhereTaxReturn
         }
 
         //input Validation        
-        if (defaultValues.NameofthePerson === "") {
+        if (defaultValues.gift_recepient === 0) {
             setNameofthePersonError(true);
             setHeirListTypeError(true);
             isSumbitDisabled = true;
@@ -169,25 +184,30 @@ export default function LivingDonationAdd() {
             setDateOfDonationError(true);
             isSumbitDisabled = true;
         }
-        if (defaultValues.DonatedPropertyType === "") {
+        if (defaultValues.gift_type === "") {
             setDonatedPropertyTypeError(true);
             isSumbitDisabled = true;
         }
-        if (defaultValues.DonatedPropertyDetail === "") {
+        if (defaultValues.details_of_gift_property === "") {
             setDonatedPropertyDetailError(true);
             isSumbitDisabled = true;
         }
-        if (defaultValues.DonatedPropertyAmount === "0") {
+        if (defaultValues.amount_donated === "0") {
             setDonatedPropertyAmountError(true);
             isSumbitDisabled = true;
         }
-        if (defaultValues.WhereTaxReturn === "") {
+        if (defaultValues.amount_on_gift_tax_paid === "0") {
+            setDonatedPropertyAmountError(true);
+            isSumbitDisabled = true;
+        }
+        if (defaultValues.where_to_submit_tax_return === "") {
             setWhereTaxReturnError(true);
             isSumbitDisabled = true;
         }
         //Api setup
         let auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (isSumbitDisabled !== true && auth_key !== null) {
+            let data;
             let response = "";
             let LivingDonationId = 0;
             let url = router.asPath;
@@ -198,28 +218,42 @@ export default function LivingDonationAdd() {
             }
             const formData = new FormData();
             formData.append("auth_key", auth_key);
-            formData.append("id", LivingDonationId);
-            //formData.append("NameofthePerson", NameofthePerson);            
-            //formData.append("DateOfDonation", DateOfDonation);
-            //formData.append("DonatedPropertyType", DonatedPropertyType);
-            //formData.append("DonatedPropertyDetail", DonatedPropertyDetail);
-            //formData.append("DonatedPropertyAmount", DonatedPropertyAmount);
-            //Valuation = Valuation.replace(/,/g, '').replace('.', '');
-            //formData.append("valuation", parseFloat(Valuation));
-            //formData.append("DonatedPropertyAmountTax", DonatedPropertyAmountTax);
-            //formData.append("WhereTaxReturn", WhereTaxReturn);            
+            formData.append("id", LivingDonationId);            
+            formData.append("gift_recipient", HeirId);         
+            formData.append("date_of_donation", DateOfDonation);      
+            formData.append("gift_type", DonatedPropertyType);
+            formData.append("details_of_gift_property", DonatedPropertyDetail);
+            DonatedPropertyAmount = DonatedPropertyAmount.replace(/,/g, '').replace('.', '');
+            formData.append("amount_donated", parseFloat(DonatedPropertyAmount));
+            DonatedPropertyAmountTax = DonatedPropertyAmountTax.replace(/,/g, '').replace('.', '');
+            formData.append("amount_on_gift_tax_paid", parseFloat(DonatedPropertyAmountTax));            
+            formData.append("where_to_submit_tax_return", WhereTaxReturn);
             try {
                 if (LivingDonationId === 0) {
-                    //response = await axios.post('https://minelife-api.azurewebsites.net/add_other_assets', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/add_gift_during_life`, {
+                        method: 'POST',
+                        body: formData                        
+                    });
                 }
                 else {
-                    //response = await axios.post('https://minelife-api.azurewebsites.net/edit_other_assets', formData);
+                    response = await fetch(`https://minelife-api.azurewebsites.net/edit_gift_during_life`, {
+                        method: 'POST',
+                        body: formData,
+                    });
                 }
-                if (response.status === 200) {
-                    router.push(`/declaration-printing/living-donation`);
+                data = await response.json();  
+                if(!response.ok) throw new Error(data);
+                if (response.ok) {
+                    setVariantSnackbar("success");
+                    setSnackbarMsg(data.message);                    
+                    setSnackbarOpen(true);
+                    await router.push(`/declaration-printing/living-donation`);
                 }
             } catch (error) {
                 console.log('Error:', error);
+                setVariantSnackbar("error");
+                setSnackbarMsg(data.error.message);                    
+                setSnackbarOpen(true);
             }
         }
         else {
@@ -229,12 +263,30 @@ export default function LivingDonationAdd() {
     };
 
 
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
+
     return (
         <>
             <>
                 {ShowLoader && (
                     <BackdropLoader ShowLoader={ShowLoader} />
                 )}
+
+<Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                    <Alert
+                        onClose={handleSnackbarClose}
+                        severity={VariantSnackbar}
+                        variant="filled"
+                        sx={{ width: '100%', color: "#FFF" }}
+                    >
+                        {SnackbarMsg}
+                    </Alert>
+                </Snackbar>
             </>
 
             <Box className="other-property-wrapper">

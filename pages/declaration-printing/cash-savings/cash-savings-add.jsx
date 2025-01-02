@@ -249,7 +249,7 @@ export default function CashSavingsAdd() {
                     setVariantSnackbar("success");
                     setSnackbarMsg(data.message);
                     setSnackbarOpen(true);
-                    //router.push(`/declaration-printing/cash-savings`);
+                    router.push(`/declaration-printing/cash-savings`);
                 }
             } catch (error) {
                 console.log('Error:', error);

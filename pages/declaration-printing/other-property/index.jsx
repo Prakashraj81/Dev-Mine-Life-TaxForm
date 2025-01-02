@@ -147,14 +147,14 @@ export default function OtherProperty() {
                         <TableBody>
                             {OtherPropertyList.map((list, index) => (
                                 <TableRow key={index} className="border border-light-gray">
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>
+                                    <TableCell sx={{ width: 400, padding: '8px', border: '1px solid lightgray' }}>
                                         {list.property_name}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>{list.other_party}</TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                    <TableCell sx={{ width: 250, padding: '8px', border: '1px solid lightgray' }}>{list.other_party}</TableCell>
+                                    <TableCell sx={{ width: 150, padding: '8px', border: '1px solid lightgray' }} align="right">
                                         {list.valuation.toLocaleString()}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                    <TableCell sx={{ width: 120, padding: '8px', border: '1px solid lightgray' }} align="right">
                                         <Box className="flex justify-end items-end">
                                             <Box>
                                                 <Button

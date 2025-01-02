@@ -65,7 +65,7 @@ export default function ConfirmationDeductionPersons() {
                     <Table aria-label="collapsible table">
                       <TableBody>
                         <TableRow>
-                          <TableCell className="border border-light-gray border-l" style={{ padding: 0 }} colSpan={10}>
+                          <TableCell className="" style={{ padding: 0, border: 'none'}} colSpan={10}>
                             <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                               <Box className="my-2">
                                 <Table>

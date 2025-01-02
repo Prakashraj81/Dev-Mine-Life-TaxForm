@@ -65,7 +65,7 @@ export default function GiftDuringLifeTable() {
             <TableBody>
                      
             <TableRow>
-              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>                  
+              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: TableExpandOpen ? '10px' : '0px', paddingTop: TableExpandOpen ? '10px' : '0px'}} colSpan={10}>                  
                   <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                     <Box>
                         <Table>

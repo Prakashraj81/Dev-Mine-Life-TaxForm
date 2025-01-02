@@ -182,11 +182,11 @@ export default function CashSavingsTable({ heir_details_list }) {
         <Table aria-label="collapsible table">
           <TableHead className="table-head">
             <TableRow>
-              <TableCell className="" align="left"><span className="font-medium">現金預金</span></TableCell>
-              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
-              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
-              <TableCell className="table-20" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-              <TableCell className="cursor-pointer" align="right">
+              <TableCell className="" align="left" sx={{border: 'none'}}><span className="font-medium">現金預金</span></TableCell>
+              <TableCell className="invisible" align="left" sx={{border: 'none'}}><span className="font-medium">Column</span></TableCell>
+              <TableCell className="invisible" align="left" sx={{border: 'none'}}><span className="font-medium">Column</span></TableCell>
+              <TableCell className="table-20" align="right" sx={{border: 'none'}}>{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-righ pl-1">円</span></TableCell>
+              <TableCell className="cursor-pointer" align="right" sx={{border: 'none'}}>
               <HtmlTooltip
                 title={
                   <React.Fragment>
@@ -228,30 +228,30 @@ export default function CashSavingsTable({ heir_details_list }) {
           </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell className="" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+              <TableCell className="" style={{ paddingBottom: 0, paddingTop: 0, padding: 0, borderTop: TableExpandOpen ? '1px solid rgba(224, 224, 224, 1)' : ''}} colSpan={10}>
                 <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                   <Box className="my-2">
                     <Table>
                       <TableHead className="table-head-2">
                         <TableRow>
-                          <TableCell className="border-light-gray border-t border-l" align="left"><span className="font-medium">預金の種類</span></TableCell>
-                          <TableCell className="border-light-gray border-t border-l"><span className="font-medium">金融機関名</span></TableCell>
-                          <TableCell className="border-light-gray border-t border-l" align="right"><span className="font-medium">金額</span></TableCell>
-                          <TableCell className="border-light-gray border-t border-l border-r" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
+                          <TableCell className=" border-t border-l" align="left"><span className="font-medium">預金の種類</span></TableCell>
+                          <TableCell className=" border-t border-l"><span className="font-medium">金融機関名</span></TableCell>
+                          <TableCell className=" border-t border-l" align="right"><span className="font-medium">金額</span></TableCell>
+                          <TableCell className=" border-t border-l border-r" align="center"><span className="font-medium text-red-300">分割情報入力</span></TableCell>
                         </TableRow>
                         {cashSavingsList.map((list) => (
                           <React.Fragment key={list.id}>
                             <TableRow key={list.id} id={list.id} value={list.customer_id}>
-                              <TableCell className="border-light-gray border-l">{list.deposit_type}</TableCell>
+                              <TableCell className=" border-l">{list.deposit_type}</TableCell>
                               {list.address ?
-                                <TableCell className="border-light-gray border-l">{list.address}</TableCell>
+                                <TableCell className=" border-l">{list.address}</TableCell>
                                 :
-                                <TableCell className="border-light-gray border-l">{list.financial_institution_name}</TableCell>
+                                <TableCell className=" border-l">{list.financial_institution_name}</TableCell>
                               }
-                              <TableCell className=" border-light-gray border-l w-20" align="right">
-                                {list.amount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span>
+                              <TableCell className="  border-l w-20" align="right">
+                                {list.amount.toLocaleString()}<span className="inline-block float-right border-l text-right  pl-1">円</span>
                               </TableCell>
-                              <TableCell className="border-light-gray border-l border-r w-15" align="center">
+                              <TableCell className=" border-l border-r w-15" align="center">
                                 <IconButton
                                   aria-label="expand row"
                                   size="small"
@@ -265,21 +265,21 @@ export default function CashSavingsTable({ heir_details_list }) {
                               </TableCell>
                             </TableRow>
                             <TableRow className="w-full">
-                              <TableCell className="border-light-gray border-l border-r" style={{ padding: 0 }} colSpan={10}>
+                              <TableCell className="" style={{ padding: 0, border: 'none'}} colSpan={10}>
                                 <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
                                   <Box>
                                     <Table>
                                       <TableHead>
                                         <TableRow>
-                                          <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-medium">分割情報の入力</span></TableCell>
+                                          <TableCell className="border  border-l bg-table-light" align="left" colSpan={10}><span className="font-medium">分割情報の入力</span></TableCell>
                                         </TableRow>
                                         <TableRow>
                                           {HeirList.map((heir) => (
                                             <>
-                                              <TableCell id={heir.heir_id} className="border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>
+                                              <TableCell id={heir.heir_id} className=" border-l bg-table-gray" align="center">{heir.name}</TableCell>
                                             </>
                                           ))}
-                                          <TableCell className="border-light-gray border-l border-r w-15 bg-table-gray" align="center">入力</TableCell>
+                                          <TableCell className=" border-l border-r w-15 bg-table-gray" align="center">入力</TableCell>
                                         </TableRow>
                                       </TableHead>
                                       <TableBody>
@@ -289,18 +289,18 @@ export default function CashSavingsTable({ heir_details_list }) {
                                               {heir_lists.numerator == 0 && heir_lists.denominator == 0 ? (
                                                 <TableCell
                                                   id={heir_lists.heir_id}
-                                                  className="border border-light-gray border-l"
+                                                  className="border  border-l"
                                                   align="right"
                                                 >
                                                   {heir_lists.share_amount.toLocaleString()}
-                                                  <span className="inline-block float-right border-l text-right border-light-gray pl-1">
+                                                  <span className="inline-block float-right border-l text-right  pl-1">
                                                     円
                                                   </span>
                                                 </TableCell>
                                               ) : (
                                                 <TableCell
                                                   id={heir_lists.heir_id}
-                                                  className="border border-light-gray border-l"
+                                                  className="border  border-l"
                                                   align="right"
                                                 >
                                                   {heir_lists.numerator}/{heir_lists.denominator}
@@ -308,7 +308,7 @@ export default function CashSavingsTable({ heir_details_list }) {
                                               )}
                                             </React.Fragment>
                                           ))}
-                                          <TableCell className="border-light-gray border-l border-r cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell>
+                                          <TableCell className=" border-l border-r cursor-pointer" align="center"><EditNoteIcon id={""} value={""} className="cursor-pointer" onClick={handleModalOpen} /></TableCell>
                                         </TableRow>
                                       </TableBody>
                                     </Table>

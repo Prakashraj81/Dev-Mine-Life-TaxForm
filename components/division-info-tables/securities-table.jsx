@@ -171,11 +171,11 @@ export default function SecuritiesTable({heir_details_list}) {
       <Table aria-label="collapsible table">
           <TableHead className="table-head">
               <TableRow>
-                  <TableCell className="" align="left"><span className="font-medium">有価証券</span></TableCell>
-                  <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
-                  <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
-                  <TableCell className="table-20" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-                  <TableCell className="cursor-pointer" align="right">
+                  <TableCell className="" align="left" sx={{border: 'none'}}><span className="font-medium">有価証券</span></TableCell>
+                  <TableCell className="invisible" align="left" sx={{border: 'none'}}><span className="font-medium">Column</span></TableCell>
+                  <TableCell className="invisible" align="left" sx={{border: 'none'}}><span className="font-medium">Column</span></TableCell>
+                  <TableCell className="table-20" align="right" sx={{border: 'none'}}>{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
+                  <TableCell className="cursor-pointer" align="right" sx={{border: 'none'}}>
                     <Box className="invisible inline-block">
                       <HtmlTooltip>
                         <QuestionMarkIcon style={{ fontSize: 18 }} className="mr-2 p-1 bg-warning-main rounded-lg text-black"/>                
@@ -187,7 +187,7 @@ export default function SecuritiesTable({heir_details_list}) {
             </TableHead>
             <TableBody>                     
             <TableRow>
-              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+              <TableCell className="" style={{padding: 0, borderTop: TableExpandOpen ? '1px solid rgba(224, 224, 224, 1)' : ''}} colSpan={10}>
                   <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                     <Box className="my-2"> 
                       <Table>
@@ -220,7 +220,7 @@ export default function SecuritiesTable({heir_details_list}) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow className="w-full">
-                                  <TableCell className="border border-light-gray border-l" style={{ padding: 0 }} colSpan={10}>
+                                  <TableCell className="" style={{ padding: 0, border: 'none'}} colSpan={10}>
                                       <Collapse in={TableExpandOpen2[list.id]} timeout="auto" unmountOnExit>
                                         <Box>
                                             <Table>

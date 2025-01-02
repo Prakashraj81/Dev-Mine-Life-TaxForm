@@ -38,6 +38,11 @@ body {
   letter-spacing: 1px;
   line-height: 26px;
   color: #000;
+
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: auto !important;
 }
 header {
   background: #fff !important;

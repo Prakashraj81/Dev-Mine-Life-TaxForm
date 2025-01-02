@@ -108,7 +108,7 @@ export default function ConfirmationSuccessiveInheritance({ heir_details_list })
           </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+              <TableCell className="border border-light-gray border-l" style={{ paddingBottom: TableExpandOpen ? '10px' : '0px', paddingTop: TableExpandOpen ? '10px' : '0px' }} colSpan={10}>
                 <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                   <Box>
                     <Table>
@@ -135,7 +135,7 @@ export default function ConfirmationSuccessiveInheritance({ heir_details_list })
                         </TableRow>
 
                         <TableRow className="w-full">
-                          <TableCell className="border border-light-gray border-l" style={{ padding: 0 }} colSpan={10}>
+                          <TableCell className="" style={{ padding: 0, border: 'none'}} colSpan={10}>
                             <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                               <Box>
                                 <Table>

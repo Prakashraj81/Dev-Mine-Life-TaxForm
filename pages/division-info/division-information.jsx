@@ -174,7 +174,7 @@ export default function divisionInformation() {
                                             Array.from({ length: 20 }, (_, index) => (
                                                 <Table key={index}>
                                                     <TableHead className="skeleton-table-head">
-                                                        <TableRow>
+                                                        <TableRow> 
                                                             <TableCell className="p-0" align="left"><Skeleton variant="text" width={400} height={45} /></TableCell>
                                                             <TableCell className="table-20 p-0" align="left"><Skeleton variant="text" width={150} height={45} /></TableCell>
                                                             <TableCell className="p-0" align="right"><Skeleton variant="text" width={50} height={45} /></TableCell>

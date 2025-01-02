@@ -197,11 +197,11 @@ const handleSnackbarClose = (event, reason) => {
         <Table aria-label="collapsible table">
           <TableHead className="table-head">
             <TableRow>
-              <TableCell className="" align="left"><span className="font-medium">土地</span></TableCell>
-              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
-              <TableCell className="invisible" align="left"><span className="font-medium">Column</span></TableCell>
-              <TableCell className="table-20" align="right">{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right border-light-gray pl-1">円</span></TableCell>
-              <TableCell className="cursor-pointer" align="right">
+              <TableCell className="" align="left" sx={{border: 'none'}}><span className="font-medium">土地</span></TableCell>
+              <TableCell className="invisible" align="left" sx={{border: 'none'}}><span className="font-medium">Column</span></TableCell>
+              <TableCell className="invisible" align="left" sx={{border: 'none'}}><span className="font-medium">Column</span></TableCell>
+              <TableCell className="table-20" align="right" sx={{border: 'none'}}>{TotalAmount.toLocaleString()}<span className="inline-block float-right border-l text-right  pl-1">円</span></TableCell>
+              <TableCell className="cursor-pointer" align="right" sx={{border: 'none'}}>
                 <Box className="invisible inline-block">
                   <HtmlTooltip>
                     <QuestionMarkIcon style={{ fontSize: 18 }} className="mr-2 p-1 bg-warning-main rounded-lg text-black" />
@@ -214,7 +214,7 @@ const handleSnackbarClose = (event, reason) => {
           <TableBody>
 
             <TableRow>
-              <TableCell className="border border-light-gray border-l" style={{ padding: 0 }} colSpan={10}>
+              <TableCell className="" style={{ padding: 0, borderTop: TableExpandOpen ? '1px solid rgba(224, 224, 224, 1)' : ''}} colSpan={10}>
                 <Collapse in={TableExpandOpen} timeout="auto" unmountOnExit>
                   <Box className="my-2">
                     <Table>
@@ -306,15 +306,15 @@ const handleSnackbarClose = (event, reason) => {
                                     <Table>
                                       <TableHead>
                                         <TableRow>
-                                          <TableCell className="border border-light-gray border-l bg-table-light" align="left" colSpan={10}><span className="font-medium">分割情報の入力</span></TableCell>
+                                          <TableCell className=" bg-table-light" align="left" sx={{border: 'none'}} colSpan={10}><span className="font-medium">分割情報の入力</span></TableCell>
                                         </TableRow>
                                         <TableRow>
                                           {HeirList.map((heir) => (
                                             <>
-                                              <TableCell id={heir.heir_id} className="border-light-gray border-l bg-table-gray" align="center">{heir.name}</TableCell>
+                                              <TableCell id={heir.heir_id} className=" bg-table-gray" align="center">{heir.name}</TableCell>
                                             </>
                                           ))}
-                                          <TableCell className="border-light-gray border-l border-r w-15 bg-table-gray" align="center">入力</TableCell>
+                                          <TableCell className=" w-15 bg-table-gray" align="center">入力</TableCell>
                                         </TableRow>
                                       </TableHead>
                                       <TableBody>
@@ -324,8 +324,9 @@ const handleSnackbarClose = (event, reason) => {
                                               {heir_lists.numerator == 0 && heir_lists.denominator == 0 ? (
                                                 <TableCell
                                                   id={heir_lists.heir_id}
-                                                  className="border border-light-gray border-l"
+                                                  className=""
                                                   align="right"
+                                                  sx={{border: 'none'}}
                                                 >
                                                   {heir_lists.share_amount.toLocaleString()}
                                                   <span className="inline-block float-right border-l text-right border-light-gray pl-1">
@@ -335,8 +336,9 @@ const handleSnackbarClose = (event, reason) => {
                                               ) : (
                                                 <TableCell
                                                   id={heir_lists.heir_id}
-                                                  className="border border-light-gray border-l"
+                                                  className=""
                                                   align="right"
+                                                  sx={{border: 'none'}}
                                                 >
                                                   {heir_lists.numerator}/{heir_lists.denominator}
                                                 </TableCell>

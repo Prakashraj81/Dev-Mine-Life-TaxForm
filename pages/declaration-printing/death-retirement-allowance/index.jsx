@@ -141,14 +141,14 @@ export default function DeathRetirementAllowance() {
                         <TableBody>
                             {DeathRetirementList.map((list, index) => (
                                 <TableRow key={index} className="border border-light-gray">
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>
+                                    <TableCell sx={{ width: 400,padding: '8px', border: '1px solid lightgray' }}>
                                         {list.name_of_work_company}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>{list.receipt_date}</TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                    <TableCell sx={{ width: 250, padding: '8px', border: '1px solid lightgray' }}>{list.receipt_date}</TableCell>
+                                    <TableCell sx={{ width: 150, padding: '8px', border: '1px solid lightgray' }} align="right">
                                         {list.amount.toLocaleString()}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                    <TableCell sx={{ width: 120, padding: '8px', border: '1px solid lightgray' }} align="right">
                                         <Box className="flex justify-end items-end">
                                             <Box>
                                                 <Button

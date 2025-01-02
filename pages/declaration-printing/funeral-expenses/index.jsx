@@ -146,14 +146,14 @@ export default function FuneralExpenses() {
                         <TableBody>
                             {FuneralExpensesList.map((list, index) => (
                                 <TableRow key={index} className="border border-light-gray">
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>
+                                    <TableCell sx={{ width: 400, padding: '8px', border: '1px solid lightgray' }}>
                                         {list.payee_name}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>{list.date_of_paid}</TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                    <TableCell sx={{ width: 250, padding: '8px', border: '1px solid lightgray' }}>{list.date_of_paid}</TableCell>
+                                    <TableCell sx={{ width: 150, padding: '8px', border: '1px solid lightgray' }} align="right">
                                         {list.amount.toLocaleString()}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                    <TableCell sx={{ width: 120, padding: '8px', border: '1px solid lightgray' }} align="right">
                                         <Box className="flex justify-end items-end">
                                             <Box>
                                                 <Button

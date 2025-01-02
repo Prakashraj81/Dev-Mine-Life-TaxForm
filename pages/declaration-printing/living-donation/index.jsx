@@ -34,7 +34,7 @@ export default function LivingDonation() {
     };
 
     useEffect(() => {
-        //GetLivingDonationList();
+        GetLivingDonationList();
     }, []);
 
 
@@ -44,12 +44,12 @@ export default function LivingDonation() {
         const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         if (auth_key !== null) {
             try {
-                const response = await fetch(`https://minelife-api.azurewebsites.net/list_other_assetsc`);
+                const response = await fetch(`https://minelife-api.azurewebsites.net/list_gift_during_life?auth_key=${auth_key}`);
                 const data = await response.json();
                 if (!response.ok) throw new Error(data);
 
                 if (response.ok) {
-                    setLivingDonationList(data.other_assets_details);
+                    setLivingDonationList(data?.other_assets_details);
                 }
                 else {
                     setLivingDonationList([]);
@@ -61,30 +61,25 @@ export default function LivingDonation() {
     }
 
     const DeleteModalFunction = async (event) => {
+        let data;
         let value = event.currentTarget.id;
         const { auth_key, LivingDonationId } = deleteTarget;
         if (value === "Yes") {
             try {
                 const response = await fetch(`https://minelife-api.azurewebsites.net/delete_living_donation?auth_key=${auth_key}&id=${LivingDonationId}`);
-                const data = await response.json();
+                data = await response.json();
                 if (!response.ok) throw new Error(data);
 
                 if (response.ok) {
                     setVariantSnackbar("success");
                     setSnackbarMsg(data.message);
-                    //GetLivingDonationList();
-                    setSnackbarOpen(true);
-                }
-                else {
-                    setVariantSnackbar("error");
-                    setSnackbarMsg(data.message);
-                    //GetLivingDonationList([]);
+                    GetLivingDonationList();
                     setSnackbarOpen(true);
                 }
             } catch (error) {
                 console.log("Errro", error);
                 setVariantSnackbar("error");
-                setSnackbarMsg("Death retirement details not deleted");
+                setSnackbarMsg(data.error.message);
             }
             setDeleteModalOpen(false);
         }
@@ -146,16 +141,16 @@ export default function LivingDonation() {
                 <Box className="cash-list py-3">
                     <Table aria-label="Living donation table">
                         <TableBody>
-                            {LivingDonationList.map((list, index) => (
+                            {LivingDonationList?.map((list, index) => (
                                 <TableRow key={index} className="border border-light-gray">
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>
+                                    <TableCell sx={{ width: 400, padding: '8px', border: '1px solid lightgray' }}>
                                         {list.property_name}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }}>{list.other_party}</TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                    <TableCell sx={{ width: 250, padding: '8px', border: '1px solid lightgray' }}>{list.other_party}</TableCell>
+                                    <TableCell sx={{ width: 150, padding: '8px', border: '1px solid lightgray' }} align="right">
                                         {list.valuation.toLocaleString()}
                                     </TableCell>
-                                    <TableCell sx={{ padding: '8px', border: '1px solid lightgray' }} align="right">
+                                    <TableCell sx={{ width: 120, padding: '8px', border: '1px solid lightgray' }} align="right">
                                         <Box className="flex justify-end items-end">
                                             <Box>
                                                 <Button
