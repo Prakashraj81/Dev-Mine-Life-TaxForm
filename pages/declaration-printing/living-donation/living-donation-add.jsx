@@ -48,9 +48,9 @@ export default function LivingDonationAdd() {
         let url = router.asPath;
         let searchParams = new URLSearchParams(url.split('?')[1]);
         searchParams = searchParams.get("edit");
-        if (searchParams !== null) {             
+        if (searchParams !== null) {
             LivingDonationId = Number(atob(searchParams));
-            //GetLivingDonationDetails(LivingDonationId);
+            GetLivingDonationDetails(LivingDonationId);
         }
         GetHeirList();
     }, []);
@@ -76,6 +76,31 @@ export default function LivingDonationAdd() {
             }
         }
     };
+
+    //Load cash savings details    
+    const GetLivingDonationDetails = async (LivingDonationId) => {
+        const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
+        if (auth_key !== null && LivingDonationId !== 0) {
+            try {
+                const response = await fetch(`https://minelife-api.azurewebsites.net/get_gift_during_life_details?auth_key=${auth_key}&id=${LivingDonationId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data);
+
+                if (response.ok) {
+                    setHeirId(data.gift_during_life_details.gift_recipient);
+                    setDonatedPropertyType(data.gift_during_life_details.gift_type);
+                    setDateOfDonation(data.gift_during_life_details.date_of_donation);
+                    setDonatedPropertyDetail(data.gift_during_life_details.details_of_gift_property);
+                    setDonatedPropertyAmount(data.gift_during_life_details.amount_donated.toLocaleString());
+                    setDonatedPropertyAmountTax(data.gift_during_life_details.amount_on_gift_tax_paid.toLocaleString());
+                    setWhereTaxReturn(data.gift_during_life_details.where_to_submit_tax_return);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    };
+
 
     const handleChangeHeir = (event) => {
         let selectedId = Number(event.target.value);
@@ -170,7 +195,7 @@ export default function LivingDonationAdd() {
             gift_type: DonatedPropertyType,
             details_of_gift_property: DonatedPropertyDetail,
             amount_donated: DonatedPropertyAmount,
-            amount_on_gift_tax_paid: DonatedPropertyAmountTax,            
+            amount_on_gift_tax_paid: DonatedPropertyAmountTax,
             where_to_submit_tax_return: WhereTaxReturn
         }
 
@@ -218,21 +243,21 @@ export default function LivingDonationAdd() {
             }
             const formData = new FormData();
             formData.append("auth_key", auth_key);
-            formData.append("id", LivingDonationId);            
-            formData.append("gift_recipient", HeirId);         
-            formData.append("date_of_donation", DateOfDonation);      
+            formData.append("id", LivingDonationId);
+            formData.append("gift_recipient", HeirId);
+            formData.append("date_of_donation", DateOfDonation);
             formData.append("gift_type", DonatedPropertyType);
             formData.append("details_of_gift_property", DonatedPropertyDetail);
             DonatedPropertyAmount = DonatedPropertyAmount.replace(/,/g, '').replace('.', '');
             formData.append("amount_donated", parseFloat(DonatedPropertyAmount));
             DonatedPropertyAmountTax = DonatedPropertyAmountTax.replace(/,/g, '').replace('.', '');
-            formData.append("amount_on_gift_tax_paid", parseFloat(DonatedPropertyAmountTax));            
+            formData.append("amount_on_gift_tax_paid", parseFloat(DonatedPropertyAmountTax));
             formData.append("where_to_submit_tax_return", WhereTaxReturn);
             try {
                 if (LivingDonationId === 0) {
                     response = await fetch(`https://minelife-api.azurewebsites.net/add_gift_during_life`, {
                         method: 'POST',
-                        body: formData                        
+                        body: formData
                     });
                 }
                 else {
@@ -241,18 +266,18 @@ export default function LivingDonationAdd() {
                         body: formData,
                     });
                 }
-                data = await response.json();  
-                if(!response.ok) throw new Error(data);
+                data = await response.json();
+                if (!response.ok) throw new Error(data);
                 if (response.ok) {
                     setVariantSnackbar("success");
-                    setSnackbarMsg(data.message);                    
+                    setSnackbarMsg(data.message);
                     setSnackbarOpen(true);
                     await router.push(`/declaration-printing/living-donation`);
                 }
             } catch (error) {
                 console.log('Error:', error);
                 setVariantSnackbar("error");
-                setSnackbarMsg(data.error.message);                    
+                setSnackbarMsg(data.error.message);
                 setSnackbarOpen(true);
             }
         }
@@ -277,7 +302,7 @@ export default function LivingDonationAdd() {
                     <BackdropLoader ShowLoader={ShowLoader} />
                 )}
 
-<Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
                     <Alert
                         onClose={handleSnackbarClose}
                         severity={VariantSnackbar}
@@ -297,10 +322,10 @@ export default function LivingDonationAdd() {
                         </Typography>
                     </Box>
                 </Box>
-                <Box className="page-description py-8">                    
+                <Box className="page-description py-8">
                     <Typography component={"p"} className="text-sm lg:text-base xl:text-base 2xl:text-base tracking-2 text-black text-left font-medium">
-                    以下の内容を入力して[保存]ボタンを押して下さい。<br/>
-                    <Typography component={"span"}>※精算課税制度の適用を受けていた場合は当システムでは作成できません。</Typography>
+                        以下の内容を入力して[保存]ボタンを押して下さい。<br />
+                        <Typography component={"span"}>※精算課税制度の適用を受けていた場合は当システムでは作成できません。</Typography>
                     </Typography>
                 </Box>
 

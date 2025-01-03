@@ -49,13 +49,11 @@ export default function LivingDonation() {
                 if (!response.ok) throw new Error(data);
 
                 if (response.ok) {
-                    setLivingDonationList(data?.other_assets_details);
-                }
-                else {
-                    setLivingDonationList([]);
+                    setLivingDonationList(data?.gift_during_life_details);
                 }
             } catch (error) {
                 console.log("Errro", error);
+                setLivingDonationList([]);
             }
         }
     }
@@ -143,12 +141,13 @@ export default function LivingDonation() {
                         <TableBody>
                             {LivingDonationList?.map((list, index) => (
                                 <TableRow key={index} className="border border-light-gray">
-                                    <TableCell sx={{ width: 400, padding: '8px', border: '1px solid lightgray' }}>
-                                        {list.property_name}
+                                    <TableCell sx={{ width: 300, padding: '8px', border: '1px solid lightgray' }}>
+                                        {list.gift_type}
                                     </TableCell>
-                                    <TableCell sx={{ width: 250, padding: '8px', border: '1px solid lightgray' }}>{list.other_party}</TableCell>
+                                    <TableCell sx={{ width: 250, padding: '8px', border: '1px solid lightgray' }}>{list.details_of_gift_property}</TableCell>
+                                    <TableCell sx={{ width: 150, padding: '8px', border: '1px solid lightgray' }}>{list.heir_name}</TableCell>
                                     <TableCell sx={{ width: 150, padding: '8px', border: '1px solid lightgray' }} align="right">
-                                        {list.valuation.toLocaleString()}
+                                        {list.amount_donated.toLocaleString()}
                                     </TableCell>
                                     <TableCell sx={{ width: 120, padding: '8px', border: '1px solid lightgray' }} align="right">
                                         <Box className="flex justify-end items-end">
