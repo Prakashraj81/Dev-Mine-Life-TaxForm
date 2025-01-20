@@ -754,8 +754,8 @@ export default function LandAdd() {
                                     <Typography component={"label"}>　上部の「ご相談・お問い合わせ」からお問い合わせください。税理士による有料サポートにて対応いたします。</Typography>
                                 </Box>
                             </Box>
-                            <Box className="w-full flex items-center justify-between mt-3 mb-7">
-                                <Box className="w-full lg:w-65 xl:w-65 2xl:w-65 block float-left">
+                            <Box className="w-full block mt-3 mb-7">
+                                <Box className="w-full block float-left">
                                     <Box className="w-full inline-block mt-2 relative">
                                         <FormControl>
                                             <RadioGroup
@@ -791,8 +791,7 @@ export default function LandAdd() {
                                         </FormControl>
                                     </Box>
                                 </Box>
-
-                                <Box className="w-full lg:w-35 xl:w-35 2xl:w-35 inline-block float-left">
+                                <Box className="w-full lg:w-35 xl:w-35 2xl:w-35 inline-block float-left mt-3">
                                     <Box className="w-full inline-block mt-2">
                                         {ShowImageOne && (
                                             <Image className="mx-auto w-full" src="/land_item01.png" alt="image-one" height={100} width={200} priority />
@@ -808,11 +807,10 @@ export default function LandAdd() {
                                         )}
                                         {ShowImageFive && (
                                             <Image className="mx-auto w-full" src="/land_item05.png" alt="image-one" height={100} width={200} priority />
-                                        )}
+                                        )}                                        
                                     </Box>
-                                </Box>
-                            </Box>
-
+                                </Box>                                            
+                            </Box>                            
                             <Box className="w-full inline-block py-5">
                                 <Box classsName="table-columns">
                                     {ShowTableOne && (

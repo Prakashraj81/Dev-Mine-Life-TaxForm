@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
 import React, { useState, Fragment } from "react";
 import { Box, Typography } from '@mui/material';
@@ -186,23 +185,62 @@ export default function DeclarationPrinting() {
         auth_key = atob(localStorage.getItem("mine_life_auth_key"));
         setauth_key(auth_key);
         let tableHeading = event.currentTarget.id;
-        if (tableHeading == "第1表") {
+        if (tableHeading === "第1表") {
             ApiRoute = "generate_table_1_pdf";
         }
-        else if (tableHeading == "第2表") {
+        else if (tableHeading === "第2表") {
             ApiRoute = "generate_table_2_pdf";
         }
-        else if (tableHeading == "第4表") {
+        else if (tableHeading === "第4表") {
             ApiRoute = "generate_table_4_pdf";
         }
-        else if (tableHeading == "第6表") {
+        else if (tableHeading === "第4表の2") {
+            ApiRoute = "generate_table_4_2_pdf";
+        }
+        else if (tableHeading === "第5表") {
+            ApiRoute = "generate_table_5_pdf";
+        }
+        else if (tableHeading === "第6表") {
             ApiRoute = "generate_table_6_pdf";
         }
-        else if (tableHeading == "第7表") {
+        else if (tableHeading === "第7表") {
             ApiRoute = "generate_table_7_pdf";
         }
-        else if (tableHeading == "第14表") {
+        else if (tableHeading === "第9表") {
+            ApiRoute = "generate_table_9_pdf";
+        }
+        else if (tableHeading === "第10表") {
+            ApiRoute = "generate_table_10_pdf";
+        }
+        else if (tableHeading === "第11表") {
+            ApiRoute = "generate_table_11_pdf";
+        }
+        else if (tableHeading === "第11表の付表1") {
+            ApiRoute = "generate_table_11_1_pdf";
+        }
+        else if (tableHeading === "第11表の付表2") {
+            ApiRoute = "generate_table_11_2_pdf";
+        }
+        else if (tableHeading === "第11表の付表3") {
+            ApiRoute = "generate_table_11_3_pdf";
+        }
+        else if (tableHeading === "第11表の付表4") {
+            ApiRoute = "generate_table_11_4_pdf";
+        }
+        else if (tableHeading === "第11・11の2表の付表1") {
+            ApiRoute = "generate_table_11_11_pdf";
+        }
+        else if (tableHeading === "第13表") {
+            ApiRoute = "generate_table_13_pdf";
+        }
+        else if (tableHeading === "第14表") {
             ApiRoute = "generate_table_14_pdf";
+        }
+        else if (tableHeading === "第15表") {
+            ApiRoute = "generate_table_15_pdf";
+        }
+        else if (tableHeading === "第15表（続）") {
+            ApiRoute = "generate_table_15_1_pdf";
         }
         if (ApiRoute !== "") {
             let response;
@@ -285,7 +323,7 @@ export default function DeclarationPrinting() {
                     </table>
                 </Box>
 
-                <Box className="w-full hidden flex justify-evenly items-center py-10">
+                <Box className="w-full hidden justify-evenly items-center py-10">
                     <BackButton />
                     <Box className="save-btn text-center">
                         <button

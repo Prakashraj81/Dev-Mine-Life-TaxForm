@@ -20,11 +20,11 @@ export default function TableTwo({inputHandlingFunction, road_price_1, regional_
                     <Table className="w-50 block" aria-label="customized table">
                         <TableHead>
                             <TableRow className="bg-custom-light text-black">
-                                <TableCell></TableCell>
-                                <TableCell>路線価</TableCell>
-                                <TableCell>地区区分</TableCell>
-                                {/* <TableCell>間口距離</TableCell>
-                                <TableCell>奥行距離</TableCell> */}
+                                <TableCell>1 図に合わせて①から④に路線価を入力ください。</TableCell>
+                                <TableCell>2 路線価</TableCell>
+                                <TableCell>3 地区区分</TableCell>
+                                {/* <TableCell>4 角地・準角地の選択</TableCell> */}
+                                {/* <TableCell>奥行距離</TableCell> */}
                             </TableRow>
                         </TableHead>
                         <TableBody>
