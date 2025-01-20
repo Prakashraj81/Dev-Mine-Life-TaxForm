@@ -135,17 +135,9 @@ const tableList = [
         secondheading: "債務及び葬式費用の明細書",
         icon: <PictureAsPdfIcon className="text-white" />,
         path: "",
-    },
+    },    
     {
         id: 17,
-        class: "",
-        heading: "第13表",
-        secondheading: "債務及び葬式費用の明細書",
-        icon: <PictureAsPdfIcon className="text-white" />,
-        path: "",
-    },
-    {
-        id: 18,
         class: "",
         heading: "第14表",
         secondheading: "純資産価額に加算される暦年課税分の贈与財産価額及び特定",
@@ -155,7 +147,7 @@ const tableList = [
         path: "/gift-various/successive-inheritance",
     },
     {
-        id: 19,
+        id: 18,
         class: "",
         heading: "第15表",
         secondheading: "相続財産の種類別価額表",
@@ -163,7 +155,7 @@ const tableList = [
         path: "",
     },
     {
-        id: 20,
+        id: 19,
         class: "",
         heading: "第15表（続）",
         secondheading: "相続財産の種類別価額表（続）",
