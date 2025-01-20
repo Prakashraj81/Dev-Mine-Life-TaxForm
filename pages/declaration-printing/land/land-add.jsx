@@ -179,88 +179,88 @@ export default function LandAdd() {
         let inputValue = event.target.value;
         let inputId = event.currentTarget.id;
         setIsSumbitDisabled(false);
-        if(inputId === "location_and_lot_number"){
+        if (inputId === "location_and_lot_number") {
             setlocation_and_lot_number(inputValue);
         }
-        else if(inputId === "ground_grain"){
+        else if (inputId === "ground_grain") {
             setground_grain(inputValue);
         }
-        else if(inputId === "land_area"){
+        else if (inputId === "land_area") {
             setland_area(inputValue);
         }
-        else if(inputId === "land_use"){
+        else if (inputId === "land_use") {
             setland_use(inputValue);
         }
-        else if(inputId === "type_of_site_rights"){
+        else if (inputId === "type_of_site_rights") {
             settype_of_site_rights(inputValue);
         }
-        else if(inputId === "percentage_of_site_rights"){
+        else if (inputId === "percentage_of_site_rights") {
             setpercentage_of_site_rights(inputValue);
         }
-        else if(inputId === "details"){
+        else if (inputId === "details") {
             setdetails(inputValue);
         }
-        else if(inputId === "road_price_1"){
+        else if (inputId === "road_price_1") {
             setroad_price_1(inputValue);
         }
-        else if(inputId === "regional_distinction_1"){
+        else if (inputId === "regional_distinction_1") {
             setregional_distinction_1(inputValue);
         }
-        else if(inputId === "corner_semi_corner_1"){
+        else if (inputId === "corner_semi_corner_1") {
             setcorner_semi_corner_1(inputValue);
         }
-        else if(inputId === "road_price_2"){
+        else if (inputId === "road_price_2") {
             setroad_price_2(inputValue);
         }
-        else if(inputId === "regional_distinction_2"){
+        else if (inputId === "regional_distinction_2") {
             setregional_distinction_2(inputValue);
         }
-        else if(inputId === "corner_semi_corner_2"){
+        else if (inputId === "corner_semi_corner_2") {
             setcorner_semi_corner_2(inputValue);
         }
-        else if(inputId === "road_price_3"){
+        else if (inputId === "road_price_3") {
             setroad_price_3(inputValue);
         }
-        else if(inputId === "regional_distinction_3"){
+        else if (inputId === "regional_distinction_3") {
             setregional_distinction_3(inputValue);
         }
-        else if(inputId === "corner_semi_corner_3"){
+        else if (inputId === "corner_semi_corner_3") {
             setcorner_semi_corner_3(inputValue);
         }
-        else if(inputId === "road_price_4"){
+        else if (inputId === "road_price_4") {
             setroad_price_4(inputValue);
         }
-        else if(inputId === "regional_distinction_4"){
+        else if (inputId === "regional_distinction_4") {
             setregional_distinction_4(inputValue);
         }
-        else if(inputId === "corner_semi_corner_4"){
+        else if (inputId === "corner_semi_corner_4") {
             setcorner_semi_corner_4(inputValue);
         }
-        else if(inputId === "co_owner_share_percentage_numerator"){
+        else if (inputId === "co_owner_share_percentage_numerator") {
             setco_owner_share_percentage_numerator(inputValue);
         }
-        else if(inputId === "co_owner_share_percentage_denominator"){
+        else if (inputId === "co_owner_share_percentage_denominator") {
             setco_owner_share_percentage_denominator(inputValue);
         }
-        else if(inputId === "appraisal_value"){
+        else if (inputId === "appraisal_value") {
             setappraisal_value(inputValue);
             setappraisal_value_error(false);
         }
-        else if(inputId === "condominium_correction_rate"){
+        else if (inputId === "condominium_correction_rate") {
             setcondominium_correction_rate(inputValue);
             setcondominium_correction_rate_error(false);
-        }        
+        }
     };
-    
+
 
     //Submit API function 
     const router = useRouter();
-    const onSubmit = async() => {        
-        if (appraisal_value <= 0) {            
+    const onSubmit = async () => {
+        if (appraisal_value <= 0) {
             setIsSumbitDisabled(true);
             setappraisal_value_error(true);
-        }       
-        else{
+        }
+        else {
             const auth_key = atob(localStorage.getItem("mine_life_auth_key"));
             if (!isSumbitDisabled && auth_key) {
                 let data;
@@ -306,7 +306,7 @@ export default function LandAdd() {
                 formData.append("is_co_owners_in_property", is_co_owners_in_property === null ? 0 : is_co_owners_in_property);
                 formData.append("co_owner_share_percentage_numerator", co_owner_share_percentage_numerator);
                 formData.append("co_owner_share_percentage_denominator", co_owner_share_percentage_denominator);
-                formData.append("appraisal_value", appraisal_value);            
+                formData.append("appraisal_value", appraisal_value);
                 formData.append("is_land_with_3_or_more_floors", is_land_with_3_or_more_floors === null ? 0 : is_land_with_3_or_more_floors);
                 formData.append("condominium_correction_rate", condominium_correction_rate);
 
@@ -326,7 +326,7 @@ export default function LandAdd() {
                     }
                     data = await response.json();
                     if (!response.ok) throw new Error(data);
-                    
+
                     if (response.ok) {
                         router.push(`/declaration-printing/land`);
                     }
@@ -337,11 +337,11 @@ export default function LandAdd() {
             else {
                 setIsSumbitDisabled(true);
                 setShowLoader(false);
-            }       
+            }
         }
     };
 
-    useEffect(() => {        
+    useEffect(() => {
         let depositId = 0;
         let url = router.asPath;
         let searchParams = new URLSearchParams(url.split('?')[1]);
@@ -380,29 +380,29 @@ export default function LandAdd() {
                     setroad_price_2(data.land_details.road_price_2);
                     setregional_distinction_2(data.land_details.regional_distinction_1);
                     setcorner_semi_corner_2(data.land_details.corner_semi_corner_2);
-                    
+
                     setroad_price_3(data.land_details.road_price_3);
                     setregional_distinction_3(data.land_details.regional_distinction_3);
                     setcorner_semi_corner_3(data.land_details.corner_semi_corner_3);
 
                     setroad_price_4(data.land_details.road_price_4);
                     setregional_distinction_4(data.land_details.regional_distinction_4);
-                    setcorner_semi_corner_4(data.land_details.corner_semi_corner_4);                  
-                    
+                    setcorner_semi_corner_4(data.land_details.corner_semi_corner_4);
+
                     setmagnification(data.land_details.magnification);
                     setmagnification_red_frame_details(data.land_details.magnification_red_frame_details);
                     setis_co_owners_in_property(data.land_details.is_co_owners_in_property === 'Yes' ? 1 : 0);
 
                     setco_owner_share_percentage_numerator(data.land_details.co_owner_share_percentage_numerator);
                     setco_owner_share_percentage_denominator(data.land_details.co_owner_share_percentage_denominator);
-                    setappraisal_value(data.land_details.appraisal_value); 
-                    
-                    setland_pattern(data.land_details.land_pattern); 
-                }                
+                    setappraisal_value(data.land_details.appraisal_value);
+
+                    setland_pattern(data.land_details.land_pattern);
+                }
             } catch (error) {
                 console.error('Error:', error);
             }
-        }        
+        }
     };
 
     return (
@@ -807,10 +807,10 @@ export default function LandAdd() {
                                         )}
                                         {ShowImageFive && (
                                             <Image className="mx-auto w-full" src="/land_item05.png" alt="image-one" height={100} width={200} priority />
-                                        )}                                        
+                                        )}
                                     </Box>
-                                </Box>                                            
-                            </Box>                            
+                                </Box>
+                            </Box>
                             <Box className="w-full inline-block py-5">
                                 <Box classsName="table-columns">
                                     {ShowTableOne && (
@@ -820,7 +820,7 @@ export default function LandAdd() {
                                         <TableTwo inputHandlingFunction={inputHandlingFunction} road_price_1={road_price_1} regional_distinction_1={regional_distinction_1} corner_semi_corner_1={corner_semi_corner_1} road_price_2={road_price_2} regional_distinction_2={regional_distinction_2} corner_semi_corner_2={corner_semi_corner_2} />
                                     )}
                                     {ShowTableThree && (
-                                        <TableThree inputHandlingFunction={inputHandlingFunction} road_price_1={road_price_1} regional_distinction_1={regional_distinction_1} corner_semi_corner_1={corner_semi_corner_1} road_price_2={road_price_2} regional_distinction_2={regional_distinction_2} corner_semi_corner_2={corner_semi_corner_2}  />
+                                        <TableThree inputHandlingFunction={inputHandlingFunction} road_price_1={road_price_1} regional_distinction_1={regional_distinction_1} corner_semi_corner_1={corner_semi_corner_1} road_price_2={road_price_2} regional_distinction_2={regional_distinction_2} corner_semi_corner_2={corner_semi_corner_2} />
                                     )}
                                     {ShowTableFour && (
                                         <TableFour inputHandlingFunction={inputHandlingFunction} road_price_1={road_price_1} regional_distinction_1={regional_distinction_1} corner_semi_corner_1={corner_semi_corner_1} road_price_2={road_price_2} regional_distinction_2={regional_distinction_2} corner_semi_corner_2={corner_semi_corner_2} road_price_3={road_price_3} regional_distinction_3={regional_distinction_3} corner_semi_corner_3={corner_semi_corner_3} />

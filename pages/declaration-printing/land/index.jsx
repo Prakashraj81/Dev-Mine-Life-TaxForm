@@ -74,7 +74,7 @@ export default function Land() {
                     setVariantSnackbar("success");
                     setSnackbarMsg(data.message);
                     setSnackbarOpen(true);
-                }                
+                }
             } catch (error) {
                 console.log("Errro", error);
                 setVariantSnackbar("error");
