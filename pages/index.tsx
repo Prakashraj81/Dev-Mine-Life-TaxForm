@@ -27,7 +27,7 @@ export default function Index({ preview }) {
     <>
       {Authkey ?
         <>
-          <FullLayout children={preview}>
+          <FullLayout>
             <PageContainer title="Dashboard" description="Dashboard">
               <BasicInformation />
             </PageContainer>
