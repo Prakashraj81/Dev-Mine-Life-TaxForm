@@ -13,8 +13,8 @@ export default function Index({ preview }) {
   let sessionValue = 0;
   let value;
   useEffect(() => {
-    let Loginvalue = sessionStorage.getItem('user_login');
-    let auth_key = localStorage.getItem("mine_life_auth_key");
+    const Loginvalue = sessionStorage.getItem('user_login');
+    const auth_key = localStorage.getItem("mine_life_auth_key");
     if(Loginvalue !== null && auth_key !== null){
       value = atob(Loginvalue);   
       setAuthkey(1);
@@ -27,7 +27,7 @@ export default function Index({ preview }) {
     <>
       {Authkey ?
         <>
-          <FullLayout>
+          <FullLayout children={preview}>
             <PageContainer title="Dashboard" description="Dashboard">
               <BasicInformation />
             </PageContainer>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
 import React, { useState, Fragment } from "react";
 import { Box, Typography } from '@mui/material';
@@ -6,6 +7,7 @@ import FullLayout from '../../components/layouts/full/FullLayout';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import BackdropLoader from '../../components/loader/backdrop-loader';
 
 const tableList = [
     {
@@ -171,11 +173,12 @@ export default function DeclarationPrinting() {
     let [SnackbarOpen, setSnackbarOpen] = useState(false);
     let [SnackbarMsg, setSnackbarMsg] = useState("success");
     let [VariantSnackbar, setVariantSnackbar] = useState("success");
+    let [ShowLoader, setShowLoader] = useState(false);
 
     const TargetBlankClick = async (event) => {
+        setShowLoader(true);        
+        setauth_key(atob(localStorage.getItem("mine_life_auth_key")));
         setApiRoute("");
-        auth_key = atob(localStorage.getItem("mine_life_auth_key"));
-        setauth_key(auth_key);
         let tableHeading = event.currentTarget.id;
         if (tableHeading === "第1表") {
             ApiRoute = "generate_table_1_pdf";
@@ -236,13 +239,16 @@ export default function DeclarationPrinting() {
         }
         if (ApiRoute !== "") {
             let response;
+            const authkey = atob(localStorage.getItem("mine_life_auth_key"));
             try {
-                response = await fetch(`https://minelife-api.azurewebsites.net/${ApiRoute}?auth_key=${auth_key}`);
+                response = await fetch(`https://minelife-api.azurewebsites.net/${ApiRoute}?auth_key=${authkey}`);
                 if (!response.ok) throw new Error(response);
                 if (response.ok) {
+                    setShowLoader(false);  
                     window.open(response.url, '_blank');
                 }
             } catch (error) {
+                setShowLoader(false);  
                 setVariantSnackbar("error");
                 setSnackbarMsg(response?.error.message);
                 setSnackbarOpen(true);
@@ -266,6 +272,9 @@ export default function DeclarationPrinting() {
 
     return (
         <>
+            {ShowLoader && (
+                <BackdropLoader ShowLoader={ShowLoader} />
+            )}
             <Snackbar open={SnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
                 <Alert
                     onClose={handleSnackbarClose}

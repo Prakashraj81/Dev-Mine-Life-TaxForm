@@ -1,3 +1,8 @@
+.sidebar-menus, .sticky-scroll, .MuiDrawer-paperAnchorLeft {
+  -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scrollbar-width: none;
+}
 .sidebarArea {
   flex-shrink: 0;
   width: 260px;
@@ -27,7 +32,6 @@
   top: 120px;
   height: calc(100vh - 60px); 
   overflow-y: auto;
-  scrollbar-width: none; /* For Firefox */
   transition: 0.3s ease;  
 }
 
