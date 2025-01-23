@@ -1,7 +1,7 @@
 .sidebar-menus, .sticky-scroll, .MuiDrawer-paperAnchorLeft {
   -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      scrollbar-width: none;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: none;
 }
 .sidebarArea {
   flex-shrink: 0;
